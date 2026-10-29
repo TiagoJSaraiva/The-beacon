@@ -1,0 +1,6 @@
+description = "Planejar uma tarefa antes de implementar"
+prompt = """
+Siga o procedimento em `.agents/fluxos/planejar.md`.
+
+{{args}}
+"""

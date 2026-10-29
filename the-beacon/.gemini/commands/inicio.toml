@@ -1,0 +1,6 @@
+description = "Início de sessão: versão, status e próximo passo"
+prompt = """
+Siga o procedimento em `.agents/fluxos/inicio.md`.
+
+{{args}}
+"""

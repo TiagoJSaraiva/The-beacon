@@ -1,0 +1,6 @@
+description = "Revisar o diff atual por categoria"
+prompt = """
+Siga o procedimento em `.agents/fluxos/revisar.md`.
+
+{{args}}
+"""

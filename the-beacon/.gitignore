@@ -1,0 +1,9 @@
+# Cache do Godot
+.godot/
+/android/
+
+# Relatórios do gdUnit4
+reports/
+
+# Configuração local do Claude Code
+.claude/settings.local.json

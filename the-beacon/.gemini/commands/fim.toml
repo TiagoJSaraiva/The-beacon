@@ -1,0 +1,6 @@
+description = "Fim de sessão: check completo e atualização da memória"
+prompt = """
+Siga o procedimento em `.agents/fluxos/fim.md`.
+
+{{args}}
+"""
