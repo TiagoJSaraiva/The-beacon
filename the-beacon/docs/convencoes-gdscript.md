@@ -62,7 +62,7 @@ func is_alive() -> bool:
 | `connect("sig", self, "_m")` | `sig.connect(_m)` |
 | `emit_signal("sig", a)` | `sig.emit(a)` |
 | `KinematicBody2D` | `CharacterBody2D` |
-| `move_and_slide(vel, up)` | `velocity = vel` + `move_and_slide()` |
+| `move_and_slide(vel, up)` | `velocity = vel` & `move_and_slide()` |
 | `instance()` | `instantiate()` |
 | `setget` | `var x: int: set = _set_x, get = _get_x` |
 | `tool` | `@tool` |
