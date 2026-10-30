@@ -51,20 +51,29 @@ if ($gdFiles.Count -gt 0) {
     Write-Host "`n(sem scripts .gd do projeto: formatação e lint pulados)" -ForegroundColor DarkGray
 }
 
-# 4. Parse de todos os scripts: importa o projeto em modo headless e procura erros na saída.
-#    O Godot nem sempre retorna exit code != 0 com erro de script, por isso a busca no texto.
+# 4. Parse de todos os scripts (decisão 0007).
+#    O --import só atualiza cache e .uid: ele não compila scripts que nenhuma cena usa.
+#    Por isso cada script passa por --check-only, que compila e devolve exit code != 0 em erro.
+#    A busca no texto cobre versões do Godot que não sinalizam o erro no exit code.
 #    Não amplie o regex para "ERROR" genérico: há ruído conhecido (Remote Debugger).
 Invoke-Step "Parse dos scripts (Godot headless)" {
-    $output = & $env:GODOT_PATH --headless --path $root --import 2>&1 | Out-String
-    if ([string]::IsNullOrWhiteSpace($output)) {
+    $importOutput = & $env:GODOT_PATH --headless --path $root --import 2>&1 | Out-String
+    if ([string]::IsNullOrWhiteSpace($importOutput)) {
         Write-Host "Saída vazia: o Godot não devolveu nada ao terminal." -ForegroundColor Yellow
         $global:LASTEXITCODE = 1
-    } elseif ($output -match 'SCRIPT ERROR|Parse Error|Failed to load script') {
-        Write-Host $output
-        $global:LASTEXITCODE = 1
-    } else {
-        $global:LASTEXITCODE = 0
+        return
     }
+    $broken = 0
+    foreach ($file in $gdFiles) {
+        $resPath = "res://" + $file.Substring($root.Length + 1).Replace('\', '/')
+        $output = & $env:GODOT_PATH --headless --path $root --check-only --script $resPath 2>&1 | Out-String
+        if ($LASTEXITCODE -ne 0 -or $output -match 'SCRIPT ERROR|Parse Error|Failed to load script') {
+            Write-Host "Erro em ${resPath}:" -ForegroundColor Red
+            Write-Host $output
+            $broken++
+        }
+    }
+    $global:LASTEXITCODE = if ($broken -gt 0) { 1 } else { 0 }
 }
 
 # 5. Testes (gdUnit4). O runtest.cmd lê o executável do Godot em GODOT_BIN.

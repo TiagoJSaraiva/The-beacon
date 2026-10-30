@@ -1,7 +1,7 @@
 # 0005 — Pipeline de verificação
 
 - **Data**: 2026-10
-- **Status**: aceita
+- **Status**: substituída por 0007
 
 ## Contexto
 Agentes precisam de feedback objetivo para saber se uma mudança está correta antes de declará-la pronta.
