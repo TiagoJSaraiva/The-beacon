@@ -76,12 +76,22 @@ func is_alive() -> bool:
 ## Comunicação entre nós
 
 - **Call down, signal up**: pai chama métodos dos filhos; filho emite sinais que o pai escuta.
-- Irmãos se comunicam pelo pai ou por sinais, nunca por referência direta.
+- Irmãos se comunicam pelo pai ou por sinais, nunca por referência direta. Exceção: um componente pode referenciar outro componente da mesma cena por `@export` tipado (`@export var health: HealthComponent`), atribuído no editor (decisão 0006).
 - Autoloads só para estado genuinamente global (save, configurações, transição de cena). Cada novo autoload exige nota em `docs/decisoes/`.
+
+## Responsabilidade e acoplamento
+
+- Um script, uma responsabilidade. Se uma tarefa daria ao script um segundo motivo para mudar (ex.: o player passa a cuidar de vida além de movimento), a parte nova nasce em um nó-componente próprio (`HealthComponent`, `HurtBox`) em vez de crescer o script.
+- Regras de jogo (dano, custo, cooldown, progressão) ficam em funções puras ou em classes `RefCounted` sem dependência da árvore de cena. O nó só lê input, chama a regra e aplica o resultado. Isso torna a regra testável em `test/unit/`.
+- Um componente não conhece quem o usa: recebe valores por `@export` ou por método e informa por sinal. Ele pode depender de outro componente via `@export` tipado (ver "Comunicação entre nós"), mas nunca do script do pai.
+- Componentes usados por mais de uma feature ficam em `components/`; os exclusivos de uma feature ficam na pasta dela.
+- Variações de conteúdo (tipos de inimigo, itens, upgrades) são dados em `Resource` (`.tres`), não ramos `if`/`match` no código. Adicionar uma variação não deve exigir editar lógica existente.
+- Script passando de ~200 linhas é sinal de alerta. Código já existente que viola estas regras não é refatorado sem pedido: aponte e proponha a divisão no plano ou no resumo.
 
 ## Valores e configuração
 
 - `@export` para valores ajustáveis por instância (velocidade de um inimigo específico).
+- `Resource` (`.tres`) para conjuntos de valores que definem uma variação de conteúdo (ver "Responsabilidade e acoplamento").
 - Constantes em script de configuração para valores globais compartilhados.
 - Nenhum número mágico no meio da lógica.
 

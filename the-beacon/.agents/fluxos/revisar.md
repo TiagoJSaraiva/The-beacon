@@ -7,6 +7,7 @@
    - **Edge cases** não tratados
    - **Performance**
    - **Robustez** (dados inválidos, nós ausentes, saves corrompidos)
+   - **Responsabilidade e acoplamento** (script com mais de uma responsabilidade, regra de jogo presa ao nó, referência direta entre irmãos fora da exceção da decisão 0006, variação de conteúdo em `if`/`match`; ver `docs/convencoes-gdscript.md`)
    - **Manutenibilidade**
    - **Legibilidade**
    - **Preferência de estilo** (opinativo, baixa prioridade)

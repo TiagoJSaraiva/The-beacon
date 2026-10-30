@@ -12,6 +12,7 @@ Organização por feature: cada cena fica junto do seu script e dos recursos exc
 <feature>/          ex.: player/, enemies/, ui/hud/
   <nome>.tscn
   <nome>.gd
+components/         componentes reutilizados por mais de uma feature (ex.: health_component)
 assets/             arte, áudio e fontes compartilhados
 autoload/           singletons (cada um com decisão registrada)
 test/unit/          testes de regras puras

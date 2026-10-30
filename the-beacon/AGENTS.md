@@ -41,6 +41,7 @@ Detalhes e exemplos em `docs/convencoes-gdscript.md`. O mínimo inegociável:
 - **Somente sintaxe do Godot 4** (`@export`, `@onready`, `await`, `signal.connect(callable)`). Nunca sintaxe do Godot 3.
 - Ações de input semânticas (`move_left`, `jump`), nunca `ui_*` para gameplay.
 - "Call down, signal up": pai chama filho; filho emite sinal. Sem `get_parent().get_parent()`.
+- Um script, uma responsabilidade: comportamento novo nasce em componente próprio, e regras de jogo ficam em funções puras testáveis, fora do nó.
 - Sem números mágicos: `@export` para ajuste por instância, constantes para valores globais.
 - Comentários explicam **por quê**, não o quê.
 
@@ -83,6 +84,7 @@ Regras:
 - Registre o que é verdade sobre o projeto, não o histórico de tentativas.
 - Atualize a nota no mesmo passo da mudança que a tornou desatualizada.
 - Uma decisão aceita só muda com uma nova decisão que a substitua (marque a antiga como substituída).
+- Ao criar ou alterar uma regra, convenção ou decisão, confira se ela contradiz `AGENTS.md`, `docs/convencoes-gdscript.md` ou uma decisão aceita. Se contradisser, não aplique: aponte o conflito ao desenvolvedor e decidam juntos (resolver pode exigir uma nova decisão em `docs/decisoes/`).
 
 ## Arquivos do Godot: cuidados
 
