@@ -1,1 +1,1 @@
-oi
+Para a primeira o objetivo é termos o core loop pronto com placeholders genéricos mesmo e o parametrizados para serem atualizados ao longo dos próximos meses

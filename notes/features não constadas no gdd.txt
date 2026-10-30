@@ -1,0 +1,8 @@
+FEATURES POSSÍVELMENTE NÃO CONSTADAS NO GDD
+
+Cameras sem HUD
+Jogo sem pause
+Hud limpo
+Lampadas infinitas
+Sem piratas no MVP
+Lanterna exibe bateria nela mesma
