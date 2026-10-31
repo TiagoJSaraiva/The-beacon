@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://beam/beam_control.gd" id="1_control"]
+[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_panel"]
+albedo_color = Color(0.2, 0.22, 0.25, 1)
+metallic = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lever"]
+albedo_color = Color(0.7, 0.6, 0.2, 1)
+metallic = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_switch"]
+size = Vector3(0.5, 0.5, 0.3)
+
+[node name="BeamControl" type="Node3D"]
+script = ExtResource("1_control")
+
+[node name="Panel" type="CSGBox3D" parent="."]
+size = Vector3(0.5, 0.5, 0.1)
+material = SubResource("StandardMaterial3D_panel")
+
+[node name="Lever" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0.06)
+
+[node name="Handle" type="CSGBox3D" parent="Lever"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+size = Vector3(0.04, 0.2, 0.04)
+material = SubResource("StandardMaterial3D_lever")
+
+[node name="Indicator" type="OmniLight3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.17, 0.12)
+light_energy = 1.2
+omni_range = 1.5
+
+[node name="SwitchPoint" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SwitchPoint"]
+shape = SubResource("BoxShape3D_switch")
+
+[connection signal="interacted" from="SwitchPoint" to="." method="_on_switch_point_interacted"]

@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://exterior/security_camera.gd" id="1_camera"]
+
+[sub_resource type="Environment" id="Environment_camera"]
+resource_local_to_scene = true
+background_mode = 1
+background_color = Color(0.03, 0.04, 0.06, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.4, 0.45, 0.55, 1)
+ambient_light_energy = 0.8
+fog_light_color = Color(0.6, 0.63, 0.66, 1)
+fog_density = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.15, 0.15, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.2, 0.2, 0.4)
+
+[node name="SecurityCamera" type="Node3D"]
+script = ExtResource("1_camera")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
+mesh = SubResource("BoxMesh_body")
+
+[node name="Viewport" type="SubViewport" parent="."]
+unique_name_in_owner = true
+size = Vector2i(320, 240)
+render_target_update_mode = 4
+
+[node name="Camera" type="Camera3D" parent="Viewport"]
+unique_name_in_owner = true
+environment = SubResource("Environment_camera")
+fov = 60.0
+far = 300.0

@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://night/wall_clock.gd" id="1_clock"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_case"]
+albedo_color = Color(0.08, 0.08, 0.08, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_case"]
+material = SubResource("StandardMaterial3D_case")
+size = Vector3(0.6, 0.25, 0.08)
+
+[node name="WallClock" type="Node3D"]
+script = ExtResource("1_clock")
+
+[node name="Case" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_case")
+
+[node name="Display" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.045)
+pixel_size = 0.002
+modulate = Color(1, 0.15, 0.1, 1)
+text = "20:00"
+font_size = 96
+outline_size = 0

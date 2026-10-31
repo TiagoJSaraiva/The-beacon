@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/game.gd" id="1_game"]
+[ext_resource type="PackedScene" path="res://lighthouse/lighthouse.tscn" id="2_lighthouse"]
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="4_hud"]
+[ext_resource type="Resource" path="res://config/difficulties/easy.tres" id="5_easy"]
+[ext_resource type="Script" path="res://night/night_director.gd" id="6_night"]
+[ext_resource type="Script" path="res://events/event_director.gd" id="7_events"]
+[ext_resource type="PackedScene" path="res://exterior/exterior.tscn" id="8_exterior"]
+[ext_resource type="Script" path="res://fog/fog_system.gd" id="9_fog"]
+[ext_resource type="Script" path="res://boats/boat_director.gd" id="10_boats"]
+[ext_resource type="PackedScene" path="res://boats/boat.tscn" id="11_boat"]
+[ext_resource type="Script" path="res://drowned/drowned_director.gd" id="12_drowned"]
+[ext_resource type="PackedScene" path="res://drowned/drowned.tscn" id="13_drowned_scene"]
+[ext_resource type="Script" path="res://fog_man/fog_man_director.gd" id="14_fog_man"]
+[ext_resource type="PackedScene" path="res://fog_man/fog_man.tscn" id="15_fog_man_scene"]
+[ext_resource type="PackedScene" path="res://ui/night_end/night_end_screen.tscn" id="16_night_end"]
+
+[sub_resource type="Environment" id="Environment_night"]
+background_mode = 1
+background_color = Color(0.02, 0.03, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.25, 0.3, 0.4, 1)
+ambient_light_energy = 0.7
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_world"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.1
+cell_height = 0.1
+agent_height = 1.8
+agent_radius = 0.4
+agent_max_climb = 0.3
+agent_max_slope = 40.0
+filter_baking_aabb = AABB(-24, -1, -14, 32, 14, 28)
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_game")
+default_difficulty = ExtResource("5_easy")
+
+[node name="World" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_night")
+
+[node name="Moon" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 30, 0)
+light_color = Color(0.6, 0.7, 0.9, 1)
+light_energy = 0.5
+shadow_enabled = true
+
+[node name="Exterior" parent="World" instance=ExtResource("8_exterior")]
+unique_name_in_owner = true
+
+[node name="Lighthouse" parent="World" instance=ExtResource("2_lighthouse")]
+unique_name_in_owner = true
+
+[node name="Player" parent="World" instance=ExtResource("3_player")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 9.05, 1.5)
+
+[node name="NightDirector" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("6_night")
+
+[node name="EventDirector" type="Node" parent="World" node_paths=PackedStringArray("night")]
+unique_name_in_owner = true
+script = ExtResource("7_events")
+night = NodePath("../NightDirector")
+
+[node name="FogSystem" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("9_fog")
+
+[node name="BoatDirector" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("10_boats")
+boat_scene = ExtResource("11_boat")
+
+[node name="DrownedDirector" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("12_drowned")
+drowned_scene = ExtResource("13_drowned_scene")
+
+[node name="FogManDirector" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("14_fog_man")
+fog_man_scene = ExtResource("15_fog_man_scene")
+
+[node name="Navigation" type="NavigationRegion3D" parent="World"]
+unique_name_in_owner = true
+navigation_mesh = SubResource("NavigationMesh_world")
+
+[node name="Hud" parent="." instance=ExtResource("4_hud")]
+unique_name_in_owner = true
+
+[node name="NightEndScreen" parent="." instance=ExtResource("16_night_end")]
+unique_name_in_owner = true

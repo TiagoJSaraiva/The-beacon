@@ -1,0 +1,127 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://power/generator.gd" id="1_generator"]
+[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://components/looping_sound.gd" id="3_loop"]
+[ext_resource type="AudioStream" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
+[ext_resource type="AudioStream" path="res://assets/audio/placeholder/alarm.wav" id="5_alarm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.4, 1, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.25, 0.32, 0.26, 1)
+metallic = 0.5
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(1.4, 1, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frame"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_frame"]
+material = SubResource("StandardMaterial3D_frame")
+size = Vector3(0.09, 0.32, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fill"]
+albedo_color = Color(0.9, 0.7, 0.1, 1)
+emission_enabled = true
+emission = Color(0.9, 0.7, 0.1, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_fill"]
+material = SubResource("StandardMaterial3D_fill")
+size = Vector3(0.05, 0.28, 0.02)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_repair"]
+size = Vector3(1.0, 0.6, 0.2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cap"]
+top_radius = 0.08
+bottom_radius = 0.08
+height = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pour"]
+size = Vector3(0.4, 0.3, 0.4)
+
+[node name="Generator" type="Node3D"]
+script = ExtResource("1_generator")
+
+[node name="Body" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Mesh" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="Gauge" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.75, 0.46)
+
+[node name="Frame" type="MeshInstance3D" parent="Gauge"]
+mesh = SubResource("BoxMesh_frame")
+
+[node name="GaugePivot" type="Node3D" parent="Gauge"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14, 0.005)
+
+[node name="Fill" type="MeshInstance3D" parent="Gauge/GaugePivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
+mesh = SubResource("BoxMesh_fill")
+
+[node name="RepairPoint" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.45, 0.5)
+script = ExtResource("2_interactable")
+mode = 1
+hands_rule = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RepairPoint"]
+shape = SubResource("BoxShape3D_repair")
+
+[node name="BrokenLight" type="OmniLight3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.3)
+light_color = Color(1, 0.1, 0.05, 1)
+light_energy = 1.5
+omni_range = 3.0
+
+[node name="FuelCap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1.05, 0)
+mesh = SubResource("CylinderMesh_cap")
+
+[node name="PourPoint" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1.1, 0)
+script = ExtResource("2_interactable")
+mode = 1
+hands_rule = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PourPoint"]
+shape = SubResource("BoxShape3D_pour")
+
+[node name="Hum" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+stream = ExtResource("4_hum")
+volume_db = -8.0
+max_distance = 14.0
+bus = &"SFX"
+script = ExtResource("3_loop")
+
+[node name="Alarm" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+stream = ExtResource("5_alarm")
+max_distance = 25.0
+bus = &"SFX"
+script = ExtResource("3_loop")
+
+[connection signal="hold_completed" from="RepairPoint" to="." method="_on_repair_point_hold_completed"]
+[connection signal="hold_completed" from="PourPoint" to="." method="_on_pour_point_hold_completed"]

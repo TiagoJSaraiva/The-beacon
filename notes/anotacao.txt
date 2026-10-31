@@ -1,1 +1,142 @@
 Para a primeira o objetivo é termos o core loop pronto com placeholders genéricos mesmo e o parametrizados para serem atualizados ao longo dos próximos meses
+
+Primeiro andar sem vidro, visualização apenas por câmera. 
+
+Mudar feedback de bateria de lanterna, mudar de porcentagem para barra de bateria
+
+Galão com física soltável por aí.
+
+Interação com o rádio gatilho pra ele não entrar na nevoa
+
+Galão precisa usar só depois de mangueira quebrar. Ele começa cheio na primeira interação, mangueira antes disso reabastece sozinha. Player pega o galão, reabastece gerador, coloca galão pra encher denovo, leva uns 2 minutos, e ciclo repete.
+
+MONITOR 
+Colocar mais um que aponte pro mar. Funciona como uma extensão do FOV cobrindo 180º
+
+
+MENU
+
+No MVP - hud tradicional acessado por esc.
+- Realocação de hotkey e compatibilidade com controle.
+Ideia pra versões futuras: Elemento interativo in game que abre menu.
+
+
+SALVAMENTO
+
+- Salvar e sair no começo de noite.
+- Ao retornar, carrega do começo da noite salva.
+- Ao sair no meio de noite, perde save. Se dar alt f4 ou sair pelo menu -> perde o salve
+
+
+PERSISTÊNCIA ENTRE NOITES
+
+- Tudo habilitado persiste:
+- Afogado
+- Mangueira quebrado
+- Bateria da lanterna
+
+- Reseta:
+- Todo o resto.
+
+
+
+
+
+
+Coisas que quebram:
+- Mangeira estoura - irreparável, causado por evento aleatório mas induzido pelo nevoeiro (talvez). Em algum momento da run precisa estourar.
+- Casa de máquina - reparável por interação, causa aleatória sem dependência do nevoeiro.
+- Lampada quebra - reparável por interação, causa aleatória sem dependência do nevoeiro.
+
+Coisas interativas:
+- Rádio: Interagir para comunicar - comunicação com barco normal evita ele de passar pela névoa (se farol e maquina estiverem funcionado), interagir com pirata revela posição que ativa trigger de evento de ataque pirata (definido futuramente). 
+- Galão de combustível: interagir para encher - quando mangueira estoura, é o galão usado pra abastecer a casa de máquina.
+- Casa de máquina: interagir para abastecer manualmente - depois que mangueira estourar.
+- Tanque de combustível: interagir pra pegar ou devolver galão - devolver para abastecer. Deve ter feedback indicando nível de abastecimento.
+- Lanterna: interagir por hotkey pra ligar ou desligar.
+
+- Switch pra desligar o farol - Se houver piratas. - Não precisa por no MVP por enquanto, apenas quando e se os piratas estiverem implementados.
+- Alçapão: fechar e abrir.
+- Trinco do alçapão: Segurar o alçapão - Se o trinco estiver ativado, o afogado não consegue invadir. A névoa desativa o trinco. Interação pra ativar e desativar trinco leva tempo de carregamento parametrizado - se for 0, não há tempo nem UI de "carga". Se o trinco for aberto pela névoa, há um tempo de recarga pra trancar novamente. 
+- Cadeira - pra sentar, fixa câmera em um pov específico "sentado" com visão geral do primeiro andar.
+NO FUTURO - Elemento pra abrir menu "natural" in game.
+
+
+
+
+
+Tudo que quebra possui cooldown entre cada quebra. 
+
+
+RADIO
+
+Quando radio tocar, player tem que atender, caso seja barco normal, se for barco pirata, não deve. Isso vai ser visível pelos monitores pois cada tipo de barco vai ter um visual diferente.
+
+
+AFOGADO
+
+Afogado fica no alçapão até conseguir abrir ou até o nevoeiro abrir. Colocar um tempo até ele "cansar". O afogado é um kill condition basicamente. Ele não sabota nada apenas tenta matar o player. Se o player tiver em baixo, ele vai atrás do player, se o player sobe e fecha o alçapão, ele bate no alçapão até entrar.
+Perguntas: Se ele ativou o trigger em uma noite, na proxima vai manter?
+
+
+BARCO
+- Barco passa pelo mar
+- O tempo de revelância dele é quando está aparecendo na câmera
+- Toca o rádio: Se o rádio não for atendido e o nevoeiro existir, ele pode afundar caso entre no nevoeiro.
+- Quando barco é avisado pelo rádio (player atende), muda de direção.
+- Nevoeiro nunca vai ocupar 100% da região mostrada pela câmera, pra evitar barcos de afundarem imediatamente.
+- Se barco entrar no nevoeiro, afunda na hora.
+- Se o nevoeiro não existir e o player não atender o rádio, nada acontece.
+- Se o barco afundar ele habilitado um afogado.
+- Pra cada barco afundado, maior a ameaça do afogado. Ameaça pode ser aumentada em % de chance do afogado aparecer
+TEMPORARIO TALVEZ - Duração de travessia de barco (normal e pirata) definida por parâmetro, a princípio, é um tempo curto, cerca de 5 segundos.
+TEMPORARIO TALVEZ - Não pode aparecer 2 barcos simultaneamente. Calibrar isso por parâmetro.
+
+
+NEVOA
+- Aparece em um momento da noite. Tem chance de aparecer a noite inteira. A quantia de tempo que fica na câmera, vamos regular.
+- Ela pode sair sozinha. Talvez colocar uma mecânica de deletar a névoa (ideia, sem garantia)
+- Se a névoa tomar o farol, chegar muito próxima do farol, ela não vai desaparecer da câmera. Ela vai bloquear a luz do farol. Pra você conseguir destravar vai levar um tempo. Se ela tomou o farol e você religou as coisas, ela vai ficar alguns segundos (parametro) bloqueando a luz. E depois desse tempo ela é recuada.
+- Se ela chegar até certo habilitador, ela pode aparecer na câmera da porta.
+- Se a névoa aparecer no limite, ao máximo, ela entra no farol, ao entrar no farol, ela habilita aparição de carranca e habilita pro afogado invadir.
+- O afogado não consegue invadir sem a névoa porque o pirata consegue fazer isso. Ele é um fantasma, não precisa da névoa.
+- Se você desligar o farol, a névoa vai te sabotar: Apagar luz do farol, gerar homem da névoa
+momento 1 farol - Cameras do barco, pode aparece o tempo inteiro, em qualquer hora; Se o jogador tiver algum bloqueadores de névoa desligado: farol ou a casa de máquina (esperrado), nesses casos, não adianta falar no rádio que o barco não desviar. Assim adiciona uma mecânica de urgência de arrumar os problemas para os barcos não afundarem. Durante momentos em que casa está quebrada: Enquanto você não consertar a casa de máquina, o nevoeiro continua se aproximando, ao consertar ele para ou recua uma certa distância.
+
+CARRANCA
+- Quando a névoa entra no farol, habilita a aparição da carranca também, ela é a menifestação na névoa, quando o player entra em certo alcance da carranca, a carranca pula no jogador deixando-o cego por alguns segundos.
+- A carranca não se mexe, só quando jogador entra no alcance determinado.
+- Quando o jogador destroi a Carranca com a lanterna, ela tem um cooldown de respawn dentro do farol, se atacar ao invés de ser destruida, ela atacar, por enquanto manter mesmo cooldown mas separar em outro parâmetro para ajuste.
+- Funciona como se fosse uma trap range
+- Apontar a lanterna pra carranca por alguns segundos faz ela desaparecer. Desaparecimento gradual ou um efeito de desaparecimento. Luz da lanterna vara o corpo da carranca, ela tem um alpha reduzido.
+- Colocar um habilitador de balancing que a Carranca, depois de te cegar certa quantia de vezes (parametrizado), no próximo ataque ela te derruba ao invés de te cegar; Empurra/derruba, algum efeito de stun, baque físico.
+
+PIRATA
+
+- Barco muito semelhante com barco normal, mas com diferenças suficientes pro player conseguir identificar.
+Se for pirata, não pode atender, se atender, ele sabe sua localização.
+Pirata passa mais rápido.
+
+
+PERSONAGEM
+
+- WASD
+- Pular - A
+- Correr - L2
+- Interagir - Y
+- Ligar lanterna Q - X
+- Quando toma queda média, corrida bloqueada por tempo (determinado por parametro)
+
+
+GERADOR DE LUZ
+
+- Gerador quebra uma vez aleatóriamente
+- O Tanque de combustível abastece o gerador que gera pra casa de máquina
+- Quando mangueira quebra, gerador principal para de funcionar, player precisa abastecer gerador de emercia do lado da casa de maquina diretamente.
+
+
+Pirata: Usuário tem que desligar o farol e não ligar o rádio pra não chamar o pirata.
+
+
+IDEIA 
+- Aumentar consumo de combustível por noite passada. Criar parâmetro de incremento por noite.

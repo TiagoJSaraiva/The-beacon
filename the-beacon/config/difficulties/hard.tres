@@ -1,0 +1,82 @@
+[gd_resource type="Resource" script_class="DifficultyConfig" format=3]
+
+[ext_resource type="Script" path="res://config/boat_config.gd" id="1_83dqw"]
+[ext_resource type="Script" path="res://config/drowned_config.gd" id="2_rac0w"]
+[ext_resource type="Script" path="res://events/event_definition.gd" id="3_0up6b"]
+[ext_resource type="Resource" path="res://config/events/lamp_burnout.tres" id="4_6yf4o"]
+[ext_resource type="Resource" path="res://config/events/hose_rupture.tres" id="5_3kbr3"]
+[ext_resource type="Resource" path="res://config/events/generator_breakdown.tres" id="6_vhuoi"]
+[ext_resource type="Resource" path="res://config/events/fog.tres" id="7_hrpw4"]
+[ext_resource type="Resource" path="res://config/events/boat.tres" id="8_atx57"]
+[ext_resource type="Script" path="res://config/fall_config.gd" id="9_ldjh3"]
+[ext_resource type="Script" path="res://config/flashlight_config.gd" id="10_tvxx4"]
+[ext_resource type="Script" path="res://config/fog_config.gd" id="11_u6d7a"]
+[ext_resource type="Script" path="res://config/fog_man_config.gd" id="12_q1ajg"]
+[ext_resource type="Script" path="res://config/power_config.gd" id="13_ksepb"]
+[ext_resource type="Script" path="res://config/repair_config.gd" id="14_o2fdw"]
+[ext_resource type="Script" path="res://config/difficulty_config.gd" id="15_k8l5r"]
+[ext_resource type="Script" path="res://config/threat_config.gd" id="16_r2g71"]
+[ext_resource type="Script" path="res://config/time_config.gd" id="17_doypv"]
+[ext_resource type="Script" path="res://config/trapdoor_config.gd" id="18_bf42e"]
+
+[sub_resource type="Resource" id="Resource_ucn1s"]
+script = ExtResource("1_83dqw")
+pirate_chance = 0.3
+sink_seconds_at_min_intensity = 70.0
+sink_seconds_at_max_intensity = 25.0
+
+[sub_resource type="Resource" id="Resource_0fsd6"]
+script = ExtResource("2_rac0w")
+
+[sub_resource type="Resource" id="Resource_io18r"]
+script = ExtResource("9_ldjh3")
+
+[sub_resource type="Resource" id="Resource_bcnhu"]
+script = ExtResource("10_tvxx4")
+battery_seconds = 1750.0
+
+[sub_resource type="Resource" id="Resource_6m6va"]
+script = ExtResource("11_u6d7a")
+
+[sub_resource type="Resource" id="Resource_243vo"]
+script = ExtResource("12_q1ajg")
+
+[sub_resource type="Resource" id="Resource_4aahe"]
+script = ExtResource("13_ksepb")
+reserve_capacity = 480.0
+reserve_start_fuel = 480.0
+
+[sub_resource type="Resource" id="Resource_rqdck"]
+script = ExtResource("14_o2fdw")
+
+[sub_resource type="Resource" id="Resource_gv3ox"]
+script = ExtResource("16_r2g71")
+spawn_chance_base = 0.2
+chase_threat_threshold = 2.5
+
+[sub_resource type="Resource" id="Resource_8fen3"]
+script = ExtResource("17_doypv")
+
+[sub_resource type="Resource" id="Resource_73kch"]
+script = ExtResource("18_bf42e")
+resistance_seconds = 15.0
+
+[resource]
+script = ExtResource("15_k8l5r")
+id = &"hard"
+display_name = "Hard"
+nights = 7
+events = Array[ExtResource("3_0up6b")]([ExtResource("4_6yf4o"), ExtResource("5_3kbr3"), ExtResource("6_vhuoi"), ExtResource("7_hrpw4"), ExtResource("8_atx57")])
+event_chance_multiplier = 1.3
+chance_increase_per_night = 0.12
+time = SubResource("Resource_8fen3")
+power = SubResource("Resource_4aahe")
+flashlight = SubResource("Resource_bcnhu")
+repair = SubResource("Resource_rqdck")
+fog = SubResource("Resource_6m6va")
+boat = SubResource("Resource_ucn1s")
+threat = SubResource("Resource_gv3ox")
+drowned = SubResource("Resource_0fsd6")
+trapdoor = SubResource("Resource_73kch")
+fog_man = SubResource("Resource_243vo")
+fall = SubResource("Resource_io18r")

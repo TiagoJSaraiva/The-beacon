@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EventDefinition" format=3]
+
+[ext_resource type="Script" path="res://events/event_definition.gd" id="1_uo11o"]
+
+[resource]
+script = ExtResource("1_uo11o")
+id = &"hose_rupture"
+window_start_hour = 22.0
+window_end_hour = 4.0
+check_interval_seconds = 45.0
+chance_per_check = 0.04

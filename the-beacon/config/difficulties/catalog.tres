@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="DifficultyCatalog" format=3]
+
+[ext_resource type="Script" path="res://config/difficulty_config.gd" id="1_swnmi"]
+[ext_resource type="Resource" path="res://config/difficulties/easy.tres" id="2_kf6df"]
+[ext_resource type="Resource" path="res://config/difficulties/medium.tres" id="3_2kxmx"]
+[ext_resource type="Resource" path="res://config/difficulties/hard.tres" id="4_xwl7c"]
+[ext_resource type="Script" path="res://config/difficulty_catalog.gd" id="5_j5ifr"]
+
+[resource]
+script = ExtResource("5_j5ifr")
+difficulties = Array[ExtResource("1_swnmi")]([ExtResource("2_kf6df"), ExtResource("3_2kxmx"), ExtResource("4_xwl7c")])

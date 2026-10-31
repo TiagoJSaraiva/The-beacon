@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://lighthouse/security_monitor.gd" id="1_monitor"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_case"]
+albedo_color = Color(0.12, 0.12, 0.11, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_case"]
+material = SubResource("StandardMaterial3D_case")
+size = Vector3(0.56, 0.44, 0.3)
+
+[sub_resource type="QuadMesh" id="QuadMesh_screen"]
+size = Vector2(0.5, 0.375)
+
+[node name="SecurityMonitor" type="Node3D"]
+script = ExtResource("1_monitor")
+
+[node name="Case" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, -0.15)
+mesh = SubResource("BoxMesh_case")
+
+[node name="Screen" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, 0.005)
+mesh = SubResource("QuadMesh_screen")

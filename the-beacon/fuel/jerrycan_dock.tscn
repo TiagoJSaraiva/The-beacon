@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fuel/jerrycan_dock.gd" id="1_dock"]
+[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Material" path="res://fuel/jerrycan_material.tres" id="3_material"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shelf"]
+albedo_color = Color(0.3, 0.3, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jerrycan"]
+material = ExtResource("3_material")
+size = Vector3(0.3, 0.4, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dock_use"]
+size = Vector3(0.6, 0.7, 0.5)
+
+[node name="JerrycanDock" type="Node3D"]
+script = ExtResource("1_dock")
+
+[node name="Shelf" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+use_collision = true
+size = Vector3(0.6, 0.5, 0.4)
+material = SubResource("StandardMaterial3D_shelf")
+
+[node name="DockedJerrycan" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("BoxMesh_jerrycan")
+
+[node name="DockPoint" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DockPoint"]
+shape = SubResource("BoxShape3D_dock_use")
+
+[connection signal="interacted" from="DockPoint" to="." method="_on_dock_point_interacted"]

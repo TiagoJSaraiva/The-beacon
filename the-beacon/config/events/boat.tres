@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EventDefinition" format=3]
+
+[ext_resource type="Script" path="res://events/event_definition.gd" id="1_0xshg"]
+
+[resource]
+script = ExtResource("1_0xshg")
+id = &"boat"
+window_start_hour = 20.5
+window_end_hour = 5.5
+max_per_night = 4

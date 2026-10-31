@@ -1,0 +1,126 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fuel/reserve_tank.gd" id="1_tank"]
+[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://components/looping_sound.gd" id="3_loop"]
+[ext_resource type="AudioStream" path="res://assets/audio/placeholder/alarm.wav" id="4_alarm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tank"]
+albedo_color = Color(0.45, 0.2, 0.15, 1)
+metallic = 0.6
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frame"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_frame"]
+material = SubResource("StandardMaterial3D_frame")
+size = Vector3(0.1, 0.62, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fill"]
+albedo_color = Color(0.9, 0.7, 0.1, 1)
+emission_enabled = true
+emission = Color(0.9, 0.7, 0.1, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_fill"]
+material = SubResource("StandardMaterial3D_fill")
+size = Vector3(0.06, 0.6, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hose"]
+albedo_color = Color(0.08, 0.08, 0.08, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hose"]
+material = SubResource("StandardMaterial3D_hose")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hose_use"]
+size = Vector3(0.35, 0.8, 0.35)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leak"]
+albedo_color = Color(0.15, 0.12, 0.05, 1)
+metallic = 0.3
+roughness = 0.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leak"]
+material = SubResource("StandardMaterial3D_leak")
+top_radius = 0.6
+bottom_radius = 0.6
+height = 0.01
+
+[node name="ReserveTank" type="Node3D"]
+script = ExtResource("1_tank")
+
+[node name="Body" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+use_collision = true
+radius = 0.5
+height = 1.6
+sides = 16
+material = SubResource("StandardMaterial3D_tank")
+
+[node name="Gauge" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0.51)
+
+[node name="Frame" type="MeshInstance3D" parent="Gauge"]
+mesh = SubResource("BoxMesh_frame")
+
+[node name="GaugePivot" type="Node3D" parent="Gauge"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0.005)
+
+[node name="Fill" type="MeshInstance3D" parent="Gauge/GaugePivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("BoxMesh_fill")
+
+[node name="Hose" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 0.55, 0.2)
+mesh = SubResource("CylinderMesh_hose")
+
+[node name="FillPoint" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 0.55, 0.2)
+script = ExtResource("2_interactable")
+mode = 1
+hands_rule = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FillPoint"]
+shape = SubResource("BoxShape3D_hose_use")
+
+[node name="RepairPoint" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 0.55, 0.2)
+script = ExtResource("2_interactable")
+mode = 1
+hands_rule = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RepairPoint"]
+shape = SubResource("BoxShape3D_hose_use")
+
+[node name="Leak" type="Node3D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="Puddle" type="MeshInstance3D" parent="Leak"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.01, 0.3)
+mesh = SubResource("CylinderMesh_leak")
+
+[node name="BrokenLight" type="OmniLight3D" parent="Leak"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.0, 0.3)
+light_color = Color(1, 0.1, 0.05, 1)
+light_energy = 1.5
+omni_range = 3.0
+
+[node name="Alarm" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.0, 0.3)
+stream = ExtResource("4_alarm")
+pitch_scale = 1.3
+max_distance = 25.0
+bus = &"SFX"
+script = ExtResource("3_loop")
+
+[connection signal="hold_completed" from="FillPoint" to="." method="_on_fill_point_hold_completed"]
+[connection signal="hold_completed" from="RepairPoint" to="." method="_on_repair_point_hold_completed"]

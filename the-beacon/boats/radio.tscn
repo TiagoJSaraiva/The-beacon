@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://blaj3p7cqy60x"]
+
+[ext_resource type="Script" uid="uid://ba7d7o1060jrk" path="res://boats/radio.gd" id="1_radio"]
+[ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
+[ext_resource type="AudioStream" uid="uid://cmcdvxu6x8t5y" path="res://assets/audio/placeholder/radio_ring.wav" id="4_ring"]
+[ext_resource type="AudioStream" uid="uid://3gvs3a7ear5m" path="res://assets/audio/placeholder/radio_allowed.wav" id="5_allowed"]
+[ext_resource type="AudioStream" uid="uid://bxwk8w7wq0kfg" path="res://assets/audio/placeholder/radio_pirate.wav" id="6_pirate"]
+[ext_resource type="PackedScene" uid="uid://bgv1ya0eo5710" path="res://assets/RadiostationMCKINLEY_GameReady.fbx" id="7_3iwy5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_answer"]
+size = Vector3(0.5, 0.35, 0.35)
+
+[node name="Radio" type="Node3D" unique_id=387591912]
+script = ExtResource("1_radio")
+allowed_message = ExtResource("5_allowed")
+pirate_message = ExtResource("6_pirate")
+
+[node name="CallLight" type="OmniLight3D" parent="." unique_id=1898745611]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.3, 0.12)
+light_color = Color(1, 0.6, 0.1, 1)
+light_energy = 1.5
+omni_range = 1.5
+
+[node name="Ring" type="AudioStreamPlayer3D" parent="." unique_id=515533845]
+unique_name_in_owner = true
+stream = ExtResource("4_ring")
+bus = &"SFX"
+script = ExtResource("3_loop")
+
+[node name="Message" type="AudioStreamPlayer3D" parent="." unique_id=1070440389]
+unique_name_in_owner = true
+bus = &"SFX"
+
+[node name="AnswerPoint" type="Area3D" parent="." unique_id=191373762]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+script = ExtResource("2_interactable")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnswerPoint" unique_id=469918417]
+shape = SubResource("BoxShape3D_answer")
+
+[node name="RadiostationMCKINLEY_GameReady" parent="." unique_id=1793233140 instance=ExtResource("7_3iwy5")]
+transform = Transform3D(2.2329223, 0, 0, 0, 3.3536701, 0, 0, 0, 1.7053541, -0.0018395483, 0, 0.012781918)
+
+[connection signal="interacted" from="AnswerPoint" to="." method="_on_answer_point_interacted"]

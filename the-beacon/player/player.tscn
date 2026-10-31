@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://player/fall_damage.gd" id="2_fall"]
+[ext_resource type="Script" path="res://player/interaction_ray.gd" id="3_ray"]
+[ext_resource type="PackedScene" path="res://player/flashlight.tscn" id="4_flashlight"]
+[ext_resource type="Material" path="res://fuel/jerrycan_material.tres" id="5_jerrycan"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_jerrycan"]
+material = ExtResource("5_jerrycan")
+size = Vector3(0.3, 0.4, 0.15)
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 67
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+
+[node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D" node_paths=PackedStringArray("user")]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -2.2)
+script = ExtResource("3_ray")
+user = NodePath("../../..")
+
+[node name="Flashlight" parent="Head/Camera3D" instance=ExtResource("4_flashlight")]
+unique_name_in_owner = true
+
+[node name="CarriedJerrycan" type="MeshInstance3D" parent="Head/Camera3D"]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, -0.42, -0.5)
+mesh = SubResource("BoxMesh_jerrycan")
+
+[node name="FallDamage" type="Node" parent="." node_paths=PackedStringArray("body")]
+unique_name_in_owner = true
+script = ExtResource("2_fall")
+body = NodePath("..")
+
+[connection signal="fatal_fall" from="FallDamage" to="." method="_on_fall_damage_fatal_fall"]
+[connection signal="slowed" from="FallDamage" to="." method="_on_fall_damage_slowed"]

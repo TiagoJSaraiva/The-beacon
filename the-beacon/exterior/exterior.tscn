@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://exterior/exterior.gd" id="1_exterior"]
+[ext_resource type="PackedScene" path="res://exterior/security_camera.tscn" id="2_camera"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock"]
+albedo_color = Color(0.2, 0.21, 0.2, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sea"]
+albedo_color = Color(0.03, 0.08, 0.12, 1)
+metallic = 0.3
+roughness = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sea"]
+material = SubResource("StandardMaterial3D_sea")
+size = Vector2(600, 600)
+
+[sub_resource type="Curve3D" id="Curve3D_boats"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -140, -0.6, 70, 0, 0, 0, 0, 0, 0, 140, -0.6, 70),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Exterior" type="Node3D" groups=["navigation_source"]]
+script = ExtResource("1_exterior")
+
+[node name="Island" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
+use_collision = true
+radius = 40.0
+height = 1.0
+sides = 48
+material = SubResource("StandardMaterial3D_rock")
+
+[node name="Sea" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+mesh = SubResource("PlaneMesh_sea")
+
+[node name="BoatPath" type="Path3D" parent="."]
+unique_name_in_owner = true
+curve = SubResource("Curve3D_boats")
+
+[node name="SeaView" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 70)
+
+[node name="DoorView" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 1.2, 0)
+
+[node name="SeaCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 6.2)
+target = NodePath("../SeaView")
+
+[node name="LighthouseCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 5, 7)
+target = NodePath("../DoorView")
+
+[node name="DrownedSpawns" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="SpawnA" type="Marker3D" parent="DrownedSpawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 3)
+
+[node name="SpawnB" type="Marker3D" parent="DrownedSpawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 0, -6)
+
+[node name="SpawnC" type="Marker3D" parent="DrownedSpawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 10)
+
+[node name="FogManSpawn" type="Marker3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 0)

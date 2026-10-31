@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://test/scenes/fixtures/flat_level.tscn" id="1_level"]
+[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_target"]
+
+[node name="InteractionLevel" instance=ExtResource("1_level")]
+
+[node name="HoldTarget" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -1.5)
+script = ExtResource("2_interactable")
+mode = 1
+hold_seconds = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HoldTarget"]
+shape = SubResource("BoxShape3D_target")

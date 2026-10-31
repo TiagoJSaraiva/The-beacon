@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://boats/boat.gd" id="1_boat"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hull"]
+albedo_color = Color(0.35, 0.3, 0.25, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cabin"]
+albedo_color = Color(0.7, 0.7, 0.65, 1)
+
+[node name="Boat" type="PathFollow3D"]
+loop = false
+script = ExtResource("1_boat")
+
+[node name="Hull" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Body" type="CSGBox3D" parent="Hull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+size = Vector3(2.5, 1.5, 7)
+material = SubResource("StandardMaterial3D_hull")
+
+[node name="Cabin" type="CSGBox3D" parent="Hull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0.8)
+size = Vector3(1.8, 1.4, 2.2)
+material = SubResource("StandardMaterial3D_cabin")
+
+[node name="MastLight" type="OmniLight3D" parent="Hull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0.8)
+light_color = Color(1, 0.8, 0.5, 1)
+light_energy = 2.0
+omni_range = 10.0

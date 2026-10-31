@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://tgoqtleobfy"]
+
+[ext_resource type="Script" uid="uid://cm4vyx3yoqhur" path="res://beam/lighthouse_lamp.gd" id="1_lamp"]
+[ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+metallic = 0.8
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
+transparency = 1
+albedo_color = Color(0.6, 0.6, 0.55, 0.5)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dead_bulb"]
+material = SubResource("StandardMaterial3D_glass")
+radius = 0.17
+height = 0.34
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bulb"]
+albedo_color = Color(1, 0.95, 0.7, 1)
+emission_enabled = true
+emission = Color(1, 0.95, 0.7, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_bulb"]
+material = SubResource("StandardMaterial3D_bulb")
+radius = 0.18
+height = 0.36
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cone"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(1, 0.95, 0.7, 0.05)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cone"]
+material = SubResource("StandardMaterial3D_cone")
+top_radius = 2.5
+bottom_radius = 0.15
+height = 40.0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_replace"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[node name="LighthouseLamp" type="Node3D" unique_id=1624980243]
+script = ExtResource("1_lamp")
+
+[node name="Pedestal" type="CSGCylinder3D" parent="." unique_id=1416522082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7781739, 0)
+use_collision = true
+radius = 0.4
+height = 4.1563478
+sides = 16
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="Head" type="Node3D" parent="." unique_id=2102935574]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Housing" type="CSGBox3D" parent="Head" unique_id=1100061393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
+size = Vector3(0.5, 0.5, 0.3)
+material = SubResource("StandardMaterial3D_metal")
+
+[node name="DeadBulb" type="MeshInstance3D" parent="Head" unique_id=1174502861]
+mesh = SubResource("SphereMesh_dead_bulb")
+
+[node name="Beam" type="Node3D" parent="Head" unique_id=1515573521]
+unique_name_in_owner = true
+
+[node name="Bulb" type="MeshInstance3D" parent="Head/Beam" unique_id=353141938]
+mesh = SubResource("SphereMesh_bulb")
+
+[node name="Light" type="SpotLight3D" parent="Head/Beam" unique_id=1896880921]
+light_color = Color(1, 0.95, 0.75, 1)
+light_energy = 8.0
+spot_range = 60.0
+spot_angle = 6.0
+
+[node name="Cone" type="MeshInstance3D" parent="Head/Beam" unique_id=902201131]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -20)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_cone")
+
+[node name="ReplacePoint" type="Area3D" parent="Head" unique_id=1263123065]
+unique_name_in_owner = true
+script = ExtResource("2_interactable")
+mode = 1
+hands_rule = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/ReplacePoint" unique_id=1363281920]
+shape = SubResource("BoxShape3D_replace")
+
+[connection signal="hold_completed" from="Head/ReplacePoint" to="." method="_on_replace_point_hold_completed"]
