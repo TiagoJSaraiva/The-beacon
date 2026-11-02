@@ -21,18 +21,20 @@ Organização por feature: cada cena fica junto do seu script e dos recursos exc
   <nome>.gd
 components/         componentes reutilizados por mais de uma feature (ex.: health_component)
 assets/             arte, áudio e fontes compartilhados
-autoload/           singletons (cada um com decisão registrada)
+autoload/           singletons (cada um com decisão registrada) e as regras puras deles
 config/             classes de configuração e .tres de dificuldades e eventos
-tools/              scripts headless de manutenção (scripts/ tem .gdignore e o Godot não os enxerga)
+tools/              scripts headless de manutenção do jogo
+scripts/            pipeline de verificação (check.ps1, parse_check.gd); tem .gdignore, fora do res://
 test/unit/          testes de regras puras
 test/scenes/        testes de cena (gdUnit4 scene runner)
 ```
 
 ## Cenas principais
-- `game/game.tscn` (Main Scene provisória) → `Game` (`Node3D`, `game.gd`):
-  - `World` (`Node3D`): toda a simulação, congelada entre noites por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
-  - Fora do `World`: `Hud`, `NightEndScreen`.
-  - Aplica a dificuldade (`default_difficulty` = Easy ao rodar direto), registra eventos, liga os sinais e conduz as noites (`RunState`). Emite `run_won`, `run_lost`, `exit_to_menu_requested` (hoje recarregam a cena; passo 19 leva às telas).
+- `ui/main_menu/main_menu.tscn` (**Main Scene**) → `MainMenu`: menu, seleção de dificuldade e configurações (ver `sistemas/menus-e-telas.md`).
+- `game/game.tscn` → `Game` (`Node3D`, `game.gd`):
+  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
+  - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `AgendaOverlay`, `AgendaController` (`sistemas/agenda.md`), `RunSnapshot` (`sistemas/save-e-progresso.md`).
+  - Lê o pedido do `SceneRouter` (dificuldade nova ou save; sem pedido, `default_difficulty` = Easy), aplica a dificuldade ou restaura o save, registra eventos, liga os sinais e conduz as noites (`RunState`) até a vitória ou a morte. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG, `SpiralStaircase`, `Landing`, `Ramp`, `Trapdoor`, `EntranceDoor` (ver `sistemas/farol.md`); `Generator`, `ReserveTank`, `JerrycanDock` (`sistemas/energia-e-combustivel.md`); `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights`; `Desk` com monitores e `Radio`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
 - `exterior/exterior.tscn` → `Exterior`: ilha, mar, rota dos barcos, câmeras, pontos de surgimento (`sistemas/exterior-e-cameras.md`).
 - `player/player.tscn` → `Player` (`CharacterBody3D`) → `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
@@ -40,10 +42,16 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 - `ui/hud/hud.tscn` → `Hud` (`CanvasLayer`): hotkey, barra de progresso, borda vermelha, cegueira.
 - `ui/night_end/night_end_screen.tscn` → `NightEndScreen` (`CanvasLayer`): entre noites.
 
-Os diretores que mexem em outros sistemas (`DrownedDirector`, `FogManDirector`) recebem as referências do `Game` em `setup()`.
+Os diretores que mexem em outros sistemas (`DrownedDirector`, `FogManDirector`, `TutorialDirector`, `AgendaController`) recebem as referências do `Game` em `setup()`. `RunSnapshot` e `AgendaController` referenciam os nós da cena por `@export` (decisão 0006).
 
 ## Autoloads
-_Nenhum._
+| Nome | Script | Papel | Decisão |
+|---|---|---|---|
+| `SceneRouter` | `autoload/scene_router.gd` | Troca menu ↔ jogo e entrega o `RunRequest` ao `Game` | 0010 |
+| `SaveService` | `autoload/save_service.gd` | Save único da partida e progresso de desbloqueio (`user://`) | 0011 |
+| `Settings` | `autoload/settings.gd` | Volumes e sensibilidade (`user://settings.cfg`) | 0012 |
+
+O parse do check carrega os scripts com os autoloads registrados (decisão 0013).
 
 ## Sinais entre sistemas
 - `Player.interaction.focus_changed` → `Hud.show_prompt` — hotkey ao mirar.
@@ -60,6 +68,9 @@ _Nenhum._
 - `BoatDirector.boat_arrived` → `Game` → `Radio.ring`; `boat_gone` → `Radio.stop_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.mark_answered`.
 - `FogManDirector.player_blinded` → `Hud.show_blindness`.
 - `Drowned.effect_triggered` → `DrownedDirector` → farol ou `Player.kill`.
+- `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).
+- `Lighthouse.agenda.open_requested` → `AgendaController`; `AgendaOverlay.closed`/`save_and_exit_requested`/`exit_without_saving_requested` → `AgendaController` → `SaveService`, `SceneRouter`.
+- `NightEndScreen`, `GameOverScreen`, `VictoryScreen` → `Game` ou direto `SceneRouter`. `Settings.changed` → `Game` → `Player.sensitivity_scale`.
 
 ## Input map
 Teclas físicas (independem do layout do teclado). O olhar usa o movimento do mouse. Não há pulo (GDD 1.2.20).
@@ -72,6 +83,8 @@ Teclas físicas (independem do layout do teclado). O olhar usa o movimento do mo
 | `toggle_flashlight` | Z |
 | `check_battery` | X |
 | `interact` | E (segurar em interações de duração) |
+
+Menus e agenda usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay): Esc (`ui_cancel`) fecha a agenda ou volta à página anterior dela.
 
 ## Camadas de colisão
 1 — `world` — paredes, chão, escada / todos colidem; raios de oclusão

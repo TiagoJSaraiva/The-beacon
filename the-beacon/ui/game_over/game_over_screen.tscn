@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/game_over/game_over_screen.gd" id="1_screen"]
+
+[node name="GameOverScreen" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_screen")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0, 0, 0.95)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Você MAMOU"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tentar novamente"
+
+[node name="MenuButton" type="Button" parent="Center/Menu"]
+layout_mode = 2
+text = "Menu principal"
+
+[node name="QuitButton" type="Button" parent="Center/Menu"]
+layout_mode = 2
+text = "Sair"
+
+[connection signal="pressed" from="Center/Menu/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="Center/Menu/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="Center/Menu/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -1,0 +1,97 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/main_menu/main_menu.gd" id="1_menu"]
+[ext_resource type="Resource" path="res://config/difficulties/catalog.tres" id="2_catalog"]
+[ext_resource type="PackedScene" path="res://ui/settings/settings_panel.tscn" id="3_settings"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+catalog = ExtResource("2_catalog")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.05, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pages" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Title" type="Label" parent="Center/Pages"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "The Beacon"
+horizontal_alignment = 1
+
+[node name="MainPage" type="VBoxContainer" parent="Center/Pages"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NewGameButton" type="Button" parent="Center/Pages/MainPage"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Novo Jogo"
+
+[node name="ContinueButton" type="Button" parent="Center/Pages/MainPage"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continuar"
+
+[node name="SettingsButton" type="Button" parent="Center/Pages/MainPage"]
+layout_mode = 2
+text = "Configurações"
+
+[node name="QuitButton" type="Button" parent="Center/Pages/MainPage"]
+layout_mode = 2
+text = "Sair"
+
+[node name="DifficultyPage" type="VBoxContainer" parent="Center/Pages"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DifficultyTitle" type="Label" parent="Center/Pages/DifficultyPage"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Dificuldade"
+horizontal_alignment = 1
+
+[node name="DifficultyButtons" type="VBoxContainer" parent="Center/Pages/DifficultyPage"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DifficultyBackButton" type="Button" parent="Center/Pages/DifficultyPage"]
+layout_mode = 2
+text = "Voltar"
+
+[node name="SettingsPanel" parent="Center/Pages" instance=ExtResource("3_settings")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="Center/Pages/MainPage/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Center/Pages/MainPage/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="Center/Pages/MainPage/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Center/Pages/MainPage/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="Center/Pages/DifficultyPage/DifficultyBackButton" to="." method="_on_difficulty_back_button_pressed"]

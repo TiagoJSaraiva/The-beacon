@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="TutorialContent" format=3]
+
+[ext_resource type="Script" path="res://tutorial/tutorial_step.gd" id="1_step"]
+[ext_resource type="Script" path="res://tutorial/tutorial_content.gd" id="2_content"]
+
+[sub_resource type="Resource" id="Resource_start"]
+script = ExtResource("1_step")
+id = &"start"
+text = "Sobreviva até as 06:00. O relógio fica na parede da torre. Nada pausa o jogo."
+
+[sub_resource type="Resource" id="Resource_flashlight"]
+script = ExtResource("1_step")
+id = &"flashlight"
+text = "Z liga e desliga a lanterna. Segure X para ver a bateria: ela não recarrega."
+
+[sub_resource type="Resource" id="Resource_agenda"]
+script = ExtResource("1_step")
+id = &"agenda"
+text = "A agenda na mesa da torre salva e sai do jogo. O tempo continua correndo com ela aberta."
+
+[sub_resource type="Resource" id="Resource_low_fuel"]
+script = ExtResource("1_step")
+id = &"low_fuel"
+text = "O gerador está ficando sem combustível. Pegue o galão no térreo, segure E na reserva para encher e no gerador para despejar."
+
+[sub_resource type="Resource" id="Resource_jerrycan"]
+script = ExtResource("1_step")
+id = &"jerrycan"
+text = "Com o galão na mão, nada que exija as mãos livres funciona. Devolva-o ao suporte ao lado da reserva."
+
+[sub_resource type="Resource" id="Resource_lamp_burned"]
+script = ExtResource("1_step")
+id = &"lamp_burned"
+text = "A lâmpada do farol queimou e o feixe apagou. Segure E na lâmpada para trocá-la."
+
+[sub_resource type="Resource" id="Resource_hose_broken"]
+script = ExtResource("1_step")
+id = &"hose_broken"
+text = "A mangueira da reserva rompeu e o combustível está vazando. Segure E nela para consertar."
+
+[sub_resource type="Resource" id="Resource_generator_broken"]
+script = ExtResource("1_step")
+id = &"generator_broken"
+text = "O gerador quebrou: luzes, relógio e feixe dependem dele. Segure E no gerador para consertar."
+
+[sub_resource type="Resource" id="Resource_fog"]
+script = ExtResource("1_step")
+id = &"fog"
+text = "Nevoeiro. Barcos que passam no nevoeiro precisam do feixe ligado (painel na torre), ou afundam."
+
+[sub_resource type="Resource" id="Resource_boat"]
+script = ExtResource("1_step")
+id = &"boat"
+text = "Um barco se aproxima: atenda o rádio. Dois tons subindo: barco permitido. Três tons graves: pirata."
+
+[sub_resource type="Resource" id="Resource_drowned"]
+script = ExtResource("1_step")
+id = &"drowned"
+text = "Afogados. Eles quebram a porta e sabotam o térreo. Feche o alçapão e segure o trinco enquanto batem."
+
+[sub_resource type="Resource" id="Resource_door_broken"]
+script = ExtResource("1_step")
+id = &"door_broken"
+text = "A porta de entrada foi quebrada. Segure E no vão para consertar."
+
+[sub_resource type="Resource" id="Resource_fog_man"]
+script = ExtResource("1_step")
+id = &"fog_man"
+text = "Homem de Nevoeiro. Mantenha a lanterna apontada para ele até que se dissipe; se tocar em você, você fica cego."
+
+[resource]
+script = ExtResource("2_content")
+steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_agenda"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_broken"), SubResource("Resource_generator_broken"), SubResource("Resource_fog"), SubResource("Resource_boat"), SubResource("Resource_drowned"), SubResource("Resource_door_broken"), SubResource("Resource_fog_man")])
+message_seconds = 8.0

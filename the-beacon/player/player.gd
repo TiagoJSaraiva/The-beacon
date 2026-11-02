@@ -19,6 +19,8 @@ const CAUSE_DROWNED := &"drowned"
 @export_range(10.0, 89.0) var max_pitch_degrees: float = 85.0
 
 var is_dead: bool = false
+## Multiplica `mouse_sensitivity`; vem das configurações do jogador.
+var sensitivity_scale: float = 1.0
 
 var _controls_enabled: bool = true
 var _speed_multiplier: float = 1.0
@@ -27,6 +29,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var interaction: InteractionRay = %InteractionRay
 @onready var flashlight: Flashlight = %Flashlight
+@onready var view_focus: ViewFocus = %ViewFocus
 @onready var _head: Node3D = $Head
 @onready var _fall_damage: FallDamage = %FallDamage
 @onready var _carried_jerrycan: Node3D = %CarriedJerrycan
@@ -38,7 +41,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Só em debug: libera o mouse para o desenvolvedor sair da janela, já que o jogo não tem pausa.
-	if OS.is_debug_build() and event.is_action_pressed("ui_cancel"):
+	if OS.is_debug_build() and _controls_enabled and event.is_action_pressed("ui_cancel"):
 		_capture_mouse(Input.mouse_mode != Input.MOUSE_MODE_CAPTURED)
 		return
 	if not _controls_enabled or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -46,10 +49,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	var motion := event as InputEventMouseMotion
 	if motion == null:
 		return
-	rotate_y(-motion.relative.x * mouse_sensitivity)
+	var sensitivity: float = mouse_sensitivity * sensitivity_scale
+	rotate_y(-motion.relative.x * sensitivity)
 	var max_pitch: float = deg_to_rad(max_pitch_degrees)
 	_head.rotation.x = clampf(
-		_head.rotation.x - motion.relative.y * mouse_sensitivity, -max_pitch, max_pitch
+		_head.rotation.x - motion.relative.y * sensitivity, -max_pitch, max_pitch
 	)
 
 
@@ -108,6 +112,29 @@ func apply_slow(seconds: float, speed_multiplier: float) -> void:
 	_slow_time_left = maxf(_slow_time_left, seconds)
 	_speed_multiplier = speed_multiplier
 	slowed_changed.emit(true)
+
+
+## Posição, olhar, lentidão e lanterna, para o save no meio da noite (GDD 1.2.22).
+func to_dict() -> Dictionary:
+	return {
+		"position": SaveCodec.vector3_to_array(global_position),
+		"yaw": rotation.y,
+		"pitch": _head.rotation.x,
+		"slow_seconds": _slow_time_left,
+		"slow_multiplier": _speed_multiplier,
+		"flashlight": flashlight.to_dict(),
+	}
+
+
+func from_dict(data: Dictionary) -> void:
+	global_position = SaveCodec.array_to_vector3(data.get("position", []))
+	velocity = Vector3.ZERO
+	rotation.y = data.get("yaw", 0.0)
+	_head.rotation.x = data.get("pitch", 0.0)
+	var slow_seconds: float = data.get("slow_seconds", 0.0)
+	if slow_seconds > 0.0:
+		apply_slow(slow_seconds, data.get("slow_multiplier", 1.0))
+	flashlight.from_dict(data.get("flashlight", {}))
 
 
 func _current_speed(crouching: bool) -> float:

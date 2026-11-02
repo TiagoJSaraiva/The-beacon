@@ -61,17 +61,15 @@ func clear() -> void:
 func to_dict() -> Dictionary:
 	var data: Dictionary = {"tracker": tracker.to_dict()}
 	if _fog_man != null:
-		var position: Vector3 = _fog_man.global_position
-		data["position"] = [position.x, position.y, position.z]
+		data["position"] = SaveCodec.vector3_to_array(_fog_man.global_position)
 	return data
 
 
 func from_dict(data: Dictionary) -> void:
 	clear()
 	tracker.from_dict(data.get("tracker", {}))
-	var position: Array = data.get("position", [])
-	if position.size() == 3:
-		_spawn(Vector3(position[0], position[1], position[2]))
+	if data.has("position"):
+		_spawn(SaveCodec.array_to_vector3(data["position"]))
 
 
 func _spawn(spawn_point: Vector3) -> void:

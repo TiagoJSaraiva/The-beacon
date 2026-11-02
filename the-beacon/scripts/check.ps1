@@ -51,9 +51,11 @@ if ($gdFiles.Count -gt 0) {
     Write-Host "`n(sem scripts .gd do projeto: formatação e lint pulados)" -ForegroundColor DarkGray
 }
 
-# 4. Parse de todos os scripts (decisão 0007).
+# 4. Parse de todos os scripts (decisão 0013, substitui a 0007).
 #    O --import só atualiza cache e .uid: ele não compila scripts que nenhuma cena usa.
-#    Por isso cada script passa por --check-only, que compila e devolve exit code != 0 em erro.
+#    Por isso scripts/parse_check.gd compila cada script numa única execução headless.
+#    Não é --check-only: nesse modo o Godot não registra os autoloads e todo script que
+#    usa um deles falharia com "Identifier not found".
 #    A busca no texto cobre versões do Godot que não sinalizam o erro no exit code.
 #    Não amplie o regex para "ERROR" genérico: há ruído conhecido (Remote Debugger).
 Invoke-Step "Parse dos scripts (Godot headless)" {
@@ -63,17 +65,20 @@ Invoke-Step "Parse dos scripts (Godot headless)" {
         $global:LASTEXITCODE = 1
         return
     }
-    $broken = 0
-    foreach ($file in $gdFiles) {
-        $resPath = "res://" + $file.Substring($root.Length + 1).Replace('\', '/')
-        $output = & $env:GODOT_PATH --headless --path $root --check-only --script $resPath 2>&1 | Out-String
-        if ($LASTEXITCODE -ne 0 -or $output -match 'SCRIPT ERROR|Parse Error|Failed to load script') {
-            Write-Host "Erro em ${resPath}:" -ForegroundColor Red
-            Write-Host $output
-            $broken++
-        }
+    # scripts/ tem .gdignore: o que está lá não é res:// e não entra no parse.
+    $scriptsDir = Join-Path $root "scripts\"
+    $resPaths = @($gdFiles | Where-Object { -not $_.StartsWith($scriptsDir) } |
+        ForEach-Object { "res://" + $_.Substring($root.Length + 1).Replace('\', '/') })
+    $parser = Join-Path $PSScriptRoot "parse_check.gd"
+    $output = & $env:GODOT_PATH --headless --path $root --script $parser -- @resPaths 2>&1 | Out-String
+    if ($LASTEXITCODE -ne 0 -or $output -match 'SCRIPT ERROR|Parse Error|Failed to load script') {
+        Write-Host $output
+        $global:LASTEXITCODE = 1
+        return
     }
-    $global:LASTEXITCODE = if ($broken -gt 0) { 1 } else { 0 }
+    $summary = $output -split "`r?`n" | Where-Object { $_ -match '^Scripts compilados' }
+    Write-Host $summary
+    $global:LASTEXITCODE = 0
 }
 
 # 5. Testes (gdUnit4). O runtest.cmd lê o executável do Godot em GODOT_BIN.

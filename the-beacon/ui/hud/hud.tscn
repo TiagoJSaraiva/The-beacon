@@ -11,6 +11,17 @@ border_width_bottom = 36
 border_color = Color(0.75, 0.05, 0.03, 0.45)
 border_blend = true
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tutorial"]
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
@@ -61,6 +72,24 @@ mouse_filter = 2
 max_value = 1.0
 step = 0.001
 show_percentage = false
+
+[node name="TutorialText" type="Label" parent="Root"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 32.0
+offset_right = 320.0
+offset_bottom = 72.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_tutorial")
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="SlowedBorder" type="Panel" parent="Root"]
 unique_name_in_owner = true

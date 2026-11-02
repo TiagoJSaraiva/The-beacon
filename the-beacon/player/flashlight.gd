@@ -65,6 +65,16 @@ func is_lit() -> bool:
 	return _lit
 
 
+func to_dict() -> Dictionary:
+	return {"battery": battery.to_dict(), "lit": _lit}
+
+
+func from_dict(data: Dictionary) -> void:
+	battery.from_dict(data.get("battery", {}))
+	_set_lit(data.get("lit", false) and not battery.is_empty())
+	_refresh_display()
+
+
 ## Diz se o ponto está dentro do cone aceso. Obstáculos são checados por quem pergunta.
 func illuminates(point: Vector3) -> bool:
 	if not _lit:

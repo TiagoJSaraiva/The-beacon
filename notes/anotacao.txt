@@ -1,18 +1,15 @@
-Para a primeira o objetivo é termos o core loop pronto com placeholders genéricos mesmo e o parametrizados para serem atualizados ao longo dos próximos meses
 
 Primeiro andar sem vidro, visualização apenas por câmera. 
 
 Mudar feedback de bateria de lanterna, mudar de porcentagem para barra de bateria
 
-Galão com física soltável por aí.
-
-Interação com o rádio gatilho pra ele não entrar na nevoa
+Galão com física soltável por aí, ao invés de local para "colcoar de volta". Botão R solta e interagir com outra coisa enquanto segura o galão solta também.
 
 Galão precisa usar só depois de mangueira quebrar. Ele começa cheio na primeira interação, mangueira antes disso reabastece sozinha. Player pega o galão, reabastece gerador, coloca galão pra encher denovo, leva uns 2 minutos, e ciclo repete.
 
 MONITOR 
-Colocar mais um que aponte pro mar. Funciona como uma extensão do FOV cobrindo 180º
-
+Colocar mais um que aponte pro mar. Funciona como uma extensão do FOV cobrindo 180º.
+Ou seja, o monitor que atualmente aponta para o mar, adicione outro ao seu lado, e que ambos funcionem como uma extensão do FOV para o mar.
 
 MENU
 
@@ -36,23 +33,22 @@ PERSISTÊNCIA ENTRE NOITES
 - Bateria da lanterna
 
 - Reseta:
-- Todo o resto.
-
-
-
+- Todo o resto (destrinachar aqui pra evitar interpretações erradas do Agente que for configurar isso)
 
 
 
 Coisas que quebram:
-- Mangeira estoura - irreparável, causado por evento aleatório mas induzido pelo nevoeiro (talvez). Em algum momento da run precisa estourar.
+- Mangeira estoura - irreparável, causado por evento aleatório mas induzido pelo nevoeiro (talvez). Em algum momento da run precisa estourar. Por enquanto, já que isso está meio que em aberto, até que o Game design master decida, vamos fazer que a mangueira estoure na primeira vez que o nevoeiro invade o farol.
 - Casa de máquina - reparável por interação, causa aleatória sem dependência do nevoeiro.
 - Lampada quebra - reparável por interação, causa aleatória sem dependência do nevoeiro.
+Quando casa de máquina ou lâmpada quebra e é reparada, há um cooldown até poder quebrar novamente.
+Quando casa de máquina ou lâmpada quebram, farol para de funcionar.
 
 Coisas interativas:
-- Rádio: Interagir para comunicar - comunicação com barco normal evita ele de passar pela névoa (se farol e maquina estiverem funcionado), interagir com pirata revela posição que ativa trigger de evento de ataque pirata (definido futuramente). 
+- Rádio: Interagir para comunicar - comunicação com barco normal evita ele de passar pela névoa (se farol e maquina estiverem funcionado), interagir com pirata revela posição que ativa trigger de evento de ataque pirata (ataque será destrinchado futuramente). 
 - Galão de combustível: interagir para encher - quando mangueira estoura, é o galão usado pra abastecer a casa de máquina.
 - Casa de máquina: interagir para abastecer manualmente - depois que mangueira estourar.
-- Tanque de combustível: interagir pra pegar ou devolver galão - devolver para abastecer. Deve ter feedback indicando nível de abastecimento.
+- Tanque de combustível: interagir pra pegar ou devolver galão - devolver galão para abastecer. Deve ter feedback indicando nível de abastecimento.
 - Lanterna: interagir por hotkey pra ligar ou desligar.
 
 - Switch pra desligar o farol - Se houver piratas. - Não precisa por no MVP por enquanto, apenas quando e se os piratas estiverem implementados.

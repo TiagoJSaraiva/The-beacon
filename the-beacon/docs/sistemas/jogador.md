@@ -4,10 +4,11 @@
 Controle em primeira pessoa (andar, correr, agachar, olhar), quedas e lanterna. Sem pulo (GDD 1.2.20).
 
 ## Componentes
-- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento e olhar; `kill(cause)`, `apply_slow()`, `set_controls_enabled()`. Expõe `interaction` e `flashlight`.
+- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento e olhar; `kill(cause)`, `apply_slow()`, `set_controls_enabled()`, `to_dict()`/`from_dict()` (posição, olhar, lentidão, lanterna). Expõe `interaction`, `flashlight` e `view_focus`.
   - `Head/Camera3D/InteractionRay`: mira de interação (ver `interacao.md`).
   - `Head/Camera3D/Flashlight` (`player/flashlight.tscn`): lanterna na mão esquerda.
   - `FallDamage`: mede a altura de cada queda.
+  - `ViewFocus` (`player/view_focus.gd`): vira o olhar para um ponto (agenda) e devolve o olhar anterior ao soltar.
 - Regras puras: `FallRules` (altura → nada / lento / fatal), `FlashlightBattery`, `FlashlightCone`.
 
 ## Regras
@@ -15,7 +16,8 @@ Controle em primeira pessoa (andar, correr, agachar, olhar), quedas e lanterna. 
 - Queda: altura = pico − pouso. `>= FallConfig.slow_height` deixa lento (`slow_speed_multiplier` por `slow_seconds`); `>= fatal_height` mata (`CAUSE_FALL`).
 - Lanterna: Z liga/desliga; segurar X traz o display de carga (`Label3D` no corpo) para a frente da câmera, sem parar o movimento. A bateria (`FlashlightConfig.battery_seconds`) só gasta ligada e não recarrega; zerada, apaga e não liga mais.
 - `Flashlight.illuminates(point)` diz se um ponto está no cone aceso (alcance e meio-ângulo da config); obstáculos são checados por quem pergunta.
-- Em build de debug, Esc solta/captura o mouse (o jogo não tem pausa).
+- Sensibilidade do mouse = `mouse_sensitivity` × `sensitivity_scale`; a escala vem de `Settings` pelo `Game`.
+- Em build de debug, Esc solta/captura o mouse (o jogo não tem pausa), só com os controles ligados.
 - Efeitos de tela (não são HUD de estado): borda vermelha enquanto lento por queda (`Hud.set_slowed`) e tela preta do toque do Homem de Nevoeiro (`Hud.show_blindness`).
 
 ## Sinais

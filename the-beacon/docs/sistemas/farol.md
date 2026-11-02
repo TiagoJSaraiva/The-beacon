@@ -10,13 +10,15 @@ Greybox dos dois andares, escada em caracol, porta de entrada e alçapão (GDD 1
 - Buraco do alçapão no piso de cima: x 0–3.6, z 0–1.5.
 - `lighthouse/trapdoor.tscn` (`Trapdoor`): dobradiça na borda longa (z=−0.05); o painel (3.7 × 1.6) abre girando para cima em X. Interativo para abrir e fechar e trinco ao lado (`HOLD_CONTINUOUS`).
 - `lighthouse/entrance_door.tscn` (`EntranceDoor`): painel na camada `barriers`, ponto de conserto e parede invisível `player_bounds`.
-- Mesa no andar de cima (z=4.2) com os dois monitores e o rádio. Lâmpada em (−1.2, 9, −1.4).
+- Mesa no andar de cima com os dois monitores, o rádio e a agenda (`agenda.md`). Lâmpada fora do centro da torre, longe do alçapão aberto.
 
 ## Regras
 - Queda do patamar (6.6 m) até o térreo é fatal com a config padrão; do meio da escada, só deixa lento.
 - A geometria evita sobrepor, na mesma posição horizontal, piso andável de níveis diferentes no encontro escada/patamar: o Recast soldava vértices entre eles e quebrava a navmesh. A folga sob o piso de cima onde a rampa passa é de pelo menos 2.1 m.
 - Alçapão: estados `CLOSED`, `OPEN`, `BROKEN`. Abre e fecha só com os pés do jogador acima da dobradiça (`min_user_height`); exige mãos livres. O trinco só funciona fechado. Quebrado não tem conserto. Resistência às batidas em `afogados.md`.
 - Porta: inteira bloqueia jogador e Afogados; quebrada, o painel some e o conserto (segurar E, `RepairConfig.door_repair_seconds`) fica disponível. O jogador nunca sai pelo vão.
+
+- `Lighthouse.to_dict()`/`from_dict()` juntam porta, alçapão, gerador, reserva, galão e lâmpada para o save; a alavanca do feixe é reposicionada sem emitir `switched`.
 
 ## Sinais
 - `Trapdoor.state_changed(state)`, `Trapdoor.latch_held_changed(held)`.

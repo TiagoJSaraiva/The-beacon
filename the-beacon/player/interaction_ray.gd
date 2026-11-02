@@ -25,7 +25,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var target: Interactable = _find_target()
+	# Sem controle (agenda aberta, telas), nada fica em foco e a HUD não mostra a hotkey.
+	var target: Interactable = _find_target() if input_enabled else null
 	if target != _focused:
 		_change_focus(target)
 	if _focused == null:

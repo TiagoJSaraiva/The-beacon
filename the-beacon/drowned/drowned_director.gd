@@ -80,8 +80,8 @@ func to_dict() -> Dictionary:
 	var drowned_data: Array[Dictionary] = []
 	for drowned: Drowned in _active:
 		var entry: Dictionary = {
-			"position": _vector_to_array(drowned.global_position),
-			"exit": _vector_to_array(drowned.targets[DrownedBrain.Target.EXIT]),
+			"position": SaveCodec.vector3_to_array(drowned.global_position),
+			"exit": SaveCodec.vector3_to_array(drowned.targets[DrownedBrain.Target.EXIT]),
 			"brain": drowned.brain.to_dict(),
 		}
 		drowned_data.append(entry)
@@ -94,8 +94,8 @@ func from_dict(data: Dictionary) -> void:
 	_spawn_timer = data.get("spawn_timer", 0.0)
 	var saved: Array = data.get("active", [])
 	for entry: Dictionary in saved:
-		var drowned: Drowned = _spawn_at(_array_to_vector(entry.get("exit", [])))
-		drowned.global_position = _array_to_vector(entry.get("position", []))
+		var drowned: Drowned = _spawn_at(SaveCodec.array_to_vector3(entry.get("exit", [])))
+		drowned.global_position = SaveCodec.array_to_vector3(entry.get("position", []))
 		drowned.brain.from_dict(entry.get("brain", {}))
 	threat_changed.emit(threat_level())
 
@@ -170,13 +170,3 @@ func _on_drowned_effect_triggered(effect: DrownedBrain.Effect) -> void:
 
 func _on_door_broken_changed(_broken: bool) -> void:
 	threat_changed.emit(threat_level())
-
-
-static func _vector_to_array(vector: Vector3) -> Array[float]:
-	return [vector.x, vector.y, vector.z]
-
-
-static func _array_to_vector(values: Array) -> Vector3:
-	if values.size() < 3:
-		return Vector3.ZERO
-	return Vector3(values[0], values[1], values[2])

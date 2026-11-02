@@ -16,6 +16,14 @@
 [ext_resource type="Script" path="res://fog_man/fog_man_director.gd" id="14_fog_man"]
 [ext_resource type="PackedScene" path="res://fog_man/fog_man.tscn" id="15_fog_man_scene"]
 [ext_resource type="PackedScene" path="res://ui/night_end/night_end_screen.tscn" id="16_night_end"]
+[ext_resource type="Resource" path="res://config/difficulties/catalog.tres" id="17_catalog"]
+[ext_resource type="PackedScene" path="res://ui/game_over/game_over_screen.tscn" id="18_game_over"]
+[ext_resource type="PackedScene" path="res://ui/victory/victory_screen.tscn" id="19_victory"]
+[ext_resource type="Script" path="res://tutorial/tutorial_director.gd" id="20_tutorial"]
+[ext_resource type="Resource" path="res://tutorial/tutorial_content.tres" id="21_tutorial_content"]
+[ext_resource type="PackedScene" path="res://agenda/agenda_overlay.tscn" id="22_agenda_overlay"]
+[ext_resource type="Script" path="res://game/agenda_controller.gd" id="23_agenda_controller"]
+[ext_resource type="Script" path="res://game/run_snapshot.gd" id="24_snapshot"]
 
 [sub_resource type="Environment" id="Environment_night"]
 background_mode = 1
@@ -40,6 +48,7 @@ filter_baking_aabb = AABB(-24, -1, -14, 32, 14, 28)
 [node name="Game" type="Node3D"]
 script = ExtResource("1_game")
 default_difficulty = ExtResource("5_easy")
+catalog = ExtResource("17_catalog")
 
 [node name="World" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -91,6 +100,11 @@ unique_name_in_owner = true
 script = ExtResource("14_fog_man")
 fog_man_scene = ExtResource("15_fog_man_scene")
 
+[node name="TutorialDirector" type="Node" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("20_tutorial")
+content = ExtResource("21_tutorial_content")
+
 [node name="Navigation" type="NavigationRegion3D" parent="World"]
 unique_name_in_owner = true
 navigation_mesh = SubResource("NavigationMesh_world")
@@ -100,3 +114,33 @@ unique_name_in_owner = true
 
 [node name="NightEndScreen" parent="." instance=ExtResource("16_night_end")]
 unique_name_in_owner = true
+
+[node name="GameOverScreen" parent="." instance=ExtResource("18_game_over")]
+unique_name_in_owner = true
+
+[node name="VictoryScreen" parent="." instance=ExtResource("19_victory")]
+unique_name_in_owner = true
+
+[node name="AgendaOverlay" parent="." instance=ExtResource("22_agenda_overlay")]
+unique_name_in_owner = true
+
+[node name="AgendaController" type="Node" parent="." node_paths=PackedStringArray("overlay", "player", "hud", "snapshot")]
+unique_name_in_owner = true
+script = ExtResource("23_agenda_controller")
+overlay = NodePath("../AgendaOverlay")
+player = NodePath("../World/Player")
+hud = NodePath("../Hud")
+snapshot = NodePath("../RunSnapshot")
+
+[node name="RunSnapshot" type="Node" parent="." node_paths=PackedStringArray("night", "events", "lighthouse", "player", "fog", "boats", "drowned", "fog_man", "tutorial")]
+unique_name_in_owner = true
+script = ExtResource("24_snapshot")
+night = NodePath("../World/NightDirector")
+events = NodePath("../World/EventDirector")
+lighthouse = NodePath("../World/Lighthouse")
+player = NodePath("../World/Player")
+fog = NodePath("../World/FogSystem")
+boats = NodePath("../World/BoatDirector")
+drowned = NodePath("../World/DrownedDirector")
+fog_man = NodePath("../World/FogManDirector")
+tutorial = NodePath("../World/TutorialDirector")

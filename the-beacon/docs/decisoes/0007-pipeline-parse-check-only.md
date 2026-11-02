@@ -1,7 +1,7 @@
 # 0007 — Pipeline de verificação com parse por --check-only
 
 - **Data**: 2026-10
-- **Status**: aceita (substitui 0005)
+- **Status**: substituída por 0013
 
 ## Contexto
 A 0005 fazia o parse com `godot --headless --import`. Uma sabotagem mostrou que o `--import` não compila scripts que nenhuma cena usa: um erro de tipo (`var x: int = "texto"`) passou pela etapa de parse e só foi pego porque estava em `test/`. Fora de `test/`, passaria pelo check completo.

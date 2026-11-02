@@ -18,6 +18,7 @@ const EVENT_GENERATOR_BREAKDOWN := &"generator_breakdown"
 @onready var lamp: LighthouseLamp = %LighthouseLamp
 @onready var beam_control: BeamControl = %BeamControl
 @onready var radio: Radio = %Radio
+@onready var agenda: Agenda = %Agenda
 @onready var _wall_clock: WallClock = %WallClock
 @onready var _sea_monitor: SecurityMonitor = %SeaMonitor
 @onready var _lighthouse_monitor: SecurityMonitor = %LighthouseMonitor
@@ -68,6 +69,28 @@ func show_camera_feeds(sea_feed: Texture2D, lighthouse_feed: Texture2D) -> void:
 
 func show_time(text: String) -> void:
 	_wall_clock.show_time(text)
+
+
+## Danos, recursos e posições dos objetos (GDD 1.2.22).
+func to_dict() -> Dictionary:
+	return {
+		"door": entrance_door.to_dict(),
+		"trapdoor": trapdoor.to_dict(),
+		"generator": generator.to_dict(),
+		"reserve_tank": reserve_tank.to_dict(),
+		"jerrycan": jerrycan_dock.to_dict(),
+		"lamp": lamp.to_dict(),
+	}
+
+
+func from_dict(data: Dictionary) -> void:
+	entrance_door.from_dict(data.get("door", {}))
+	trapdoor.from_dict(data.get("trapdoor", {}))
+	generator.from_dict(data.get("generator", {}))
+	reserve_tank.from_dict(data.get("reserve_tank", {}))
+	jerrycan_dock.from_dict(data.get("jerrycan", {}))
+	lamp.from_dict(data.get("lamp", {}))
+	beam_control.set_on(lamp.state.switch_on, lamp.is_active())
 
 
 func _on_reserve_tank_fill_requested() -> void:

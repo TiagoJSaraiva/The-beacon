@@ -13,6 +13,7 @@ Uso dos objetos do cenário com a tecla E. A HUD só mostra a hotkey ao mirar e 
 - Modos: `PRESS` (toque), `HOLD` (segurar até completar `hold_seconds`; soltar ou trocar de alvo zera), `HOLD_CONTINUOUS` (efeito enquanto segura, ex.: trinco).
 - Depois de completar, só aceita outra interação ao soltar a tecla. Segurar E enquanto vira para outro objeto não dispara o novo.
 - O raio colide com `world` e `barriers`: paredes bloqueiam a mira.
+- Com `input_enabled` desligado (agenda aberta, telas), nada fica em foco e a hotkey some.
 - `hands_rule`: `ANY`, `FREE` (bloqueado com o galão na mão) ou `CARRYING` (só com o galão), conforme `InteractionRay.hands_busy`.
 - `usable_check`: checagem opcional do dono, recebe o corpo de quem interage (ex.: alçapão só por cima).
 
