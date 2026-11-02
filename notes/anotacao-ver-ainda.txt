@@ -1,0 +1,6 @@
+BARCOS, RÁDIO E CÂMERA
+
+Considerações sobre barcos, rádio e câmera, coisas que ainda tem que ver melhor.
+
+- Colocar apenas uma tela de segurança, que troca entre diferentes câmeras. Cada câmera se alinha com uma frequência diferente do rádio, necessária para interação com barcos no alinhamento da câmera.
+- Aí a frequência do rádio entra na mecânica, para o player se comunicar com determinado barco, precisa estar alinhado na mesma frequência dele.
