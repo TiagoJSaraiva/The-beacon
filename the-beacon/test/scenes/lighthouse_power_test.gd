@@ -1,6 +1,7 @@
 extends GdUnitTestSuite
-## Energia e galão no farol (decisão 0017): a fonte troca quando a mangueira estoura, e o
-## galão circula entre slot, mão, chão e gerador de emergência.
+## Energia, galão e nevoeiro no farol (decisão 0017): a fonte troca quando a mangueira
+## estoura, o galão circula entre slot, mão, chão e gerador de emergência, e o nevoeiro
+## bloqueia o feixe e estoura a mangueira.
 
 const LIGHTHOUSE := "res://lighthouse/lighthouse.tscn"
 
@@ -23,6 +24,25 @@ func test_emergency_generator_takes_over_when_hose_bursts() -> void:
 
 	lighthouse.emergency_generator.state.fuel = 0.0
 	await assert_signal(lighthouse).wait_until(1000).is_emitted("beam_lit_changed", [false])
+
+
+func test_near_fog_blocks_the_beam_and_inside_fog_bursts_the_hose() -> void:
+	var runner := scene_runner(LIGHTHOUSE)
+	var lighthouse: Lighthouse = runner.scene()
+	await runner.simulate_frames(2)
+	lighthouse.beam_control.is_on = true
+	lighthouse.beam_control.switched.emit(true)
+
+	lighthouse.set_fog_stage(FogStage.Stage.NEAR)
+	assert_bool(lighthouse.beam.is_operational()).is_true()
+	assert_bool(lighthouse.beam.is_lit()).is_false()
+	assert_bool(lighthouse.is_hose_burst()).is_false()
+
+	lighthouse.set_fog_stage(FogStage.Stage.GROUND_FLOOR)
+	assert_bool(lighthouse.is_hose_burst()).is_true()
+
+	lighthouse.set_fog_stage(FogStage.Stage.SEA)
+	assert_bool(lighthouse.beam.is_lit()).is_true()
 
 
 func test_jerrycan_goes_from_slot_to_floor_and_back() -> void:

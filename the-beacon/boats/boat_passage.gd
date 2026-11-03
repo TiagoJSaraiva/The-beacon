@@ -1,50 +1,49 @@
 class_name BoatPassage
 extends RefCounted
-## Passagem de um barco pela ilha (GDD 1.2.26, provisório). A contagem até afundar começa
-## quando o rádio toca e só anda com nevoeiro e feixe apagado; mais nevoeiro, mais rápido.
-## Pirata não afunda; se o feixe acender durante a passagem, ele encontra o farol.
+## Travessia de um barco (entrega 2). Cruza a rota em `crossing_seconds`. Dentro do trecho
+## de nevoeiro sem ter desviado, afunda na hora. Com nevoeiro, chama pelo rádio até ser
+## atendido; atendido com o feixe aceso, para e desvia.
 
-enum Outcome { PASSING, PASSED, SANK }
+enum Outcome { CROSSING, PASSED, SANK, DIVERTED }
 
-var config: BoatConfig
-var is_pirate: bool
-var elapsed_seconds: float = 0.0
-## De 0 a 1; em 1 o barco afunda.
-var sink_progress: float = 0.0
-var outcome: Outcome = Outcome.PASSING
-var was_answered: bool = false
-var pirate_guided: bool = false
+var crossing_seconds: float
+## Fração da rota percorrida (0 a 1).
+var progress: float = 0.0
+var outcome: Outcome = Outcome.CROSSING
+var answered: bool = false
 
 
-func _init(boat_config: BoatConfig, pirate: bool) -> void:
-	config = boat_config
-	is_pirate = pirate
+func _init(seconds_to_cross: float) -> void:
+	crossing_seconds = seconds_to_cross
 
 
-## Segundos de feixe apagado até afundar na intensidade dada (0 a 1).
-static func sink_seconds(fog_intensity: float, boat_config: BoatConfig) -> float:
-	return lerpf(
-		boat_config.sink_seconds_at_min_intensity,
-		boat_config.sink_seconds_at_max_intensity,
-		clampf(fog_intensity, 0.0, 1.0)
-	)
-
-
-func tick(delta: float, fog_intensity: float, beam_active: bool) -> void:
-	if outcome != Outcome.PASSING:
+## `fog_start` e `fog_end`: trecho da rota coberto; iguais quando não há nevoeiro.
+func tick(delta: float, fog_start: float, fog_end: float) -> void:
+	if outcome != Outcome.CROSSING:
 		return
-	elapsed_seconds += delta
-	if is_pirate:
-		pirate_guided = pirate_guided or beam_active
-	elif fog_intensity > 0.0 and not beam_active:
-		sink_progress += delta / sink_seconds(fog_intensity, config)
-		if sink_progress >= 1.0:
-			outcome = Outcome.SANK
-			return
-	if elapsed_seconds >= config.passage_seconds:
+	progress = minf(1.0, progress + delta / crossing_seconds)
+	if _has_fog(fog_start, fog_end) and progress >= fog_start and progress <= fog_end:
+		outcome = Outcome.SANK
+	elif progress >= 1.0:
 		outcome = Outcome.PASSED
 
 
-## Fração da rota já percorrida (0 a 1).
-func route_progress() -> float:
-	return clampf(elapsed_seconds / config.passage_seconds, 0.0, 1.0)
+## Precisa de aviso: há nevoeiro adiante e ninguém atendeu ainda.
+func is_calling(fog_start: float, fog_end: float) -> bool:
+	return (
+		outcome == Outcome.CROSSING
+		and not answered
+		and _has_fog(fog_start, fog_end)
+		and progress < fog_start
+	)
+
+
+## Rádio atendido. Com o feixe aceso, o barco desvia; apagado, segue em frente.
+func answer(beam_lit: bool) -> void:
+	answered = true
+	if beam_lit and outcome == Outcome.CROSSING:
+		outcome = Outcome.DIVERTED
+
+
+func _has_fog(fog_start: float, fog_end: float) -> bool:
+	return fog_end > fog_start

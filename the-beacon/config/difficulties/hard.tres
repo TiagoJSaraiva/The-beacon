@@ -20,9 +20,6 @@
 
 [sub_resource type="Resource" id="Resource_ucn1s"]
 script = ExtResource("1_83dqw")
-pirate_chance = 0.3
-sink_seconds_at_min_intensity = 70.0
-sink_seconds_at_max_intensity = 25.0
 
 [sub_resource type="Resource" id="Resource_0fsd6"]
 script = ExtResource("2_rac0w")

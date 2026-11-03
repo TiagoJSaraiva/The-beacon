@@ -10,7 +10,7 @@ Luz giratória que protege os barcos no nevoeiro, e a máquina que a gira (GDD 1
 - `beam/beam_state.gd` (`BeamState`, no `Lighthouse`): junta alavanca, energia, lâmpada, casa de máquinas e nevoeiro.
 
 ## Regras
-- **Operando** = alavanca ligada + energia + lâmpada inteira + casa de máquinas inteira. **Aceso** = operando + nevoeiro sem bloquear (`fog_blocking`, ligado na fase D da entrega 2; hoje sempre falso).
+- **Operando** = alavanca ligada + energia + lâmpada inteira + casa de máquinas inteira. **Aceso** = operando + nevoeiro sem bloquear (`fog_blocking`, a partir de `NEAR`; ver `nevoeiro.md`).
 - Indicador da alavanca: verde = aceso; vermelho = ligada mas sem feixe; apagado = desligada.
 - Lâmpada (evento `lamp_burnout`) e casa de máquinas (evento `machine_breakdown`) quebram ao acaso. Depois do conserto, cada uma só volta a quebrar passado o seu intervalo (`RepairConfig.lamp_burnout_cooldown_seconds`, `machine_breakdown_cooldown_seconds`).
 - Troca da lâmpada: `lamp_replace_seconds` na portinha da câmara. Reposições infinitas. Conserto da casa de máquinas: `machine_repair_seconds`.
@@ -18,7 +18,7 @@ Luz giratória que protege os barcos no nevoeiro, e a máquina que a gira (GDD 1
 
 ## Sinais
 - `BeamControl.switched(on)`, `MachineHouse.broken_changed(broken)`, `MachineHouse.lamp_replaced`, `LighthouseLamp.burned_changed(burned)`, `Generator.power_changed` → `Lighthouse`, que recalcula o farol.
-- `Lighthouse.beam_lit_changed(lit)` → `Game` → `BoatDirector.set_beam_active`.
+- `Lighthouse.beam_operational_changed(operational)` → `FogSystem`; `Lighthouse.beam_lit_changed(lit)` → `BoatDirector.set_beam_lit`; `FogSystem.stage_changed` → `Lighthouse.set_fog_stage`.
 
 ## Testes
 - `test/unit/beam_state_test.gd`, `failure_state_test.gd`.

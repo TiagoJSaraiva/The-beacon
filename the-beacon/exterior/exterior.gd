@@ -2,16 +2,13 @@ class_name Exterior
 extends Node3D
 ## Ilha, mar, rota dos barcos, câmeras de segurança e pontos de chegada das ameaças.
 
-@onready var sea_camera: SecurityCamera = %SeaCamera
-@onready var lighthouse_camera: SecurityCamera = %LighthouseCamera
+## Panorama do mar: a da esquerda mira o lado +X da rota, que aparece à esquerda na tela.
+@onready var sea_camera_left: SecurityCamera = %SeaCameraLeft
+@onready var sea_camera_right: SecurityCamera = %SeaCameraRight
+@onready var door_camera: SecurityCamera = %DoorCamera
 @onready var boat_path: Path3D = %BoatPath
 @onready var _drowned_spawns: Node3D = %DrownedSpawns
 @onready var _fog_man_spawn: Marker3D = %FogManSpawn
-
-
-func set_fog_intensity(intensity: float) -> void:
-	sea_camera.set_fog_intensity(intensity)
-	lighthouse_camera.set_fog_intensity(intensity)
 
 
 func drowned_spawn_points() -> Array[Vector3]:

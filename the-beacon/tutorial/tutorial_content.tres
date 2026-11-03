@@ -6,7 +6,7 @@
 [sub_resource type="Resource" id="Resource_start"]
 script = ExtResource("1_step")
 id = &"start"
-text = "Sobreviva até as 06:00. O relógio fica na parede da torre."
+text = "Sobreviva até as 06:00. Ligue o farol na alavanca da cabine: parado, ele deixa o nevoeiro chegar."
 
 [sub_resource type="Resource" id="Resource_flashlight"]
 script = ExtResource("1_step")
@@ -41,12 +41,12 @@ text = "A casa de máquinas quebrou e o farol parou de girar. Segure E nela para
 [sub_resource type="Resource" id="Resource_fog"]
 script = ExtResource("1_step")
 id = &"fog"
-text = "Nevoeiro. Barcos que passam no nevoeiro precisam do feixe ligado (painel na torre), ou afundam."
+text = "Nevoeiro no mar, nas câmeras. Com o farol parado, ele avança até o farol e apaga o feixe."
 
 [sub_resource type="Resource" id="Resource_boat"]
 script = ExtResource("1_step")
 id = &"boat"
-text = "Um barco se aproxima: atenda o rádio. Dois tons subindo: barco permitido. Três tons graves: pirata."
+text = "Um barco está chamando. Atenda o rádio com o feixe aceso e ele desvia; se entrar no nevoeiro, afunda."
 
 [sub_resource type="Resource" id="Resource_drowned"]
 script = ExtResource("1_step")

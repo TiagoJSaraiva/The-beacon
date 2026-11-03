@@ -22,6 +22,7 @@ var run: RunState
 @onready var _night_director: NightDirector = %NightDirector
 @onready var _event_director: EventDirector = %EventDirector
 @onready var _fog: FogSystem = %FogSystem
+@onready var _fog_visuals: FogVisuals = %FogVisuals
 @onready var _boats: BoatDirector = %BoatDirector
 @onready var _drowned: DrownedDirector = %DrownedDirector
 @onready var _fog_man: FogManDirector = %FogManDirector
@@ -69,8 +70,11 @@ func _configure_systems() -> void:
 	_fog.register_events(_event_director)
 	_boats.register_events(_event_director)
 	_lighthouse.show_camera_feeds(
-		_exterior.sea_camera.get_feed(), _exterior.lighthouse_camera.get_feed()
+		_exterior.sea_camera_left.get_feed(),
+		_exterior.sea_camera_right.get_feed(),
+		_exterior.door_camera.get_feed()
 	)
+	_fog_visuals.setup(_fog, _exterior.boat_path)
 
 
 func _connect_signals() -> void:
@@ -94,14 +98,14 @@ func _connect_signals() -> void:
 	_lighthouse.jerrycan_carried_changed.connect(_player.set_carrying)
 	_lighthouse.chair.sit_requested.connect(_player.sit)
 	_player.drop_requested.connect(_lighthouse.drop_jerrycan)
-	_lighthouse.beam_lit_changed.connect(_boats.set_beam_active)
-	_lighthouse.radio.answered.connect(_on_radio_answered)
-	_fog.intensity_changed.connect(_exterior.set_fog_intensity)
-	_fog.intensity_changed.connect(_boats.set_fog_intensity)
-	_fog.covers_lighthouse_camera_changed.connect(_fog_man.set_fog_covers_camera)
+	_lighthouse.beam_operational_changed.connect(_fog.set_beam_operational)
+	_lighthouse.beam_lit_changed.connect(_boats.set_beam_lit)
+	_lighthouse.radio.answered.connect(_boats.warn_calling_boats)
+	_fog.stage_changed.connect(_lighthouse.set_fog_stage)
+	_fog.stage_changed.connect(_fog_man.set_fog_stage)
+	_fog.route_fog_changed.connect(_boats.set_route_fog)
 	_fog_man.player_blinded.connect(_hud.show_blindness)
-	_boats.boat_arrived.connect(_on_boat_arrived)
-	_boats.boat_gone.connect(_lighthouse.radio.stop_ringing)
+	_boats.calling_changed.connect(_lighthouse.radio.set_ringing)
 	_boats.boat_sank.connect(_drowned.add_drowned_point)
 
 
@@ -186,12 +190,3 @@ func _win_run() -> void:
 	SaveService.register_victory(difficulty.id, catalog)
 	_victory.show_result(difficulty.display_name, run.total_nights)
 	run_won.emit(difficulty.id)
-
-
-func _on_boat_arrived(is_pirate: bool, answered: bool) -> void:
-	if not answered:
-		_lighthouse.radio.ring(is_pirate)
-
-
-func _on_radio_answered(_is_pirate: bool) -> void:
-	_boats.mark_answered()

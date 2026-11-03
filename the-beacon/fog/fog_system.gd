@@ -1,18 +1,20 @@
 class_name FogSystem
 extends Node
-## Roda o nevoeiro da noite e avisa a intensidade a câmeras, barcos e Homem de Nevoeiro.
+## Roda o nevoeiro da noite conforme o farol opera e avisa o estágio e o trecho da rota dos
+## barcos coberto. Os visuais leem o `state` direto.
 
-signal intensity_changed(intensity: float)
-## O nevoeiro passou a cobrir (ou deixou de cobrir) a câmera do farol.
-signal covers_lighthouse_camera_changed(covers: bool)
+signal stage_changed(stage: FogStage.Stage)
+## Trecho da rota dos barcos coberto, em fração da rota. Vazio (0, 0) sem nevoeiro.
+signal route_fog_changed(start: float, end: float)
 
 const EVENT_FOG := &"fog"
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var state: FogState = FogState.new(FogConfig.new())
 
-var _published_intensity: float = -1.0
-var _published_covers: bool = false
+var _beam_operational: bool = false
+var _published_stage: FogStage.Stage = FogStage.Stage.NONE
+var _published_route: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -20,7 +22,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	state.tick(delta, rng)
+	state.tick(delta, _beam_operational, rng)
 	_publish()
 
 
@@ -34,19 +36,23 @@ func register_events(events: EventDirector) -> void:
 
 
 func can_start() -> bool:
-	return not state.is_active
+	return state.can_start()
 
 
 func start() -> void:
 	state.start(rng)
 
 
+func set_beam_operational(operational: bool) -> void:
+	_beam_operational = operational
+
+
 func _publish() -> void:
-	var covers: bool = state.covers_lighthouse_camera()
-	if covers != _published_covers:
-		_published_covers = covers
-		covers_lighthouse_camera_changed.emit(covers)
-	if is_equal_approx(state.intensity, _published_intensity):
-		return
-	_published_intensity = state.intensity
-	intensity_changed.emit(state.intensity)
+	var stage: FogStage.Stage = state.stage()
+	if stage != _published_stage:
+		_published_stage = stage
+		stage_changed.emit(stage)
+	var route: Vector2 = state.route_segment()
+	if not route.is_equal_approx(_published_route):
+		_published_route = route
+		route_fog_changed.emit(route.x, route.y)

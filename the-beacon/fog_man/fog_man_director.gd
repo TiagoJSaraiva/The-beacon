@@ -1,6 +1,6 @@
 class_name FogManDirector
 extends Node
-## Faz surgir o Homem de Nevoeiro quando o nevoeiro cobre a câmera do farol, persegue o
+## Faz surgir o Homem de Nevoeiro quando o nevoeiro chega perto do farol, persegue o
 ## jogador, dissipa-o com a lanterna e cega o jogador ao toque (GDD 1.2.10).
 
 signal appeared
@@ -47,8 +47,8 @@ func setup(player: Player, exterior: Exterior) -> void:
 	_exterior = exterior
 
 
-func set_fog_covers_camera(covers: bool) -> void:
-	_fog_covers_camera = covers
+func set_fog_stage(stage: FogStage.Stage) -> void:
+	_fog_covers_camera = FogStage.blocks_beam(stage)
 
 
 func _spawn(spawn_point: Vector3) -> void:

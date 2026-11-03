@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fog/fog_visuals.gd" id="1_visuals"]
+[ext_resource type="Shader" path="res://fog/fog_volume.gdshader" id="2_shader"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_volume"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_volume"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 2.0
+radial_segments = 32
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sea"]
+render_priority = 1
+shader = ExtResource("2_shader")
+shader_parameter/density = 0.06
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_near"]
+render_priority = 1
+shader = ExtResource("2_shader")
+shader_parameter/density = 0.08
+shader_parameter/is_cylinder = true
+shader_parameter/inner_radius = 0.26
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ground_floor"]
+render_priority = 1
+shader = ExtResource("2_shader")
+shader_parameter/density = 0.15
+shader_parameter/is_cylinder = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stairs"]
+render_priority = 1
+shader = ExtResource("2_shader")
+shader_parameter/density = 0.15
+shader_parameter/is_cylinder = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cabin"]
+render_priority = 1
+shader = ExtResource("2_shader")
+shader_parameter/density = 0.15
+shader_parameter/is_cylinder = true
+
+[node name="FogVisuals" type="Node3D"]
+script = ExtResource("1_visuals")
+
+[node name="SeaBand" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+cast_shadow = 0
+mesh = SubResource("BoxMesh_volume")
+material_override = SubResource("ShaderMaterial_sea")
+
+[node name="NearRing" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(22, 0, 0, 0, 5, 0, 0, 0, 22, 0, 3, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_volume")
+material_override = SubResource("ShaderMaterial_near")
+
+[node name="GroundFloor" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(5, 0, 0, 0, 1.6, 0, 0, 0, 5, 0, 1.6, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_volume")
+material_override = SubResource("ShaderMaterial_ground_floor")
+
+[node name="Stairs" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(5, 0, 0, 0, 2.8, 0, 0, 0, 5, 0, 6.0, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_volume")
+material_override = SubResource("ShaderMaterial_stairs")
+
+[node name="Cabin" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(5, 0, 0, 0, 1.5, 0, 0, 0, 5, 0, 10.5, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_volume")
+material_override = SubResource("ShaderMaterial_cabin")

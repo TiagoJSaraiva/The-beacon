@@ -9,8 +9,6 @@ background_color = Color(0.03, 0.04, 0.06, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.4, 0.45, 0.55, 1)
 ambient_light_energy = 0.8
-fog_light_color = Color(0.6, 0.63, 0.66, 1)
-fog_density = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.15, 0.15, 0.15, 1)

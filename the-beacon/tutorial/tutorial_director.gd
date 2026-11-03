@@ -83,8 +83,8 @@ func setup(
 	lighthouse.fuel_tank.hose_burst.connect(show_step.bind(STEP_HOSE_BURST))
 	lighthouse.machine_house.broken_changed.connect(_show_when.bind(STEP_MACHINE_BROKEN))
 	lighthouse.entrance_door.broken_changed.connect(_show_when.bind(STEP_DOOR_BROKEN))
-	fog.intensity_changed.connect(_on_fog_intensity_changed)
-	boats.boat_arrived.connect(show_step.bind(STEP_BOAT).unbind(2))
+	fog.stage_changed.connect(_on_fog_stage_changed)
+	boats.calling_changed.connect(_show_when.bind(STEP_BOAT))
 	drowned.drowned_appeared.connect(show_step.bind(STEP_DROWNED).unbind(1))
 	fog_man.appeared.connect(show_step.bind(STEP_FOG_MAN))
 
@@ -125,6 +125,6 @@ func _on_night_started(_night: int) -> void:
 	show_step(STEP_FLASHLIGHT)
 
 
-func _on_fog_intensity_changed(intensity: float) -> void:
-	if intensity > 0.0:
+func _on_fog_stage_changed(stage: FogStage.Stage) -> void:
+	if stage != FogStage.Stage.NONE:
 		show_step(STEP_FOG)

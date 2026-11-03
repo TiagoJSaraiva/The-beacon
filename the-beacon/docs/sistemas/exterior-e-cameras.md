@@ -4,18 +4,19 @@
 Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelos monitores fixos (GDD 1.2.17).
 
 ## Componentes
-- `exterior/exterior.tscn` (`Exterior`): `Island` (CSG, grupo `navigation_source`), `Sea`, `BoatPath` (`Path3D` em z=70), marcadores `SeaView`/`DoorView`, `DrownedSpawns` (3 pontos na margem), `FogManSpawn`.
-- `exterior/security_camera.tscn` (`SecurityCamera`): `SubViewport` com `Camera3D` e `Environment` próprio (`resource_local_to_scene`); mira o `target` em `_ready`.
-- `lighthouse/security_monitor.tscn` (`SecurityMonitor`): tela que exibe a textura da câmera. Dois monitores na mesa do andar de cima (`SeaMonitor`, `LighthouseMonitor`).
+- `exterior/exterior.tscn` (`Exterior`): `Island` (CSG, grupo `navigation_source`), `Sea`, `BoatPath` (`Path3D` de x −140 a 140 em z=70), marcadores `SeaViewLeft`/`SeaViewRight`/`DoorView`, `DrownedSpawns` (3 pontos na margem), `FogManSpawn`.
+- `exterior/security_camera.tscn` (`SecurityCamera`): `SubViewport` com `Camera3D` e `Environment` próprio; mira o `target` em `_ready`.
+  - `SeaCameraLeft` e `SeaCameraRight`: no alto da torre, miram x = 48 e x = −48 da rota; juntas formam um panorama da rota inteira.
+  - `DoorCamera`: fora da porta de entrada, mirando-a.
+- `lighthouse/security_monitor.tscn` (`SecurityMonitor`): tela que exibe a textura da câmera. Três na mesa da cabine: `SeaMonitorLeft`, `SeaMonitorRight` (panorama, lado a lado) e `DoorMonitor`.
 
 ## Regras
-- Câmera do mar mostra a rota dos barcos; câmera do farol mostra a porta de entrada.
-- Monitores não dependem do gerador.
-- O nevoeiro aparece só na fog do `Environment` de cada câmera: densidade = `max_fog_density × intensidade`. O ambiente principal não tem fog (cobriria o interior).
+- A câmera da esquerda mira o lado +X da rota, que aparece à esquerda na tela; os barcos vão da direita para a esquerda no panorama.
+- Monitores funcionam sem energia.
+- O nevoeiro aparece pelos volumes do `FogVisuals` (`nevoeiro.md`), que as câmeras renderizam como qualquer objeto.
 
 ## Sinais
-- `FogSystem.intensity_changed` → `Exterior.set_fog_intensity`.
-- O `Game` passa as texturas com `Lighthouse.show_camera_feeds()`.
+- O `Game` passa as texturas com `Lighthouse.show_camera_feeds(sea_left, sea_right, door)`.
 
 ## Testes
 Sem teste dedicado (só visual).

@@ -1,17 +1,15 @@
 class_name Radio
 extends Node3D
-## Rádio da torre: toca quando um barco se aproxima; atender revela, só por som, se o barco
-## é permitido ou pirata (GDD 1.2.26). Não depende do gerador.
+## Rádio da mesa: toca enquanto um barco precisa de aviso no nevoeiro. Atender confirma
+## por som; quem decide o efeito é o BoatDirector. Funciona sem energia.
 
-signal answered(is_pirate: bool)
+signal answered
 
 @export var blink_interval_seconds: float = 0.5
-@export var allowed_message: AudioStream
-@export var pirate_message: AudioStream
+@export var reply_message: AudioStream
 
 var is_ringing: bool = false
 
-var _incoming_is_pirate: bool = false
 var _blink_time: float = 0.0
 
 @onready var _ring: LoopingSound = %Ring
@@ -21,7 +19,7 @@ var _blink_time: float = 0.0
 
 
 func _ready() -> void:
-	_set_ringing(false)
+	set_ringing(false)
 
 
 func _process(delta: float) -> void:
@@ -31,16 +29,7 @@ func _process(delta: float) -> void:
 	_call_light.visible = fmod(_blink_time, blink_interval_seconds * 2.0) < blink_interval_seconds
 
 
-func ring(is_pirate: bool) -> void:
-	_incoming_is_pirate = is_pirate
-	_set_ringing(true)
-
-
-func stop_ringing() -> void:
-	_set_ringing(false)
-
-
-func _set_ringing(ringing: bool) -> void:
+func set_ringing(ringing: bool) -> void:
 	is_ringing = ringing
 	_blink_time = 0.0
 	_ring.set_active(ringing)
@@ -49,7 +38,7 @@ func _set_ringing(ringing: bool) -> void:
 
 
 func _on_answer_point_interacted() -> void:
-	_set_ringing(false)
-	_message.stream = pirate_message if _incoming_is_pirate else allowed_message
+	set_ringing(false)
+	_message.stream = reply_message
 	_message.play()
-	answered.emit(_incoming_is_pirate)
+	answered.emit()

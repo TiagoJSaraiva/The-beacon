@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
 [ext_resource type="AudioStream" uid="uid://cmcdvxu6x8t5y" path="res://assets/audio/placeholder/radio_ring.wav" id="4_ring"]
 [ext_resource type="AudioStream" uid="uid://3gvs3a7ear5m" path="res://assets/audio/placeholder/radio_allowed.wav" id="5_allowed"]
-[ext_resource type="AudioStream" uid="uid://bxwk8w7wq0kfg" path="res://assets/audio/placeholder/radio_pirate.wav" id="6_pirate"]
 [ext_resource type="PackedScene" uid="uid://bgv1ya0eo5710" path="res://assets/RadiostationMCKINLEY_GameReady.fbx" id="7_3iwy5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_answer"]
@@ -13,8 +12,7 @@ size = Vector3(0.5, 0.35, 0.35)
 
 [node name="Radio" type="Node3D" unique_id=387591912]
 script = ExtResource("1_radio")
-allowed_message = ExtResource("5_allowed")
-pirate_message = ExtResource("6_pirate")
+reply_message = ExtResource("5_allowed")
 
 [node name="CallLight" type="OmniLight3D" parent="." unique_id=1898745611]
 unique_name_in_owner = true

@@ -4,6 +4,9 @@ extends Node3D
 ## O Game fala com o farol só por estes métodos e sinais.
 
 signal jerrycan_carried_changed(carried: bool)
+## Alavanca, energia, lâmpada e casa de máquinas em ordem: segura o nevoeiro.
+signal beam_operational_changed(operational: bool)
+## Operando e sem nevoeiro bloqueando: os barcos enxergam o feixe.
 signal beam_lit_changed(lit: bool)
 
 const EVENT_LAMP_BURNOUT := &"lamp_burnout"
@@ -11,6 +14,7 @@ const EVENT_MACHINE_BREAKDOWN := &"machine_breakdown"
 
 var beam: BeamState = BeamState.new()
 
+var _was_operational: bool = false
 var _was_lit: bool = false
 
 @onready var entrance_door: EntranceDoor = %EntranceDoor
@@ -25,8 +29,9 @@ var _was_lit: bool = false
 @onready var radio: Radio = %Radio
 @onready var chair: Chair = %Chair
 @onready var _wall_clock: WallClock = %WallClock
-@onready var _sea_monitor: SecurityMonitor = %SeaMonitor
-@onready var _lighthouse_monitor: SecurityMonitor = %LighthouseMonitor
+@onready var _sea_monitor_left: SecurityMonitor = %SeaMonitorLeft
+@onready var _sea_monitor_right: SecurityMonitor = %SeaMonitorRight
+@onready var _door_monitor: SecurityMonitor = %DoorMonitor
 @onready var _door_outside: Marker3D = %DoorOutside
 @onready var _hose_spot: Marker3D = %HoseSpot
 @onready var _generator_spot: Marker3D = %GeneratorSpot
@@ -94,16 +99,27 @@ func drowned_targets() -> Dictionary[DrownedBrain.Target, Vector3]:
 	}
 
 
-func show_camera_feeds(sea_feed: Texture2D, lighthouse_feed: Texture2D) -> void:
-	_sea_monitor.show_feed(sea_feed)
-	_lighthouse_monitor.show_feed(lighthouse_feed)
+func show_camera_feeds(sea_left: Texture2D, sea_right: Texture2D, door: Texture2D) -> void:
+	_sea_monitor_left.show_feed(sea_left)
+	_sea_monitor_right.show_feed(sea_right)
+	_door_monitor.show_feed(door)
+
+
+## Perto do farol, o nevoeiro bloqueia o feixe. Na primeira vez que entra no farol, estoura
+## a mangueira (decisão 0017).
+func set_fog_stage(stage: FogStage.Stage) -> void:
+	beam.fog_blocking = FogStage.blocks_beam(stage)
+	if FogStage.is_inside(stage):
+		burst_hose()
+	_refresh_beam()
 
 
 func show_time(text: String) -> void:
 	_wall_clock.show_time(text)
 
 
-## Recalcula o farol a cada mudança de alavanca, energia, lâmpada ou casa de máquinas.
+## Recalcula o farol a cada mudança de alavanca, energia, lâmpada, casa de máquinas ou
+## nevoeiro.
 func _refresh_beam() -> void:
 	beam.switch_on = beam_control.is_on
 	beam.powered = main_generator.is_running() or emergency_generator.is_running()
@@ -114,6 +130,10 @@ func _refresh_beam() -> void:
 	lamp.show_beam(beam.is_operational(), beam.is_lit())
 	machine_house.show_running(beam.is_operational())
 	beam_control.show_status(beam.is_lit())
+	var operational: bool = beam.is_operational()
+	if operational != _was_operational:
+		_was_operational = operational
+		beam_operational_changed.emit(operational)
 	var lit: bool = beam.is_lit()
 	if lit != _was_lit:
 		_was_lit = lit

@@ -1,15 +1,11 @@
 class_name BoatDirector
 extends Node
-## Faz um barco por vez cruzar o mar quando o evento `boat` dispara e decide se ele passa,
-## afunda ou (pirata) é guiado pelo feixe.
+## Faz os barcos cruzarem o mar quando o evento `boat` dispara (até
+## `max_simultaneous_boats` ao mesmo tempo) e decide se passam, afundam ou desviam.
 
-## `answered` só é verdadeiro ao restaurar um barco cujo rádio já foi atendido.
-signal boat_arrived(is_pirate: bool, answered: bool)
-signal boat_passed
+## Algum barco precisa de aviso: o rádio toca enquanto for verdade.
+signal calling_changed(calling: bool)
 signal boat_sank
-signal pirate_guided
-## O barco deixou de precisar de resposta (passou, afundou ou a noite acabou).
-signal boat_gone
 
 const EVENT_BOAT := &"boat"
 
@@ -19,9 +15,11 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var boat_path: Path3D
 
 var _config: BoatConfig = BoatConfig.new()
-var _boat: Boat
-var _fog_intensity: float = 0.0
-var _beam_active: bool = false
+var _boats: Array[Boat] = []
+var _fog_start: float = 0.0
+var _fog_end: float = 0.0
+var _beam_lit: bool = false
+var _calling: bool = false
 
 
 func _ready() -> void:
@@ -29,22 +27,17 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if _boat == null:
-		return
-	var passage: BoatPassage = _boat.passage
-	var was_guided: bool = passage.pirate_guided
-	passage.tick(delta, _fog_intensity, _beam_active)
-	if passage.pirate_guided and not was_guided:
-		pirate_guided.emit()
-	match passage.outcome:
-		BoatPassage.Outcome.PASSED:
-			_boat.queue_free()
-			_finish()
-			boat_passed.emit()
-		BoatPassage.Outcome.SANK:
-			_boat.sink()
-			_finish()
-			boat_sank.emit()
+	for boat: Boat in _boats.duplicate():
+		boat.passage.tick(delta, _fog_start, _fog_end)
+		match boat.passage.outcome:
+			BoatPassage.Outcome.PASSED:
+				_boats.erase(boat)
+				boat.queue_free()
+			BoatPassage.Outcome.SANK:
+				_boats.erase(boat)
+				boat.sink()
+				boat_sank.emit()
+	_refresh_calling()
 
 
 func configure(config: BoatConfig) -> void:
@@ -56,33 +49,43 @@ func register_events(events: EventDirector) -> void:
 
 
 func can_spawn() -> bool:
-	return _boat == null and boat_path != null
+	return boat_path != null and _boats.size() < _config.max_simultaneous_boats
 
 
 func spawn() -> void:
-	_spawn_passage(BoatPassage.new(_config, rng.randf() < _config.pirate_chance))
+	var boat: Boat = boat_scene.instantiate()
+	boat.passage = BoatPassage.new(_config.crossing_seconds)
+	boat_path.add_child(boat)
+	_boats.append(boat)
+	_refresh_calling()
 
 
-func set_fog_intensity(intensity: float) -> void:
-	_fog_intensity = intensity
+func set_route_fog(start: float, end: float) -> void:
+	_fog_start = start
+	_fog_end = end
+	_refresh_calling()
 
 
-func set_beam_active(active: bool) -> void:
-	_beam_active = active
+func set_beam_lit(lit: bool) -> void:
+	_beam_lit = lit
 
 
-func mark_answered() -> void:
-	if _boat != null:
-		_boat.passage.was_answered = true
+## Rádio atendido: vale para todos os barcos que estão chamando.
+func warn_calling_boats() -> void:
+	for boat: Boat in _boats.duplicate():
+		if not boat.passage.is_calling(_fog_start, _fog_end):
+			continue
+		boat.passage.answer(_beam_lit)
+		if boat.passage.outcome == BoatPassage.Outcome.DIVERTED:
+			_boats.erase(boat)
+			boat.divert()
+	_refresh_calling()
 
 
-func _spawn_passage(passage: BoatPassage) -> void:
-	_boat = boat_scene.instantiate()
-	_boat.passage = passage
-	boat_path.add_child(_boat)
-	boat_arrived.emit(passage.is_pirate, passage.was_answered)
-
-
-func _finish() -> void:
-	_boat = null
-	boat_gone.emit()
+func _refresh_calling() -> void:
+	var calling: bool = false
+	for boat: Boat in _boats:
+		calling = calling or boat.passage.is_calling(_fog_start, _fog_end)
+	if calling != _calling:
+		_calling = calling
+		calling_changed.emit(calling)

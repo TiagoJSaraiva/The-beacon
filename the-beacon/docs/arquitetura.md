@@ -33,7 +33,7 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 ## Cenas principais
 - `ui/main_menu/main_menu.tscn` (**Main Scene**) → `MainMenu`: menu, seleção de dificuldade e configurações (ver `sistemas/menus-e-telas.md`).
 - `game/game.tscn` → `Game` (`Node3D`, `game.gd`):
-  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
+  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `FogVisuals`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
   - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `PauseMenu` (`sistemas/menus-e-telas.md`), `RunCarryover` (`sistemas/save-e-progresso.md`).
   - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica a dificuldade e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG, `SpiralStaircase`, `Landing`, `Ramp`, `Trapdoor`, `EntranceDoor` (ver `sistemas/farol.md`); `MainGenerator`, `EmergencyGenerator`, `FuelTank` (com `JerrycanSlot`), `Jerrycan` (`sistemas/energia-e-combustivel.md`); `MachineHouse`, `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights`; `Desk` com monitores, `Radio` e `Chair`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
@@ -66,9 +66,9 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - Eventos: cada sistema se registra no `EventDirector` (`Lighthouse`, `FogSystem`, `BoatDirector`).
 - `NightDirector.night_ended` → `Game` (congela, `RunCarryover.capture`, tela ou vitória).
 - `Player.died` → `Game` → `run_lost`. `Player.sprint_blocked_changed` → `Hud.set_hurt_border`.
-- `FogSystem.intensity_changed` → `Exterior.set_fog_intensity`, `BoatDirector.set_fog_intensity`; `FogSystem.covers_lighthouse_camera_changed` → `FogManDirector.set_fog_covers_camera`.
-- `Lighthouse.beam_lit_changed` → `BoatDirector.set_beam_active`.
-- `BoatDirector.boat_arrived` → `Game` → `Radio.ring`; `boat_gone` → `Radio.stop_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.mark_answered`.
+- `Lighthouse.beam_operational_changed` → `FogSystem.set_beam_operational`. `FogSystem.stage_changed` → `Lighthouse.set_fog_stage` (bloqueio do feixe, mangueira), `FogManDirector.set_fog_stage`. `FogSystem.route_fog_changed` → `BoatDirector.set_route_fog`. `FogVisuals` lê o `FogSystem` direto (recebe-o em `setup()`).
+- `Lighthouse.beam_lit_changed` → `BoatDirector.set_beam_lit`.
+- `BoatDirector.calling_changed` → `Radio.set_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.warn_calling_boats`.
 - `FogManDirector.player_blinded` → `Hud.show_blindness`.
 - `Drowned.effect_triggered` → `DrownedDirector` → farol ou `Player.kill`.
 - `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).

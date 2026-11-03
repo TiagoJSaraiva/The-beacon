@@ -15,7 +15,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 ## Regras
 - Energia alimenta só a casa de máquinas e a lâmpada. Relógio, luzes, monitores e rádio funcionam sem ela (provisório).
 - Com energia = gerador principal funcionando **ou** gerador de emergência com combustível.
-- Mangueira: estoura uma vez (`Lighthouse.burst_hose()`), sem conserto, e continua estourada nas noites seguintes (`RunState.hose_burst`). Estourada, o gerador principal para de vez. Quem a estoura é o nevoeiro (fase D da entrega 2); hoje, só a depuração.
+- Mangueira: estoura uma vez (`Lighthouse.burst_hose()`), sem conserto, e continua estourada nas noites seguintes (`RunState.hose_burst`). Estourada, o gerador principal para de vez. Estoura na primeira vez que o nevoeiro entra no farol (`GROUND_FLOOR`).
 - Gerador de emergência: começa cada noite cheio (`generator_start_fuel`). Só gasta (`generator_consumption_per_second`) quando é a fonte ativa (mangueira estourada) e a alavanca está ligada.
 - Galão: começa cada noite cheio no slot. Pegar: E de mãos livres (no slot ou no chão). Soltar: R (`drop_item`), ou usar qualquer interação de mãos livres (ela fica em foco e o primeiro E só solta o galão). Sai da mão com um arremesso leve (`Player.drop_throw_speed`), sem atravessar a parede à frente. Devolver: E no slot vazio com o galão na mão.
 - No slot, o galão enche de vazio a cheio em `jerrycan_slot_fill_seconds` (120 s).

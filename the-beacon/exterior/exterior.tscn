@@ -42,20 +42,28 @@ mesh = SubResource("PlaneMesh_sea")
 unique_name_in_owner = true
 curve = SubResource("Curve3D_boats")
 
-[node name="SeaView" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 70)
+[node name="SeaViewLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 2, 70)
+
+[node name="SeaViewRight" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 2, 70)
 
 [node name="DoorView" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 1.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, -4.3)
 
-[node name="SeaCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+[node name="SeaCameraLeft" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 6.2)
-target = NodePath("../SeaView")
+target = NodePath("../SeaViewLeft")
 
-[node name="LighthouseCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+[node name="SeaCameraRight" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 5, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 6.2)
+target = NodePath("../SeaViewRight")
+
+[node name="DoorCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 5, -8)
 target = NodePath("../DoorView")
 
 [node name="DrownedSpawns" type="Node3D" parent="."]

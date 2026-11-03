@@ -61,12 +61,11 @@ func validate() -> PackedStringArray:
 		return errors
 	if power.generator_start_fuel > power.generator_capacity:
 		errors.append("power: combustível inicial do gerador acima da capacidade")
-	if fog.min_intensity > fog.max_intensity:
-		errors.append("fog: intensidade mínima acima da máxima")
+	errors.append_array(fog.validate())
 	if fall.sprint_block_height >= fall.fatal_height:
 		errors.append("fall: altura que bloqueia a corrida precisa ser menor que a fatal")
-	if boat.sink_seconds_at_max_intensity > boat.sink_seconds_at_min_intensity:
-		errors.append("boat: nevoeiro forte precisa afundar mais rápido que o fraco")
+	if boat.crossing_seconds <= 0.0 or boat.max_simultaneous_boats < 1:
+		errors.append("boat: travessia precisa de tempo e de ao menos um barco")
 	for event: EventDefinition in events:
 		if event == null or event.id == &"":
 			errors.append("evento nulo ou sem id")

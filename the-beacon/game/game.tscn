@@ -23,6 +23,7 @@
 [ext_resource type="Resource" path="res://tutorial/tutorial_content.tres" id="21_tutorial_content"]
 [ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="22_pause_menu"]
 [ext_resource type="Script" path="res://game/run_carryover.gd" id="25_carryover"]
+[ext_resource type="PackedScene" path="res://fog/fog_visuals.tscn" id="26_fog_visuals"]
 
 [sub_resource type="Environment" id="Environment_night"]
 background_mode = 1
@@ -83,6 +84,9 @@ night = NodePath("../NightDirector")
 [node name="FogSystem" type="Node" parent="World"]
 unique_name_in_owner = true
 script = ExtResource("9_fog")
+
+[node name="FogVisuals" parent="World" instance=ExtResource("26_fog_visuals")]
+unique_name_in_owner = true
 
 [node name="BoatDirector" type="Node" parent="World"]
 unique_name_in_owner = true
