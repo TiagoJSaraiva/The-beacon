@@ -139,7 +139,7 @@ func _set_simulation_running(running: bool) -> void:
 	_player.set_controls_enabled(running)
 	_pause_menu.enabled = running
 	if not running:
-		_hud.show_prompt("")
+		_hud.show_prompt(false)
 		_hud.show_hold_progress(0.0, false)
 
 

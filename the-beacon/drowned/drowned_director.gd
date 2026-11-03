@@ -5,6 +5,8 @@ extends Node
 ## medidor cheio, arromba a porta e entra. No máximo um por noite, e ele não sai mais.
 ## Recebe o farol e o jogador do Game em setup().
 
+## O barulho de aproximação começou (true) ou parou (false).
+signal approaching_changed(approaching: bool)
 signal drowned_entered
 
 @export var drowned_scene: PackedScene
@@ -17,6 +19,7 @@ var _lighthouse: Lighthouse
 var _player: Player
 var _fog_inside: bool = false
 var _drowned: Drowned
+var _approaching: bool = false
 
 
 func _physics_process(delta: float) -> void:
@@ -24,7 +27,11 @@ func _physics_process(delta: float) -> void:
 		return
 	if approach.tick(delta, _fog_inside, drowned_points):
 		_enter()
-	_lighthouse.entrance_door.show_approach(0.0 if approach.has_entered else approach.level)
+	var level: float = 0.0 if approach.has_entered else approach.level
+	_lighthouse.entrance_door.show_approach(level)
+	if (level > 0.0) != _approaching:
+		_approaching = level > 0.0
+		approaching_changed.emit(_approaching)
 	if _drowned == null:
 		return
 	var senses := DrownedSenses.new()

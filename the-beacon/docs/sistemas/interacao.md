@@ -4,10 +4,10 @@
 Uso dos objetos do cenário com a ação `interact` (E, Y no controle). A HUD só mostra a hotkey ao mirar e a barra de progresso (GDD 1.2.21).
 
 ## Componentes
-- `components/interactable.gd` (`Interactable`, `Area3D` na camada `interactable`): declara modo, duração, prompt e restrições. Não conhece o efeito; o dono escuta os sinais.
+- `components/interactable.gd` (`Interactable`, `Area3D` na camada `interactable`): declara modo, duração e restrições. Não conhece o efeito; o dono escuta os sinais.
 - `player/interaction_ray.gd` (`InteractionRay`, `RayCast3D` na câmera): encontra o alvo e traduz a tecla.
 - `components/hold_progress.gd` (`HoldProgress`): regra pura do progresso.
-- `ui/hud/hud.tscn` (`Hud`): `show_prompt(text)`, `show_hold_progress(ratio, active)`; ligado pelo `Game`.
+- `ui/hud/hud.tscn` (`Hud`): `show_prompt(visible)` (a tecla de `interact` atual, do último dispositivo usado), `show_hold_progress(ratio, active)`; ligado pelo `Game`.
 
 ## Regras
 - Modos: `PRESS` (toque), `HOLD` (segurar até completar `hold_seconds`; soltar ou trocar de alvo zera), `HOLD_CONTINUOUS` (efeito enquanto segura, ex.: trinco).
@@ -19,7 +19,7 @@ Uso dos objetos do cenário com a ação `interact` (E, Y no controle). A HUD s�
 
 ## Sinais
 - `Interactable.interacted`, `hold_completed`, `hold_state_changed(holding)`.
-- `InteractionRay.focus_changed(prompt)`, `hold_progress_changed(ratio, active)` → `Hud`.
+- `InteractionRay.focus_changed(focused)`, `hold_progress_changed(ratio, active)` → `Hud`.
 
 ## Testes
 - `test/unit/hold_progress_test.gd`.

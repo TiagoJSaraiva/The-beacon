@@ -14,16 +14,6 @@ func _init() -> void:
 	_noise.seed = 42
 	_save("radio_ring", _tone(900.0, 0.4) + _silence(0.15) + _tone(900.0, 0.4) + _silence(1.0))
 	_save("radio_allowed", _tone(600.0, 0.3) + _silence(0.1) + _tone(900.0, 0.45))
-	_save(
-		"radio_pirate",
-		(
-			_square(220.0, 0.35)
-			+ _silence(0.15)
-			+ _square(200.0, 0.35)
-			+ _silence(0.15)
-			+ _square(180.0, 0.5)
-		)
-	)
 	_save("alarm", _square(440.0, 0.4) + _silence(0.6))
 	_save("footstep", _thump(0.14, 90.0) + _silence(0.4))
 	_save("bang", _thump(0.3, 55.0))

@@ -49,3 +49,13 @@ func test_chance_multiplier_grows_each_night() -> void:
 func test_find_by_id_returns_null_for_unknown() -> void:
 	var catalog: DifficultyCatalog = load(CATALOG_PATH)
 	assert_object(catalog.find_by_id(&"nightmare")).is_null()
+
+
+func test_validate_reports_new_rule_conflicts() -> void:
+	var catalog: DifficultyCatalog = load(CATALOG_PATH)
+	var difficulty: DifficultyConfig = catalog.find_by_id(&"easy").duplicate(true)
+	difficulty.figurehead.trigger_range = difficulty.figurehead.min_spawn_distance
+	difficulty.events.append(difficulty.events[0])
+	var errors := Array(difficulty.validate())
+	assert_array(errors).contains(["figurehead: não pode surgir já ao alcance do pulo"])
+	assert_array(errors).contains(["eventos repetidos"])

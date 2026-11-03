@@ -15,7 +15,10 @@ const STEP_LAMP_BURNED := &"lamp_burned"
 const STEP_HOSE_BURST := &"hose_burst"
 const STEP_MACHINE_BROKEN := &"machine_broken"
 const STEP_FOG := &"fog"
+const STEP_FOG_NEAR := &"fog_near"
+const STEP_LATCH := &"latch"
 const STEP_BOAT := &"boat"
+const STEP_DROWNED_APPROACHING := &"drowned_approaching"
 const STEP_DROWNED := &"drowned"
 const STEP_FIGUREHEAD := &"figurehead"
 ## Passos que este diretor sabe disparar. Um passo do conteúdo fora daqui nunca aparece.
@@ -28,7 +31,10 @@ const KNOWN_STEPS: Array[StringName] = [
 	STEP_HOSE_BURST,
 	STEP_MACHINE_BROKEN,
 	STEP_FOG,
+	STEP_FOG_NEAR,
+	STEP_LATCH,
 	STEP_BOAT,
+	STEP_DROWNED_APPROACHING,
 	STEP_DROWNED,
 	STEP_FIGUREHEAD,
 ]
@@ -82,6 +88,7 @@ func setup(
 	lighthouse.machine_house.broken_changed.connect(_show_when.bind(STEP_MACHINE_BROKEN))
 	fog.stage_changed.connect(_on_fog_stage_changed)
 	boats.calling_changed.connect(_show_when.bind(STEP_BOAT))
+	drowned.approaching_changed.connect(_show_when.bind(STEP_DROWNED_APPROACHING))
 	drowned.drowned_entered.connect(show_step.bind(STEP_DROWNED))
 	figurehead.appeared.connect(show_step.bind(STEP_FIGUREHEAD))
 
@@ -125,3 +132,7 @@ func _on_night_started(_night: int) -> void:
 func _on_fog_stage_changed(stage: FogStage.Stage) -> void:
 	if stage != FogStage.Stage.NONE:
 		show_step(STEP_FOG)
+	if FogStage.blocks_beam(stage):
+		show_step(STEP_FOG_NEAR)
+	if stage >= FogStage.Stage.TRAPDOOR:
+		show_step(STEP_LATCH)

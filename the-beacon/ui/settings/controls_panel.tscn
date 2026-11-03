@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/settings/controls_panel.gd" id="1_controls"]
+
+[node name="ControlsPanel" type="VBoxContainer"]
+custom_minimum_size = Vector2(520, 0)
+theme_override_constants/separation = 10
+script = ExtResource("1_controls")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Controles"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="."]
+layout_mode = 2
+text = "Escolha uma tecla ou um botão e aperte o novo. Esc cancela."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Header" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 3
+
+[node name="Action" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ação"
+
+[node name="Keyboard" type="Label" parent="Header"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Teclado"
+horizontal_alignment = 1
+
+[node name="Joypad" type="Label" parent="Header"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Controle"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3
+
+[node name="ResetButton" type="Button" parent="."]
+layout_mode = 2
+text = "Restaurar padrão"
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 2
+text = "Voltar"
+
+[connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

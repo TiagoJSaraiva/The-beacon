@@ -1,7 +1,7 @@
 # Plano — Entrega 2: revisão das mecânicas
 
 - **Origem**: reunião com o game designer (`../notes/anotacao.txt`) e esclarecimentos com o desenvolvedor (2026-11).
-- **Status**: aprovado (2026-11). Um commit ao fim de cada fase.
+- **Status**: implementado (2026-11), fases A a G; falta o playtest. Desvios do plano estão nas notas de `docs/sistemas/` e no `status.md`.
 - **Fora deste plano**: piratas (só documentação), tela única de câmeras com frequências do rádio (`../notes/anotacao-ver-ainda.txt`), aumento de consumo por noite, menu "natural" dentro do jogo.
 
 ## Objetivo

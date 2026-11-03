@@ -10,7 +10,8 @@ Tutorial integrado ao jogo (GDD 9.1): em toda partida no Easy, na primeira vez q
 
 ## Regras
 - Ativo quando `DifficultyConfig.tutorial_enabled` (hoje só Easy).
-- Gatilhos: início da 1ª noite (`start`, `flashlight`), combustível do gerador de emergência abaixo de `low_fuel_ratio` (`low_fuel`), galão na mão (`jerrycan`), lâmpada queimada, mangueira estourada (`hose_burst`), casa de máquinas quebrada (`machine_broken`), nevoeiro (qualquer estágio), barco chamando no rádio, Afogado entrando (`drowned`), carranca surgindo (`figurehead`).
+- Gatilhos: início da 1ª noite (`start`, `flashlight`), combustível do gerador de emergência abaixo de `low_fuel_ratio` (`low_fuel`), galão na mão (`jerrycan`), lâmpada queimada (`lamp_burned`), mangueira estourada (`hose_burst`), casa de máquinas quebrada (`machine_broken`), nevoeiro em qualquer estágio (`fog`), perto do farol (`fog_near`) e no alçapão (`latch`), barco chamando no rádio (`boat`), barulho do Afogado se aproximando (`drowned_approaching`), Afogado entrando (`drowned`), carranca surgindo (`figurehead`).
+- Teclas nos textos são marcadores `{ação}` (ex.: `{interact}`); a HUD troca pela tecla atual do dispositivo em uso (decisão 0018). O teste reprova marcador que não seja ação remapeável.
 - Textos que chegam juntos entram numa fila; cada um fica `message_seconds` na tela.
 - Mudar um texto: só o `.tres`. Passo novo: o id em `TutorialDirector.KNOWN_STEPS` e o gatilho no `setup()`, mais o texto no `.tres` (o teste reprova conteúdo com id desconhecido ou faltando).
 - Os passos já mostrados passam de uma noite para a outra (`RunState.tutorial_shown_ids`) e vão no save.
@@ -19,4 +20,4 @@ Tutorial integrado ao jogo (GDD 9.1): em toda partida no Easy, na primeira vez q
 - `TutorialDirector.message_changed(text)`.
 
 ## Testes
-- `test/unit/tutorial_tracker_test.gd`: primeira vez só, id desconhecido, fim, retomada de noites anteriores, conteúdo coerente com `KNOWN_STEPS`.
+- `test/unit/tutorial_tracker_test.gd`: primeira vez só, id desconhecido, fim, retomada de noites anteriores, conteúdo coerente com `KNOWN_STEPS`, marcadores de tecla válidos.

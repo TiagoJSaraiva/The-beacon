@@ -13,7 +13,7 @@ func test_release_resets_and_full_hold_completes() -> void:
 	player.mouse_sensitivity = 0.0
 	monitor_signals(target)
 	monitor_signals(ray)
-	await assert_signal(ray).wait_until(5000).is_emitted("focus_changed", ["E"])
+	await assert_signal(ray).wait_until(5000).is_emitted("focus_changed", [true])
 
 	runner.simulate_action_press("interact")
 	await await_millis(200)

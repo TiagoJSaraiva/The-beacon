@@ -25,7 +25,7 @@ A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, e
 
 ## Sinais
 - `Drowned.effect_triggered(effect)` → `DrownedDirector` → `Player.kill(CAUSE_DROWNED)`.
-- `DrownedDirector.drowned_entered` → tutorial.
+- `DrownedDirector.approaching_changed(approaching)`, `drowned_entered` → tutorial.
 - `FogSystem.stage_changed` → `DrownedDirector.set_fog_stage`; `BoatDirector.boat_sank` → `add_drowned_point`.
 
 ## Testes

@@ -3,7 +3,8 @@ extends RayCast3D
 ## Mira do jogador: encontra o Interactable à frente e traduz a tecla de interação
 ## em toque, segurar até completar ou segurar contínuo.
 
-signal focus_changed(prompt: String)
+## Algo usável entrou (true) ou saiu (false) da mira; a HUD mostra a tecla de interagir.
+signal focus_changed(focused: bool)
 signal hold_progress_changed(ratio: float, active: bool)
 ## Usou algo de mãos livres com o galão na mão: soltar o galão primeiro.
 signal drop_requested
@@ -78,7 +79,7 @@ func _change_focus(target: Interactable) -> void:
 	_focused = target
 	# Segurar E enquanto vira para outro objeto não deve disparar o novo.
 	_awaiting_release = Input.is_action_pressed("interact")
-	focus_changed.emit(target.prompt if target != null else "")
+	focus_changed.emit(target != null)
 
 
 func _find_target() -> Interactable:

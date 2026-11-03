@@ -33,7 +33,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		if _index_page.visible:
 			close()
+		elif _settings_panel.visible and _settings_panel.go_back_from_subpage():
+			return
 		else:
+			# Sair das configurações pelo Esc grava como o botão Voltar.
+			if _settings_panel.visible:
+				Settings.save()
 			_show_index()
 
 

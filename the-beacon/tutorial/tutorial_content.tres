@@ -11,47 +11,62 @@ text = "Sobreviva até as 06:00. Ligue o farol na alavanca da cabine: parado, el
 [sub_resource type="Resource" id="Resource_flashlight"]
 script = ExtResource("1_step")
 id = &"flashlight"
-text = "Q liga e desliga a lanterna. Segure X para ver a bateria: ela não recarrega."
+text = "{toggle_flashlight} liga e desliga a lanterna. Segure {check_battery} para ver a bateria: ela não recarrega."
 
 [sub_resource type="Resource" id="Resource_low_fuel"]
 script = ExtResource("1_step")
 id = &"low_fuel"
-text = "O gerador de emergência está ficando sem combustível. Pegue o galão no slot do tanque, no térreo, e segure E na boca do gerador, na cabine, para despejar."
+text = "O gerador de emergência está ficando sem combustível. Pegue o galão no slot do tanque, no térreo, e segure {interact} na boca do gerador, na cabine, para despejar."
 
 [sub_resource type="Resource" id="Resource_jerrycan"]
 script = ExtResource("1_step")
 id = &"jerrycan"
-text = "R solta o galão; usar algo que exija as mãos livres também. Devolvido ao slot do tanque, ele enche de novo aos poucos."
+text = "{drop_item} solta o galão; usar algo que exija as mãos livres também. Devolvido ao slot do tanque, ele enche de novo aos poucos."
 
 [sub_resource type="Resource" id="Resource_lamp_burned"]
 script = ExtResource("1_step")
 id = &"lamp_burned"
-text = "A lâmpada do farol queimou e o feixe apagou. Segure E na portinha da câmara da lâmpada, na tubulação da casa de máquinas, para trocá-la."
+text = "A lâmpada do farol queimou e o feixe apagou. Segure {interact} na portinha da câmara da lâmpada, na tubulação da casa de máquinas, para trocá-la."
 
 [sub_resource type="Resource" id="Resource_hose_burst"]
 script = ExtResource("1_step")
 id = &"hose_burst"
-text = "A mangueira estourou e o gerador principal parou de vez. Agora o farol depende do gerador de emergência, na cabine, abastecido com o galão."
+text = "O nevoeiro entrou e estourou a mangueira: o gerador principal parou de vez. Agora o farol depende do gerador de emergência, na cabine, abastecido com o galão."
 
 [sub_resource type="Resource" id="Resource_machine_broken"]
 script = ExtResource("1_step")
 id = &"machine_broken"
-text = "A casa de máquinas quebrou e o farol parou de girar. Segure E nela para consertar."
+text = "A casa de máquinas quebrou e o farol parou de girar. Segure {interact} nela para consertar."
 
 [sub_resource type="Resource" id="Resource_fog"]
 script = ExtResource("1_step")
 id = &"fog"
-text = "Nevoeiro no mar, nas câmeras. Com o farol parado, ele avança até o farol e apaga o feixe."
+text = "Nevoeiro no mar, nas câmeras. Com o farol parado, ele avança até o farol."
+
+[sub_resource type="Resource" id="Resource_fog_near"]
+script = ExtResource("1_step")
+id = &"fog_near"
+text = "O nevoeiro chegou perto do farol e cobre o feixe. Mantenha o farol operando para ele recuar."
+
+[sub_resource type="Resource" id="Resource_latch"]
+script = ExtResource("1_step")
+id = &"latch"
+text = "O nevoeiro chegou ao alçapão e soltou o trinco. Só dá para trancar de novo depois que ele recuar."
 
 [sub_resource type="Resource" id="Resource_boat"]
 script = ExtResource("1_step")
 id = &"boat"
 text = "Um barco está chamando. Atenda o rádio com o feixe aceso e ele desvia; se entrar no nevoeiro, afunda."
 
+[sub_resource type="Resource" id="Resource_drowned_approaching"]
+script = ExtResource("1_step")
+id = &"drowned_approaching"
+text = "Barulho na porta: o Afogado se aproxima enquanto o nevoeiro estiver no farol. Afaste o nevoeiro ou prepare o alçapão."
+
 [sub_resource type="Resource" id="Resource_drowned"]
 script = ExtResource("1_step")
 id = &"drowned"
-text = "O Afogado entrou e mata ao tocar. Feche o alçapão e ligue o trinco: trancado, ele cansa de bater."
+text = "O Afogado entrou e mata ao tocar. Feche o alçapão e segure {interact} no trinco para trancar: trancado, ele cansa de bater."
 
 [sub_resource type="Resource" id="Resource_figurehead"]
 script = ExtResource("1_step")
@@ -60,5 +75,5 @@ text = "Carranca. Ela pula em quem chega perto e cega; depois de algumas vezes, 
 
 [resource]
 script = ExtResource("2_content")
-steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_boat"), SubResource("Resource_drowned"), SubResource("Resource_figurehead")])
+steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_fog_near"), SubResource("Resource_latch"), SubResource("Resource_boat"), SubResource("Resource_drowned_approaching"), SubResource("Resource_drowned"), SubResource("Resource_figurehead")])
 message_seconds = 8.0

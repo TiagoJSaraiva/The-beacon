@@ -20,6 +20,18 @@ func _ready() -> void:
 	_show_main_page()
 
 
+## Voltar (Esc, B no controle) sobe uma página.
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("ui_cancel") or _main_page.visible:
+		return
+	get_viewport().set_input_as_handled()
+	if _settings_panel.visible and _settings_panel.go_back_from_subpage():
+		return
+	if _settings_panel.visible:
+		Settings.save()
+	_show_main_page()
+
+
 func _build_difficulty_buttons() -> void:
 	for difficulty: DifficultyConfig in catalog.difficulties:
 		var unlocked: bool = SaveService.is_unlocked(difficulty.id, catalog)

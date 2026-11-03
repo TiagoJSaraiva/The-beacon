@@ -49,3 +49,14 @@ func test_content_steps_are_unique_known_and_have_text() -> void:
 		assert_int(ids.count(step.id)).is_equal(1)
 		assert_str(step.text).is_not_empty()
 	assert_float(content.message_seconds).is_greater(0.0)
+
+
+func test_text_markers_name_remappable_actions() -> void:
+	var content: TutorialContent = load(CONTENT)
+	var marker := RegEx.create_from_string(r"\{(\w+)\}")
+	var unknown: Array[String] = []
+	for step: TutorialStep in content.steps:
+		for found: RegExMatch in marker.search_all(step.text):
+			if not InputBindings.KEYBOARD_ACTIONS.has(StringName(found.get_string(1))):
+				unknown.append("%s: %s" % [step.id, found.get_string()])
+	assert_array(unknown).is_empty()

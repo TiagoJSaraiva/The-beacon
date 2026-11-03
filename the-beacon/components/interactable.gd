@@ -16,7 +16,6 @@ enum HandsRule { ANY, FREE, CARRYING }
 @export var mode: Mode = Mode.PRESS
 ## Duração do modo HOLD. O dono costuma sobrescrever com o valor da configuração.
 @export var hold_seconds: float = 1.0
-@export var prompt: String = "E"
 @export var hands_rule: HandsRule = HandsRule.ANY
 @export var enabled: bool = true
 

@@ -64,7 +64,28 @@ func validate() -> PackedStringArray:
 		errors.append("fall: altura que bloqueia a corrida precisa ser menor que a fatal")
 	if boat.crossing_seconds <= 0.0 or boat.max_simultaneous_boats < 1:
 		errors.append("boat: travessia precisa de tempo e de ao menos um barco")
+	if drowned.approach_base_per_second <= 0.0 or drowned.approach_recede_per_second <= 0.0:
+		errors.append("drowned: aproximação precisa subir e descer")
+	if trapdoor.resistance_seconds <= 0.0:
+		errors.append("trapdoor: resistência precisa ser positiva")
+	if figurehead.max_simultaneous < 1:
+		errors.append("figurehead: precisa de ao menos uma carranca")
+	if figurehead.trigger_range >= figurehead.min_spawn_distance:
+		errors.append("figurehead: não pode surgir já ao alcance do pulo")
+	if not _ids_are_unique(events):
+		errors.append("eventos repetidos")
 	for event: EventDefinition in events:
 		if event == null or event.id == &"":
 			errors.append("evento nulo ou sem id")
 	return errors
+
+
+static func _ids_are_unique(definitions: Array[EventDefinition]) -> bool:
+	var seen: Array[StringName] = []
+	for definition: EventDefinition in definitions:
+		if definition == null:
+			continue
+		if seen.has(definition.id):
+			return false
+		seen.append(definition.id)
+	return true
