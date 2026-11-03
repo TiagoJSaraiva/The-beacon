@@ -40,13 +40,3 @@ func test_full_refuel_cycle_moves_fuel_from_reserve_to_generator() -> void:
 	assert_float(reserve.fuel).is_equal_approx(75.0, 0.0001)
 	assert_float(generator.fuel).is_equal_approx(75.0, 0.0001)
 	assert_float(jerrycan.amount).is_equal_approx(0.0, 0.0001)
-
-
-func test_save_round_trip() -> void:
-	var jerrycan := JerrycanState.new(25.0)
-	jerrycan.amount = 12.0
-	jerrycan.is_carried = true
-	var restored := JerrycanState.new(25.0)
-	restored.from_dict(jerrycan.to_dict())
-	assert_float(restored.amount).is_equal_approx(12.0, 0.0001)
-	assert_bool(restored.is_carried).is_true()

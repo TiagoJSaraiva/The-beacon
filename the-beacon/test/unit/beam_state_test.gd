@@ -23,13 +23,3 @@ func test_burned_lamp_turns_beam_off() -> void:
 	beam.switch_on = true
 	beam.lamp_burned = true
 	assert_bool(beam.is_active()).is_false()
-
-
-func test_save_round_trip() -> void:
-	var beam := BeamState.new()
-	beam.switch_on = true
-	beam.lamp_burned = true
-	var restored := BeamState.new()
-	restored.from_dict(beam.to_dict())
-	assert_bool(restored.switch_on).is_true()
-	assert_bool(restored.lamp_burned).is_true()

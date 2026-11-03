@@ -5,10 +5,11 @@ Visão do projeto como ele está **agora**. Atualize no mesmo passo de qualquer 
 ## Visão geral
 Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de dois andares (GDD em `../notes/gdd.md`, fora do repositório). O jogador cumpre um plantão de 3, 5 ou 7 noites (Easy, Medium, Hard), de 20h às 6h, mantendo gerador, combustível, feixe, alçapão e lanterna enquanto lida com nevoeiro, barcos, Afogados e o Homem de Nevoeiro. Sem HUD de estado: toda informação está em objetos do cenário.
 
-**Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, agenda, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração.
+**Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração. **Entrega 2** em andamento: revisão das mecânicas (`planos/entrega-2.md`).
 
 Princípios da implementação:
-- Regras em classes `RefCounted` puras (`*_state.gd`, `*_rules.gd`), testáveis e serializáveis (`to_dict`/`from_dict`). Nós só fazem tick, leem input e aplicam o resultado.
+- Regras em classes `RefCounted` puras (`*_state.gd`, `*_rules.gd`), testáveis. Nós só fazem tick, leem input e aplicam o resultado. Só o estado que passa de uma noite para a outra é serializado (`RunState`, decisão 0015).
+- Cada noite é uma carga nova de `game/game.tscn`; o `RunState` leva o que persiste.
 - Todo valor de balanceamento vem de `DifficultyConfig` (`config/difficulties/*.tres`), com sub-configs por sistema.
 - Eventos sorteáveis são `EventDefinition` (`config/events/*.tres`); o sistema que trata cada um se registra no `EventDirector`.
 
@@ -33,8 +34,8 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 - `ui/main_menu/main_menu.tscn` (**Main Scene**) → `MainMenu`: menu, seleção de dificuldade e configurações (ver `sistemas/menus-e-telas.md`).
 - `game/game.tscn` → `Game` (`Node3D`, `game.gd`):
   - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
-  - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `AgendaOverlay`, `AgendaController` (`sistemas/agenda.md`), `RunSnapshot` (`sistemas/save-e-progresso.md`).
-  - Lê o pedido do `SceneRouter` (dificuldade nova ou save; sem pedido, `default_difficulty` = Easy), aplica a dificuldade ou restaura o save, registra eventos, liga os sinais e conduz as noites (`RunState`) até a vitória ou a morte. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
+  - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `PauseMenu` (`sistemas/menus-e-telas.md`), `RunCarryover` (`sistemas/save-e-progresso.md`).
+  - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica a dificuldade e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG, `SpiralStaircase`, `Landing`, `Ramp`, `Trapdoor`, `EntranceDoor` (ver `sistemas/farol.md`); `Generator`, `ReserveTank`, `JerrycanDock` (`sistemas/energia-e-combustivel.md`); `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights`; `Desk` com monitores e `Radio`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
 - `exterior/exterior.tscn` → `Exterior`: ilha, mar, rota dos barcos, câmeras, pontos de surgimento (`sistemas/exterior-e-cameras.md`).
 - `player/player.tscn` → `Player` (`CharacterBody3D`) → `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
@@ -42,13 +43,13 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 - `ui/hud/hud.tscn` → `Hud` (`CanvasLayer`): hotkey, barra de progresso, borda vermelha, cegueira.
 - `ui/night_end/night_end_screen.tscn` → `NightEndScreen` (`CanvasLayer`): entre noites.
 
-Os diretores que mexem em outros sistemas (`DrownedDirector`, `FogManDirector`, `TutorialDirector`, `AgendaController`) recebem as referências do `Game` em `setup()`. `RunSnapshot` e `AgendaController` referenciam os nós da cena por `@export` (decisão 0006).
+Os diretores que mexem em outros sistemas (`DrownedDirector`, `FogManDirector`, `TutorialDirector`) recebem as referências do `Game` em `setup()`. `RunCarryover` referencia os nós da cena por `@export` (decisão 0006).
 
 ## Autoloads
 | Nome | Script | Papel | Decisão |
 |---|---|---|---|
-| `SceneRouter` | `autoload/scene_router.gd` | Troca menu ↔ jogo e entrega o `RunRequest` ao `Game` | 0010 |
-| `SaveService` | `autoload/save_service.gd` | Save único da partida e progresso de desbloqueio (`user://`) | 0011 |
+| `SceneRouter` | `autoload/scene_router.gd` | Troca menu ↔ jogo; `play_night(difficulty, run)` carrega cada noite e entrega o `RunRequest` ao `Game` | 0010, 0015 |
+| `SaveService` | `autoload/save_service.gd` | Save único da partida (`RunState`, só entre noites) e progresso de desbloqueio (`user://`) | 0014 |
 | `Settings` | `autoload/settings.gd` | Volumes e sensibilidade (`user://settings.cfg`) | 0012 |
 
 O parse do check carrega os scripts com os autoloads registrados (decisão 0013).
@@ -61,7 +62,7 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `Lighthouse.jerrycan_carried_changed` → `Player.set_carrying` — galão na mão.
 - Dentro do farol: `Generator.power_changed` → `PowerConsumer` (relógio, luzes, lâmpada); `BeamControl.switched` → lâmpada; `LighthouseLamp.beam_active_changed` → consumo do gerador, painel e `Lighthouse.beam_active_changed`; encher/despejar do galão.
 - Eventos: cada sistema se registra no `EventDirector` (`Lighthouse`, `FogSystem`, `BoatDirector`).
-- `NightDirector.night_ended` → `Game` (congela, limpa entidades, tela ou vitória); `NightEndScreen.continue_requested` → próxima noite.
+- `NightDirector.night_ended` → `Game` (congela, `RunCarryover.capture`, tela ou vitória).
 - `Player.died` → `Game` → `run_lost`. `Player.slowed_changed` → `Hud.set_slowed`.
 - `FogSystem.intensity_changed` → `Exterior.set_fog_intensity`, `BoatDirector.set_fog_intensity`; `FogSystem.covers_lighthouse_camera_changed` → `FogManDirector.set_fog_covers_camera`.
 - `Lighthouse.beam_active_changed` → `BoatDirector.set_beam_active`.
@@ -69,8 +70,8 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `FogManDirector.player_blinded` → `Hud.show_blindness`.
 - `Drowned.effect_triggered` → `DrownedDirector` → farol ou `Player.kill`.
 - `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).
-- `Lighthouse.agenda.open_requested` → `AgendaController`; `AgendaOverlay.closed`/`save_and_exit_requested`/`exit_without_saving_requested` → `AgendaController` → `SaveService`, `SceneRouter`.
-- `NightEndScreen`, `GameOverScreen`, `VictoryScreen` → `Game` ou direto `SceneRouter`. `Settings.changed` → `Game` → `Player.sensitivity_scale`.
+- `PauseMenu.paused_changed` → `Game` → `Player.set_controls_enabled`; `PauseMenu.exit_requested` → `Game` → `SceneRouter.go_to_main_menu`.
+- `NightEndScreen.continue_requested` → `Game` → `SceneRouter.play_night`; `NightEndScreen.save_and_exit_requested` → `Game` → `SaveService.write_run`, `SceneRouter`. `GameOverScreen`, `VictoryScreen` → `Game` ou direto `SceneRouter`. `Settings.changed` → `Game` → `Player.sensitivity_scale`.
 
 ## Input map
 Teclas físicas (independem do layout do teclado). O olhar usa o movimento do mouse. Não há pulo (GDD 1.2.20).
@@ -83,8 +84,9 @@ Teclas físicas (independem do layout do teclado). O olhar usa o movimento do mo
 | `toggle_flashlight` | Z |
 | `check_battery` | X |
 | `interact` | E (segurar em interações de duração) |
+| `pause` | Esc / Start (controle) |
 
-Menus e agenda usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay): Esc (`ui_cancel`) fecha a agenda ou volta à página anterior dela.
+Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay). No menu de pausa, Esc (`ui_cancel` ou `pause`) volta à página anterior ou fecha.
 
 ## Camadas de colisão
 1 — `world` — paredes, chão, escada / todos colidem; raios de oclusão

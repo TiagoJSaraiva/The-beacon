@@ -1,10 +1,10 @@
 class_name NightEndScreen
 extends CanvasLayer
-## Tela entre noites (GDD 15.2): continuar para a próxima noite ou voltar ao menu.
-## Não salva nada: o jogo só salva pela agenda.
+## Tela entre noites (GDD 15.2): seguir para a próxima noite ou salvar e sair. É o único
+## lugar onde o jogo salva (decisão 0014).
 
 signal continue_requested
-signal menu_requested
+signal save_and_exit_requested
 
 @onready var _title: Label = %Title
 @onready var _continue_button: Button = %ContinueButton
@@ -25,6 +25,6 @@ func _on_continue_button_pressed() -> void:
 	continue_requested.emit()
 
 
-func _on_menu_button_pressed() -> void:
+func _on_save_and_exit_button_pressed() -> void:
 	visible = false
-	menu_requested.emit()
+	save_and_exit_requested.emit()

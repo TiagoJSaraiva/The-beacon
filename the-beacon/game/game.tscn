@@ -21,9 +21,8 @@
 [ext_resource type="PackedScene" path="res://ui/victory/victory_screen.tscn" id="19_victory"]
 [ext_resource type="Script" path="res://tutorial/tutorial_director.gd" id="20_tutorial"]
 [ext_resource type="Resource" path="res://tutorial/tutorial_content.tres" id="21_tutorial_content"]
-[ext_resource type="PackedScene" path="res://agenda/agenda_overlay.tscn" id="22_agenda_overlay"]
-[ext_resource type="Script" path="res://game/agenda_controller.gd" id="23_agenda_controller"]
-[ext_resource type="Script" path="res://game/run_snapshot.gd" id="24_snapshot"]
+[ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="22_pause_menu"]
+[ext_resource type="Script" path="res://game/run_carryover.gd" id="25_carryover"]
 
 [sub_resource type="Environment" id="Environment_night"]
 background_mode = 1
@@ -121,26 +120,13 @@ unique_name_in_owner = true
 [node name="VictoryScreen" parent="." instance=ExtResource("19_victory")]
 unique_name_in_owner = true
 
-[node name="AgendaOverlay" parent="." instance=ExtResource("22_agenda_overlay")]
+[node name="PauseMenu" parent="." instance=ExtResource("22_pause_menu")]
 unique_name_in_owner = true
 
-[node name="AgendaController" type="Node" parent="." node_paths=PackedStringArray("overlay", "player", "hud", "snapshot")]
+[node name="RunCarryover" type="Node" parent="." node_paths=PackedStringArray("lighthouse", "player", "drowned", "tutorial")]
 unique_name_in_owner = true
-script = ExtResource("23_agenda_controller")
-overlay = NodePath("../AgendaOverlay")
-player = NodePath("../World/Player")
-hud = NodePath("../Hud")
-snapshot = NodePath("../RunSnapshot")
-
-[node name="RunSnapshot" type="Node" parent="." node_paths=PackedStringArray("night", "events", "lighthouse", "player", "fog", "boats", "drowned", "fog_man", "tutorial")]
-unique_name_in_owner = true
-script = ExtResource("24_snapshot")
-night = NodePath("../World/NightDirector")
-events = NodePath("../World/EventDirector")
+script = ExtResource("25_carryover")
 lighthouse = NodePath("../World/Lighthouse")
 player = NodePath("../World/Player")
-fog = NodePath("../World/FogSystem")
-boats = NodePath("../World/BoatDirector")
 drowned = NodePath("../World/DrownedDirector")
-fog_man = NodePath("../World/FogManDirector")
 tutorial = NodePath("../World/TutorialDirector")

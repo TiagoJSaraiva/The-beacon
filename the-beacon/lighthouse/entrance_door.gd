@@ -30,15 +30,6 @@ func repair() -> void:
 	_set_broken(false)
 
 
-func to_dict() -> Dictionary:
-	return {"is_broken": is_broken}
-
-
-func from_dict(data: Dictionary) -> void:
-	is_broken = data.get("is_broken", false)
-	_apply_state()
-
-
 func _set_broken(broken: bool) -> void:
 	if is_broken == broken:
 		return

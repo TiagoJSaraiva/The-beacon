@@ -19,7 +19,7 @@ Principal ameaça física; a única que mata (GDD 1.2.10, 1.2.11).
 - Jogador ao alcance (com a porta já aberta) é sempre o alvo; tocar (`kill_distance`) mata. Perdido o alcance, volta à ação anterior: esconder-se não sobe a ação para o nível 4.
 - Alcance: distância + `occlusion_penalty` por obstáculo (`world`/`barriers`) entre os olhos dele e os do jogador, comparado a `perception_range`.
 - Alçapão aberto ou quebrado na chegada → persegue até matar. Fechado → bate; a resistência (`TrapdoorConfig.resistance_seconds`) corre sem o trinco, congela com ele, não zera ao soltar e volta ao máximo quando ninguém bate. Zerada, o alçapão quebra.
-- Mais lento que o jogador (`move_speed`). Às 06:00 todos somem; pontos e ameaça continuam.
+- Mais lento que o jogador (`move_speed`). A noite seguinte começa sem Afogados em cena; os pontos continuam (`RunState`).
 
 ## Sinais
 - `Drowned.effect_triggered(effect)` → `DrownedDirector` → porta, mangueira, gerador ou `Player.kill(CAUSE_DROWNED)`.

@@ -1,20 +1,19 @@
 class_name Game
 extends Node3D
-## Orquestra o plantão: aplica a dificuldade (ou restaura o save), liga os sinais entre
-## jogador, farol, sistemas e HUD, e conduz as noites até a vitória ou a morte.
+## Uma noite do plantão (decisão 0015): aplica a dificuldade e o estado que veio das noites
+## anteriores, liga os sinais entre jogador, farol, sistemas e HUD, e às 06:00 recolhe o
+## estado para a noite seguinte, a vitória ou o save.
 
 signal run_won(difficulty_id: StringName)
 signal run_lost(cause: StringName)
 
 ## Dificuldade usada ao rodar esta cena direto (sem passar pelo menu).
 @export var default_difficulty: DifficultyConfig
-## Ordem de desbloqueio e busca da dificuldade de um save.
+## Ordem de desbloqueio das dificuldades.
 @export var catalog: DifficultyCatalog
 
 var difficulty: DifficultyConfig
 var run: RunState
-
-var _saved_run: Dictionary = {}
 
 @onready var _world: Node3D = %World
 @onready var _player: Player = %Player
@@ -32,21 +31,20 @@ var _saved_run: Dictionary = {}
 @onready var _night_end: NightEndScreen = %NightEndScreen
 @onready var _game_over: GameOverScreen = %GameOverScreen
 @onready var _victory: VictoryScreen = %VictoryScreen
-@onready var _agenda: AgendaController = %AgendaController
-@onready var _snapshot: RunSnapshot = %RunSnapshot
+@onready var _pause_menu: PauseMenu = %PauseMenu
+@onready var _carryover: RunCarryover = %RunCarryover
 
 
 func _ready() -> void:
-	difficulty = default_difficulty
 	_read_run_request()
-	run = RunState.new(difficulty.id, difficulty.nights)
+	# Começar a noite consome o save: qualquer saída antes do próximo "Salvar e sair",
+	# inclusive fechar o jogo à força, perde a partida (decisão 0014).
+	SaveService.delete_run()
 	_configure_systems()
 	_connect_signals()
 	_apply_settings()
-	if _saved_run.is_empty():
-		_night_director.start_night(run.current_night)
-	else:
-		_snapshot.restore(_saved_run, run)
+	_carryover.apply(run)
+	_night_director.start_night(run.current_night)
 	# O CSG monta a geometria no primeiro frame; só então a navmesh enxerga o farol.
 	await get_tree().process_frame
 	_navigation.bake_navigation_mesh(false)
@@ -67,7 +65,6 @@ func _configure_systems() -> void:
 	_tutorial.setup(
 		difficulty.tutorial_enabled, _night_director, _lighthouse, _fog, _boats, _drowned, _fog_man
 	)
-	_agenda.setup(run, _lighthouse.agenda)
 	_lighthouse.register_events(_event_director)
 	_fog.register_events(_event_director)
 	_boats.register_events(_event_director)
@@ -86,11 +83,13 @@ func _connect_signals() -> void:
 	_night_director.night_started.connect(_on_night_started)
 	_night_director.night_ended.connect(_on_night_ended)
 	_night_end.continue_requested.connect(_on_night_end_continue_requested)
-	_night_end.menu_requested.connect(SceneRouter.go_to_main_menu)
+	_night_end.save_and_exit_requested.connect(_on_night_end_save_and_exit_requested)
 	_game_over.retry_requested.connect(_on_game_over_retry_requested)
 	_game_over.menu_requested.connect(SceneRouter.go_to_main_menu)
 	_game_over.quit_requested.connect(SceneRouter.quit_game)
 	_victory.menu_requested.connect(SceneRouter.go_to_main_menu)
+	_pause_menu.paused_changed.connect(_on_pause_menu_paused_changed)
+	_pause_menu.exit_requested.connect(_on_pause_menu_exit_requested)
 	Settings.changed.connect(_apply_settings)
 	_lighthouse.jerrycan_carried_changed.connect(_player.set_carrying)
 	_lighthouse.beam_active_changed.connect(_boats.set_beam_active)
@@ -104,23 +103,16 @@ func _connect_signals() -> void:
 	_boats.boat_sank.connect(_drowned.add_drowned_point)
 
 
-## Usa a dificuldade escolhida no menu ou a do save; sem pedido (cena aberta direto) ou com
-## um save de dificuldade desconhecida, começa um plantão novo na padrão.
+## Usa o pedido do SceneRouter; sem pedido (cena aberta direto no editor ou em teste),
+## começa um plantão novo na dificuldade padrão.
 func _read_run_request() -> void:
 	var request: RunRequest = SceneRouter.take_run_request()
 	if request == null:
+		difficulty = default_difficulty
+		run = RunState.new_run(difficulty)
 		return
-	if request.difficulty != null:
-		difficulty = request.difficulty
-		return
-	var saved_difficulty: DifficultyConfig = catalog.find_by_id(
-		RunSnapshot.difficulty_id_of(request.saved_run)
-	)
-	if saved_difficulty == null:
-		push_warning("Save com dificuldade desconhecida; começando um plantão novo")
-		return
-	difficulty = saved_difficulty
-	_saved_run = request.saved_run
+	difficulty = request.difficulty
+	run = request.run
 
 
 func _apply_settings() -> void:
@@ -131,38 +123,47 @@ func _apply_settings() -> void:
 func _set_simulation_running(running: bool) -> void:
 	_world.process_mode = Node.PROCESS_MODE_INHERIT if running else Node.PROCESS_MODE_DISABLED
 	_player.set_controls_enabled(running)
+	_pause_menu.enabled = running
 	if not running:
-		_agenda.dismiss()
 		_hud.show_prompt("")
 		_hud.show_hold_progress(0.0, false)
-
-
-## Às 06:00 a noite termina mesmo com algo em andamento (GDD 1.2.1): ameaças e barco somem;
-## recursos, danos e ameaça acumulada continuam.
-func _clear_night_entities() -> void:
-	_boats.clear()
-	_drowned.clear()
-	_fog_man.clear()
-	_fog.clear()
 
 
 func _on_night_started(_night: int) -> void:
 	_event_director.reset_night()
 
 
+## Às 06:00 a noite termina mesmo com algo em andamento (GDD 1.2.1). Só o estado
+## persistente segue; a próxima noite recarrega a cena do zero.
 func _on_night_ended(night: int) -> void:
 	_set_simulation_running(false)
-	_clear_night_entities()
+	_carryover.capture(run)
 	if run.is_last_night():
 		_win_run()
 	else:
+		run.advance_night()
 		_night_end.show_night(night)
 
 
 func _on_night_end_continue_requested() -> void:
-	run.advance_night()
-	_set_simulation_running(true)
-	_night_director.start_night(run.current_night)
+	SceneRouter.play_night(difficulty, run)
+
+
+## O save já aponta para a noite seguinte (decisão 0014).
+func _on_night_end_save_and_exit_requested() -> void:
+	SaveService.write_run(run.to_dict())
+	SceneRouter.go_to_main_menu()
+
+
+func _on_pause_menu_paused_changed(paused: bool) -> void:
+	_player.set_controls_enabled(not paused)
+	if paused:
+		_hud.show_hold_progress(0.0, false)
+
+
+## O save já foi consumido ao começar a noite: sair daqui perde a partida (decisão 0014).
+func _on_pause_menu_exit_requested() -> void:
+	SceneRouter.go_to_main_menu()
 
 
 func _on_player_died(cause: StringName) -> void:

@@ -49,11 +49,3 @@ func test_window_crossing_midnight() -> void:
 func test_window_within_same_day() -> void:
 	assert_bool(NightClock.is_hour_in_window(1.0, 0.5, 3.0)).is_true()
 	assert_bool(NightClock.is_hour_in_window(23.0, 0.5, 3.0)).is_false()
-
-
-func test_save_round_trip() -> void:
-	var clock := _clock()
-	clock.advance(123.0)
-	var restored := _clock()
-	restored.from_dict(clock.to_dict())
-	assert_float(restored.elapsed_seconds).is_equal_approx(123.0, 0.0001)

@@ -51,27 +51,6 @@ func set_fog_covers_camera(covers: bool) -> void:
 	_fog_covers_camera = covers
 
 
-## Remove o Homem de Nevoeiro sem consequência (fim da noite).
-func clear() -> void:
-	if _fog_man != null:
-		_fog_man.queue_free()
-		_fog_man = null
-
-
-func to_dict() -> Dictionary:
-	var data: Dictionary = {"tracker": tracker.to_dict()}
-	if _fog_man != null:
-		data["position"] = SaveCodec.vector3_to_array(_fog_man.global_position)
-	return data
-
-
-func from_dict(data: Dictionary) -> void:
-	clear()
-	tracker.from_dict(data.get("tracker", {}))
-	if data.has("position"):
-		_spawn(SaveCodec.array_to_vector3(data["position"]))
-
-
 func _spawn(spawn_point: Vector3) -> void:
 	_fog_man = fog_man_scene.instantiate()
 	_fog_man.move_speed = tracker.config.move_speed
@@ -80,7 +59,8 @@ func _spawn(spawn_point: Vector3) -> void:
 
 
 func _vanish() -> void:
-	clear()
+	_fog_man.queue_free()
+	_fog_man = null
 	tracker.on_vanished()
 
 

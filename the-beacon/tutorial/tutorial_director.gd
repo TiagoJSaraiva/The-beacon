@@ -9,7 +9,6 @@ signal message_changed(text: String)
 
 const STEP_START := &"start"
 const STEP_FLASHLIGHT := &"flashlight"
-const STEP_AGENDA := &"agenda"
 const STEP_LOW_FUEL := &"low_fuel"
 const STEP_JERRYCAN := &"jerrycan"
 const STEP_LAMP_BURNED := &"lamp_burned"
@@ -24,7 +23,6 @@ const STEP_FOG_MAN := &"fog_man"
 const KNOWN_STEPS: Array[StringName] = [
 	STEP_START,
 	STEP_FLASHLIGHT,
-	STEP_AGENDA,
 	STEP_LOW_FUEL,
 	STEP_JERRYCAN,
 	STEP_LAMP_BURNED,
@@ -99,12 +97,12 @@ func show_step(step_id: StringName) -> void:
 		_show_next_message()
 
 
-func to_dict() -> Dictionary:
-	return tracker.to_dict()
+func shown_ids() -> Array[StringName]:
+	return tracker.shown_ids.duplicate()
 
 
-func from_dict(data: Dictionary) -> void:
-	tracker.from_dict(data)
+func restore_shown(ids: Array[StringName]) -> void:
+	tracker.restore(ids)
 
 
 func _show_next_message() -> void:
@@ -124,7 +122,6 @@ func _show_when(active: bool, step_id: StringName) -> void:
 func _on_night_started(_night: int) -> void:
 	show_step(STEP_START)
 	show_step(STEP_FLASHLIGHT)
-	show_step(STEP_AGENDA)
 
 
 func _on_fog_intensity_changed(intensity: float) -> void:

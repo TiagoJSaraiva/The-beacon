@@ -1,14 +1,12 @@
 class_name RunRequest
 extends RefCounted
-## Pedido de partida que o menu entrega à cena de jogo: um plantão novo numa dificuldade
-## ou a continuação do save.
+## Pedido de noite que o menu (ou a noite anterior) entrega à cena de jogo: a dificuldade e o
+## plantão a continuar (decisão 0015).
 
-## Dificuldade de um plantão novo. Nula ao continuar: o save diz qual é.
 var difficulty: DifficultyConfig
-## Save da partida a restaurar; vazio num plantão novo.
-var saved_run: Dictionary = {}
+var run: RunState
 
 
-func _init(chosen: DifficultyConfig, saved: Dictionary = {}) -> void:
+func _init(chosen: DifficultyConfig, run_state: RunState) -> void:
 	difficulty = chosen
-	saved_run = saved
+	run = run_state

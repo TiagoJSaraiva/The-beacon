@@ -81,15 +81,3 @@ func test_ineligible_event_does_not_fire_or_count() -> void:
 	scheduler.add(_event(1.0, 1))
 	assert_array(scheduler.update(10.0, 23.0, 1.0, _rng(), _never)).is_empty()
 	assert_int(scheduler.count_tonight(&"test_event")).is_equal(0)
-
-
-func test_save_round_trip() -> void:
-	var scheduler := EventScheduler.new()
-	scheduler.add(_event(1.0))
-	scheduler.update(10.0, 23.0, 1.0, _rng(), _always)
-	scheduler.update(4.0, 23.0, 1.0, _rng(), _always)
-	var restored := EventScheduler.new()
-	restored.add(_event(1.0))
-	restored.from_dict(scheduler.to_dict())
-	assert_int(restored.count_tonight(&"test_event")).is_equal(1)
-	assert_array(restored.update(6.0, 23.0, 1.0, _rng(), _always)).has_size(1)

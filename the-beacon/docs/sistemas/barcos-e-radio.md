@@ -13,7 +13,7 @@ Barcos que pedem passagem, o rádio que revela se são permitidos ou piratas e o
 - Ao surgir, o barco aparece no monitor do mar e o rádio toca. Atender toca a mensagem: dois tons subindo = permitido; três tons graves = pirata (`pirate_chance`). Sem legenda no MVP.
 - A passagem dura `passage_seconds`. Permitido: a contagem até afundar só anda com nevoeiro e feixe apagado, a `1 / sink_seconds(intensidade)` por segundo (intensidade 0 → `sink_seconds_at_min_intensity`, 1 → `sink_seconds_at_max_intensity`). Feixe aceso pausa, apagar retoma. Chegando a 1, afunda e soma 1 ponto de afogado.
 - Pirata: nunca afunda; se o feixe acender durante a passagem, `pirate_guided` (sem consequência no MVP).
-- Às 06:00 o barco some sem consequência.
+- Às 06:00 a simulação congela; a noite seguinte começa sem barco.
 
 ## Sinais
 - `BoatDirector.boat_arrived(is_pirate, answered)` → `Game` → `Radio.ring`.

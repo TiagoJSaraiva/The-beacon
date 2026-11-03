@@ -41,20 +41,6 @@ func start() -> void:
 	state.start(rng)
 
 
-func clear() -> void:
-	state.clear()
-	_publish()
-
-
-func to_dict() -> Dictionary:
-	return state.to_dict()
-
-
-func from_dict(data: Dictionary) -> void:
-	state.from_dict(data)
-	_publish()
-
-
 func _publish() -> void:
 	var covers: bool = state.covers_lighthouse_camera()
 	if covers != _published_covers:

@@ -76,28 +76,6 @@ func mark_answered() -> void:
 		_boat.passage.was_answered = true
 
 
-## Remove o barco atual sem consequência (fim da noite).
-func clear() -> void:
-	if _boat == null:
-		return
-	_boat.queue_free()
-	_finish()
-
-
-func to_dict() -> Dictionary:
-	return {"passage": _boat.passage.to_dict() if _boat != null else {}}
-
-
-func from_dict(data: Dictionary) -> void:
-	clear()
-	var saved: Dictionary = data.get("passage", {})
-	if saved.is_empty():
-		return
-	var passage := BoatPassage.new(_config, false)
-	passage.from_dict(saved)
-	_spawn_passage(passage)
-
-
 func _spawn_passage(passage: BoatPassage) -> void:
 	_boat = boat_scene.instantiate()
 	_boat.passage = passage

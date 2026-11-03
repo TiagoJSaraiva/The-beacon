@@ -56,15 +56,6 @@ func replace() -> void:
 	_set_burned(false)
 
 
-func to_dict() -> Dictionary:
-	return state.to_dict()
-
-
-func from_dict(data: Dictionary) -> void:
-	state.from_dict(data)
-	_refresh()
-
-
 func _set_burned(burned: bool) -> void:
 	if state.lamp_burned == burned:
 		return

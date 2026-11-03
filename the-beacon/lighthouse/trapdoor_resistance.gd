@@ -21,12 +21,3 @@ func tick(delta: float, banging: bool, latched: bool) -> bool:
 
 func reset() -> void:
 	remaining_seconds = max_seconds
-
-
-func to_dict() -> Dictionary:
-	return {"remaining_seconds": remaining_seconds}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved: float = data.get("remaining_seconds", max_seconds)
-	remaining_seconds = clampf(saved, 0.0, max_seconds)

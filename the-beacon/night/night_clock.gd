@@ -54,12 +54,3 @@ func display_text() -> String:
 
 func reset() -> void:
 	elapsed_seconds = 0.0
-
-
-func to_dict() -> Dictionary:
-	return {"elapsed_seconds": elapsed_seconds}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved: float = data.get("elapsed_seconds", 0.0)
-	elapsed_seconds = clampf(saved, 0.0, duration_seconds())

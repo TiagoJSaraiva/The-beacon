@@ -51,14 +51,6 @@ func reset_night() -> void:
 	_scheduler.reset_night()
 
 
-func to_dict() -> Dictionary:
-	return _scheduler.to_dict()
-
-
-func from_dict(data: Dictionary) -> void:
-	_scheduler.from_dict(data)
-
-
 func _is_eligible(definition: EventDefinition) -> bool:
 	if not _can_trigger.has(definition.id):
 		return false

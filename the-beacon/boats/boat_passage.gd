@@ -48,24 +48,3 @@ func tick(delta: float, fog_intensity: float, beam_active: bool) -> void:
 ## Fração da rota já percorrida (0 a 1).
 func route_progress() -> float:
 	return clampf(elapsed_seconds / config.passage_seconds, 0.0, 1.0)
-
-
-func to_dict() -> Dictionary:
-	return {
-		"is_pirate": is_pirate,
-		"elapsed_seconds": elapsed_seconds,
-		"sink_progress": sink_progress,
-		"outcome": outcome,
-		"was_answered": was_answered,
-		"pirate_guided": pirate_guided,
-	}
-
-
-func from_dict(data: Dictionary) -> void:
-	is_pirate = data.get("is_pirate", false)
-	elapsed_seconds = data.get("elapsed_seconds", 0.0)
-	sink_progress = data.get("sink_progress", 0.0)
-	var saved_outcome: int = data.get("outcome", Outcome.PASSING)
-	outcome = saved_outcome as Outcome
-	was_answered = data.get("was_answered", false)
-	pirate_guided = data.get("pirate_guided", false)

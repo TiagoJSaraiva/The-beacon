@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://agenda/agenda_overlay.gd" id="1_overlay"]
+[ext_resource type="Script" path="res://ui/pause_menu/pause_menu.gd" id="1_pause"]
 [ext_resource type="PackedScene" path="res://ui/settings/settings_panel.tscn" id="2_settings"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper"]
@@ -22,9 +22,10 @@ content_margin_bottom = 36.0
 [sub_resource type="Theme" id="Theme_paper"]
 Label/colors/font_color = Color(0.15, 0.1, 0.08, 1)
 
-[node name="AgendaOverlay" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
 layer = 5
-script = ExtResource("1_overlay")
+script = ExtResource("1_pause")
 
 [node name="Center" type="CenterContainer" parent="."]
 anchors_preset = 15
@@ -51,63 +52,52 @@ theme_override_constants/separation = 14
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.1, 0.08, 1)
 theme_override_font_sizes/font_size = 30
-text = "Agenda do faroleiro"
+text = "Pausa"
 horizontal_alignment = 1
 
-[node name="Hint" type="Label" parent="Center/Book/Pages/IndexPage"]
+[node name="ResumeButton" type="Button" parent="Center/Book/Pages/IndexPage"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.08, 0.06, 1)
-text = "O tempo continua correndo."
-horizontal_alignment = 1
+text = "Continuar"
 
 [node name="SettingsButton" type="Button" parent="Center/Book/Pages/IndexPage"]
 layout_mode = 2
 text = "Configurações"
 
-[node name="SaveButton" type="Button" parent="Center/Book/Pages/IndexPage"]
-unique_name_in_owner = true
+[node name="ExitButton" type="Button" parent="Center/Book/Pages/IndexPage"]
 layout_mode = 2
-text = "Salvar e sair"
-
-[node name="DiscardButton" type="Button" parent="Center/Book/Pages/IndexPage"]
-layout_mode = 2
-text = "Sair sem salvar"
-
-[node name="CloseButton" type="Button" parent="Center/Book/Pages/IndexPage"]
-layout_mode = 2
-text = "Fechar a agenda"
+text = "Sair para o menu"
 
 [node name="SettingsPanel" parent="Center/Book/Pages" instance=ExtResource("2_settings")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="DiscardPage" type="VBoxContainer" parent="Center/Book/Pages"]
+[node name="ExitPage" type="VBoxContainer" parent="Center/Book/Pages"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Warning" type="Label" parent="Center/Book/Pages/DiscardPage"]
+[node name="Warning" type="Label" parent="Center/Book/Pages/ExitPage"]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.1, 0.08, 1)
 theme_override_font_sizes/font_size = 22
-text = "Sair sem salvar perde o plantão inteiro, inclusive o save anterior."
+text = "Sair agora perde a partida inteira: o jogo só salva entre noites."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="DiscardConfirmButton" type="Button" parent="Center/Book/Pages/DiscardPage"]
+[node name="ExitConfirmButton" type="Button" parent="Center/Book/Pages/ExitPage"]
 layout_mode = 2
-text = "Sair e perder tudo"
+text = "Sair e perder a partida"
 
-[node name="DiscardCancelButton" type="Button" parent="Center/Book/Pages/DiscardPage"]
+[node name="ExitCancelButton" type="Button" parent="Center/Book/Pages/ExitPage"]
 layout_mode = 2
 text = "Voltar"
 
+[connection signal="pressed" from="Center/Book/Pages/IndexPage/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="Center/Book/Pages/IndexPage/SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="pressed" from="Center/Book/Pages/IndexPage/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="Center/Book/Pages/IndexPage/DiscardButton" to="." method="_on_discard_button_pressed"]
-[connection signal="pressed" from="Center/Book/Pages/IndexPage/CloseButton" to="." method="_on_close_button_pressed"]
-[connection signal="pressed" from="Center/Book/Pages/DiscardPage/DiscardConfirmButton" to="." method="_on_discard_confirm_button_pressed"]
-[connection signal="pressed" from="Center/Book/Pages/DiscardPage/DiscardCancelButton" to="." method="_on_discard_cancel_button_pressed"]
+[connection signal="pressed" from="Center/Book/Pages/IndexPage/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="Center/Book/Pages/ExitPage/ExitConfirmButton" to="." method="_on_exit_confirm_button_pressed"]
+[connection signal="pressed" from="Center/Book/Pages/ExitPage/ExitCancelButton" to="." method="_on_exit_cancel_button_pressed"]

@@ -25,12 +25,3 @@ func ratio() -> float:
 	if capacity_seconds <= 0.0:
 		return 0.0
 	return remaining_seconds / capacity_seconds
-
-
-func to_dict() -> Dictionary:
-	return {"remaining_seconds": remaining_seconds}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved: float = data.get("remaining_seconds", capacity_seconds)
-	remaining_seconds = clampf(saved, 0.0, capacity_seconds)

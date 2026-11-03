@@ -47,23 +47,6 @@ func reset_night() -> void:
 		_counts[event_id] = 0
 
 
-func to_dict() -> Dictionary:
-	var timers: Dictionary = {}
-	var counts: Dictionary = {}
-	for event_id: StringName in _timers:
-		timers[String(event_id)] = _timers[event_id]
-		counts[String(event_id)] = _counts[event_id]
-	return {"timers": timers, "counts": counts}
-
-
-func from_dict(data: Dictionary) -> void:
-	var timers: Dictionary = data.get("timers", {})
-	var counts: Dictionary = data.get("counts", {})
-	for event_id: StringName in _timers:
-		_timers[event_id] = float(timers.get(String(event_id), 0.0))
-		_counts[event_id] = int(counts.get(String(event_id), 0))
-
-
 func _can_roll(definition: EventDefinition, clock_hour: float) -> bool:
 	if definition.max_per_night > 0 and _counts[definition.id] >= definition.max_per_night:
 		return false

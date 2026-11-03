@@ -23,18 +23,10 @@ func is_finished() -> bool:
 	return shown_ids.size() >= step_ids.size()
 
 
-func to_dict() -> Dictionary:
-	var ids: Array[String] = []
-	for step_id: StringName in shown_ids:
-		ids.append(String(step_id))
-	return {"shown": ids}
-
-
-## Ids que não existem mais no conteúdo são descartados.
-func from_dict(data: Dictionary) -> void:
+## Retoma os passos mostrados em noites anteriores. Ids que não existem mais no conteúdo
+## são descartados.
+func restore(ids: Array[StringName]) -> void:
 	shown_ids.clear()
-	var saved: Array = data.get("shown", [])
-	for value: Variant in saved:
-		var step_id := StringName(str(value))
+	for step_id: StringName in ids:
 		if step_ids.has(step_id) and not shown_ids.has(step_id):
 			shown_ids.append(step_id)

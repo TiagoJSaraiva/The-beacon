@@ -10,7 +10,7 @@ extends Resource
 @export var beam_extra_consumption_per_second: float = 0.06
 
 @export_group("Reserva")
-## Combustível total do plantão inteiro: não é reabastecido entre noites.
+## Combustível da reserva no começo de cada noite.
 @export var reserve_capacity: float = 300.0
 @export var reserve_start_fuel: float = 300.0
 ## Vazamento enquanto a mangueira está rompida.

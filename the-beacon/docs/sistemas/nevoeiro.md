@@ -11,7 +11,7 @@ Ameaça ambiental de intensidade variável (GDD 1.2.10).
 - Dura entre `min_duration_seconds` e `max_duration_seconds`; a cada `retarget_interval_seconds` sorteia um alvo de intensidade entre `min_intensity` e `max_intensity`; a intensidade anda até o alvo a `intensity_change_per_second`. Ao acabar, cai até 0 no mesmo ritmo.
 - `is_present()` = intensidade > 0 (barcos permitidos precisam do feixe).
 - `covers_lighthouse_camera()` = intensidade >= `fog_man_threshold` (surge o Homem de Nevoeiro).
-- Às 06:00 some de imediato (`clear()`).
+- A noite seguinte começa sem nevoeiro.
 
 ## Sinais
 - `FogSystem.intensity_changed(intensity)` → câmeras e `BoatDirector`.

@@ -50,7 +50,15 @@ func _on_new_game_button_pressed() -> void:
 
 
 func _on_continue_button_pressed() -> void:
-	SceneRouter.continue_run(SaveService.read_run())
+	var run := RunState.new()
+	run.from_dict(SaveService.read_run())
+	var difficulty: DifficultyConfig = catalog.find_by_id(run.difficulty_id)
+	if difficulty == null:
+		push_warning("Save com dificuldade desconhecida; descartado")
+		SaveService.delete_run()
+		_continue_button.disabled = true
+		return
+	SceneRouter.play_night(difficulty, run)
 
 
 func _on_settings_button_pressed() -> void:

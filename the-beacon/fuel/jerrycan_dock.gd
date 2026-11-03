@@ -19,16 +19,6 @@ func configure(power: PowerConfig) -> void:
 	_refresh()
 
 
-func to_dict() -> Dictionary:
-	return jerrycan.to_dict()
-
-
-func from_dict(data: Dictionary) -> void:
-	jerrycan.from_dict(data)
-	_refresh()
-	carried_changed.emit(jerrycan.is_carried)
-
-
 func _refresh() -> void:
 	_docked_mesh.visible = not jerrycan.is_carried
 

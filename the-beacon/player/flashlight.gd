@@ -65,13 +65,10 @@ func is_lit() -> bool:
 	return _lit
 
 
-func to_dict() -> Dictionary:
-	return {"battery": battery.to_dict(), "lit": _lit}
-
-
-func from_dict(data: Dictionary) -> void:
-	battery.from_dict(data.get("battery", {}))
-	_set_lit(data.get("lit", false) and not battery.is_empty())
+## Carga que sobrou da noite anterior; a lanterna começa desligada.
+func set_battery_seconds(seconds: float) -> void:
+	battery.remaining_seconds = clampf(seconds, 0.0, battery.capacity_seconds)
+	_set_lit(false)
 	_refresh_display()
 
 

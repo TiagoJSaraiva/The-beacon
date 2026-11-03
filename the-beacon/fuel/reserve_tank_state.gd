@@ -35,13 +35,3 @@ func fuel_ratio() -> float:
 	if config.reserve_capacity <= 0.0:
 		return 0.0
 	return fuel / config.reserve_capacity
-
-
-func to_dict() -> Dictionary:
-	return {"fuel": fuel, "hose_broken": hose_broken}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved_fuel: float = data.get("fuel", fuel)
-	fuel = clampf(saved_fuel, 0.0, config.reserve_capacity)
-	hose_broken = data.get("hose_broken", false)

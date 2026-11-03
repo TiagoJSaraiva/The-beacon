@@ -1,24 +1,26 @@
 # Save e progresso
 
 ## Propósito
-Um único save da partida no meio da noite e o desbloqueio permanente das dificuldades (GDD 1.2.14, 1.2.22; decisão 0011).
+Um único save da partida, gravado só entre noites, e o desbloqueio permanente das dificuldades (GDD 1.2.14; decisões 0014 e 0015).
 
 ## Componentes
 - Autoload `SaveService` (`autoload/save_service.gd`): `user://run_save.json` (save) e `user://progress.json` (desbloqueio), arquivos separados.
+- `game/run_state.gd` (`RunState`, puro): o plantão e tudo o que passa de uma noite para a outra. É o conteúdo do save.
+- `game/run_carryover.gd` (`RunCarryover`, nó no `Game`): aplica o `RunState` aos sistemas ao montar a noite e o recolhe às 06:00.
 - `autoload/progress_state.gd` (`ProgressState`, puro): regras do desbloqueio.
-- `game/run_snapshot.gd` (`RunSnapshot`, nó no `Game`): monta e restaura o conteúdo do save chamando o `to_dict`/`from_dict` de cada sistema.
-- `components/save_codec.gd` (`SaveCodec`): `Vector3` ↔ lista para o JSON.
-- `autoload/run_request.gd` (`RunRequest`): o que o menu pede ao jogo (dificuldade nova ou save).
+- `autoload/run_request.gd` (`RunRequest`): dificuldade e `RunState` que o `SceneRouter` entrega à cena de jogo.
 
 ## Regras
-- Só "Salvar e sair" (agenda) grava. Sem autosave, nem entre noites.
-- Apagam o save: morrer, vencer, "Sair sem salvar", escolher dificuldade em Novo Jogo.
-- O save guarda: noite e relógio, contadores de eventos, porta, alçapão, gerador, reserva, galão (inclusive na mão), lâmpada e interruptor, jogador (posição, olhar, lentidão, lanterna e bateria), nevoeiro, barco em andamento (com rádio atendido ou não), pontos de afogado e Afogados em cena (posição, saída e estado do cérebro), Homem de Nevoeiro e tracker, passos do tutorial já mostrados.
-- Não guarda: sorteios do RNG, fila de textos do tutorial, trinco segurado, progresso de uma interação de duração.
-- Restauração: o `Game` resolve a dificuldade pelo `difficulty_id` do save no catálogo; dificuldade desconhecida ou `version` diferente de `SAVE_VERSION` = plantão novo. A noite é retomada sem `night_started`, para não zerar os eventos.
+- Persistem entre noites: dificuldade, noite atual, pontos de Afogado, mangueira rompida, bateria da lanterna, passos do tutorial já mostrados. Todo o resto recomeça do zero, porque cada noite é uma carga nova da cena de jogo (`SceneRouter.play_night`).
+- Só "Salvar e sair", na tela de fim de noite, grava. O save já aponta para a noite seguinte.
+- Começar uma noite (plantão novo, próxima noite ou Continuar) apaga o save. Sair no meio da noite (menu de pausa, fechar o jogo, Alt+F4) perde a partida, e Continuar fica desabilitado.
+- Também apagam o save: morrer, vencer, escolher dificuldade em Novo Jogo.
+- Continuar: o menu monta o `RunState` do save e busca a dificuldade no catálogo; dificuldade desconhecida descarta o save. `version` diferente de `SAVE_VERSION` = sem save.
 - Desbloqueio: a primeira do catálogo sempre liberada; vencer libera a seguinte. Nada o desfaz.
-- Mudou o formato de algum `to_dict`? Suba `SaveService.SAVE_VERSION`.
+- Mudou o formato do `RunState`? Suba `SaveService.SAVE_VERSION` (hoje 2).
+- Estado novo que precisa sobreviver à noite: campo no `RunState` e entrada no `RunCarryover`.
 
 ## Testes
-- `test/unit/progress_state_test.gd`; ida e volta do `to_dict` em cada classe de estado.
-- `test/scenes/save_restore_test.gd`: salva no meio da noite (via JSON), muda tudo, restaura e confere horário, porta, combustível, pontos de afogado, posição, barco e rádio.
+- `test/unit/run_state_test.gd`: plantão novo, avanço de noites, ida e volta pelo JSON, valores inválidos.
+- `test/unit/progress_state_test.gd`.
+- `test/scenes/night_transition_test.gd`: às 06:00 o `RunState` recolhe pontos, mangueira e bateria; uma noite montada a partir do save aplica esse estado, recomeça o resto e apaga o save.

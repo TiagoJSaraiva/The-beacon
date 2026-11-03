@@ -1,6 +1,6 @@
 extends Node
 ## Autoload Settings: carrega, aplica e grava as preferências do jogador, editadas tanto no
-## menu principal quanto na agenda (decisão 0012).
+## menu principal quanto no menu de pausa (decisão 0012).
 
 signal changed
 

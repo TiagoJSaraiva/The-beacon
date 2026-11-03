@@ -29,11 +29,3 @@ func test_reset_restores_full_resistance() -> void:
 	resistance.tick(6.0, true, false)
 	resistance.reset()
 	assert_float(resistance.remaining_seconds).is_equal_approx(10.0, 0.0001)
-
-
-func test_save_round_trip() -> void:
-	var resistance := TrapdoorResistance.new(10.0)
-	resistance.tick(2.5, true, false)
-	var restored := TrapdoorResistance.new(10.0)
-	restored.from_dict(resistance.to_dict())
-	assert_float(restored.remaining_seconds).is_equal_approx(7.5, 0.0001)

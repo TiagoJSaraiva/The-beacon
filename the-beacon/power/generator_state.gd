@@ -38,13 +38,3 @@ func add_fuel(amount: float) -> float:
 
 func fuel_ratio() -> float:
 	return fuel / config.generator_capacity
-
-
-func to_dict() -> Dictionary:
-	return {"fuel": fuel, "is_broken": is_broken}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved_fuel: float = data.get("fuel", fuel)
-	fuel = clampf(saved_fuel, 0.0, config.generator_capacity)
-	is_broken = data.get("is_broken", false)

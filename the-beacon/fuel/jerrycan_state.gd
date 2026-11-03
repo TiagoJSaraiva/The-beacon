@@ -23,13 +23,3 @@ func pour_into(generator: GeneratorState) -> float:
 	var poured: float = generator.add_fuel(amount)
 	amount -= poured
 	return poured
-
-
-func to_dict() -> Dictionary:
-	return {"amount": amount, "is_carried": is_carried}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved_amount: float = data.get("amount", 0.0)
-	amount = clampf(saved_amount, 0.0, capacity)
-	is_carried = data.get("is_carried", false)

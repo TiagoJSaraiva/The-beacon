@@ -17,4 +17,4 @@ Sorteio de acontecimentos com janelas de horário (GDD 1.2.8): falhas, nevoeiro 
 - `EventDirector.event_triggered(event_id)` (para tutorial e depuração).
 
 ## Testes
-- `test/unit/event_scheduler_test.gd`: intervalo, janela que cruza a meia-noite, chance zero, multiplicador, limite e reset da noite, elegibilidade, ida e volta do save.
+- `test/unit/event_scheduler_test.gd`: intervalo, janela que cruza a meia-noite, chance zero, multiplicador, limite e reset da noite, elegibilidade.

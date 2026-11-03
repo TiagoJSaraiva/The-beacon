@@ -41,19 +41,6 @@ func start_night(night: int) -> void:
 	night_started.emit(night)
 
 
-func to_dict() -> Dictionary:
-	return {"night": current_night, "clock": clock.to_dict()}
-
-
-## Retoma a noite salva no horário exato, sem emitir `night_started` (que zeraria os eventos).
-func from_dict(data: Dictionary) -> void:
-	current_night = data.get("night", 1)
-	clock.from_dict(data.get("clock", {}))
-	is_running = not clock.is_finished()
-	_shown_text = ""
-	_publish_time()
-
-
 func _publish_time() -> void:
 	var text: String = clock.display_text()
 	if text == _shown_text:

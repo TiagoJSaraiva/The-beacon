@@ -1,7 +1,7 @@
 # 0008 — Arquitetura da simulação: regras puras, config em Resource e eventos registrados
 
 - **Data**: 2026-10
-- **Status**: aceita
+- **Status**: aceita em parte; os itens "uma única cena de jogo" e "toda classe de estado tem `to_dict`/`from_dict`" foram substituídos por 0015
 
 ## Contexto
 O jogo é uma simulação de vários sistemas interligados (gerador, combustível, feixe, barcos, nevoeiro, Afogados...) cujos valores vão ser ajustados por meses e que precisa ser salva no meio da noite. Cada dificuldade muda só valores, não regras.

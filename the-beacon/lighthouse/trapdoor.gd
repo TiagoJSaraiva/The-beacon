@@ -69,17 +69,6 @@ func break_open() -> void:
 	_set_state(State.BROKEN)
 
 
-func to_dict() -> Dictionary:
-	return {"state": state, "resistance": resistance.to_dict()}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved: int = data.get("state", State.CLOSED)
-	state = saved as State
-	resistance.from_dict(data.get("resistance", {}))
-	_apply_state(false)
-
-
 func _set_state(new_state: State) -> void:
 	if state == new_state:
 		return

@@ -29,13 +29,13 @@ func test_finishes_after_all_steps() -> void:
 	assert_bool(tracker.is_finished()).is_true()
 
 
-func test_save_round_trip_drops_removed_steps() -> void:
+func test_restore_drops_removed_steps() -> void:
 	var tracker: TutorialTracker = _tracker()
 	tracker.mark_shown(&"fog")
-	var data: Dictionary = JSON.parse_string(JSON.stringify(tracker.to_dict()))
-	data["shown"].append("removed_step")
+	var previous_night: Array[StringName] = tracker.shown_ids.duplicate()
+	previous_night.append(&"removed_step")
 	var restored: TutorialTracker = _tracker()
-	restored.from_dict(data)
+	restored.restore(previous_night)
 	assert_array(restored.shown_ids).contains_exactly([&"fog"])
 	assert_bool(restored.mark_shown(&"fog")).is_false()
 

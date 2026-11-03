@@ -34,12 +34,3 @@ func test_light_must_be_continuous() -> void:
 	tracker.update_light(1.0, true)
 	tracker.update_light(0.1, false)
 	assert_bool(tracker.update_light(1.0, true)).is_false()
-
-
-func test_save_round_trip() -> void:
-	var tracker := FogManTracker.new(_config())
-	tracker.on_vanished()
-	tracker.tick_cooldown(10.0)
-	var restored := FogManTracker.new(_config())
-	restored.from_dict(tracker.to_dict())
-	assert_float(restored.cooldown_remaining).is_equal_approx(50.0, 0.0001)

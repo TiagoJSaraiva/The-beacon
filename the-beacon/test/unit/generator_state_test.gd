@@ -43,13 +43,3 @@ func test_add_fuel_caps_at_capacity() -> void:
 	assert_float(state.add_fuel(30.0)).is_equal_approx(30.0, 0.0001)
 	assert_float(state.add_fuel(30.0)).is_equal_approx(20.0, 0.0001)
 	assert_float(state.fuel).is_equal_approx(100.0, 0.0001)
-
-
-func test_save_round_trip() -> void:
-	var state := GeneratorState.new(_config())
-	state.tick(5.0)
-	state.is_broken = true
-	var restored := GeneratorState.new(_config())
-	restored.from_dict(state.to_dict())
-	assert_float(restored.fuel).is_equal_approx(45.0, 0.0001)
-	assert_bool(restored.is_broken).is_true()

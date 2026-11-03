@@ -126,17 +126,3 @@ func test_hiding_during_sabotage_does_not_escalate() -> void:
 	senses.player_in_reach = false
 	brain.update(0.1, senses, _rng())
 	assert_int(brain.state).is_equal(DrownedBrain.State.GO_SABOTAGE)
-
-
-func test_save_round_trip() -> void:
-	var brain := _brain()
-	var senses := _senses(3.0, true)
-	brain.start(senses, _rng())
-	senses.arrived = true
-	brain.update(0.1, senses, _rng())
-	brain.update(1.0, senses, _rng())
-	var restored := _brain()
-	restored.from_dict(brain.to_dict())
-	assert_int(restored.state).is_equal(DrownedBrain.State.BANG_TRAPDOOR)
-	restored.update(4.0, senses, _rng())
-	assert_int(restored.state).is_equal(DrownedBrain.State.LEAVE)

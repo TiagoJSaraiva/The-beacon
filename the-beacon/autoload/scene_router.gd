@@ -1,6 +1,6 @@
 extends Node
-## Autoload SceneRouter: troca entre menu principal e jogo e guarda o pedido de partida até
-## a cena de jogo buscá-lo (decisão 0010).
+## Autoload SceneRouter: troca entre menu principal e jogo e guarda o pedido de noite até
+## a cena de jogo buscá-lo (decisões 0010 e 0015).
 
 const MAIN_MENU_SCENE := "res://ui/main_menu/main_menu.tscn"
 const GAME_SCENE := "res://game/game.tscn"
@@ -13,12 +13,13 @@ func go_to_main_menu() -> void:
 
 
 func start_new_run(difficulty: DifficultyConfig) -> void:
-	_pending_run = RunRequest.new(difficulty)
-	_change_scene(GAME_SCENE)
+	play_night(difficulty, RunState.new_run(difficulty))
 
 
-func continue_run(saved_run: Dictionary) -> void:
-	_pending_run = RunRequest.new(null, saved_run)
+## Carrega a cena de jogo do zero para a noite atual do plantão. Plantão novo, próxima noite
+## e Continuar passam todos por aqui.
+func play_night(difficulty: DifficultyConfig, run: RunState) -> void:
+	_pending_run = RunRequest.new(difficulty, run)
 	_change_scene(GAME_SCENE)
 
 

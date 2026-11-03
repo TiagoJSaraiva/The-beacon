@@ -27,12 +27,6 @@ func show_status(beam_active: bool) -> void:
 	_indicator.light_color = COLOR_ACTIVE if beam_active else COLOR_FAILURE
 
 
-## Põe a alavanca na posição dada sem emitir `switched` (restauração do save).
-func set_on(on: bool, beam_active: bool) -> void:
-	is_on = on
-	show_status(beam_active)
-
-
 func _on_switch_point_interacted() -> void:
 	is_on = not is_on
 	switched.emit(is_on)

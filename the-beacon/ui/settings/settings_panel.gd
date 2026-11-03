@@ -1,7 +1,7 @@
 class_name SettingsPanel
 extends VBoxContainer
-## Opções do jogo (GDD 15.2): volumes e sensibilidade do mouse. Usado no menu principal e na
-## agenda; cada mudança vale na hora e é gravada ao voltar.
+## Opções do jogo (GDD 15.2): volumes e sensibilidade do mouse. Usado no menu principal e no
+## menu de pausa; cada mudança vale na hora e é gravada ao voltar.
 
 signal back_requested
 

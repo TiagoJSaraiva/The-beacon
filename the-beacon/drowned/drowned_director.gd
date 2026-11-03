@@ -67,39 +67,6 @@ func active_count() -> int:
 	return _active.size()
 
 
-## Remove todos os Afogados em cena (fim da noite). Pontos e ameaça continuam.
-func clear() -> void:
-	for drowned: Drowned in _active.duplicate():
-		_remove(drowned)
-	_spawn_timer = 0.0
-	if _lighthouse != null:
-		_lighthouse.trapdoor.set_banging(false)
-
-
-func to_dict() -> Dictionary:
-	var drowned_data: Array[Dictionary] = []
-	for drowned: Drowned in _active:
-		var entry: Dictionary = {
-			"position": SaveCodec.vector3_to_array(drowned.global_position),
-			"exit": SaveCodec.vector3_to_array(drowned.targets[DrownedBrain.Target.EXIT]),
-			"brain": drowned.brain.to_dict(),
-		}
-		drowned_data.append(entry)
-	return {"drowned_points": drowned_points, "spawn_timer": _spawn_timer, "active": drowned_data}
-
-
-func from_dict(data: Dictionary) -> void:
-	clear()
-	drowned_points = data.get("drowned_points", 0)
-	_spawn_timer = data.get("spawn_timer", 0.0)
-	var saved: Array = data.get("active", [])
-	for entry: Dictionary in saved:
-		var drowned: Drowned = _spawn_at(SaveCodec.array_to_vector3(entry.get("exit", [])))
-		drowned.global_position = SaveCodec.array_to_vector3(entry.get("position", []))
-		drowned.brain.from_dict(entry.get("brain", {}))
-	threat_changed.emit(threat_level())
-
-
 func _update_spawning(delta: float) -> void:
 	if drowned_points < 1:
 		return

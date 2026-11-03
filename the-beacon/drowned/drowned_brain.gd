@@ -111,26 +111,6 @@ func update(delta: float, senses: DrownedSenses, rng: RandomNumberGenerator) -> 
 	return Effect.NONE
 
 
-func to_dict() -> Dictionary:
-	return {
-		"state": state,
-		"sabotage_generator": sabotage_generator,
-		"timer": _timer,
-		"resume_state": _resume_state,
-		"forced_chase": _forced_chase,
-	}
-
-
-func from_dict(data: Dictionary) -> void:
-	var saved_state: int = data.get("state", State.APPROACH_DOOR)
-	var saved_resume: int = data.get("resume_state", State.LEAVE)
-	state = saved_state as State
-	_resume_state = saved_resume as State
-	sabotage_generator = data.get("sabotage_generator", false)
-	_timer = data.get("timer", 0.0)
-	_forced_chase = data.get("forced_chase", false)
-
-
 func _update_chase(senses: DrownedSenses) -> Effect:
 	if senses.player_in_kill_range:
 		_enter(State.LEAVE)

@@ -1,7 +1,7 @@
 # 0011 — Autoload SaveService e formato do save
 
 - **Data**: 2026-11
-- **Status**: aceita
+- **Status**: substituída por 0014
 
 ## Contexto
 GDD 1.2.22 e 1.2.14: um único save de partida, gravado só por "Salvar e sair" na agenda, com o estado exato no meio da noite. Ele é apagado ao morrer, ao vencer, em "Sair sem salvar" e em "Novo Jogo". O desbloqueio de dificuldades é permanente e nada disso o afeta. Menu, jogo e agenda leem e escrevem esses dados.

@@ -34,13 +34,3 @@ func test_intact_hose_does_not_leak() -> void:
 	var tank := ReserveTankState.new(_config())
 	tank.tick(10.0)
 	assert_float(tank.fuel).is_equal_approx(100.0, 0.0001)
-
-
-func test_save_round_trip() -> void:
-	var tank := ReserveTankState.new(_config())
-	tank.draw(30.0)
-	tank.hose_broken = true
-	var restored := ReserveTankState.new(_config())
-	restored.from_dict(tank.to_dict())
-	assert_float(restored.fuel).is_equal_approx(70.0, 0.0001)
-	assert_bool(restored.hose_broken).is_true()

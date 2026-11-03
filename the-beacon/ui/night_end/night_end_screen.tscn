@@ -35,11 +35,11 @@ horizontal_alignment = 1
 [node name="ContinueButton" type="Button" parent="Center/Menu"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Continuar"
+text = "Próxima noite"
 
-[node name="MenuButton" type="Button" parent="Center/Menu"]
+[node name="SaveAndExitButton" type="Button" parent="Center/Menu"]
 layout_mode = 2
-text = "Menu principal"
+text = "Salvar e sair"
 
 [connection signal="pressed" from="Center/Menu/ContinueButton" to="." method="_on_continue_button_pressed"]
-[connection signal="pressed" from="Center/Menu/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="Center/Menu/SaveAndExitButton" to="." method="_on_save_and_exit_button_pressed"]

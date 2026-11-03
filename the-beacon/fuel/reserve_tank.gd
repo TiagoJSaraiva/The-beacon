@@ -42,15 +42,6 @@ func repair_hose() -> void:
 	_set_hose_broken(false)
 
 
-func to_dict() -> Dictionary:
-	return state.to_dict()
-
-
-func from_dict(data: Dictionary) -> void:
-	state.from_dict(data)
-	_refresh()
-
-
 func _set_hose_broken(broken: bool) -> void:
 	if state.hose_broken == broken:
 		return

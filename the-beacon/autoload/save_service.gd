@@ -1,11 +1,11 @@
 extends Node
 ## Autoload SaveService: o save único da partida e o progresso de desbloqueio, em arquivos
-## separados para que apagar um nunca toque no outro (GDD 1.2.14 e 1.2.22; decisão 0011).
+## separados para que apagar um nunca toque no outro (GDD 1.2.14; decisão 0014).
 
 const RUN_SAVE_PATH := "user://run_save.json"
 const PROGRESS_PATH := "user://progress.json"
 ## Sobe quando o formato muda; um save de outra versão é ignorado.
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 
 var progress: ProgressState = ProgressState.new()
 

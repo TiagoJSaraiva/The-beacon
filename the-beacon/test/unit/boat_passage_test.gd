@@ -55,15 +55,3 @@ func test_pirate_never_sinks_and_is_guided_by_beam() -> void:
 	assert_bool(passage.pirate_guided).is_true()
 	passage.tick(60.0, 1.0, false)
 	assert_int(passage.outcome).is_equal(BoatPassage.Outcome.PASSED)
-
-
-func test_save_round_trip() -> void:
-	var passage := BoatPassage.new(_config(), false)
-	passage.tick(10.0, 0.5, false)
-	passage.was_answered = true
-	var restored := BoatPassage.new(_config(), true)
-	restored.from_dict(passage.to_dict())
-	assert_bool(restored.is_pirate).is_false()
-	assert_bool(restored.was_answered).is_true()
-	assert_float(restored.sink_progress).is_equal_approx(passage.sink_progress, 0.0001)
-	assert_float(restored.elapsed_seconds).is_equal_approx(10.0, 0.0001)

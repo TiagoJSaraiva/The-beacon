@@ -64,15 +64,6 @@ func repair() -> void:
 	_set_broken(false)
 
 
-func to_dict() -> Dictionary:
-	return state.to_dict()
-
-
-func from_dict(data: Dictionary) -> void:
-	state.from_dict(data)
-	_refresh()
-
-
 func _set_broken(broken: bool) -> void:
 	if state.is_broken == broken:
 		return

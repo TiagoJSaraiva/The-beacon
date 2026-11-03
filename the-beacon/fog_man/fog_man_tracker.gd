@@ -30,12 +30,3 @@ func update_light(delta: float, lit: bool) -> bool:
 func on_vanished() -> void:
 	cooldown_remaining = config.spawn_cooldown_seconds
 	lit_seconds = 0.0
-
-
-func to_dict() -> Dictionary:
-	return {"cooldown_remaining": cooldown_remaining, "lit_seconds": lit_seconds}
-
-
-func from_dict(data: Dictionary) -> void:
-	cooldown_remaining = data.get("cooldown_remaining", 0.0)
-	lit_seconds = data.get("lit_seconds", 0.0)

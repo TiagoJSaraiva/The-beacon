@@ -13,11 +13,6 @@ script = ExtResource("1_step")
 id = &"flashlight"
 text = "Z liga e desliga a lanterna. Segure X para ver a bateria: ela não recarrega."
 
-[sub_resource type="Resource" id="Resource_agenda"]
-script = ExtResource("1_step")
-id = &"agenda"
-text = "A agenda na mesa da torre salva e sai do jogo. O tempo continua correndo com ela aberta."
-
 [sub_resource type="Resource" id="Resource_low_fuel"]
 script = ExtResource("1_step")
 id = &"low_fuel"
@@ -70,5 +65,5 @@ text = "Homem de Nevoeiro. Mantenha a lanterna apontada para ele até que se dis
 
 [resource]
 script = ExtResource("2_content")
-steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_agenda"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_broken"), SubResource("Resource_generator_broken"), SubResource("Resource_fog"), SubResource("Resource_boat"), SubResource("Resource_drowned"), SubResource("Resource_door_broken"), SubResource("Resource_fog_man")])
+steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_broken"), SubResource("Resource_generator_broken"), SubResource("Resource_fog"), SubResource("Resource_boat"), SubResource("Resource_drowned"), SubResource("Resource_door_broken"), SubResource("Resource_fog_man")])
 message_seconds = 8.0
