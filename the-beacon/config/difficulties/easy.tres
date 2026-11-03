@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://b635ujq77fpwb" path="res://config/power_config.gd" id="13_5t01q"]
 [ext_resource type="Script" uid="uid://hh3sbbnjk2n8" path="res://config/repair_config.gd" id="14_rfi3c"]
 [ext_resource type="Script" uid="uid://chwdj2g3ngfvq" path="res://config/difficulty_config.gd" id="15_5i4ki"]
-[ext_resource type="Script" uid="uid://cuqjbodyli1lt" path="res://config/threat_config.gd" id="16_f05il"]
 [ext_resource type="Script" uid="uid://dtaq4xt2b7656" path="res://config/time_config.gd" id="17_j8cnh"]
 [ext_resource type="Script" uid="uid://c438uc3lakg47" path="res://config/trapdoor_config.gd" id="18_b7iwn"]
 
@@ -43,11 +42,6 @@ script = ExtResource("13_5t01q")
 [sub_resource type="Resource" id="Resource_ja4ac"]
 script = ExtResource("14_rfi3c")
 
-[sub_resource type="Resource" id="Resource_o6lik"]
-script = ExtResource("16_f05il")
-spawn_chance_base = 0.1
-chase_threat_threshold = 4.0
-
 [sub_resource type="Resource" id="Resource_co2l7"]
 script = ExtResource("17_j8cnh")
 
@@ -69,7 +63,6 @@ flashlight = SubResource("Resource_bxr3d")
 repair = SubResource("Resource_ja4ac")
 fog = SubResource("Resource_cuc16")
 boat = SubResource("Resource_lkuax")
-threat = SubResource("Resource_o6lik")
 drowned = SubResource("Resource_he8cc")
 trapdoor = SubResource("Resource_p6ylf")
 fog_man = SubResource("Resource_alaf6")

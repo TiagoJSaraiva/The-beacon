@@ -32,9 +32,8 @@ var _was_lit: bool = false
 @onready var _sea_monitor_left: SecurityMonitor = %SeaMonitorLeft
 @onready var _sea_monitor_right: SecurityMonitor = %SeaMonitorRight
 @onready var _door_monitor: SecurityMonitor = %DoorMonitor
-@onready var _door_outside: Marker3D = %DoorOutside
-@onready var _hose_spot: Marker3D = %HoseSpot
-@onready var _generator_spot: Marker3D = %GeneratorSpot
+@onready var _door_inside: Marker3D = %DoorInside
+@onready var _rest_spot: Marker3D = %RestSpot
 @onready var _trapdoor_below: Marker3D = %TrapdoorBelow
 
 
@@ -54,7 +53,6 @@ func _ready() -> void:
 
 
 func configure(difficulty: DifficultyConfig) -> void:
-	entrance_door.configure(difficulty.repair)
 	main_generator.configure(difficulty.power)
 	emergency_generator.configure(difficulty.power)
 	fuel_tank.configure(difficulty.power)
@@ -89,14 +87,17 @@ func drop_jerrycan(at: Vector3, throw_velocity: Vector3) -> void:
 	jerrycan_carried_changed.emit(false)
 
 
-## Pontos onde os Afogados agem (GDD 1.2.10). A saída é definida por quem os cria.
+## Pontos onde o Afogado age dentro do farol.
 func drowned_targets() -> Dictionary[DrownedBrain.Target, Vector3]:
 	return {
-		DrownedBrain.Target.DOOR_OUTSIDE: _door_outside.global_position,
-		DrownedBrain.Target.HOSE: _hose_spot.global_position,
-		DrownedBrain.Target.GENERATOR: _generator_spot.global_position,
 		DrownedBrain.Target.TRAPDOOR_BELOW: _trapdoor_below.global_position,
+		DrownedBrain.Target.REST_SPOT: _rest_spot.global_position,
 	}
+
+
+## Onde o Afogado aparece depois de arrombar a porta.
+func drowned_entry_point() -> Vector3:
+	return _door_inside.global_position
 
 
 func show_camera_feeds(sea_left: Texture2D, sea_right: Texture2D, door: Texture2D) -> void:
@@ -106,11 +107,12 @@ func show_camera_feeds(sea_left: Texture2D, sea_right: Texture2D, door: Texture2
 
 
 ## Perto do farol, o nevoeiro bloqueia o feixe. Na primeira vez que entra no farol, estoura
-## a mangueira (decisão 0017).
+## a mangueira (decisão 0017). No alçapão, desliga o trinco.
 func set_fog_stage(stage: FogStage.Stage) -> void:
 	beam.fog_blocking = FogStage.blocks_beam(stage)
 	if FogStage.is_inside(stage):
 		burst_hose()
+	trapdoor.set_fog_present(stage >= FogStage.Stage.TRAPDOOR)
 	_refresh_beam()
 
 

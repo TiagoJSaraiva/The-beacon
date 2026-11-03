@@ -1,49 +1,36 @@
 class_name EntranceDoor
 extends Node3D
-## Porta do térreo: primeira barreira contra os Afogados (GDD 1.2.11).
-## Quebrada, deixa os Afogados entrarem e soma ameaça; o conserto é segurar E.
-## O jogador nunca sai: uma parede invisível só para ele fica no vão.
+## Porta do térreo (entrega 2). Não quebra nem tem conserto: o barulho do Afogado se
+## aproximando vem de fora dela, e ao entrar ele a arromba (som e a folha abrindo e
+## voltando). A colisão nunca abre: o jogador não sai do farol.
 
-signal broken_changed(broken: bool)
+## Folha aberta para dentro (+X local) no arrombamento.
+@export var burst_open_degrees: float = 80.0
+@export var burst_open_seconds: float = 0.15
+@export var burst_return_seconds: float = 1.2
+## Volume do barulho de aproximação com o medidor quase vazio e cheio.
+@export var approach_quiet_db: float = -30.0
+@export var approach_loud_db: float = 3.0
 
-var is_broken: bool = false
+var _swing: Tween
 
-@onready var _panel: Node3D = %Panel
-@onready var _panel_collision: CollisionShape3D = %PanelCollision
-@onready var _broken_panel: Node3D = %BrokenPanel
-@onready var _repair_point: Interactable = %RepairPoint
-
-
-func _ready() -> void:
-	_apply_state()
-
-
-func configure(config: RepairConfig) -> void:
-	_repair_point.hold_seconds = config.door_repair_seconds
+@onready var _leaf: Node3D = %Leaf
+@onready var _burst_sound: AudioStreamPlayer3D = %BurstSound
+@onready var _approach_noise: LoopingSound = %ApproachNoise
 
 
-func break_door() -> void:
-	_set_broken(true)
+## Barulho do lado de fora, crescendo com a aproximação (0 a 1).
+func show_approach(level: float) -> void:
+	_approach_noise.set_active(level > 0.0)
+	_approach_noise.volume_db = lerpf(approach_quiet_db, approach_loud_db, level)
 
 
-func repair() -> void:
-	_set_broken(false)
-
-
-func _set_broken(broken: bool) -> void:
-	if is_broken == broken:
-		return
-	is_broken = broken
-	_apply_state()
-	broken_changed.emit(is_broken)
-
-
-func _apply_state() -> void:
-	_panel.visible = not is_broken
-	_panel_collision.set_deferred("disabled", is_broken)
-	_broken_panel.visible = is_broken
-	_repair_point.enabled = is_broken
-
-
-func _on_repair_point_hold_completed() -> void:
-	repair()
+func burst_open() -> void:
+	_burst_sound.play()
+	if _swing != null:
+		_swing.kill()
+	_swing = create_tween()
+	_swing.tween_property(_leaf, "rotation:y", deg_to_rad(burst_open_degrees), burst_open_seconds)
+	_swing.tween_property(_leaf, "rotation:y", 0.0, burst_return_seconds).set_trans(
+		Tween.TRANS_SINE
+	)

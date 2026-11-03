@@ -10,6 +10,3 @@ extends Resource
 @export_group("Casa de máquinas")
 @export var machine_repair_seconds: float = 6.0
 @export var machine_breakdown_cooldown_seconds: float = 120.0
-
-@export_group("Porta")
-@export var door_repair_seconds: float = 5.0

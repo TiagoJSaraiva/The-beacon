@@ -208,17 +208,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.85)
 
 [node name="DrownedTargets" type="Node3D" parent="." unique_id=1056986253]
 
-[node name="DoorOutside" type="Marker3D" parent="DrownedTargets" unique_id=887698510]
+[node name="DoorInside" type="Marker3D" parent="DrownedTargets"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -2.7)
 
-[node name="HoseSpot" type="Marker3D" parent="DrownedTargets" unique_id=1642757457]
+[node name="RestSpot" type="Marker3D" parent="DrownedTargets"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 1.5)
-
-[node name="GeneratorSpot" type="Marker3D" parent="DrownedTargets" unique_id=1850077378]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 
 [node name="TrapdoorBelow" type="Marker3D" parent="DrownedTargets" unique_id=1728830340]
 unique_name_in_owner = true

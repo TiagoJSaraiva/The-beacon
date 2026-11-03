@@ -17,7 +17,6 @@ const STEP_MACHINE_BROKEN := &"machine_broken"
 const STEP_FOG := &"fog"
 const STEP_BOAT := &"boat"
 const STEP_DROWNED := &"drowned"
-const STEP_DOOR_BROKEN := &"door_broken"
 const STEP_FOG_MAN := &"fog_man"
 ## Passos que este diretor sabe disparar. Um passo do conteúdo fora daqui nunca aparece.
 const KNOWN_STEPS: Array[StringName] = [
@@ -31,7 +30,6 @@ const KNOWN_STEPS: Array[StringName] = [
 	STEP_FOG,
 	STEP_BOAT,
 	STEP_DROWNED,
-	STEP_DOOR_BROKEN,
 	STEP_FOG_MAN,
 ]
 
@@ -82,10 +80,9 @@ func setup(
 	lighthouse.lamp.burned_changed.connect(_show_when.bind(STEP_LAMP_BURNED))
 	lighthouse.fuel_tank.hose_burst.connect(show_step.bind(STEP_HOSE_BURST))
 	lighthouse.machine_house.broken_changed.connect(_show_when.bind(STEP_MACHINE_BROKEN))
-	lighthouse.entrance_door.broken_changed.connect(_show_when.bind(STEP_DOOR_BROKEN))
 	fog.stage_changed.connect(_on_fog_stage_changed)
 	boats.calling_changed.connect(_show_when.bind(STEP_BOAT))
-	drowned.drowned_appeared.connect(show_step.bind(STEP_DROWNED).unbind(1))
+	drowned.drowned_entered.connect(show_step.bind(STEP_DROWNED))
 	fog_man.appeared.connect(show_step.bind(STEP_FOG_MAN))
 
 

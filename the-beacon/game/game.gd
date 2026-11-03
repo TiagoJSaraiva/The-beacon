@@ -59,8 +59,8 @@ func _configure_systems() -> void:
 	_fog.configure(difficulty.fog)
 	_boats.configure(difficulty.boat)
 	_boats.boat_path = _exterior.boat_path
-	_drowned.configure(difficulty.threat, difficulty.drowned)
-	_drowned.setup(_lighthouse, _player, _exterior)
+	_drowned.configure(difficulty.drowned)
+	_drowned.setup(_lighthouse, _player)
 	_fog_man.configure(difficulty.fog_man)
 	_fog_man.setup(_player, _exterior)
 	_tutorial.setup(
@@ -103,6 +103,7 @@ func _connect_signals() -> void:
 	_lighthouse.radio.answered.connect(_boats.warn_calling_boats)
 	_fog.stage_changed.connect(_lighthouse.set_fog_stage)
 	_fog.stage_changed.connect(_fog_man.set_fog_stage)
+	_fog.stage_changed.connect(_drowned.set_fog_stage)
 	_fog.route_fog_changed.connect(_boats.set_route_fog)
 	_fog_man.player_blinded.connect(_hud.show_blindness)
 	_boats.calling_changed.connect(_lighthouse.radio.set_ringing)

@@ -70,7 +70,7 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `Lighthouse.beam_lit_changed` → `BoatDirector.set_beam_lit`.
 - `BoatDirector.calling_changed` → `Radio.set_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.warn_calling_boats`.
 - `FogManDirector.player_blinded` → `Hud.show_blindness`.
-- `Drowned.effect_triggered` → `DrownedDirector` → farol ou `Player.kill`.
+- `Drowned.effect_triggered` → `DrownedDirector` → `Player.kill`. `FogSystem.stage_changed` → `DrownedDirector.set_fog_stage` (aproximação). O `DrownedDirector` chama direto `EntranceDoor.show_approach`/`burst_open` e `Trapdoor.set_banging`.
 - `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).
 - `PauseMenu.paused_changed` → `Game` → `Player.set_controls_enabled`; `PauseMenu.exit_requested` → `Game` → `SceneRouter.go_to_main_menu`.
 - `NightEndScreen.continue_requested` → `Game` → `SceneRouter.play_night`; `NightEndScreen.save_and_exit_requested` → `Game` → `SaveService.write_run`, `SceneRouter`. `GameOverScreen`, `VictoryScreen` → `Game` ou direto `SceneRouter`. `Settings.changed` → `Game` → `Player.sensitivity_scale`.
@@ -94,16 +94,16 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay). N
 
 ## Camadas de colisão
 1 — `world` — paredes, chão, escada / todos colidem; raios de oclusão
-2 — `barriers` — porta de entrada e alçapão / jogador e Afogados colidem; o Homem de Nevoeiro ignora
+2 — `barriers` — porta de entrada e alçapão / jogador e Afogado colidem; o Homem de Nevoeiro ignora
 3 — `player` — jogador / detectado por Afogados e Homem de Nevoeiro
 4 — `drowned` — Afogados
 5 — `fog_man` — Homem de Nevoeiro
 6 — `interactable` — objetos interativos / detectados pelo raio de interação do jogador
-7 — `player_bounds` — paredes invisíveis que só o jogador detecta (ex.: vão da porta quebrada; ele nunca sai do farol)
+7 — (livre)
 8 — `props` — objetos com física (galão) / colidem com `world`, `barriers` e entre si; o jogador os atravessa
 
 ## Áudio
 Buses em `default_bus_layout.tres`: `Master` → `Music`, `SFX`. Sons placeholder (tons sintéticos) em `assets/audio/placeholder/`, gerados por `tools/generate_placeholder_audio.gd` (rodar com `godot --headless --path . --script res://tools/generate_placeholder_audio.gd`). Sons em loop usam `components/looping_sound.gd`.
 
 ## Navegação
-Navmesh assada em runtime no `Game`, sem porta e alçapão (decisão 0009). `project.godot`: `navigation/3d/default_cell_size` e `default_cell_height` = 0.1.
+Navmesh assada em runtime no `Game`, sem porta e alçapão (decisão 0009), só do interior: o grupo `navigation_source` fica só no `Lighthouse`. `project.godot`: `navigation/3d/default_cell_size` e `default_cell_height` = 0.1.

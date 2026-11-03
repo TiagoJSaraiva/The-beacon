@@ -1,7 +1,7 @@
 class_name Drowned
 extends CharacterBody3D
-## Um Afogado em cena: anda pela navmesh até o alvo que o DrownedBrain escolhe, percebe o
-## jogador por distância com oclusão e informa ao diretor os efeitos das ações.
+## O Afogado dentro do farol: anda pela navmesh até o alvo que o DrownedBrain escolhe,
+## percebe o jogador por distância com oclusão e informa ao diretor os efeitos das ações.
 
 signal effect_triggered(effect: DrownedBrain.Effect)
 
@@ -24,12 +24,11 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func setup(
 	drowned_config: DrownedConfig,
-	threat_config: ThreatConfig,
 	target_points: Dictionary[DrownedBrain.Target, Vector3],
 	target_player: Player
 ) -> void:
 	_config = drowned_config
-	brain = DrownedBrain.new(drowned_config, threat_config)
+	brain = DrownedBrain.new(drowned_config)
 	targets = target_points
 	player = target_player
 
@@ -39,16 +38,12 @@ func _ready() -> void:
 
 
 ## Um passo de decisão e movimento. `senses` vem do diretor com o estado do farol.
-func think(delta: float, senses: DrownedSenses, rng: RandomNumberGenerator) -> void:
+func think(delta: float, senses: DrownedSenses) -> void:
 	_sense(senses)
-	var effect: DrownedBrain.Effect = brain.update(delta, senses, rng)
+	var effect: DrownedBrain.Effect = brain.update(delta, senses)
 	if effect != DrownedBrain.Effect.NONE:
 		effect_triggered.emit(effect)
 	_move(delta)
-
-
-func is_gone() -> bool:
-	return brain.state == DrownedBrain.State.GONE
 
 
 func _sense(senses: DrownedSenses) -> void:
@@ -66,7 +61,7 @@ func _move(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	var horizontal := Vector3.ZERO
-	if not brain.is_acting() and brain.state != DrownedBrain.State.GONE:
+	if not brain.is_acting():
 		_agent.target_position = _target_point()
 		var next: Vector3 = _agent.get_next_path_position()
 		var direction: Vector3 = next - global_position

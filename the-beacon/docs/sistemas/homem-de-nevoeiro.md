@@ -9,6 +9,7 @@ Manifestação do nevoeiro que cega o jogador por alguns segundos (GDD 1.2.10).
 - `fog_man/fog_man_director.gd` (`FogManDirector`, nó no `World`, recebe `Player` e `Exterior` em `setup()`).
 
 ## Regras
+- Interino até a fase F da entrega 2 (carranca): ele nasce em `FogManSpawn`, fora do farol, e a navmesh agora é só do interior, então fica parado lá fora.
 - Surge em `FogManSpawn` quando o nevoeiro chega a `NEAR` (`FogManDirector.set_fog_stage`), se não houver outro e o intervalo (`spawn_cooldown_seconds`) tiver passado. Vai até o jogador (`move_speed`).
 - Dissipa após `dissipate_seconds` contínuos dentro do cone aceso da lanterna, com linha de visão livre (paredes, piso e alçapão fechado bloqueiam a luz).
 - Tocar o jogador (`touch_distance`) cega por `blind_seconds` (tela preta) e ele some. Não mata.

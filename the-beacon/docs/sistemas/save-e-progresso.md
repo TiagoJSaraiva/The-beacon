@@ -11,7 +11,7 @@ Um único save da partida, gravado só entre noites, e o desbloqueio permanente 
 - `autoload/run_request.gd` (`RunRequest`): dificuldade e `RunState` que o `SceneRouter` entrega à cena de jogo.
 
 ## Regras
-- Persistem entre noites: dificuldade, noite atual, pontos de Afogado, mangueira rompida, bateria da lanterna, passos do tutorial já mostrados. Todo o resto recomeça do zero, porque cada noite é uma carga nova da cena de jogo (`SceneRouter.play_night`).
+- Persistem entre noites: dificuldade, noite atual, pontos de Afogado, mangueira estourada, bateria da lanterna, passos do tutorial já mostrados. Todo o resto recomeça do zero, porque cada noite é uma carga nova da cena de jogo (`SceneRouter.play_night`).
 - Só "Salvar e sair", na tela de fim de noite, grava. O save já aponta para a noite seguinte.
 - Começar uma noite (plantão novo, próxima noite ou Continuar) apaga o save. Sair no meio da noite (menu de pausa, fechar o jogo, Alt+F4) perde a partida, e Continuar fica desabilitado.
 - Também apagam o save: morrer, vencer, escolher dificuldade em Novo Jogo.

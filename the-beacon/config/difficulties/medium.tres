@@ -14,7 +14,6 @@
 [ext_resource type="Script" path="res://config/power_config.gd" id="13_qasbp"]
 [ext_resource type="Script" path="res://config/repair_config.gd" id="14_0i3bh"]
 [ext_resource type="Script" path="res://config/difficulty_config.gd" id="15_wk4rj"]
-[ext_resource type="Script" path="res://config/threat_config.gd" id="16_p51rl"]
 [ext_resource type="Script" path="res://config/time_config.gd" id="17_5wged"]
 [ext_resource type="Script" path="res://config/trapdoor_config.gd" id="18_nhtnk"]
 
@@ -43,9 +42,6 @@ script = ExtResource("13_qasbp")
 [sub_resource type="Resource" id="Resource_xktrb"]
 script = ExtResource("14_0i3bh")
 
-[sub_resource type="Resource" id="Resource_dk8fe"]
-script = ExtResource("16_p51rl")
-
 [sub_resource type="Resource" id="Resource_ut0qd"]
 script = ExtResource("17_5wged")
 
@@ -65,7 +61,6 @@ flashlight = SubResource("Resource_o6lxf")
 repair = SubResource("Resource_xktrb")
 fog = SubResource("Resource_c7hy6")
 boat = SubResource("Resource_w24fo")
-threat = SubResource("Resource_dk8fe")
 drowned = SubResource("Resource_g70nk")
 trapdoor = SubResource("Resource_uidvd")
 fog_man = SubResource("Resource_up55e")

@@ -39,7 +39,6 @@ collision_mask = 0
 sync_to_physics = false
 
 [node name="PanelCollision" type="CollisionShape3D" parent="Panel"]
-unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, -0.05, 0.8)
 shape = SubResource("BoxShape3D_panel")
 
@@ -59,7 +58,8 @@ shape = SubResource("BoxShape3D_panel_use")
 [node name="Latch" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.85)
 
-[node name="Mesh" type="MeshInstance3D" parent="Latch"]
+[node name="LatchBolt" type="MeshInstance3D" parent="Latch"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 mesh = SubResource("BoxMesh_latch")
 
@@ -67,7 +67,7 @@ mesh = SubResource("BoxMesh_latch")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
 script = ExtResource("2_interactable")
-mode = 2
+mode = 1
 hands_rule = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Latch/LatchInteractable"]
@@ -82,4 +82,5 @@ bus = &"SFX"
 script = ExtResource("3_loop")
 
 [connection signal="interacted" from="Panel/PanelInteractable" to="." method="_on_panel_interactable_interacted"]
-[connection signal="hold_state_changed" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_hold_state_changed"]
+[connection signal="interacted" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_interacted"]
+[connection signal="hold_completed" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_hold_completed"]

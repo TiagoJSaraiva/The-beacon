@@ -1,30 +1,33 @@
-# Afogados
+# Afogado
 
 ## Propósito
-Principal ameaça física; a única que mata (GDD 1.2.10, 1.2.11).
+A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, ele se aproxima, arromba a porta e caça o jogador até o fim da noite.
 
 ## Componentes
-- `drowned/threat_rules.gd` (`ThreatRules`): nível de ameaça e sorteios.
-- `drowned/perception_rules.gd` (`PerceptionRules`): alcance com oclusão.
-- `drowned/drowned_brain.gd` (`DrownedBrain`): máquina de estados das ações.
-- `drowned/drowned.tscn` (`Drowned`, `CharacterBody3D` na camada `drowned`, colide com `world` e `barriers`): navega com `NavigationAgent3D`, conta obstáculos por raio, passos audíveis por proximidade.
-- `drowned/drowned_director.gd` (`DrownedDirector`, nó no `World`, recebe `Lighthouse`, `Player` e `Exterior` em `setup()`): pontos, aparições, efeitos e batidas no alçapão.
-- Alvos: marcadores `DrownedTargets/*` no farol (fora da porta, mangueira, gerador, rampa sob o alçapão); a saída é o ponto onde ele surgiu.
-- `lighthouse/trapdoor_resistance.gd` (`TrapdoorResistance`), dentro do `Trapdoor`.
+- `drowned/drowned_approach.gd` (`DrownedApproach`, puro): medidor de aproximação e entrada.
+- `drowned/perception_rules.gd` (`PerceptionRules`, puro): alcance com oclusão.
+- `drowned/drowned_brain.gd` (`DrownedBrain`, puro): perseguir, bater, cansar, descansar.
+- `drowned/drowned.tscn` (`Drowned`, `CharacterBody3D` na camada `drowned`, colide com `world` e `barriers`): navega com `NavigationAgent3D` pela navmesh do interior, conta obstáculos por raio, passos audíveis por proximidade.
+- `drowned/drowned_director.gd` (`DrownedDirector`, nó no `World`, recebe `Lighthouse` e `Player` em `setup()`): pontos, aproximação, entrada, efeitos e batidas no alçapão.
+- Pontos no farol (`DrownedTargets/*`): `DoorInside` (onde aparece), `TrapdoorBelow` (rampa sob o alçapão), `RestSpot` (térreo).
 
 ## Regras
-- Ameaça = pontos × `threat_per_drowned_point` + `threat_from_broken_door` enquanto a porta está quebrada.
-- A partir do 1º ponto, a cada `spawn_check_interval_seconds` sorteia aparição com chance `spawn_chance_base + spawn_chance_per_threat × ameaça`; extras com `extra_drowned_chance_per_threat × ameaça`, até `max_simultaneous_drowned`.
-- Com a porta inteira, sempre a quebra primeiro (`door_break_seconds`). Depois: ameaça >= `chase_threat_threshold` → sobe e bate no alçapão (`bang_seconds`, depois vai embora); abaixo disso → vai embora. A sabotagem está desligada desde a fase C da entrega 2 (o gerador não quebra e a mangueira só estoura pelo nevoeiro): o `DrownedDirector` informa os dois como já quebrados. O cérebro é reescrito na fase E.
-- Jogador ao alcance (com a porta já aberta) é sempre o alvo; tocar (`kill_distance`) mata. Perdido o alcance, volta à ação anterior: esconder-se não sobe a ação para o nível 4.
+- Cada barco afundado soma um ponto de Afogado; os pontos passam de uma noite para a outra (`RunState`).
+- **Aproximação**: medidor de 0 a 1. Sobe com o nevoeiro em `GROUND_FLOOR` ou acima e ao menos um ponto, a `approach_base_per_second + approach_per_point_per_second × pontos`. Com o nevoeiro fora do farol, desce a `approach_recede_per_second`. O barulho vem de fora da porta (`EntranceDoor.show_approach`) e cresce com o medidor.
+- **Entrada**: com o medidor cheio, arromba a porta (som e a folha abrindo e voltando; a porta segue fechada) e aparece do lado de dentro. No máximo um por noite; com 0 pontos, não vem. Ele não sai mais, mesmo que o nevoeiro recue.
+- **Dentro**:
+  - Jogador ao alcance: persegue e mata ao tocar (`kill_distance`).
+  - Fora do alcance: vai para baixo do alçapão e bate. Com o trinco ligado, cansa depois de `tire_seconds` (só o tempo de trinco ligado conta), descansa em `RestSpot` por `rest_seconds` e volta. Com o trinco desligado, bate até o alçapão abrir (`TrapdoorConfig.resistance_seconds`, ver `farol.md`).
+  - Alçapão aberto: sobe e persegue mesmo sem o jogador ao alcance, até o alçapão fechar.
+  - Não sabota nada.
 - Alcance: distância + `occlusion_penalty` por obstáculo (`world`/`barriers`) entre os olhos dele e os do jogador, comparado a `perception_range`.
-- Alçapão aberto ou quebrado na chegada → persegue até matar. Fechado → bate; a resistência (`TrapdoorConfig.resistance_seconds`) corre sem o trinco, congela com ele, não zera ao soltar e volta ao máximo quando ninguém bate. Zerada, o alçapão quebra.
-- Mais lento que o jogador (`move_speed`). A noite seguinte começa sem Afogados em cena; os pontos continuam (`RunState`).
+- Mais lento que o jogador (`move_speed`). A noite seguinte começa sem ele e com o medidor zerado.
 
 ## Sinais
-- `Drowned.effect_triggered(effect)` → `DrownedDirector` → porta ou `Player.kill(CAUSE_DROWNED)`.
-- `DrownedDirector.threat_changed(threat)`, `drowned_appeared(count)`.
+- `Drowned.effect_triggered(effect)` → `DrownedDirector` → `Player.kill(CAUSE_DROWNED)`.
+- `DrownedDirector.drowned_entered` → tutorial.
+- `FogSystem.stage_changed` → `DrownedDirector.set_fog_stage`; `BoatDirector.boat_sank` → `add_drowned_point`.
 
 ## Testes
-- `test/unit/threat_rules_test.gd`, `perception_rules_test.gd`, `drowned_brain_test.gd`, `trapdoor_resistance_test.gd`.
-- Validado por sondas headless (fora do repositório): baixa ameaça (porta → mangueira → embora → volta → gerador) e alta ameaça (porta → escada → alçapão quebra → persegue → mata).
+- `test/unit/drowned_approach_test.gd`, `drowned_brain_test.gd`, `perception_rules_test.gd`.
+- `test/scenes/drowned_entry_test.gd`: com nevoeiro dentro e um ponto, ele entra pela porta, a navmesh tem caminho até o alçapão e ele sai andando.

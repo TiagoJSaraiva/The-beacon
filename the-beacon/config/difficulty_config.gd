@@ -22,7 +22,6 @@ extends Resource
 @export var repair: RepairConfig
 @export var fog: FogConfig
 @export var boat: BoatConfig
-@export var threat: ThreatConfig
 @export var drowned: DrownedConfig
 @export var trapdoor: TrapdoorConfig
 @export var fog_man: FogManConfig
@@ -48,7 +47,6 @@ func validate() -> PackedStringArray:
 		"repair": repair,
 		"fog": fog,
 		"boat": boat,
-		"threat": threat,
 		"drowned": drowned,
 		"trapdoor": trapdoor,
 		"fog_man": fog_man,
