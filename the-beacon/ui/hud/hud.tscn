@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://ui/hud/hud.gd" id="1_hud"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slowed"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hurt"]
 draw_center = false
 border_width_left = 36
 border_width_top = 36
@@ -91,7 +91,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_tutorial")
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SlowedBorder" type="Panel" parent="Root"]
+[node name="HurtBorder" type="Panel" parent="Root"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -101,7 +101,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_slowed")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hurt")
 
 [node name="Blindness" type="ColorRect" parent="Root"]
 unique_name_in_owner = true

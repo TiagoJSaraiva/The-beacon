@@ -1,8 +1,9 @@
 class_name FallDamage
 extends Node
-## Mede a altura de cada queda do corpo e informa lentidão ou queda fatal.
+## Mede a altura de cada queda do corpo: uma queda média bloqueia a corrida por um tempo e
+## uma queda alta mata.
 
-signal slowed(seconds: float, speed_multiplier: float)
+signal sprint_blocked_changed(active: bool)
 signal fatal_fall
 
 @export var body: CharacterBody3D
@@ -10,6 +11,7 @@ signal fatal_fall
 
 var _airborne: bool = false
 var _peak_height: float = 0.0
+var _sprint_block_left: float = 0.0
 
 
 func _ready() -> void:
@@ -21,7 +23,8 @@ func _ready() -> void:
 		config = FallConfig.new()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	_update_sprint_block(delta)
 	var height: float = body.global_position.y
 	if not body.is_on_floor():
 		if not _airborne:
@@ -35,5 +38,25 @@ func _physics_process(_delta: float) -> void:
 	match FallRules.evaluate(_peak_height - height, config):
 		FallRules.Outcome.FATAL:
 			fatal_fall.emit()
-		FallRules.Outcome.SLOW:
-			slowed.emit(config.slow_seconds, config.slow_speed_multiplier)
+		FallRules.Outcome.SPRINT_BLOCK:
+			_block_sprint()
+
+
+func is_sprint_blocked() -> bool:
+	return _sprint_block_left > 0.0
+
+
+func _block_sprint() -> void:
+	var was_blocked: bool = is_sprint_blocked()
+	# Outra queda média durante o bloqueio recomeça a contagem.
+	_sprint_block_left = config.sprint_block_seconds
+	if not was_blocked:
+		sprint_blocked_changed.emit(true)
+
+
+func _update_sprint_block(delta: float) -> void:
+	if not is_sprint_blocked():
+		return
+	_sprint_block_left -= delta
+	if not is_sprint_blocked():
+		sprint_blocked_changed.emit(false)

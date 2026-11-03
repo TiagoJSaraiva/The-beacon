@@ -18,6 +18,7 @@ const EVENT_GENERATOR_BREAKDOWN := &"generator_breakdown"
 @onready var lamp: LighthouseLamp = %LighthouseLamp
 @onready var beam_control: BeamControl = %BeamControl
 @onready var radio: Radio = %Radio
+@onready var chair: Chair = %Chair
 @onready var _wall_clock: WallClock = %WallClock
 @onready var _sea_monitor: SecurityMonitor = %SeaMonitor
 @onready var _lighthouse_monitor: SecurityMonitor = %LighthouseMonitor

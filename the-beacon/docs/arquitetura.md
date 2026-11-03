@@ -60,10 +60,11 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `NightDirector.time_changed` → `Lighthouse.show_time` — relógio de parede.
 - `NightDirector.night_started` → `Game` → `EventDirector.reset_night`.
 - `Lighthouse.jerrycan_carried_changed` → `Player.set_carrying` — galão na mão.
+- `Lighthouse.chair.sit_requested` → `Player.sit` — cadeira da mesa.
 - Dentro do farol: `Generator.power_changed` → `PowerConsumer` (relógio, luzes, lâmpada); `BeamControl.switched` → lâmpada; `LighthouseLamp.beam_active_changed` → consumo do gerador, painel e `Lighthouse.beam_active_changed`; encher/despejar do galão.
 - Eventos: cada sistema se registra no `EventDirector` (`Lighthouse`, `FogSystem`, `BoatDirector`).
 - `NightDirector.night_ended` → `Game` (congela, `RunCarryover.capture`, tela ou vitória).
-- `Player.died` → `Game` → `run_lost`. `Player.slowed_changed` → `Hud.set_slowed`.
+- `Player.died` → `Game` → `run_lost`. `Player.sprint_blocked_changed` → `Hud.set_hurt_border`.
 - `FogSystem.intensity_changed` → `Exterior.set_fog_intensity`, `BoatDirector.set_fog_intensity`; `FogSystem.covers_lighthouse_camera_changed` → `FogManDirector.set_fog_covers_camera`.
 - `Lighthouse.beam_active_changed` → `BoatDirector.set_beam_active`.
 - `BoatDirector.boat_arrived` → `Game` → `Radio.ring`; `boat_gone` → `Radio.stop_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.mark_answered`.
@@ -74,17 +75,19 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `NightEndScreen.continue_requested` → `Game` → `SceneRouter.play_night`; `NightEndScreen.save_and_exit_requested` → `Game` → `SaveService.write_run`, `SceneRouter`. `GameOverScreen`, `VictoryScreen` → `Game` ou direto `SceneRouter`. `Settings.changed` → `Game` → `Player.sensitivity_scale`.
 
 ## Input map
-Teclas físicas (independem do layout do teclado). O olhar usa o movimento do mouse. Não há pulo (GDD 1.2.20).
+Teclado por tecla física (independe do layout) e controle no padrão Xbox (botões de face pela posição). O olhar usa o mouse ou o analógico direito. Os prompts da HUD ainda mostram só a tecla do teclado; controles remapeáveis no passo 28 da entrega 2.
 
-| Ação | Tecla |
-|---|---|
-| `move_forward` / `move_back` / `move_left` / `move_right` | W / S / A / D |
-| `sprint` | Shift |
-| `crouch` | Ctrl |
-| `toggle_flashlight` | Z |
-| `check_battery` | X |
-| `interact` | E (segurar em interações de duração) |
-| `pause` | Esc / Start (controle) |
+| Ação | Teclado | Controle |
+|---|---|---|
+| `move_forward` / `move_back` / `move_left` / `move_right` | W / S / A / D | Analógico esquerdo |
+| `look_up` / `look_down` / `look_left` / `look_right` | (mouse) | Analógico direito |
+| `jump` | Espaço | A |
+| `sprint` | Shift | L2 |
+| `interact` | E (segurar em interações de duração) | Y |
+| `toggle_flashlight` | Q | X |
+| `check_battery` (segurar) | X | D-pad cima |
+| `drop_item` | R | B (sem uso até o galão com física, passo 14) |
+| `pause` | Esc | Start |
 
 Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay). No menu de pausa, Esc (`ui_cancel` ou `pause`) volta à página anterior ou fecha.
 

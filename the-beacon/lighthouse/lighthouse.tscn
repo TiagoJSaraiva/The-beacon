@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://beam/beam_control.tscn" id="12_control"]
 [ext_resource type="PackedScene" path="res://lighthouse/security_monitor.tscn" id="13_monitor"]
 [ext_resource type="PackedScene" path="res://boats/radio.tscn" id="14_radio"]
+[ext_resource type="PackedScene" path="res://player/chair.tscn" id="15_chair"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -202,6 +203,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.8, 0.05)
 [node name="Radio" parent="Desk" unique_id=386836183 instance=ExtResource("14_radio")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.8, 0.05)
+
+[node name="Chair" parent="Desk" instance=ExtResource("15_chair")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.85)
 
 [node name="DrownedTargets" type="Node3D" parent="." unique_id=1056986253]
 

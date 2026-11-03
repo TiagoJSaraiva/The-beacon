@@ -76,7 +76,7 @@ func _configure_systems() -> void:
 func _connect_signals() -> void:
 	_player.interaction.focus_changed.connect(_hud.show_prompt)
 	_player.interaction.hold_progress_changed.connect(_hud.show_hold_progress)
-	_player.slowed_changed.connect(_hud.set_slowed)
+	_player.sprint_blocked_changed.connect(_hud.set_hurt_border)
 	_tutorial.message_changed.connect(_hud.show_tutorial)
 	_player.died.connect(_on_player_died)
 	_night_director.time_changed.connect(_lighthouse.show_time)
@@ -92,6 +92,7 @@ func _connect_signals() -> void:
 	_pause_menu.exit_requested.connect(_on_pause_menu_exit_requested)
 	Settings.changed.connect(_apply_settings)
 	_lighthouse.jerrycan_carried_changed.connect(_player.set_carrying)
+	_lighthouse.chair.sit_requested.connect(_player.sit)
 	_lighthouse.beam_active_changed.connect(_boats.set_beam_active)
 	_lighthouse.radio.answered.connect(_on_radio_answered)
 	_fog.intensity_changed.connect(_exterior.set_fog_intensity)

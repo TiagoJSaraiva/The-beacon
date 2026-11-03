@@ -1,14 +1,14 @@
 class_name Flashlight
 extends Node3D
-## Lanterna na mão esquerda: liga e desliga (Z) e mostra a bateria no próprio corpo (X).
-## A bateria nunca aparece na HUD (GDD 1.2.19).
+## Lanterna na mão esquerda: liga e desliga e, segurando `check_battery`, mostra a carga
+## numa barra no próprio corpo. A bateria nunca aparece na HUD (GDD 1.2.19).
 
 signal toggled(lit: bool)
 signal battery_depleted
 
 @export var config: FlashlightConfig
 @export var rest_position: Vector3 = Vector3(-0.28, -0.24, -0.42)
-## Posição e giro que deixam o display de carga de frente para a câmera.
+## Posição e giro que deixam a barra de carga de frente para a câmera.
 @export var inspect_position: Vector3 = Vector3(-0.08, -0.12, -0.3)
 @export var inspect_yaw_degrees: float = -90.0
 @export var pose_speed: float = 10.0
@@ -17,10 +17,9 @@ var input_enabled: bool = true
 var battery: FlashlightBattery
 
 var _lit: bool = false
-var _shown_percent: int = -1
 
 @onready var _light: SpotLight3D = %Light
-@onready var _display: Label3D = %BatteryDisplay
+@onready var _gauge: BatteryGauge = %BatteryGauge
 
 
 func _ready() -> void:
@@ -103,8 +102,4 @@ func _update_pose(inspecting: bool, delta: float) -> void:
 
 
 func _refresh_display() -> void:
-	var percent: int = roundi(battery.ratio() * 100.0)
-	if percent == _shown_percent:
-		return
-	_shown_percent = percent
-	_display.text = "%d%%" % percent
+	_gauge.show_ratio(battery.ratio())

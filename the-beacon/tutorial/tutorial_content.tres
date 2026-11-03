@@ -6,12 +6,12 @@
 [sub_resource type="Resource" id="Resource_start"]
 script = ExtResource("1_step")
 id = &"start"
-text = "Sobreviva até as 06:00. O relógio fica na parede da torre. Nada pausa o jogo."
+text = "Sobreviva até as 06:00. O relógio fica na parede da torre."
 
 [sub_resource type="Resource" id="Resource_flashlight"]
 script = ExtResource("1_step")
 id = &"flashlight"
-text = "Z liga e desliga a lanterna. Segure X para ver a bateria: ela não recarrega."
+text = "Q liga e desliga a lanterna. Segure X para ver a bateria: ela não recarrega."
 
 [sub_resource type="Resource" id="Resource_low_fuel"]
 script = ExtResource("1_step")

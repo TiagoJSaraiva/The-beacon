@@ -65,8 +65,8 @@ func validate() -> PackedStringArray:
 		errors.append("power: combustível inicial da reserva acima da capacidade")
 	if fog.min_intensity > fog.max_intensity:
 		errors.append("fog: intensidade mínima acima da máxima")
-	if fall.slow_height >= fall.fatal_height:
-		errors.append("fall: altura de lentidão precisa ser menor que a fatal")
+	if fall.sprint_block_height >= fall.fatal_height:
+		errors.append("fall: altura que bloqueia a corrida precisa ser menor que a fatal")
 	if boat.sink_seconds_at_max_intensity > boat.sink_seconds_at_min_intensity:
 		errors.append("boat: nevoeiro forte precisa afundar mais rápido que o fraco")
 	for event: EventDefinition in events:

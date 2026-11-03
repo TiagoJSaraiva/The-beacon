@@ -1,11 +1,28 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://player/flashlight.gd" id="1_flashlight"]
+[ext_resource type="Script" path="res://player/battery_gauge.gd" id="2_gauge"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.18, 0.18, 0.2, 1)
 metallic = 0.6
 roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gauge_frame"]
+shading_mode = 0
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gauge_frame"]
+material = SubResource("StandardMaterial3D_gauge_frame")
+size = Vector3(0.13, 0.022, 0.002)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gauge_fill"]
+shading_mode = 0
+albedo_color = Color(0.45, 1, 0.55, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gauge_fill"]
+material = SubResource("StandardMaterial3D_gauge_fill")
+size = Vector3(0.12, 0.012, 0.002)
 
 [node name="Flashlight" type="Node3D"]
 script = ExtResource("1_flashlight")
@@ -26,11 +43,14 @@ shadow_enabled = true
 spot_range = 12.0
 spot_angle = 18.0
 
-[node name="BatteryDisplay" type="Label3D" parent="."]
+[node name="BatteryGauge" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.027, 0, 0.06)
-pixel_size = 0.0004
-modulate = Color(0.45, 1, 0.55, 1)
-text = "100%"
-font_size = 48
-outline_size = 0
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.026, 0, 0.06)
+script = ExtResource("2_gauge")
+
+[node name="Frame" type="MeshInstance3D" parent="BatteryGauge"]
+mesh = SubResource("BoxMesh_gauge_frame")
+
+[node name="Fill" type="MeshInstance3D" parent="BatteryGauge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+mesh = SubResource("BoxMesh_gauge_fill")

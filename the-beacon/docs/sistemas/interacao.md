@@ -1,7 +1,7 @@
 # Interação
 
 ## Propósito
-Uso dos objetos do cenário com a tecla E. A HUD só mostra a hotkey ao mirar e a barra de progresso (GDD 1.2.21).
+Uso dos objetos do cenário com a ação `interact` (E, Y no controle). A HUD só mostra a hotkey ao mirar e a barra de progresso (GDD 1.2.21).
 
 ## Componentes
 - `components/interactable.gd` (`Interactable`, `Area3D` na camada `interactable`): declara modo, duração, prompt e restrições. Não conhece o efeito; o dono escuta os sinais.

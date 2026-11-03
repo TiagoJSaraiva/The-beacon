@@ -11,7 +11,7 @@ var _blind_tween: Tween
 @onready var _prompt: Label = %Prompt
 @onready var _hold_bar: ProgressBar = %HoldBar
 @onready var _blindness: ColorRect = %Blindness
-@onready var _slowed_border: Panel = %SlowedBorder
+@onready var _hurt_border: Panel = %HurtBorder
 @onready var _tutorial_text: Label = %TutorialText
 
 
@@ -41,6 +41,6 @@ func show_tutorial(text: String) -> void:
 	_tutorial_text.visible = not text.is_empty()
 
 
-## Borda vermelha enquanto o jogador está lento por queda.
-func set_slowed(active: bool) -> void:
-	_slowed_border.visible = active
+## Borda vermelha enquanto a corrida está bloqueada por queda.
+func set_hurt_border(active: bool) -> void:
+	_hurt_border.visible = active

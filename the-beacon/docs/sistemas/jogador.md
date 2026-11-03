@@ -1,29 +1,32 @@
 # Jogador
 
 ## Propósito
-Controle em primeira pessoa (andar, correr, agachar, olhar), quedas e lanterna. Sem pulo (GDD 1.2.20).
+Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico), quedas, cadeira e lanterna.
 
 ## Componentes
-- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento e olhar; `kill(cause)`, `apply_slow()`, `set_controls_enabled()`. A carga da bateria passa de uma noite para a outra (`Flashlight.set_battery_seconds`, via `RunCarryover`). Expõe `interaction`, `flashlight` e `view_focus`.
+- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento, pulo e olhar; `sit(seat, yaw_limit_degrees)`, `kill(cause)`, `set_controls_enabled()`, `set_carrying()`. A carga da bateria passa de uma noite para a outra (`Flashlight.set_battery_seconds`, via `RunCarryover`). Expõe `interaction` e `flashlight`.
   - `Head/Camera3D/InteractionRay`: mira de interação (ver `interacao.md`).
-  - `Head/Camera3D/Flashlight` (`player/flashlight.tscn`): lanterna na mão esquerda.
-  - `FallDamage`: mede a altura de cada queda.
-  - `ViewFocus` (`player/view_focus.gd`): vira o olhar para um ponto e devolve o olhar anterior ao soltar. Sem uso desde que a agenda saiu; a cadeira (entrega 2, passo 10) decide se fica.
-- Regras puras: `FallRules` (altura → nada / lento / fatal), `FlashlightBattery`, `FlashlightCone`.
+  - `Head/Camera3D/Flashlight` (`player/flashlight.tscn`): lanterna na mão esquerda, com a barra de carga (`BatteryGauge`) no corpo.
+  - `FallDamage`: mede a altura de cada queda e conta o bloqueio da corrida.
+- `player/chair.tscn` (`Chair`): cadeira da mesa da cabine, instanciada no `Lighthouse`. Não colide com o jogador.
+- Regras puras: `FallRules` (altura → nada / corrida bloqueada / fatal), `SeatRules` (limite do olhar sentado), `FlashlightBattery`, `FlashlightCone`.
 
 ## Regras
-- Velocidades por `@export` no `Player` (andar 3.5, correr 5.5, agachar 1.6 m/s). Agachar só baixa a câmera e a velocidade.
-- Queda: altura = pico − pouso. `>= FallConfig.slow_height` deixa lento (`slow_speed_multiplier` por `slow_seconds`); `>= fatal_height` mata (`CAUSE_FALL`).
-- Lanterna: Z liga/desliga; segurar X traz o display de carga (`Label3D` no corpo) para a frente da câmera, sem parar o movimento. A bateria (`FlashlightConfig.battery_seconds`) só gasta ligada e não recarrega, nem entre noites; zerada, apaga e não liga mais.
+- Velocidades por `@export` no `Player` (andar 3.5, correr 5.5 m/s). O analógico esquerdo inclinado pela metade anda mais devagar.
+- Pulo: só no chão, `jump_velocity` 4.0 m/s (cerca de 0,8 m). Não há agachar.
+- Olhar: mouse (`mouse_sensitivity`) ou analógico direito (`stick_look_degrees_per_second`), os dois multiplicados por `sensitivity_scale`, que vem de `Settings` pelo `Game`.
+- Queda: altura = pico − pouso. `>= FallConfig.sprint_block_height` bloqueia a corrida por `sprint_block_seconds` (30 s; outra queda média recomeça a contagem); `>= fatal_height` mata (`CAUSE_FALL`).
+- Cadeira: interagir senta com os pés no ponto da cadeira, de frente para a mesa, com a cabeça mais baixa (`seated_head_height`). O olhar vira até `Chair.yaw_limit_degrees` (75°) para cada lado. Sentado dá para usar o que estiver ao alcance (monitores, rádio). Qualquer movimento ou o pulo levanta no mesmo lugar.
+- Lanterna: `toggle_flashlight` liga/desliga; segurar `check_battery` traz a barra de carga para a frente da câmera, sem parar o movimento. A bateria (`FlashlightConfig.battery_seconds`) só gasta ligada e não recarrega, nem entre noites; zerada, apaga e não liga mais.
 - `Flashlight.illuminates(point)` diz se um ponto está no cone aceso (alcance e meio-ângulo da config); obstáculos são checados por quem pergunta.
-- Sensibilidade do mouse = `mouse_sensitivity` × `sensitivity_scale`; a escala vem de `Settings` pelo `Game`.
-- Efeitos de tela (não são HUD de estado): borda vermelha enquanto lento por queda (`Hud.set_slowed`) e tela preta do toque do Homem de Nevoeiro (`Hud.show_blindness`).
+- Efeitos de tela (não são HUD de estado): borda vermelha enquanto a corrida está bloqueada (`Hud.set_hurt_border`) e tela preta do toque do Homem de Nevoeiro (`Hud.show_blindness`).
 
 ## Sinais
-- `Player.died(cause)`, `Player.slowed_changed(active)`.
-- `FallDamage.slowed(seconds, multiplier)`, `FallDamage.fatal_fall` → `Player`.
+- `Player.died(cause)`, `Player.sprint_blocked_changed(active)`.
+- `FallDamage.sprint_blocked_changed(active)`, `FallDamage.fatal_fall` → `Player`.
+- `Chair.sit_requested(seat, yaw_limit_degrees)` → `Game` → `Player.sit`.
 - `Flashlight.toggled(lit)`, `Flashlight.battery_depleted`.
 
 ## Testes
-- `test/unit/fall_rules_test.gd`, `flashlight_battery_test.gd`, `flashlight_cone_test.gd`.
-- `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média deixa lento, queda alta mata.
+- `test/unit/fall_rules_test.gd`, `seat_rules_test.gd`, `flashlight_battery_test.gd`, `flashlight_cone_test.gd`.
+- `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média bloqueia a corrida, queda alta mata; altura do pulo (faixa); sentar segura o jogador parado e mover levanta.
