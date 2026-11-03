@@ -61,8 +61,6 @@ func validate() -> PackedStringArray:
 		return errors
 	if power.generator_start_fuel > power.generator_capacity:
 		errors.append("power: combustível inicial do gerador acima da capacidade")
-	if power.reserve_start_fuel > power.reserve_capacity:
-		errors.append("power: combustível inicial da reserva acima da capacidade")
 	if fog.min_intensity > fog.max_intensity:
 		errors.append("fog: intensidade mínima acima da máxima")
 	if fall.sprint_block_height >= fall.fatal_height:

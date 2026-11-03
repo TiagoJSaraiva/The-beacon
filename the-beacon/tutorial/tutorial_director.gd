@@ -12,8 +12,8 @@ const STEP_FLASHLIGHT := &"flashlight"
 const STEP_LOW_FUEL := &"low_fuel"
 const STEP_JERRYCAN := &"jerrycan"
 const STEP_LAMP_BURNED := &"lamp_burned"
-const STEP_HOSE_BROKEN := &"hose_broken"
-const STEP_GENERATOR_BROKEN := &"generator_broken"
+const STEP_HOSE_BURST := &"hose_burst"
+const STEP_MACHINE_BROKEN := &"machine_broken"
 const STEP_FOG := &"fog"
 const STEP_BOAT := &"boat"
 const STEP_DROWNED := &"drowned"
@@ -26,8 +26,8 @@ const KNOWN_STEPS: Array[StringName] = [
 	STEP_LOW_FUEL,
 	STEP_JERRYCAN,
 	STEP_LAMP_BURNED,
-	STEP_HOSE_BROKEN,
-	STEP_GENERATOR_BROKEN,
+	STEP_HOSE_BURST,
+	STEP_MACHINE_BROKEN,
 	STEP_FOG,
 	STEP_BOAT,
 	STEP_DROWNED,
@@ -36,7 +36,8 @@ const KNOWN_STEPS: Array[StringName] = [
 ]
 
 @export var content: TutorialContent
-## Abaixo desta fração de combustível no gerador, aparece o passo de reabastecer.
+## Abaixo desta fração de combustível no gerador de emergência, aparece o passo de
+## reabastecer.
 @export_range(0.0, 1.0) var low_fuel_ratio: float = 0.35
 
 var tracker: TutorialTracker = TutorialTracker.new([])
@@ -75,12 +76,12 @@ func setup(
 	is_active = enabled and content != null
 	if not is_active:
 		return
-	_generator = lighthouse.generator
+	_generator = lighthouse.emergency_generator
 	night.night_started.connect(_on_night_started)
 	lighthouse.jerrycan_carried_changed.connect(_show_when.bind(STEP_JERRYCAN))
 	lighthouse.lamp.burned_changed.connect(_show_when.bind(STEP_LAMP_BURNED))
-	lighthouse.reserve_tank.hose_broken_changed.connect(_show_when.bind(STEP_HOSE_BROKEN))
-	lighthouse.generator.broken_changed.connect(_show_when.bind(STEP_GENERATOR_BROKEN))
+	lighthouse.fuel_tank.hose_burst.connect(show_step.bind(STEP_HOSE_BURST))
+	lighthouse.machine_house.broken_changed.connect(_show_when.bind(STEP_MACHINE_BROKEN))
 	lighthouse.entrance_door.broken_changed.connect(_show_when.bind(STEP_DOOR_BROKEN))
 	fog.intensity_changed.connect(_on_fog_intensity_changed)
 	boats.boat_arrived.connect(show_step.bind(STEP_BOAT).unbind(2))

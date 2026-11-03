@@ -5,6 +5,8 @@ extends RayCast3D
 
 signal focus_changed(prompt: String)
 signal hold_progress_changed(ratio: float, active: bool)
+## Usou algo de mãos livres com o galão na mão: soltar o galão primeiro.
+signal drop_requested
 
 ## Corpo de quem interage, repassado aos objetos que restringem o uso (ex.: alçapão).
 @export var user: Node3D
@@ -37,6 +39,10 @@ func _physics_process(delta: float) -> void:
 		_stop_hold()
 		return
 	if _awaiting_release:
+		return
+	if hands_busy and _focused.hands_rule == Interactable.HandsRule.FREE:
+		_awaiting_release = true
+		drop_requested.emit()
 		return
 	match _focused.mode:
 		Interactable.Mode.PRESS:
@@ -79,6 +85,10 @@ func _find_target() -> Interactable:
 	if not is_colliding():
 		return null
 	var target := get_collider() as Interactable
-	if target == null or not target.can_be_used(hands_busy, user):
+	if target == null:
+		return null
+	# De mãos ocupadas, o que exige mãos livres continua em foco: usar solta o galão.
+	var free_hands_target: bool = target.hands_rule == Interactable.HandsRule.FREE
+	if not target.can_be_used(hands_busy and not free_hands_target, user):
 		return null
 	return target

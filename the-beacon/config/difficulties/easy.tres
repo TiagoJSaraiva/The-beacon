@@ -4,8 +4,7 @@
 [ext_resource type="Script" uid="uid://mdne70pgyysh" path="res://config/drowned_config.gd" id="2_5rg58"]
 [ext_resource type="Script" uid="uid://dcsho071qqobc" path="res://events/event_definition.gd" id="3_h4kqa"]
 [ext_resource type="Resource" path="res://config/events/lamp_burnout.tres" id="4_63jmm"]
-[ext_resource type="Resource" path="res://config/events/hose_rupture.tres" id="5_44wgk"]
-[ext_resource type="Resource" path="res://config/events/generator_breakdown.tres" id="6_y613j"]
+[ext_resource type="Resource" path="res://config/events/machine_breakdown.tres" id="5_44wgk"]
 [ext_resource type="Resource" path="res://config/events/fog.tres" id="7_wj5i2"]
 [ext_resource type="Resource" path="res://config/events/boat.tres" id="8_ru7dc"]
 [ext_resource type="Script" uid="uid://dm4iojmcq5tcc" path="res://config/fall_config.gd" id="9_uo8rd"]
@@ -43,8 +42,6 @@ script = ExtResource("12_dv4f4")
 
 [sub_resource type="Resource" id="Resource_pe4op"]
 script = ExtResource("13_5t01q")
-reserve_capacity = 220.0
-reserve_start_fuel = 220.0
 
 [sub_resource type="Resource" id="Resource_ja4ac"]
 script = ExtResource("14_rfi3c")
@@ -66,7 +63,7 @@ script = ExtResource("15_5i4ki")
 id = &"easy"
 display_name = "Easy"
 tutorial_enabled = true
-events = Array[ExtResource("3_h4kqa")]([ExtResource("4_63jmm"), ExtResource("5_44wgk"), ExtResource("6_y613j"), ExtResource("7_wj5i2"), ExtResource("8_ru7dc")])
+events = Array[ExtResource("3_h4kqa")]([ExtResource("4_63jmm"), ExtResource("5_44wgk"), ExtResource("7_wj5i2"), ExtResource("8_ru7dc")])
 event_chance_multiplier = 0.7
 chance_increase_per_night = 0.1
 time = SubResource("Resource_co2l7")

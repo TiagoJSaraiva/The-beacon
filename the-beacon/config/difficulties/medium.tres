@@ -4,8 +4,7 @@
 [ext_resource type="Script" path="res://config/drowned_config.gd" id="2_ca67h"]
 [ext_resource type="Script" path="res://events/event_definition.gd" id="3_pl71k"]
 [ext_resource type="Resource" path="res://config/events/lamp_burnout.tres" id="4_brymo"]
-[ext_resource type="Resource" path="res://config/events/hose_rupture.tres" id="5_50g2q"]
-[ext_resource type="Resource" path="res://config/events/generator_breakdown.tres" id="6_tvok1"]
+[ext_resource type="Resource" path="res://config/events/machine_breakdown.tres" id="5_50g2q"]
 [ext_resource type="Resource" path="res://config/events/fog.tres" id="7_co02s"]
 [ext_resource type="Resource" path="res://config/events/boat.tres" id="8_fcvjl"]
 [ext_resource type="Script" path="res://config/fall_config.gd" id="9_0qa3n"]
@@ -40,8 +39,6 @@ script = ExtResource("12_okxwg")
 
 [sub_resource type="Resource" id="Resource_ei2eh"]
 script = ExtResource("13_qasbp")
-reserve_capacity = 360.0
-reserve_start_fuel = 360.0
 
 [sub_resource type="Resource" id="Resource_xktrb"]
 script = ExtResource("14_0i3bh")
@@ -60,7 +57,7 @@ script = ExtResource("15_wk4rj")
 id = &"medium"
 display_name = "Medium"
 nights = 5
-events = Array[ExtResource("3_pl71k")]([ExtResource("4_brymo"), ExtResource("5_50g2q"), ExtResource("6_tvok1"), ExtResource("7_co02s"), ExtResource("8_fcvjl")])
+events = Array[ExtResource("3_pl71k")]([ExtResource("4_brymo"), ExtResource("5_50g2q"), ExtResource("7_co02s"), ExtResource("8_fcvjl")])
 chance_increase_per_night = 0.12
 time = SubResource("Resource_ut0qd")
 power = SubResource("Resource_ei2eh")

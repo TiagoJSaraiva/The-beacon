@@ -5,6 +5,8 @@ extends CharacterBody3D
 
 signal died(cause: StringName)
 signal sprint_blocked_changed(active: bool)
+## Soltar o galão da mão em `at`, com a velocidade do arremesso.
+signal drop_requested(at: Vector3, throw_velocity: Vector3)
 
 const CAUSE_FALL := &"fall"
 const CAUSE_DROWNED := &"drowned"
@@ -20,6 +22,10 @@ const CAUSE_DROWNED := &"drowned"
 @export_range(10.0, 89.0) var max_pitch_degrees: float = 85.0
 @export var seated_head_height: float = 1.15
 @export var head_transition_speed: float = 3.0
+## Velocidade com que o galão sai da mão ao ser solto (um arremesso leve).
+@export var drop_throw_speed: float = 1.5
+## Distância que o galão solto fica de uma parede à frente.
+@export var drop_wall_margin: float = 0.25
 
 var is_dead: bool = false
 var is_seated: bool = false
@@ -35,12 +41,14 @@ var _seat_yaw_limit: float = 0.0
 @onready var interaction: InteractionRay = %InteractionRay
 @onready var flashlight: Flashlight = %Flashlight
 @onready var _head: Node3D = $Head
+@onready var _camera: Camera3D = $Head/Camera3D
 @onready var _fall_damage: FallDamage = %FallDamage
 @onready var _carried_jerrycan: Node3D = %CarriedJerrycan
 
 
 func _ready() -> void:
 	_standing_head_height = _head.position.y
+	interaction.drop_requested.connect(_request_drop)
 	_capture_mouse(true)
 
 
@@ -71,6 +79,8 @@ func _physics_process(delta: float) -> void:
 	if _controls_enabled:
 		input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		jump_pressed = Input.is_action_just_pressed("jump")
+		if interaction.hands_busy and Input.is_action_just_pressed("drop_item"):
+			_request_drop()
 	if is_seated:
 		# Mover ou pular só levanta; o movimento começa no frame seguinte.
 		if not input.is_zero_approx() or jump_pressed:
@@ -132,6 +142,20 @@ func kill(cause: StringName) -> void:
 	is_dead = true
 	set_controls_enabled(false)
 	died.emit(cause)
+
+
+func _request_drop() -> void:
+	var forward: Vector3 = -_camera.global_basis.z
+	var at: Vector3 = _carried_jerrycan.global_position
+	# Colado numa parede, o galão nasceria dentro dela: recua até a frente do obstáculo.
+	var query := PhysicsRayQueryParameters3D.create(
+		_camera.global_position, at, CollisionLayers.WORLD | CollisionLayers.BARRIERS
+	)
+	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	if not hit.is_empty():
+		at = hit["position"] - forward * drop_wall_margin
+	var carried_velocity := Vector3(velocity.x, 0.0, velocity.z)
+	drop_requested.emit(at, carried_velocity + forward * drop_throw_speed)
 
 
 func _look(turn: Vector2) -> void:

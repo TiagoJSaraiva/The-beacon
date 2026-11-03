@@ -3,7 +3,7 @@
 Visão do projeto como ele está **agora**. Atualize no mesmo passo de qualquer mudança nos itens abaixo.
 
 ## Visão geral
-Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de dois andares (GDD em `../notes/gdd.md`, fora do repositório). O jogador cumpre um plantão de 3, 5 ou 7 noites (Easy, Medium, Hard), de 20h às 6h, mantendo gerador, combustível, feixe, alçapão e lanterna enquanto lida com nevoeiro, barcos, Afogados e o Homem de Nevoeiro. Sem HUD de estado: toda informação está em objetos do cenário.
+Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de dois andares (GDD em `../notes/gdd.md`, fora do repositório). O jogador cumpre um plantão de 3, 5 ou 7 noites (Easy, Medium, Hard), de 20h às 6h, mantendo geradores, galão, casa de máquinas, feixe, alçapão e lanterna enquanto lida com nevoeiro, barcos, Afogados e o Homem de Nevoeiro. Sem HUD de estado: toda informação está em objetos do cenário.
 
 **Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração. **Entrega 2** em andamento: revisão das mecânicas (`planos/entrega-2.md`).
 
@@ -36,7 +36,7 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
   - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
   - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `PauseMenu` (`sistemas/menus-e-telas.md`), `RunCarryover` (`sistemas/save-e-progresso.md`).
   - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica a dificuldade e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
-- `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG, `SpiralStaircase`, `Landing`, `Ramp`, `Trapdoor`, `EntranceDoor` (ver `sistemas/farol.md`); `Generator`, `ReserveTank`, `JerrycanDock` (`sistemas/energia-e-combustivel.md`); `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights`; `Desk` com monitores e `Radio`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
+- `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG, `SpiralStaircase`, `Landing`, `Ramp`, `Trapdoor`, `EntranceDoor` (ver `sistemas/farol.md`); `MainGenerator`, `EmergencyGenerator`, `FuelTank` (com `JerrycanSlot`), `Jerrycan` (`sistemas/energia-e-combustivel.md`); `MachineHouse`, `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights`; `Desk` com monitores, `Radio` e `Chair`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
 - `exterior/exterior.tscn` → `Exterior`: ilha, mar, rota dos barcos, câmeras, pontos de surgimento (`sistemas/exterior-e-cameras.md`).
 - `player/player.tscn` → `Player` (`CharacterBody3D`) → `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
 - Entidades instanciadas pelos diretores: `boats/boat.tscn` (na `BoatPath`), `drowned/drowned.tscn` e `fog_man/fog_man.tscn` (filhos dos diretores).
@@ -61,12 +61,13 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `NightDirector.night_started` → `Game` → `EventDirector.reset_night`.
 - `Lighthouse.jerrycan_carried_changed` → `Player.set_carrying` — galão na mão.
 - `Lighthouse.chair.sit_requested` → `Player.sit` — cadeira da mesa.
-- Dentro do farol: `Generator.power_changed` → `PowerConsumer` (relógio, luzes, lâmpada); `BeamControl.switched` → lâmpada; `LighthouseLamp.beam_active_changed` → consumo do gerador, painel e `Lighthouse.beam_active_changed`; encher/despejar do galão.
+- Dentro do farol: geradores, alavanca, lâmpada e casa de máquinas → `Lighthouse`, que recalcula o `BeamState`, liga o consumo do gerador de emergência e emite `beam_lit_changed`; `FuelTank.hose_burst` → gerador principal; galão entre slot, mão e mundo.
+- `Player.drop_requested` → `Lighthouse.drop_jerrycan` — soltar o galão.
 - Eventos: cada sistema se registra no `EventDirector` (`Lighthouse`, `FogSystem`, `BoatDirector`).
 - `NightDirector.night_ended` → `Game` (congela, `RunCarryover.capture`, tela ou vitória).
 - `Player.died` → `Game` → `run_lost`. `Player.sprint_blocked_changed` → `Hud.set_hurt_border`.
 - `FogSystem.intensity_changed` → `Exterior.set_fog_intensity`, `BoatDirector.set_fog_intensity`; `FogSystem.covers_lighthouse_camera_changed` → `FogManDirector.set_fog_covers_camera`.
-- `Lighthouse.beam_active_changed` → `BoatDirector.set_beam_active`.
+- `Lighthouse.beam_lit_changed` → `BoatDirector.set_beam_active`.
 - `BoatDirector.boat_arrived` → `Game` → `Radio.ring`; `boat_gone` → `Radio.stop_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.mark_answered`.
 - `FogManDirector.player_blinded` → `Hud.show_blindness`.
 - `Drowned.effect_triggered` → `DrownedDirector` → farol ou `Player.kill`.
@@ -86,7 +87,7 @@ Teclado por tecla física (independe do layout) e controle no padrão Xbox (bot�
 | `interact` | E (segurar em interações de duração) | Y |
 | `toggle_flashlight` | Q | X |
 | `check_battery` (segurar) | X | D-pad cima |
-| `drop_item` | R | B (sem uso até o galão com física, passo 14) |
+| `drop_item` | R | B |
 | `pause` | Esc | Start |
 
 Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay). No menu de pausa, Esc (`ui_cancel` ou `pause`) volta à página anterior ou fecha.
@@ -99,6 +100,7 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay). N
 5 — `fog_man` — Homem de Nevoeiro
 6 — `interactable` — objetos interativos / detectados pelo raio de interação do jogador
 7 — `player_bounds` — paredes invisíveis que só o jogador detecta (ex.: vão da porta quebrada; ele nunca sai do farol)
+8 — `props` — objetos com física (galão) / colidem com `world`, `barriers` e entre si; o jogador os atravessa
 
 ## Áudio
 Buses em `default_bus_layout.tres`: `Master` → `Music`, `SFX`. Sons placeholder (tons sintéticos) em `assets/audio/placeholder/`, gerados por `tools/generate_placeholder_audio.gd` (rodar com `godot --headless --path . --script res://tools/generate_placeholder_audio.gd`). Sons em loop usam `components/looping_sound.gd`.

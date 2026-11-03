@@ -27,7 +27,7 @@ func test_new_run_starts_clean_with_full_battery() -> void:
 	assert_int(run.total_nights).is_equal(5)
 	assert_int(run.current_night).is_equal(1)
 	assert_int(run.drowned_points).is_equal(0)
-	assert_bool(run.hose_broken).is_false()
+	assert_bool(run.hose_burst).is_false()
 	assert_float(run.flashlight_battery_seconds).is_equal(240.0)
 	assert_array(run.tutorial_shown_ids).is_empty()
 
@@ -36,7 +36,7 @@ func test_save_round_trip_through_json() -> void:
 	var run := RunState.new(&"medium", 5, 300.0)
 	run.advance_night()
 	run.drowned_points = 3
-	run.hose_broken = true
+	run.hose_burst = true
 	run.flashlight_battery_seconds = 42.5
 	run.tutorial_shown_ids = [&"start", &"fog"]
 	var restored := RunState.new()
@@ -45,7 +45,7 @@ func test_save_round_trip_through_json() -> void:
 	assert_int(restored.total_nights).is_equal(5)
 	assert_int(restored.current_night).is_equal(2)
 	assert_int(restored.drowned_points).is_equal(3)
-	assert_bool(restored.hose_broken).is_true()
+	assert_bool(restored.hose_burst).is_true()
 	assert_float(restored.flashlight_battery_seconds).is_equal(42.5)
 	assert_array(restored.tutorial_shown_ids).contains_exactly([&"start", &"fog"])
 

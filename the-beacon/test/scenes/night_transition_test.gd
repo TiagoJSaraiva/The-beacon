@@ -19,7 +19,7 @@ func test_night_end_captures_persistent_state() -> void:
 	var screen: NightEndScreen = runner.find_child("NightEndScreen")
 	var world: Node3D = runner.find_child("World")
 	night.debug_time_scale = 600.0
-	lighthouse.reserve_tank.break_hose()
+	lighthouse.burst_hose()
 	drowned.add_drowned_point()
 	drowned.add_drowned_point()
 	player.flashlight.set_battery_seconds(BATTERY_LEFT)
@@ -30,7 +30,7 @@ func test_night_end_captures_persistent_state() -> void:
 	assert_int(world.process_mode).is_equal(Node.PROCESS_MODE_DISABLED)
 	assert_int(game.run.current_night).is_equal(2)
 	assert_int(game.run.drowned_points).is_equal(2)
-	assert_bool(game.run.hose_broken).is_true()
+	assert_bool(game.run.hose_burst).is_true()
 	assert_float(game.run.flashlight_battery_seconds).is_equal_approx(
 		BATTERY_LEFT, BATTERY_TOLERANCE
 	)
@@ -41,7 +41,7 @@ func test_night_starts_from_saved_run_and_consumes_save() -> void:
 	var run := RunState.new_run(difficulty)
 	run.advance_night()
 	run.drowned_points = 2
-	run.hose_broken = true
+	run.hose_burst = true
 	run.flashlight_battery_seconds = BATTERY_LEFT
 	SaveService.write_run(run.to_dict())
 	var saved := RunState.new()
@@ -60,8 +60,13 @@ func test_night_starts_from_saved_run_and_consumes_save() -> void:
 	assert_int(night.current_night).is_equal(2)
 	assert_str(night.clock.display_text()).is_equal("20:00")
 	assert_int(drowned.drowned_points).is_equal(2)
-	assert_bool(lighthouse.reserve_tank.state.hose_broken).is_true()
-	assert_bool(lighthouse.generator.state.is_broken).is_false()
+	# A mangueira segue estourada: só o gerador de emergência dá energia.
+	assert_bool(lighthouse.is_hose_burst()).is_true()
+	assert_bool(lighthouse.main_generator.is_running()).is_false()
+	assert_bool(lighthouse.emergency_generator.is_running()).is_true()
+	# O resto recomeça: casa de máquinas inteira e galão no slot.
+	assert_bool(lighthouse.machine_house.is_broken()).is_false()
+	assert_int(lighthouse.jerrycan.place).is_equal(Jerrycan.Place.SLOT)
 	assert_float(player.flashlight.battery.remaining_seconds).is_equal_approx(
 		BATTERY_LEFT, BATTERY_TOLERANCE
 	)

@@ -9,7 +9,7 @@ var current_night: int = 1
 ## Barcos afundados no plantão; aceleram a chegada do Afogado.
 var drowned_points: int = 0
 ## A mangueira estoura uma vez só e não tem conserto.
-var hose_broken: bool = false
+var hose_burst: bool = false
 ## A bateria da lanterna nunca recarrega, nem entre noites.
 var flashlight_battery_seconds: float = 0.0
 ## Passos do tutorial já mostrados, para não repetir nas noites seguintes.
@@ -44,7 +44,7 @@ func to_dict() -> Dictionary:
 		"total_nights": total_nights,
 		"current_night": current_night,
 		"drowned_points": drowned_points,
-		"hose_broken": hose_broken,
+		"hose_burst": hose_burst,
 		"flashlight_battery_seconds": flashlight_battery_seconds,
 		"tutorial_shown_ids": shown,
 	}
@@ -56,7 +56,7 @@ func from_dict(data: Dictionary) -> void:
 	total_nights = maxi(int(data.get("total_nights", total_nights)), 1)
 	current_night = clampi(int(data.get("current_night", 1)), 1, total_nights)
 	drowned_points = maxi(int(data.get("drowned_points", 0)), 0)
-	hose_broken = bool(data.get("hose_broken", false))
+	hose_burst = bool(data.get("hose_burst", false))
 	flashlight_battery_seconds = maxf(
 		float(data.get("flashlight_battery_seconds", flashlight_battery_seconds)), 0.0
 	)

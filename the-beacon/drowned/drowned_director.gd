@@ -107,8 +107,10 @@ func _remove(drowned: Drowned) -> void:
 func _fill_shared_senses() -> void:
 	_senses.threat = threat_level()
 	_senses.door_broken = _lighthouse.entrance_door.is_broken
-	_senses.hose_broken = _lighthouse.reserve_tank.state.hose_broken
-	_senses.generator_broken = _lighthouse.generator.state.is_broken
+	# Nada mais é sabotável: o gerador não quebra e a mangueira só estoura pelo nevoeiro.
+	# Com os dois "quebrados", o cérebro atual pula a sabotagem (reescrito na fase E).
+	_senses.hose_broken = true
+	_senses.generator_broken = true
 	_senses.trapdoor_state = _lighthouse.trapdoor.state
 
 
@@ -127,10 +129,6 @@ func _on_drowned_effect_triggered(effect: DrownedBrain.Effect) -> void:
 	match effect:
 		DrownedBrain.Effect.BREAK_DOOR:
 			_lighthouse.entrance_door.break_door()
-		DrownedBrain.Effect.DAMAGE_HOSE:
-			_lighthouse.reserve_tank.break_hose()
-		DrownedBrain.Effect.DAMAGE_GENERATOR:
-			_lighthouse.generator.break_down()
 		DrownedBrain.Effect.KILL:
 			_player.kill(Player.CAUSE_DROWNED)
 

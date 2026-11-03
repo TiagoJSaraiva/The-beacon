@@ -1,0 +1,77 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fuel/fuel_tank.gd" id="1_tank"]
+[ext_resource type="PackedScene" path="res://fuel/jerrycan_slot.tscn" id="2_slot"]
+[ext_resource type="AudioStream" path="res://assets/audio/placeholder/bang.wav" id="3_bang"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tank"]
+albedo_color = Color(0.45, 0.2, 0.15, 1)
+metallic = 0.6
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hose"]
+albedo_color = Color(0.08, 0.08, 0.08, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hose"]
+material = SubResource("StandardMaterial3D_hose")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_stub"]
+material = SubResource("StandardMaterial3D_hose")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leak"]
+albedo_color = Color(0.15, 0.12, 0.05, 1)
+metallic = 0.3
+roughness = 0.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leak"]
+material = SubResource("StandardMaterial3D_leak")
+top_radius = 0.6
+bottom_radius = 0.6
+height = 0.01
+
+[node name="FuelTank" type="Node3D"]
+script = ExtResource("1_tank")
+
+[node name="Body" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+use_collision = true
+radius = 0.5
+height = 1.6
+sides = 16
+material = SubResource("StandardMaterial3D_tank")
+
+[node name="Hose" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Mesh" type="MeshInstance3D" parent="Hose"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.25, -0.95)
+mesh = SubResource("CylinderMesh_hose")
+
+[node name="Burst" type="Node3D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="Stub" type="MeshInstance3D" parent="Burst"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.25, -0.62)
+mesh = SubResource("CylinderMesh_stub")
+
+[node name="Puddle" type="MeshInstance3D" parent="Burst"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -1.0)
+mesh = SubResource("CylinderMesh_leak")
+
+[node name="BurstSound" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.8)
+stream = ExtResource("3_bang")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="JerrycanSlot" parent="." instance=ExtResource("2_slot")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, 0)

@@ -6,15 +6,14 @@
 [ext_resource type="Script" uid="uid://d015ev76gt87w" path="res://lighthouse/lighthouse.gd" id="4_lighthouse"]
 [ext_resource type="PackedScene" path="res://night/wall_clock.tscn" id="5_clock"]
 [ext_resource type="PackedScene" path="res://power/generator.tscn" id="6_generator"]
-[ext_resource type="Script" uid="uid://c0v7xkvth0f04" path="res://components/power_consumer.gd" id="7_consumer"]
-[ext_resource type="Script" uid="uid://mna5pwjfv511" path="res://lighthouse/powered_lights.gd" id="8_lights"]
-[ext_resource type="PackedScene" path="res://fuel/reserve_tank.tscn" id="9_tank"]
-[ext_resource type="PackedScene" path="res://fuel/jerrycan_dock.tscn" id="10_dock"]
+[ext_resource type="PackedScene" path="res://fuel/fuel_tank.tscn" id="9_tank"]
+[ext_resource type="PackedScene" path="res://fuel/jerrycan.tscn" id="10_jerrycan"]
 [ext_resource type="PackedScene" uid="uid://tgoqtleobfy" path="res://beam/lighthouse_lamp.tscn" id="11_lamp"]
 [ext_resource type="PackedScene" path="res://beam/beam_control.tscn" id="12_control"]
 [ext_resource type="PackedScene" path="res://lighthouse/security_monitor.tscn" id="13_monitor"]
 [ext_resource type="PackedScene" path="res://boats/radio.tscn" id="14_radio"]
 [ext_resource type="PackedScene" path="res://player/chair.tscn" id="15_chair"]
+[ext_resource type="PackedScene" path="res://machine_house/machine_house.tscn" id="16_machine"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -61,13 +60,6 @@ material = SubResource("StandardMaterial3D_brick")
 transform = Transform3D(0.74925226, 0, -0.66228473, 0, 1, 0, 0.66228473, 0, 0.74925226, 3.3121357, 1.1, -3.6076891)
 operation = 2
 size = Vector3(1.4, 2.2, 1.2)
-
-[node name="WindowBand" type="CSGCylinder3D" parent="Shell" unique_id=1519801541]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.7856045, 0)
-operation = 2
-radius = 5.7
-height = 1.2
-sides = 32
 
 [node name="DoorHole2" type="CSGBox3D" parent="Shell" unique_id=1498920226]
 transform = Transform3D(0.13002798, 0, -0.9569805, 0, 1, 0, 0.085169844, 0, 1.4610127, 3.3121357, 6.98838, -3.6076891)
@@ -133,16 +125,20 @@ transform = Transform3D(-0.66586125, 0, -0.7460756, 0, 1, 0, 0.7460756, 0, -0.66
 unique_name_in_owner = true
 transform = Transform3D(-0.75864124, 0, -0.65150857, 0, 1, 0, 0.65150857, 0, -0.75864124, 2.9530382, 11.653152, 4.0281725)
 
-[node name="PowerConsumer" type="Node" parent="WallClock" unique_id=2014448309 node_paths=PackedStringArray("source")]
-script = ExtResource("7_consumer")
-source = NodePath("../../Generator")
-
-[node name="Generator" parent="." unique_id=904717009 instance=ExtResource("6_generator")]
+[node name="MainGenerator" parent="." unique_id=904717009 instance=ExtResource("6_generator")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -3.247446)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6, 0, -0.3)
+feed = 0
+
+[node name="EmergencyGenerator" parent="." instance=ExtResource("6_generator")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 9, -2.6)
+
+[node name="MachineHouse" parent="." instance=ExtResource("16_machine")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 9, -2.4)
 
 [node name="UpperLights" type="Node3D" parent="." unique_id=1774744971]
-script = ExtResource("8_lights")
 
 [node name="LightA" type="OmniLight3D" parent="UpperLights" unique_id=1258293197]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 11.4, 0)
@@ -159,29 +155,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 11.4, 2.5)
 light_color = Color(1, 0.85, 0.6, 1)
 omni_range = 6.0
 
-[node name="PowerConsumer" type="Node" parent="UpperLights" unique_id=1949884565 node_paths=PackedStringArray("source")]
-script = ExtResource("7_consumer")
-source = NodePath("../../Generator")
-
-[node name="ReserveTank" parent="." unique_id=968141463 instance=ExtResource("9_tank")]
+[node name="FuelTank" parent="." unique_id=968141463 instance=ExtResource("9_tank")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, 1.8)
 
-[node name="JerrycanDock" parent="." unique_id=239970813 instance=ExtResource("10_dock")]
+[node name="Jerrycan" parent="." unique_id=239970813 instance=ExtResource("10_jerrycan")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 2.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.5, 1.8)
 
 [node name="LighthouseLamp" parent="." unique_id=704315292 instance=ExtResource("11_lamp")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6072819, 11.100225, 0.666705)
-
-[node name="PowerConsumer" type="Node" parent="LighthouseLamp" unique_id=1293034739 node_paths=PackedStringArray("source")]
-script = ExtResource("7_consumer")
-source = NodePath("../../Generator")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 12.3, -2.4)
 
 [node name="BeamControl" parent="." unique_id=812803256 instance=ExtResource("12_control")]
 unique_name_in_owner = true
-transform = Transform3D(-0.839157, 0, -0.54387164, 0, 1, 0, 0.54387164, 0, -0.839157, -0.79904675, 9.6, 0.3184855)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 10.05, -2.1)
+
+[node name="LeverPost" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 9.5, -2.22)
+use_collision = true
+size = Vector3(0.12, 1.0, 0.12)
+material = SubResource("StandardMaterial3D_stone")
 
 [node name="Desk" type="Node3D" parent="." unique_id=442308190]
 transform = Transform3D(-0.033360563, 0, -0.99944335, 0, 1, 0, 0.99944335, 0, -0.033360563, -2.6731043, 9, 0.38975644)
@@ -194,15 +188,19 @@ material = SubResource("StandardMaterial3D_wood")
 
 [node name="SeaMonitor" parent="Desk" unique_id=323299548 instance=ExtResource("13_monitor")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.8, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.8, 0.05)
+
+[node name="SecondSeaMonitor" parent="Desk" instance=ExtResource("13_monitor")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29, 0.8, 0.05)
 
 [node name="LighthouseMonitor" parent="Desk" unique_id=1163733992 instance=ExtResource("13_monitor")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.8, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.8, 0.05)
 
 [node name="Radio" parent="Desk" unique_id=386836183 instance=ExtResource("14_radio")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.8, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.8, 0.05)
 
 [node name="Chair" parent="Desk" instance=ExtResource("15_chair")]
 unique_name_in_owner = true
@@ -226,6 +224,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.6)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 6.9, 0.75)
 
-[connection signal="powered_changed" from="WallClock/PowerConsumer" to="WallClock" method="set_powered"]
-[connection signal="powered_changed" from="UpperLights/PowerConsumer" to="UpperLights" method="set_powered"]
-[connection signal="powered_changed" from="LighthouseLamp/PowerConsumer" to="LighthouseLamp" method="set_powered"]

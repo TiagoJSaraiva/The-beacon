@@ -5,7 +5,7 @@ extends Node
 const RUN_SAVE_PATH := "user://run_save.json"
 const PROGRESS_PATH := "user://progress.json"
 ## Sobe quando o formato muda; um save de outra versão é ignorado.
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 
 var progress: ProgressState = ProgressState.new()
 

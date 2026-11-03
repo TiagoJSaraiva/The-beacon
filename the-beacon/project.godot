@@ -128,6 +128,7 @@ pause={
 3d_physics/layer_5="fog_man"
 3d_physics/layer_6="interactable"
 3d_physics/layer_7="player_bounds"
+3d_physics/layer_8="props"
 
 [navigation]
 

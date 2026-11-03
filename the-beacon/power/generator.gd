@@ -1,27 +1,34 @@
 class_name Generator
 extends Node3D
-## Gerador na casa de máquinas. Alimenta lâmpada, relógio e luzes de cima (GDD 1.2.5);
-## monitores e rádio não dependem dele.
+## Gerador (decisão 0017). A mesma cena serve ao gerador principal, alimentado pela
+## mangueira do tanque, e ao de emergência, abastecido com o galão. Alimenta só a casa de
+## máquinas e a lâmpada; quem decide a fonte ativa é o farol.
 
 signal power_changed(powered: bool)
-signal broken_changed(broken: bool)
 ## Jogador segurou E na boca de combustível com o galão; o farol faz a transferência.
 signal refuel_requested
 
-# Estado inicial com valores padrão: os consumidores podem consultar antes do configure().
-var state: GeneratorState = GeneratorState.new(PowerConfig.new())
+@export var feed: GeneratorState.Feed = GeneratorState.Feed.FUEL
 
-var _was_running: bool = true
+var state: GeneratorState
 
+var _was_running: bool = false
+
+@onready var _gauge: Node3D = %Gauge
 @onready var _gauge_pivot: Node3D = %GaugePivot
-@onready var _repair_point: Interactable = %RepairPoint
+@onready var _fuel_cap: Node3D = %FuelCap
 @onready var _pour_point: Interactable = %PourPoint
-@onready var _broken_light: Light3D = %BrokenLight
 @onready var _hum: LoopingSound = %Hum
-@onready var _alarm: LoopingSound = %Alarm
 
 
 func _ready() -> void:
+	# Valores padrão até o configure(): o farol consulta o estado logo ao montar.
+	state = GeneratorState.new(PowerConfig.new(), feed)
+	var uses_fuel: bool = feed == GeneratorState.Feed.FUEL
+	_gauge.visible = uses_fuel
+	_fuel_cap.visible = uses_fuel
+	_pour_point.enabled = uses_fuel
+	_was_running = state.is_running()
 	_refresh()
 
 
@@ -30,9 +37,10 @@ func _process(delta: float) -> void:
 	_refresh()
 
 
-func configure(power: PowerConfig, repair_config: RepairConfig) -> void:
-	state = GeneratorState.new(power)
-	_repair_point.hold_seconds = repair_config.generator_repair_seconds
+func configure(power: PowerConfig) -> void:
+	var hose_intact: bool = state.hose_intact
+	state = GeneratorState.new(power, feed)
+	state.hose_intact = hose_intact
 	_pour_point.hold_seconds = power.jerrycan_pour_seconds
 	_refresh()
 
@@ -41,51 +49,24 @@ func is_running() -> bool:
 	return state.is_running()
 
 
-func set_beam_load(active: bool) -> void:
-	state.beam_load = active
-
-
-## Põe combustível e devolve quanto foi aceito.
-func add_fuel(amount: float) -> float:
-	var accepted: float = state.add_fuel(amount)
+func set_hose_intact(intact: bool) -> void:
+	state.hose_intact = intact
 	_refresh()
-	return accepted
 
 
-func can_break_down() -> bool:
-	return not state.is_broken
-
-
-func break_down() -> void:
-	_set_broken(true)
-
-
-func repair() -> void:
-	_set_broken(false)
-
-
-func _set_broken(broken: bool) -> void:
-	if state.is_broken == broken:
-		return
-	state.is_broken = broken
+func set_in_use(in_use: bool) -> void:
+	state.in_use = in_use
 	_refresh()
-	broken_changed.emit(broken)
 
 
 func _refresh() -> void:
 	_gauge_pivot.scale.y = maxf(state.fuel_ratio(), 0.001)
-	_repair_point.enabled = state.is_broken
-	_broken_light.visible = state.is_broken
-	_alarm.set_active(state.is_broken)
 	var running: bool = state.is_running()
-	_hum.set_active(running)
+	# O de emergência só faz barulho quando está de fato alimentando o farol.
+	_hum.set_active(running and (feed == GeneratorState.Feed.HOSE or state.in_use))
 	if running != _was_running:
 		_was_running = running
 		power_changed.emit(running)
-
-
-func _on_repair_point_hold_completed() -> void:
-	repair()
 
 
 func _on_pour_point_hold_completed() -> void:

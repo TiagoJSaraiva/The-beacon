@@ -1,40 +1,46 @@
 class_name GeneratorState
 extends RefCounted
-## Combustível e quebra do gerador (GDD 1.2.5). Funciona com combustível e sem quebra.
+## Gerador (decisão 0017). Pela mangueira (`HOSE`): funciona enquanto ela está inteira e não
+## gasta nada. Por combustível (`FUEL`): funciona enquanto tem combustível e só gasta em uso.
+
+enum Feed { HOSE, FUEL }
 
 var config: PowerConfig
-var fuel: float
-var is_broken: bool = false
-## Feixe do farol aceso: soma o consumo extra.
-var beam_load: bool = false
+var feed: Feed
+var fuel: float = 0.0
+var hose_intact: bool = true
+## Alimentando o farol ligado. Só em uso o gerador por combustível gasta.
+var in_use: bool = false
 
 
-func _init(power_config: PowerConfig) -> void:
+func _init(power_config: PowerConfig, generator_feed: Feed = Feed.FUEL) -> void:
 	config = power_config
-	fuel = clampf(config.generator_start_fuel, 0.0, config.generator_capacity)
+	feed = generator_feed
+	if feed == Feed.FUEL:
+		fuel = clampf(config.generator_start_fuel, 0.0, config.generator_capacity)
 
 
 func is_running() -> bool:
-	return fuel > 0.0 and not is_broken
-
-
-func consumption_per_second() -> float:
-	var extra: float = config.beam_extra_consumption_per_second if beam_load else 0.0
-	return config.generator_consumption_per_second + extra
+	if feed == Feed.HOSE:
+		return hose_intact
+	return fuel > 0.0
 
 
 func tick(delta: float) -> void:
-	if not is_running():
-		return
-	fuel = maxf(0.0, fuel - consumption_per_second() * delta)
+	if feed == Feed.FUEL and in_use:
+		fuel = maxf(0.0, fuel - config.generator_consumption_per_second * delta)
 
 
-## Põe combustível até a capacidade e devolve quanto foi aceito.
+## Põe combustível até a capacidade e devolve quanto foi aceito. Pela mangueira, nada.
 func add_fuel(amount: float) -> float:
+	if feed == Feed.HOSE:
+		return 0.0
 	var accepted: float = clampf(amount, 0.0, config.generator_capacity - fuel)
 	fuel += accepted
 	return accepted
 
 
 func fuel_ratio() -> float:
+	if feed == Feed.HOSE or config.generator_capacity <= 0.0:
+		return 0.0
 	return fuel / config.generator_capacity

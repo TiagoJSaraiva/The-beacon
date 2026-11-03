@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fuel/jerrycan.gd" id="1_jerrycan"]
+[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Material" path="res://fuel/jerrycan_material.tres" id="3_material"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jerrycan"]
+friction = 0.8
+bounce = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(0.3, 0.4, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+material = ExtResource("3_material")
+size = Vector3(0.3, 0.4, 0.15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pick"]
+size = Vector3(0.45, 0.55, 0.35)
+
+[node name="Jerrycan" type="RigidBody3D"]
+collision_layer = 128
+collision_mask = 131
+mass = 12.0
+physics_material_override = SubResource("PhysicsMaterial_jerrycan")
+continuous_cd = true
+freeze = true
+script = ExtResource("1_jerrycan")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="PickPoint" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+script = ExtResource("2_interactable")
+hands_rule = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickPoint"]
+shape = SubResource("BoxShape3D_pick")
+
+[connection signal="interacted" from="PickPoint" to="." method="_on_pick_point_interacted"]

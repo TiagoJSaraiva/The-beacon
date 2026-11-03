@@ -1,77 +1,58 @@
 class_name LighthouseLamp
 extends Node3D
-## Lâmpada do farol: acende o feixe e gira enquanto ativa. Pode queimar; a troca é
-## infinita e feita segurando E na própria lâmpada (GDD 1.2.18).
+## Cabeça do farol, acima do telhado: gira com o farol operando e mostra o feixe aceso
+## (GDD 1.2.7). A lâmpada queima ao acaso; a troca é feita na câmara da lâmpada, na casa
+## de máquinas, e as reposições são infinitas (GDD 1.2.18).
 
-signal beam_active_changed(active: bool)
 signal burned_changed(burned: bool)
 
 @export var rotation_speed_degrees: float = 36.0
 
-var state: BeamState = BeamState.new()
+var failure: FailureState = FailureState.new()
 
-var _was_active: bool = false
+var _turning: bool = false
 
 @onready var _head: Node3D = %Head
 @onready var _beam: Node3D = %Beam
-@onready var _replace_point: Interactable = %ReplacePoint
 
 
 func _ready() -> void:
-	_refresh()
+	_beam.visible = false
 
 
 func _process(delta: float) -> void:
-	if state.is_active():
+	failure.tick(delta)
+	if _turning:
 		_head.rotate_y(deg_to_rad(rotation_speed_degrees) * delta)
 
 
 func configure(repair_config: RepairConfig) -> void:
-	_replace_point.hold_seconds = repair_config.lamp_replace_seconds
+	failure = FailureState.new(repair_config.lamp_burnout_cooldown_seconds)
 
 
-func is_active() -> bool:
-	return state.is_active()
+## Gira com o farol operando; o feixe só aparece aceso.
+func show_beam(operational: bool, lit: bool) -> void:
+	_turning = operational
+	_beam.visible = lit
 
 
-func set_switch_on(on: bool) -> void:
-	state.switch_on = on
-	_refresh()
-
-
-func set_powered(powered: bool) -> void:
-	state.powered = powered
-	_refresh()
+func is_burned() -> bool:
+	return failure.is_broken
 
 
 func can_burn_out() -> bool:
-	return not state.lamp_burned
+	return failure.can_break()
 
 
 func burn_out() -> void:
-	_set_burned(true)
+	if not failure.can_break():
+		return
+	failure.break_down()
+	burned_changed.emit(true)
 
 
 func replace() -> void:
-	_set_burned(false)
-
-
-func _set_burned(burned: bool) -> void:
-	if state.lamp_burned == burned:
+	if not failure.is_broken:
 		return
-	state.lamp_burned = burned
-	_refresh()
-	burned_changed.emit(burned)
-
-
-func _refresh() -> void:
-	_beam.visible = state.is_active()
-	_replace_point.enabled = state.lamp_burned
-	var active: bool = state.is_active()
-	if active != _was_active:
-		_was_active = active
-		beam_active_changed.emit(active)
-
-
-func _on_replace_point_hold_completed() -> void:
-	replace()
+	failure.repair()
+	burned_changed.emit(false)

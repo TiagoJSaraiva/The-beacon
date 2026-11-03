@@ -9,3 +9,4 @@ const DROWNED := 8
 const FOG_MAN := 16
 const INTERACTABLE := 32
 const PLAYER_BOUNDS := 64
+const PROPS := 128

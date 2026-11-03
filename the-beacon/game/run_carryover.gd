@@ -13,13 +13,13 @@ extends Node
 func apply(run: RunState) -> void:
 	tutorial.restore_shown(run.tutorial_shown_ids)
 	drowned.drowned_points = run.drowned_points
-	if run.hose_broken:
-		lighthouse.reserve_tank.break_hose()
+	if run.hose_burst:
+		lighthouse.burst_hose(false)
 	player.flashlight.set_battery_seconds(run.flashlight_battery_seconds)
 
 
 func capture(run: RunState) -> void:
 	run.drowned_points = drowned.drowned_points
-	run.hose_broken = lighthouse.reserve_tank.state.hose_broken
+	run.hose_burst = lighthouse.is_hose_burst()
 	run.flashlight_battery_seconds = player.flashlight.battery.remaining_seconds
 	run.tutorial_shown_ids = tutorial.shown_ids()

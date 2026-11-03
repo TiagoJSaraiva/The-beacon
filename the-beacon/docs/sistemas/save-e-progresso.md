@@ -17,7 +17,7 @@ Um único save da partida, gravado só entre noites, e o desbloqueio permanente 
 - Também apagam o save: morrer, vencer, escolher dificuldade em Novo Jogo.
 - Continuar: o menu monta o `RunState` do save e busca a dificuldade no catálogo; dificuldade desconhecida descarta o save. `version` diferente de `SAVE_VERSION` = sem save.
 - Desbloqueio: a primeira do catálogo sempre liberada; vencer libera a seguinte. Nada o desfaz.
-- Mudou o formato do `RunState`? Suba `SaveService.SAVE_VERSION` (hoje 2).
+- Mudou o formato do `RunState`? Suba `SaveService.SAVE_VERSION` (hoje 3).
 - Estado novo que precisa sobreviver à noite: campo no `RunState` e entrada no `RunCarryover`.
 
 ## Testes

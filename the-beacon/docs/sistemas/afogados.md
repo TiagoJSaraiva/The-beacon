@@ -15,14 +15,14 @@ Principal ameaça física; a única que mata (GDD 1.2.10, 1.2.11).
 ## Regras
 - Ameaça = pontos × `threat_per_drowned_point` + `threat_from_broken_door` enquanto a porta está quebrada.
 - A partir do 1º ponto, a cada `spawn_check_interval_seconds` sorteia aparição com chance `spawn_chance_base + spawn_chance_per_threat × ameaça`; extras com `extra_drowned_chance_per_threat × ameaça`, até `max_simultaneous_drowned`.
-- Com a porta inteira, sempre a quebra primeiro (`door_break_seconds`). Depois: ameaça >= `chase_threat_threshold` → sobe e bate no alçapão (`bang_seconds`, depois vai embora); abaixo disso → sabota gerador (mais provável com a ameaça, `severe_action_weight_per_threat`) ou mangueira (`sabotage_seconds`), pulando o que já está quebrado, e vai embora.
+- Com a porta inteira, sempre a quebra primeiro (`door_break_seconds`). Depois: ameaça >= `chase_threat_threshold` → sobe e bate no alçapão (`bang_seconds`, depois vai embora); abaixo disso → vai embora. A sabotagem está desligada desde a fase C da entrega 2 (o gerador não quebra e a mangueira só estoura pelo nevoeiro): o `DrownedDirector` informa os dois como já quebrados. O cérebro é reescrito na fase E.
 - Jogador ao alcance (com a porta já aberta) é sempre o alvo; tocar (`kill_distance`) mata. Perdido o alcance, volta à ação anterior: esconder-se não sobe a ação para o nível 4.
 - Alcance: distância + `occlusion_penalty` por obstáculo (`world`/`barriers`) entre os olhos dele e os do jogador, comparado a `perception_range`.
 - Alçapão aberto ou quebrado na chegada → persegue até matar. Fechado → bate; a resistência (`TrapdoorConfig.resistance_seconds`) corre sem o trinco, congela com ele, não zera ao soltar e volta ao máximo quando ninguém bate. Zerada, o alçapão quebra.
 - Mais lento que o jogador (`move_speed`). A noite seguinte começa sem Afogados em cena; os pontos continuam (`RunState`).
 
 ## Sinais
-- `Drowned.effect_triggered(effect)` → `DrownedDirector` → porta, mangueira, gerador ou `Player.kill(CAUSE_DROWNED)`.
+- `Drowned.effect_triggered(effect)` → `DrownedDirector` → porta ou `Player.kill(CAUSE_DROWNED)`.
 - `DrownedDirector.threat_changed(threat)`, `drowned_appeared(count)`.
 
 ## Testes
