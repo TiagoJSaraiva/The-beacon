@@ -25,7 +25,7 @@ func show_hold_progress(ratio: float, active: bool) -> void:
 	_hold_bar.visible = active
 
 
-## Tela preta por `seconds` (toque do Homem de Nevoeiro), voltando aos poucos.
+## Tela preta por `seconds` (pulo da carranca), voltando aos poucos.
 func show_blindness(seconds: float) -> void:
 	if _blind_tween != null:
 		_blind_tween.kill()

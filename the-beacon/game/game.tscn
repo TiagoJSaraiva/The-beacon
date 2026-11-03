@@ -13,8 +13,8 @@
 [ext_resource type="PackedScene" path="res://boats/boat.tscn" id="11_boat"]
 [ext_resource type="Script" path="res://drowned/drowned_director.gd" id="12_drowned"]
 [ext_resource type="PackedScene" path="res://drowned/drowned.tscn" id="13_drowned_scene"]
-[ext_resource type="Script" path="res://fog_man/fog_man_director.gd" id="14_fog_man"]
-[ext_resource type="PackedScene" path="res://fog_man/fog_man.tscn" id="15_fog_man_scene"]
+[ext_resource type="Script" path="res://figurehead/figurehead_director.gd" id="14_figurehead"]
+[ext_resource type="PackedScene" path="res://figurehead/figurehead.tscn" id="15_figurehead_scene"]
 [ext_resource type="PackedScene" path="res://ui/night_end/night_end_screen.tscn" id="16_night_end"]
 [ext_resource type="Resource" path="res://config/difficulties/catalog.tres" id="17_catalog"]
 [ext_resource type="PackedScene" path="res://ui/game_over/game_over_screen.tscn" id="18_game_over"]
@@ -98,10 +98,10 @@ unique_name_in_owner = true
 script = ExtResource("12_drowned")
 drowned_scene = ExtResource("13_drowned_scene")
 
-[node name="FogManDirector" type="Node" parent="World"]
+[node name="FigureheadDirector" type="Node" parent="World"]
 unique_name_in_owner = true
-script = ExtResource("14_fog_man")
-fog_man_scene = ExtResource("15_fog_man_scene")
+script = ExtResource("14_figurehead")
+figurehead_scene = ExtResource("15_figurehead_scene")
 
 [node name="TutorialDirector" type="Node" parent="World"]
 unique_name_in_owner = true

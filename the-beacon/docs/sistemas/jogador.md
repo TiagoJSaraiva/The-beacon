@@ -4,7 +4,7 @@
 Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico), quedas, cadeira e lanterna.
 
 ## Componentes
-- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento, pulo e olhar; `sit(seat, yaw_limit_degrees)`, `kill(cause)`, `set_controls_enabled()`, `set_carrying()`. A carga da bateria passa de uma noite para a outra (`Flashlight.set_battery_seconds`, via `RunCarryover`). Expõe `interaction` e `flashlight`.
+- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento, pulo e olhar; `sit(seat, yaw_limit_degrees)`, `knock_down(seconds)`, `kill(cause)`, `set_controls_enabled()`, `set_carrying()`. A carga da bateria passa de uma noite para a outra (`Flashlight.set_battery_seconds`, via `RunCarryover`). Expõe `interaction` e `flashlight`.
   - `Head/Camera3D/InteractionRay`: mira de interação (ver `interacao.md`).
   - `Head/Camera3D/Flashlight` (`player/flashlight.tscn`): lanterna na mão esquerda, com a barra de carga (`BatteryGauge`) no corpo.
   - `FallDamage`: mede a altura de cada queda e conta o bloqueio da corrida.
@@ -19,7 +19,8 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 - Cadeira: interagir senta com os pés no ponto da cadeira, de frente para a mesa, com a cabeça mais baixa (`seated_head_height`). O olhar vira até `Chair.yaw_limit_degrees` (75°) para cada lado. Sentado dá para usar o que estiver ao alcance (monitores, rádio). Qualquer movimento ou o pulo levanta no mesmo lugar.
 - Lanterna: `toggle_flashlight` liga/desliga; segurar `check_battery` traz a barra de carga para a frente da câmera, sem parar o movimento. A bateria (`FlashlightConfig.battery_seconds`) só gasta ligada e não recarrega, nem entre noites; zerada, apaga e não liga mais.
 - `Flashlight.illuminates(point)` diz se um ponto está no cone aceso (alcance e meio-ângulo da config); obstáculos são checados por quem pergunta.
-- Efeitos de tela (não são HUD de estado): borda vermelha enquanto a corrida está bloqueada (`Hud.set_hurt_border`) e tela preta do toque do Homem de Nevoeiro (`Hud.show_blindness`).
+- Efeitos de tela (não são HUD de estado): borda vermelha enquanto a corrida está bloqueada (`Hud.set_hurt_border`) e tela preta do pulo da carranca (`Hud.show_blindness`).
+- Derrubada (`knock_down(seconds)`, carranca): ajoelha (`kneeling_head_height`), sem andar nem pular, com o olhar livre; tira da cadeira. `eye_transform()` dá a posição e a direção da câmera.
 
 ## Sinais
 - `Player.died(cause)`, `Player.sprint_blocked_changed(active)`.
@@ -29,4 +30,4 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 
 ## Testes
 - `test/unit/fall_rules_test.gd`, `seat_rules_test.gd`, `flashlight_battery_test.gd`, `flashlight_cone_test.gd`.
-- `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média bloqueia a corrida, queda alta mata; altura do pulo (faixa); sentar segura o jogador parado e mover levanta.
+- `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média bloqueia a corrida, queda alta mata; altura do pulo (faixa); sentar segura o jogador parado e mover levanta; a derrubada segura o jogador e depois o solta.

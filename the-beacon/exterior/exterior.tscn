@@ -65,7 +65,3 @@ target = NodePath("../SeaViewRight")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 5, -8)
 target = NodePath("../DoorView")
-
-[node name="FogManSpawn" type="Marker3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 0)

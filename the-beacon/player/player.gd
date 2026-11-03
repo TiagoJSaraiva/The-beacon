@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody3D
-## Jogador em primeira pessoa: andar, correr, pular, olhar (mouse ou analógico direito) e
-## sentar na cadeira da mesa.
+## Jogador em primeira pessoa: andar, correr, pular, olhar (mouse ou analógico direito),
+## sentar na cadeira da mesa e ser derrubado pela carranca.
 
 signal died(cause: StringName)
 signal sprint_blocked_changed(active: bool)
@@ -21,6 +21,7 @@ const CAUSE_DROWNED := &"drowned"
 @export var stick_look_degrees_per_second: float = 150.0
 @export_range(10.0, 89.0) var max_pitch_degrees: float = 85.0
 @export var seated_head_height: float = 1.15
+@export var kneeling_head_height: float = 0.8
 @export var head_transition_speed: float = 3.0
 ## Velocidade com que o galão sai da mão ao ser solto (um arremesso leve).
 @export var drop_throw_speed: float = 1.5
@@ -29,6 +30,7 @@ const CAUSE_DROWNED := &"drowned"
 
 var is_dead: bool = false
 var is_seated: bool = false
+var is_knocked_down: bool = false
 ## Multiplica a sensibilidade do mouse e do analógico; vem das configurações do jogador.
 var sensitivity_scale: float = 1.0
 
@@ -37,6 +39,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var _standing_head_height: float = 0.0
 var _seat_yaw: float = 0.0
 var _seat_yaw_limit: float = 0.0
+var _knockdown_left: float = 0.0
 
 @onready var interaction: InteractionRay = %InteractionRay
 @onready var flashlight: Flashlight = %Flashlight
@@ -71,8 +74,10 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var target_head: float = seated_head_height if is_seated else _standing_head_height
-	_head.position.y = move_toward(_head.position.y, target_head, head_transition_speed * delta)
+	_update_knockdown(delta)
+	_head.position.y = move_toward(
+		_head.position.y, _target_head_height(), head_transition_speed * delta
+	)
 
 	var input := Vector2.ZERO
 	var jump_pressed: bool = false
@@ -87,6 +92,9 @@ func _physics_process(delta: float) -> void:
 			is_seated = false
 		return
 
+	if is_knocked_down:
+		input = Vector2.ZERO
+		jump_pressed = false
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	elif jump_pressed:
@@ -135,6 +143,18 @@ func sit(seat: Transform3D, yaw_limit_degrees: float) -> void:
 	_head.rotation.x = 0.0
 
 
+## Derrubado (carranca): ajoelha e não se move por `seconds`; o olhar continua livre.
+func knock_down(seconds: float) -> void:
+	is_seated = false
+	is_knocked_down = true
+	_knockdown_left = maxf(_knockdown_left, seconds)
+
+
+## Olho do jogador: posição e direção da câmera.
+func eye_transform() -> Transform3D:
+	return _camera.global_transform
+
+
 ## Mata o jogador uma única vez e trava os controles.
 func kill(cause: StringName) -> void:
 	if is_dead:
@@ -164,6 +184,22 @@ func _look(turn: Vector2) -> void:
 		rotation.y = SeatRules.clamp_yaw(rotation.y, _seat_yaw, _seat_yaw_limit)
 	var max_pitch: float = deg_to_rad(max_pitch_degrees)
 	_head.rotation.x = clampf(_head.rotation.x - turn.y, -max_pitch, max_pitch)
+
+
+func _target_head_height() -> float:
+	if is_knocked_down:
+		return kneeling_head_height
+	if is_seated:
+		return seated_head_height
+	return _standing_head_height
+
+
+func _update_knockdown(delta: float) -> void:
+	if not is_knocked_down:
+		return
+	_knockdown_left -= delta
+	if _knockdown_left <= 0.0:
+		is_knocked_down = false
 
 
 func _current_speed() -> float:

@@ -16,16 +16,16 @@ Ameaça que avança do mar até a cabine enquanto o farol está parado (entrega 
 - Farol parado: avança a `advance_per_second` até 1.
 - Farol volta a operar com o nevoeiro em `NEAR` ou acima: segue bloqueando o feixe por `unblock_seconds` e recua até `recede_to_advance`; daí volta a se comportar como no mar. Abaixo de `NEAR`, só para de avançar.
 - Efeitos por estágio:
-  - `NEAR` ou acima: bloqueia o feixe (`Lighthouse.set_fog_stage`); o anel em volta do farol aparece na câmera da porta; surge o Homem de Nevoeiro.
-  - `GROUND_FLOOR` ou acima: na primeira vez, estoura a mangueira. Volume no térreo.
-  - `STAIRS`, `CABIN`: volumes na escada e na cabine.
-  - `TRAPDOOR`: destrancar o trinco entra na fase E da entrega 2.
+  - `NEAR` ou acima: bloqueia o feixe (`Lighthouse.set_fog_stage`); o anel em volta do farol aparece na câmera da porta.
+  - `GROUND_FLOOR` ou acima: na primeira vez, estoura a mangueira. Volume no térreo. Aproximação do Afogado. Carrancas no térreo.
+  - `STAIRS`, `CABIN`: volumes e carrancas na escada e na cabine.
+  - `TRAPDOOR` ou acima: desliga o trinco do alçapão e impede ligá-lo.
 - Rota dos barcos: o nevoeiro cobre um trecho em volta de um centro sorteado ao surgir. A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho e fica mais densa com o avanço.
 - Cada volume esmaece ao entrar e sair do seu estágio (`FogVisuals.fade_per_second`).
 - A noite seguinte começa sem nevoeiro.
 
 ## Sinais
-- `FogSystem.stage_changed(stage)` → `Lighthouse.set_fog_stage`, `FogManDirector.set_fog_stage`, tutorial.
+- `FogSystem.stage_changed(stage)` → `Lighthouse.set_fog_stage`, `DrownedDirector.set_fog_stage`, `FigureheadDirector.set_fog_stage`, tutorial.
 - `FogSystem.route_fog_changed(start, end)` → `BoatDirector.set_route_fog`.
 - `Lighthouse.beam_operational_changed(operational)` → `FogSystem.set_beam_operational`.
 

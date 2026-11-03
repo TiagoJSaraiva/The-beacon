@@ -17,7 +17,7 @@ const STEP_MACHINE_BROKEN := &"machine_broken"
 const STEP_FOG := &"fog"
 const STEP_BOAT := &"boat"
 const STEP_DROWNED := &"drowned"
-const STEP_FOG_MAN := &"fog_man"
+const STEP_FIGUREHEAD := &"figurehead"
 ## Passos que este diretor sabe disparar. Um passo do conteúdo fora daqui nunca aparece.
 const KNOWN_STEPS: Array[StringName] = [
 	STEP_START,
@@ -30,7 +30,7 @@ const KNOWN_STEPS: Array[StringName] = [
 	STEP_FOG,
 	STEP_BOAT,
 	STEP_DROWNED,
-	STEP_FOG_MAN,
+	STEP_FIGUREHEAD,
 ]
 
 @export var content: TutorialContent
@@ -65,7 +65,7 @@ func setup(
 	fog: FogSystem,
 	boats: BoatDirector,
 	drowned: DrownedDirector,
-	fog_man: FogManDirector
+	figurehead: FigureheadDirector
 ) -> void:
 	var ids: Array[StringName] = []
 	if content != null:
@@ -83,7 +83,7 @@ func setup(
 	fog.stage_changed.connect(_on_fog_stage_changed)
 	boats.calling_changed.connect(_show_when.bind(STEP_BOAT))
 	drowned.drowned_entered.connect(show_step.bind(STEP_DROWNED))
-	fog_man.appeared.connect(show_step.bind(STEP_FOG_MAN))
+	figurehead.appeared.connect(show_step.bind(STEP_FIGUREHEAD))
 
 
 ## Mostra o passo se for a primeira vez; textos chegando juntos entram numa fila.

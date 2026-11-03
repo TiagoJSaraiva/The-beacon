@@ -25,7 +25,7 @@ var run: RunState
 @onready var _fog_visuals: FogVisuals = %FogVisuals
 @onready var _boats: BoatDirector = %BoatDirector
 @onready var _drowned: DrownedDirector = %DrownedDirector
-@onready var _fog_man: FogManDirector = %FogManDirector
+@onready var _figurehead: FigureheadDirector = %FigureheadDirector
 @onready var _tutorial: TutorialDirector = %TutorialDirector
 @onready var _navigation: NavigationRegion3D = %Navigation
 @onready var _hud: Hud = %Hud
@@ -61,10 +61,16 @@ func _configure_systems() -> void:
 	_boats.boat_path = _exterior.boat_path
 	_drowned.configure(difficulty.drowned)
 	_drowned.setup(_lighthouse, _player)
-	_fog_man.configure(difficulty.fog_man)
-	_fog_man.setup(_player, _exterior)
+	_figurehead.configure(difficulty.figurehead)
+	_figurehead.setup(_player)
 	_tutorial.setup(
-		difficulty.tutorial_enabled, _night_director, _lighthouse, _fog, _boats, _drowned, _fog_man
+		difficulty.tutorial_enabled,
+		_night_director,
+		_lighthouse,
+		_fog,
+		_boats,
+		_drowned,
+		_figurehead
 	)
 	_lighthouse.register_events(_event_director)
 	_fog.register_events(_event_director)
@@ -102,10 +108,11 @@ func _connect_signals() -> void:
 	_lighthouse.beam_lit_changed.connect(_boats.set_beam_lit)
 	_lighthouse.radio.answered.connect(_boats.warn_calling_boats)
 	_fog.stage_changed.connect(_lighthouse.set_fog_stage)
-	_fog.stage_changed.connect(_fog_man.set_fog_stage)
+	_fog.stage_changed.connect(_figurehead.set_fog_stage)
 	_fog.stage_changed.connect(_drowned.set_fog_stage)
 	_fog.route_fog_changed.connect(_boats.set_route_fog)
-	_fog_man.player_blinded.connect(_hud.show_blindness)
+	_figurehead.player_blinded.connect(_hud.show_blindness)
+	_figurehead.player_knocked_down.connect(_player.knock_down)
 	_boats.calling_changed.connect(_lighthouse.radio.set_ringing)
 	_boats.boat_sank.connect(_drowned.add_drowned_point)
 

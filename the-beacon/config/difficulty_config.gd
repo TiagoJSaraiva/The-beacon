@@ -24,7 +24,7 @@ extends Resource
 @export var boat: BoatConfig
 @export var drowned: DrownedConfig
 @export var trapdoor: TrapdoorConfig
-@export var fog_man: FogManConfig
+@export var figurehead: FigureheadConfig
 @export var fall: FallConfig
 
 
@@ -49,7 +49,7 @@ func validate() -> PackedStringArray:
 		"boat": boat,
 		"drowned": drowned,
 		"trapdoor": trapdoor,
-		"fog_man": fog_man,
+		"figurehead": figurehead,
 		"fall": fall,
 	}
 	for config_name: String in sub_configs:

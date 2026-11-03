@@ -53,12 +53,12 @@ script = ExtResource("1_step")
 id = &"drowned"
 text = "O Afogado entrou e mata ao tocar. Feche o alçapão e ligue o trinco: trancado, ele cansa de bater."
 
-[sub_resource type="Resource" id="Resource_fog_man"]
+[sub_resource type="Resource" id="Resource_figurehead"]
 script = ExtResource("1_step")
-id = &"fog_man"
-text = "Homem de Nevoeiro. Mantenha a lanterna apontada para ele até que se dissipe; se tocar em você, você fica cego."
+id = &"figurehead"
+text = "Carranca. Ela pula em quem chega perto e cega; depois de algumas vezes, derruba. Um instante sob a lanterna a dissolve."
 
 [resource]
 script = ExtResource("2_content")
-steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_boat"), SubResource("Resource_drowned"), SubResource("Resource_fog_man")])
+steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_boat"), SubResource("Resource_drowned"), SubResource("Resource_figurehead")])
 message_seconds = 8.0

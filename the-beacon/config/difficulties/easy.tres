@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://dm4iojmcq5tcc" path="res://config/fall_config.gd" id="9_uo8rd"]
 [ext_resource type="Script" uid="uid://b4xulobdimfnr" path="res://config/flashlight_config.gd" id="10_xlio1"]
 [ext_resource type="Script" uid="uid://ccgmkv73srnu1" path="res://config/fog_config.gd" id="11_5e6jg"]
-[ext_resource type="Script" uid="uid://c3oblfdja825m" path="res://config/fog_man_config.gd" id="12_dv4f4"]
+[ext_resource type="Script" uid="uid://c3oblfdja825m" path="res://config/figurehead_config.gd" id="12_dv4f4"]
 [ext_resource type="Script" uid="uid://b635ujq77fpwb" path="res://config/power_config.gd" id="13_5t01q"]
 [ext_resource type="Script" uid="uid://hh3sbbnjk2n8" path="res://config/repair_config.gd" id="14_rfi3c"]
 [ext_resource type="Script" uid="uid://chwdj2g3ngfvq" path="res://config/difficulty_config.gd" id="15_5i4ki"]
@@ -65,5 +65,5 @@ fog = SubResource("Resource_cuc16")
 boat = SubResource("Resource_lkuax")
 drowned = SubResource("Resource_he8cc")
 trapdoor = SubResource("Resource_p6ylf")
-fog_man = SubResource("Resource_alaf6")
+figurehead = SubResource("Resource_alaf6")
 fall = SubResource("Resource_q2kr5")

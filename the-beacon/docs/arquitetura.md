@@ -3,7 +3,7 @@
 Visão do projeto como ele está **agora**. Atualize no mesmo passo de qualquer mudança nos itens abaixo.
 
 ## Visão geral
-Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de dois andares (GDD em `../notes/gdd.md`, fora do repositório). O jogador cumpre um plantão de 3, 5 ou 7 noites (Easy, Medium, Hard), de 20h às 6h, mantendo geradores, galão, casa de máquinas, feixe, alçapão e lanterna enquanto lida com nevoeiro, barcos, Afogados e o Homem de Nevoeiro. Sem HUD de estado: toda informação está em objetos do cenário.
+Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de dois andares (GDD em `../notes/gdd.md`, fora do repositório). O jogador cumpre um plantão de 3, 5 ou 7 noites (Easy, Medium, Hard), de 20h às 6h, mantendo geradores, galão, casa de máquinas, feixe, alçapão e lanterna enquanto lida com nevoeiro, barcos, o Afogado e as carrancas. Sem HUD de estado: toda informação está em objetos do cenário.
 
 **Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração. **Entrega 2** em andamento: revisão das mecânicas (`planos/entrega-2.md`).
 
@@ -33,17 +33,17 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 ## Cenas principais
 - `ui/main_menu/main_menu.tscn` (**Main Scene**) → `MainMenu`: menu, seleção de dificuldade e configurações (ver `sistemas/menus-e-telas.md`).
 - `game/game.tscn` → `Game` (`Node3D`, `game.gd`):
-  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `FogVisuals`, `BoatDirector`, `DrownedDirector`, `FogManDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
+  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `FogVisuals`, `BoatDirector`, `DrownedDirector`, `FigureheadDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
   - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `PauseMenu` (`sistemas/menus-e-telas.md`), `RunCarryover` (`sistemas/save-e-progresso.md`).
   - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica a dificuldade e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG, `SpiralStaircase`, `Landing`, `Ramp`, `Trapdoor`, `EntranceDoor` (ver `sistemas/farol.md`); `MainGenerator`, `EmergencyGenerator`, `FuelTank` (com `JerrycanSlot`), `Jerrycan` (`sistemas/energia-e-combustivel.md`); `MachineHouse`, `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights`; `Desk` com monitores, `Radio` e `Chair`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
 - `exterior/exterior.tscn` → `Exterior`: ilha, mar, rota dos barcos, câmeras, pontos de surgimento (`sistemas/exterior-e-cameras.md`).
 - `player/player.tscn` → `Player` (`CharacterBody3D`) → `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
-- Entidades instanciadas pelos diretores: `boats/boat.tscn` (na `BoatPath`), `drowned/drowned.tscn` e `fog_man/fog_man.tscn` (filhos dos diretores).
+- Entidades instanciadas pelos diretores: `boats/boat.tscn` (na `BoatPath`), `drowned/drowned.tscn` e `figurehead/figurehead.tscn` (filhos dos diretores).
 - `ui/hud/hud.tscn` → `Hud` (`CanvasLayer`): hotkey, barra de progresso, borda vermelha, cegueira.
 - `ui/night_end/night_end_screen.tscn` → `NightEndScreen` (`CanvasLayer`): entre noites.
 
-Os diretores que mexem em outros sistemas (`DrownedDirector`, `FogManDirector`, `TutorialDirector`) recebem as referências do `Game` em `setup()`. `RunCarryover` referencia os nós da cena por `@export` (decisão 0006).
+Os diretores que mexem em outros sistemas (`DrownedDirector`, `FigureheadDirector`, `TutorialDirector`) recebem as referências do `Game` em `setup()`. `RunCarryover` referencia os nós da cena por `@export` (decisão 0006).
 
 ## Autoloads
 | Nome | Script | Papel | Decisão |
@@ -66,10 +66,10 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - Eventos: cada sistema se registra no `EventDirector` (`Lighthouse`, `FogSystem`, `BoatDirector`).
 - `NightDirector.night_ended` → `Game` (congela, `RunCarryover.capture`, tela ou vitória).
 - `Player.died` → `Game` → `run_lost`. `Player.sprint_blocked_changed` → `Hud.set_hurt_border`.
-- `Lighthouse.beam_operational_changed` → `FogSystem.set_beam_operational`. `FogSystem.stage_changed` → `Lighthouse.set_fog_stage` (bloqueio do feixe, mangueira), `FogManDirector.set_fog_stage`. `FogSystem.route_fog_changed` → `BoatDirector.set_route_fog`. `FogVisuals` lê o `FogSystem` direto (recebe-o em `setup()`).
+- `Lighthouse.beam_operational_changed` → `FogSystem.set_beam_operational`. `FogSystem.stage_changed` → `Lighthouse.set_fog_stage` (bloqueio do feixe, mangueira), `FigureheadDirector.set_fog_stage`. `FogSystem.route_fog_changed` → `BoatDirector.set_route_fog`. `FogVisuals` lê o `FogSystem` direto (recebe-o em `setup()`).
 - `Lighthouse.beam_lit_changed` → `BoatDirector.set_beam_lit`.
 - `BoatDirector.calling_changed` → `Radio.set_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.warn_calling_boats`.
-- `FogManDirector.player_blinded` → `Hud.show_blindness`.
+- `FigureheadDirector.player_blinded` → `Hud.show_blindness`; `player_knocked_down` → `Player.knock_down`.
 - `Drowned.effect_triggered` → `DrownedDirector` → `Player.kill`. `FogSystem.stage_changed` → `DrownedDirector.set_fog_stage` (aproximação). O `DrownedDirector` chama direto `EntranceDoor.show_approach`/`burst_open` e `Trapdoor.set_banging`.
 - `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).
 - `PauseMenu.paused_changed` → `Game` → `Player.set_controls_enabled`; `PauseMenu.exit_requested` → `Game` → `SceneRouter.go_to_main_menu`.
@@ -94,10 +94,10 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay). N
 
 ## Camadas de colisão
 1 — `world` — paredes, chão, escada / todos colidem; raios de oclusão
-2 — `barriers` — porta de entrada e alçapão / jogador e Afogado colidem; o Homem de Nevoeiro ignora
-3 — `player` — jogador / detectado por Afogados e Homem de Nevoeiro
+2 — `barriers` — porta de entrada e alçapão / jogador e Afogado colidem
+3 — `player` — jogador / detectado pelo Afogado
 4 — `drowned` — Afogados
-5 — `fog_man` — Homem de Nevoeiro
+5 — (livre)
 6 — `interactable` — objetos interativos / detectados pelo raio de interação do jogador
 7 — (livre)
 8 — `props` — objetos com física (galão) / colidem com `world`, `barriers` e entre si; o jogador os atravessa

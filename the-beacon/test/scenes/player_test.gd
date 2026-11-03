@@ -1,5 +1,6 @@
 extends GdUnitTestSuite
-## Movimento, pulo, queda e cadeira do jogador numa fase plana. Física: só faixas de valores.
+## Movimento, pulo, queda, cadeira e derrubada do jogador numa fase plana.
+## Física: só faixas de valores.
 
 const LEVEL := "res://test/scenes/fixtures/flat_level.tscn"
 
@@ -67,6 +68,23 @@ func test_sitting_holds_still_and_moving_stands_up() -> void:
 	runner.simulate_action_release("move_forward")
 	assert_bool(player.is_seated).is_false()
 	assert_float(player.global_position.distance_to(seat.origin)).is_greater(0.3)
+
+
+func test_knockdown_holds_the_player_then_lets_go() -> void:
+	var runner := scene_runner(LEVEL)
+	var player: Player = runner.find_child("Player")
+	await runner.simulate_frames(10)
+	var start: Vector3 = player.global_position
+
+	player.knock_down(0.5)
+	runner.simulate_action_press("move_forward")
+	await runner.simulate_frames(15)
+	assert_bool(player.is_knocked_down).is_true()
+	assert_float(player.global_position.distance_to(start)).is_less(0.05)
+	await runner.simulate_frames(60)
+	runner.simulate_action_release("move_forward")
+	assert_bool(player.is_knocked_down).is_false()
+	assert_float(player.global_position.distance_to(start)).is_greater(0.3)
 
 
 func _horizontal_speed(player: Player) -> float:
