@@ -23,7 +23,7 @@ render_priority = 1
 shader = ExtResource("2_shader")
 shader_parameter/density = 0.08
 shader_parameter/is_cylinder = true
-shader_parameter/inner_radius = 0.396
+shader_parameter/inner_radius = 0.335
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ground_floor"]
 render_priority = 1
@@ -56,7 +56,7 @@ material_override = SubResource("ShaderMaterial_sea")
 [node name="NearRing" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(27, 0, 0, 0, 5, 0, 0, 0, 27, 0, 3, 0)
+transform = Transform3D(24.5, 0, 0, 0, 5, 0, 0, 0, 24.5, 0, 3, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_near")
@@ -64,7 +64,7 @@ material_override = SubResource("ShaderMaterial_near")
 [node name="GroundFloor" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(10, 0, 0, 0, 1.6, 0, 0, 0, 10, 0, 1.6, 0)
+transform = Transform3D(7.4, 0, 0, 0, 1.6, 0, 0, 0, 7.4, 0, 1.6, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_ground_floor")
@@ -72,7 +72,7 @@ material_override = SubResource("ShaderMaterial_ground_floor")
 [node name="Stairs" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(10, 0, 0, 0, 2.8, 0, 0, 0, 10, 0, 6.0, 0)
+transform = Transform3D(6.4, 0, 0, 0, 2.8, 0, 0, 0, 6.4, 0, 6.0, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_stairs")
@@ -80,7 +80,7 @@ material_override = SubResource("ShaderMaterial_stairs")
 [node name="Cabin" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(10, 0, 0, 0, 1.5, 0, 0, 0, 10, 0, 10.5, 0)
+transform = Transform3D(6, 0, 0, 0, 1.5, 0, 0, 0, 6, 0, 10.5, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_cabin")

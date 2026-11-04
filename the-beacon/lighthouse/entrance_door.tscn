@@ -21,7 +21,7 @@ size = Vector3(1.2, 2.2, 1.4)
 script = ExtResource("1_door")
 
 [node name="Panel" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -1.1, 0)
 collision_layer = 2
 collision_mask = 0
 
@@ -31,7 +31,7 @@ shape = SubResource("BoxShape3D_panel")
 
 [node name="Leaf" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -1.1, -0.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -1.1, -0.7)
 
 [node name="Mesh" type="MeshInstance3D" parent="Leaf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.7)

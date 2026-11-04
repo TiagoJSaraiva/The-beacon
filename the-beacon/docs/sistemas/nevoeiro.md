@@ -22,6 +22,7 @@ Ameaça que avança do mar até a cabine enquanto o farol está parado (entrega 
   - `TRAPDOOR` ou acima: desliga o trinco do alçapão e impede ligá-lo.
 - Rota dos barcos: o nevoeiro cobre um trecho em volta de um centro sorteado ao surgir. A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho e fica mais densa com o avanço.
 - Cada volume esmaece ao entrar e sair do seu estágio (`FogVisuals.fade_per_second`).
+- Os volumes internos são cilindros retos dentro de um farol cônico: o raio de cada um cabe na parede no topo do trecho, para não vazar por fora, e sobra folga na parte baixa.
 - A noite seguinte começa sem nevoeiro.
 
 ## Sinais

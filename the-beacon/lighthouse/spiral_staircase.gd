@@ -17,6 +17,11 @@ const RAIL_THICKNESS := 0.06
 	set(value):
 		outer_radius = value
 		_queue_build()
+## Quanto os dois raios encolhem da base ao topo, para acompanhar uma parede inclinada.
+@export var radius_shrink: float = 0.0:
+	set(value):
+		radius_shrink = value
+		_queue_build()
 @export var start_height: float = 0.0:
 	set(value):
 		start_height = value
@@ -68,7 +73,7 @@ func _ready() -> void:
 ## Ponto central do degrau no ângulo e altura da posição relativa (0 = base, 1 = topo).
 func point_at(progress: float) -> Vector3:
 	var angle: float = deg_to_rad(start_angle_degrees) + TAU * turns * progress
-	var radius: float = (inner_radius + outer_radius) * 0.5
+	var radius: float = (inner_radius + outer_radius) * 0.5 - radius_shrink * progress
 	var height: float = lerpf(start_height, end_height, progress)
 	return Vector3(radius * cos(angle), height, radius * sin(angle))
 
@@ -100,7 +105,8 @@ func _build() -> void:
 		var along: Vector3 = (end - start).normalized()
 		var middle: Vector3 = (start + end) * 0.5
 		var outward: Vector3 = Vector3(middle.x, 0.0, middle.z).normalized()
-		var up: Vector3 = along.cross(outward)
+		# Com a escada encolhendo, `along` não é perpendicular a `outward`.
+		var up: Vector3 = along.cross(outward).normalized()
 		var segment_basis := Basis(along, up, along.cross(up))
 		# A face de cima do segmento fica na linha da rampa.
 		var segment_transform := Transform3D(segment_basis, middle - up * thickness * 0.5)
