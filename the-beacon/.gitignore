@@ -7,3 +7,6 @@ reports/
 
 # Configuração local do Claude Code
 .claude/settings.local.json
+
+# Diretório de build do Godot
+dist/
