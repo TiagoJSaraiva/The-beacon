@@ -1,8 +1,9 @@
 class_name EntranceDoor
-extends Node3D
+extends CSGBox3D
 ## Porta do térreo (entrega 2). Não quebra nem tem conserto: o barulho do Afogado se
 ## aproximando vem de fora dela, e ao entrar ele a arromba (som e a folha abrindo e
 ## voltando). A colisão nunca abre: o jogador não sai do farol.
+## A raiz é o buraco na parede (decisão 0019): precisa ser filha direta do CSG que corta.
 
 ## Folha aberta para dentro (+X local) no arrombamento.
 @export var burst_open_degrees: float = 80.0

@@ -49,19 +49,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 2, 70)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 2, 70)
 
 [node name="DoorView" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, -4.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.91, 1.2, -8.33)
 
 [node name="SeaCameraLeft" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 6.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 11.2)
 target = NodePath("../SeaViewLeft")
 
 [node name="SeaCameraRight" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 6.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.5, 11.2)
 target = NodePath("../SeaViewRight")
 
 [node name="DoorCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 5, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.4, 5, -12.03)
 target = NodePath("../DoorView")

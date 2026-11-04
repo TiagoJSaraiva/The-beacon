@@ -11,11 +11,13 @@
   - **F** — carranca no lugar do Homem de Nevoeiro: armadilha imóvel que cega e derruba; a lanterna a dissolve.
   - **G** — tutorial com passos novos (nevoeiro perto, alçapão, Afogado se aproximando) e teclas como marcadores `{ação}`; controles remapeáveis com página própria nas configurações (decisão 0018); prompts e tutorial mostram a tecla do dispositivo em uso; voltar com Esc/B em todos os menus; limpeza (som do pirata) e `validate()` das dificuldades ampliado.
 - Iluminação provisória mais clara em `game/game.tscn` só para testes.
+- **Farol ampliado**: interior com 20 m de diâmetro, escada de 0,45 volta, porta e alçapão alinhados e cada passagem como uma cena só, com o buraco na raiz (decisão 0019). Objetos internos continuam onde estavam: o espaço novo está livre para organizar.
 
 ## Próximo passo
 Playtest da entrega 2: montar o roteiro a partir da lista abaixo, jogar e balancear. Depois, arte e áudio finais.
 
 Validar jogando (por fase):
+- **Farol ampliado**: sem frestas em volta da porta e do alçapão (conferência visual, sem teste automático); enquadramento da câmera da porta e das câmeras do mar; nevoeiro no anel e nos volumes internos; arrombamento (folha não atravessa a parede); iluminação da cabine; ritmo com o caminho do Afogado de ~42 m (antes ~29 m) e a mesa a ~7 m do alçapão.
 - **A**: Esc pausa e solta o mouse; Continuar e Configurações na pausa; Sair para o menu deixa Continuar desabilitado; fim de noite → Salvar e sair → Continuar começa a noite seguinte; Próxima noite recarrega com o farol consertado e o nevoeiro limpo.
 - **B**: altura do pulo; velocidade do olhar no analógico direito (`stick_look_degrees_per_second`); L2 corre; borda vermelha e corrida bloqueada depois de cair do meio da escada; barra da bateria legível; sentar na cadeira, alcance dos monitores e do rádio sentado, limite do olhar (75°) e levantar.
 - **C**: leitura da cabine (casa de máquinas, câmara da lâmpada, gerador de emergência, alavanca); volante e zumbido com o farol operando; conserto da casa de máquinas e troca da lâmpada; subir a escada com o galão, despejar no gerador de emergência, física do galão solto (chão e escada), devolver ao slot e ver o medidor encher. `FuelTank.debug_burst_on_start` estoura a mangueira desde o início.
@@ -31,4 +33,5 @@ Validar jogando (por fase):
   - O bake da navmesh avisa no console que lê malhas visuais do CSG (custo só na abertura; decisão 0009).
   - Saves e progresso ficam em `user://` (`%APPDATA%/Godot/app_userdata/the-beacon/`). Para testar o desbloqueio do zero, apague `progress.json`. Rodar `game.tscn` direto ou os testes de cena apaga o save de partida (começar a noite consome o save).
   - Afogado: se o alçapão fechar com ele em cima e o jogador fora do alcance, ele pode ficar preso tentando descer pelo painel fechado.
+  - Mover a porta não leva `DoorInside`, a câmera da porta nem as fendas acima dela (decisão 0019).
   - `game.gd` está com ~195 linhas: a próxima responsabilidade nova deve nascer em componente próprio.

@@ -1,8 +1,9 @@
 class_name Trapdoor
-extends Node3D
+extends CSGBox3D
 ## Alçapão no topo da escada (entrega 2; regras em `TrapdoorRules`). Abre e fecha só por
-## cima; o trinco, ao lado, liga e desliga. Este nó fica na dobradiça (borda longa); o
-## painel abre girando para cima em torno do eixo X local.
+## cima; o trinco, ao lado, liga e desliga. A raiz é o buraco no piso (decisão 0019) e
+## precisa ser filha direta do CSG que corta. O painel tem a origem na dobradiça (borda
+## longa) e abre girando para cima em torno do eixo X local.
 
 signal state_changed(state: State)
 signal latch_changed(latched: bool)
@@ -99,7 +100,7 @@ func _toggle_latch() -> void:
 
 
 func _is_above(user: Node3D) -> bool:
-	return user != null and user.global_position.y >= global_position.y + min_user_height
+	return user != null and user.global_position.y >= _panel.global_position.y + min_user_height
 
 
 func _on_panel_interactable_interacted() -> void:
