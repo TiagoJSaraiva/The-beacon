@@ -54,8 +54,6 @@ func _physics_process(delta: float) -> void:
 			_awaiting_release = true
 		Interactable.Mode.HOLD:
 			_advance_hold(delta)
-		Interactable.Mode.HOLD_CONTINUOUS:
-			_focused.set_held(true)
 
 
 ## Avança a barra do alvo e publica o progresso. Ao completar, avisa o alvo e exige soltar a
@@ -71,13 +69,11 @@ func _advance_hold(delta: float) -> void:
 		_focused.complete_hold()
 
 
-## Cancela a barra em andamento e solta o alvo em foco.
+## Cancela a barra em andamento, se houver, e publica o progresso zerado.
 func _stop_hold() -> void:
 	if _progress != null:
 		_progress = null
 		hold_progress_changed.emit(0.0, false)
-	if _focused != null:
-		_focused.set_held(false)
 
 
 ## Troca o alvo em foco, cancelando a interação anterior, e emite `focus_changed`.

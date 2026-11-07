@@ -5,11 +5,9 @@ extends Area3D
 
 signal interacted
 signal hold_completed
-signal hold_state_changed(holding: bool)
 
 ## PRESS: um toque. HOLD: segurar até completar a barra.
-## HOLD_CONTINUOUS: o efeito dura enquanto a tecla está segura.
-enum Mode { PRESS, HOLD, HOLD_CONTINUOUS }
+enum Mode { PRESS, HOLD }
 ## Restrição pelo galão na mão (GDD 1.2.24): qualquer, mãos livres ou carregando.
 enum HandsRule { ANY, FREE, CARRYING }
 
@@ -19,7 +17,6 @@ enum HandsRule { ANY, FREE, CARRYING }
 @export var hands_rule: HandsRule = HandsRule.ANY
 @export var enabled: bool = true
 
-var is_held: bool = false
 ## Checagem extra opcional do dono: recebe quem interage e diz se pode usar.
 var usable_check: Callable
 
@@ -51,12 +48,3 @@ func interact() -> void:
 ## Emite `hold_completed`, a barra cheia do modo HOLD.
 func complete_hold() -> void:
 	hold_completed.emit()
-
-
-## Atualiza se a tecla está segura no modo HOLD_CONTINUOUS e emite `hold_state_changed` só quando
-## isso muda.
-func set_held(held: bool) -> void:
-	if is_held == held:
-		return
-	is_held = held
-	hold_state_changed.emit(held)
