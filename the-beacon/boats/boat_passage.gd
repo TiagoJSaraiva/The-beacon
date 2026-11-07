@@ -13,11 +13,13 @@ var outcome: Outcome = Outcome.CROSSING
 var answered: bool = false
 
 
+## Cria a travessia no início da rota, com a duração em segundos.
 func _init(seconds_to_cross: float) -> void:
 	crossing_seconds = seconds_to_cross
 
 
-## `fog_start` e `fog_end`: trecho da rota coberto; iguais quando não há nevoeiro.
+## Avança o barco e define o desfecho: dentro do trecho de nevoeiro, afunda; no fim da rota,
+## passa. `fog_start` e `fog_end` são o trecho coberto, iguais quando não há nevoeiro.
 func tick(delta: float, fog_start: float, fog_end: float) -> void:
 	if outcome != Outcome.CROSSING:
 		return
@@ -28,7 +30,7 @@ func tick(delta: float, fog_start: float, fog_end: float) -> void:
 		outcome = Outcome.PASSED
 
 
-## Precisa de aviso: há nevoeiro adiante e ninguém atendeu ainda.
+## Diz se o barco precisa de aviso: há nevoeiro adiante e ninguém atendeu ainda.
 func is_calling(fog_start: float, fog_end: float) -> bool:
 	return (
 		outcome == Outcome.CROSSING
@@ -38,12 +40,13 @@ func is_calling(fog_start: float, fog_end: float) -> bool:
 	)
 
 
-## Rádio atendido. Com o feixe aceso, o barco desvia; apagado, segue em frente.
+## Registra o rádio atendido. Com o feixe aceso, o barco desvia; apagado, segue em frente.
 func answer(beam_lit: bool) -> void:
 	answered = true
 	if beam_lit and outcome == Outcome.CROSSING:
 		outcome = Outcome.DIVERTED
 
 
+## Diz se o trecho da rota tem algum comprimento.
 func _has_fog(fog_start: float, fog_end: float) -> bool:
 	return fog_end > fog_start

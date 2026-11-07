@@ -18,10 +18,12 @@ var _blink_time: float = 0.0
 @onready var _answer_point: Interactable = %AnswerPoint
 
 
+## Começa sem tocar.
 func _ready() -> void:
 	set_ringing(false)
 
 
+## Pisca a luz enquanto o rádio toca.
 func _process(delta: float) -> void:
 	if not is_ringing:
 		return
@@ -29,6 +31,7 @@ func _process(delta: float) -> void:
 	_call_light.visible = fmod(_blink_time, blink_interval_seconds * 2.0) < blink_interval_seconds
 
 
+## Liga ou desliga o toque, a luz e o ponto de atender, que só fica ativo tocando.
 func set_ringing(ringing: bool) -> void:
 	is_ringing = ringing
 	_blink_time = 0.0
@@ -37,6 +40,7 @@ func set_ringing(ringing: bool) -> void:
 	_answer_point.enabled = ringing
 
 
+## Para o toque, responde por som e emite `answered`.
 func _on_answer_point_interacted() -> void:
 	set_ringing(false)
 	_message.stream = reply_message

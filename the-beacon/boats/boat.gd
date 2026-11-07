@@ -13,12 +13,13 @@ var passage: BoatPassage
 @onready var _hull: Node3D = %Hull
 
 
+## Acompanha na rota o progresso da travessia, enquanto o barco está cruzando.
 func _process(_delta: float) -> void:
 	if passage != null and passage.outcome == BoatPassage.Outcome.CROSSING:
 		progress_ratio = passage.progress
 
 
-## Afunda devagar e some.
+## Anima o casco afundando e apaga o barco ao final.
 func sink() -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(_hull, "position:y", -sink_depth, sink_seconds)
@@ -26,7 +27,7 @@ func sink() -> void:
 	tween.tween_callback(queue_free)
 
 
-## Para, vira e se afasta da ilha.
+## Anima o casco virando e se afastando da ilha e apaga o barco ao final.
 func divert() -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(_hull, "rotation:y", _hull.rotation.y + PI * 0.5, divert_seconds * 0.3)
