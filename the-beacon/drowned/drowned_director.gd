@@ -22,6 +22,8 @@ var _drowned: Drowned
 var _approaching: bool = false
 
 
+## Avança a aproximação e atualiza o barulho da porta. Com o Afogado dentro, roda a decisão dele
+## e as batidas no alçapão.
 func _physics_process(delta: float) -> void:
 	if _lighthouse == null:
 		return
@@ -41,24 +43,29 @@ func _physics_process(delta: float) -> void:
 	_lighthouse.trapdoor.set_banging(_drowned.brain.is_banging())
 
 
+## Aplica os valores da dificuldade e recria o medidor de aproximação, zerado.
 func configure(config: DrownedConfig) -> void:
 	_config = config
 	approach = DrownedApproach.new(config)
 
 
+## Recebe o farol e o jogador. Antes disso, nada acontece.
 func setup(lighthouse: Lighthouse, player: Player) -> void:
 	_lighthouse = lighthouse
 	_player = player
 
 
+## Guarda se o nevoeiro já está dentro do farol, condição para o Afogado se aproximar.
 func set_fog_stage(stage: FogStage.Stage) -> void:
 	_fog_inside = FogStage.is_inside(stage)
 
 
+## Soma um ponto de Afogado. É chamada a cada barco afundado.
 func add_drowned_point() -> void:
 	drowned_points += 1
 
 
+## Arromba a porta, coloca o Afogado no ponto de entrada e emite `drowned_entered`.
 func _enter() -> void:
 	_lighthouse.entrance_door.burst_open()
 	_drowned = drowned_scene.instantiate()
@@ -69,6 +76,7 @@ func _enter() -> void:
 	drowned_entered.emit()
 
 
+## Mata o jogador quando o Afogado gera o efeito KILL.
 func _on_drowned_effect_triggered(effect: DrownedBrain.Effect) -> void:
 	if effect == DrownedBrain.Effect.KILL:
 		_player.kill(Player.CAUSE_DROWNED)

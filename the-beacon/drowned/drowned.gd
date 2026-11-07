@@ -22,6 +22,8 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var _footsteps: LoopingSound = %Footsteps
 
 
+## Recebe a configuração, os pontos do farol e o jogador, e cria o cérebro. Precisa vir antes de
+## entrar na árvore, porque `_ready` usa a configuração.
 func setup(
 	drowned_config: DrownedConfig,
 	target_points: Dictionary[DrownedBrain.Target, Vector3],
@@ -33,11 +35,13 @@ func setup(
 	player = target_player
 
 
+## Limita a distância em que os passos são ouvidos.
 func _ready() -> void:
 	_footsteps.max_distance = _config.footstep_audible_distance
 
 
-## Um passo de decisão e movimento. `senses` vem do diretor com o estado do farol.
+## Executa um passo de decisão e movimento e emite `effect_triggered` se a decisão gerar um
+## efeito. `senses` vem do diretor com o estado do farol.
 func think(delta: float, senses: DrownedSenses) -> void:
 	_sense(senses)
 	var effect: DrownedBrain.Effect = brain.update(delta, senses)
@@ -46,6 +50,8 @@ func think(delta: float, senses: DrownedSenses) -> void:
 	_move(delta)
 
 
+## Preenche em `senses` se o jogador está ao alcance e na distância de matar, e se ele chegou ao
+## alvo.
 func _sense(senses: DrownedSenses) -> void:
 	var to_player: Vector3 = player.global_position - global_position
 	var distance: float = to_player.length()
@@ -57,6 +63,8 @@ func _sense(senses: DrownedSenses) -> void:
 	senses.arrived = global_position.distance_to(_target_point()) <= arrive_distance
 
 
+## Aplica a gravidade e, se não estiver parado agindo, anda pela navmesh até o alvo do cérebro,
+## com os passos tocando.
 func _move(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
@@ -75,6 +83,7 @@ func _move(delta: float) -> void:
 	move_and_slide()
 
 
+## Devolve a posição do alvo atual; sem alvo conhecido, a própria posição.
 func _target_point() -> Vector3:
 	var target: DrownedBrain.Target = brain.target()
 	if target == DrownedBrain.Target.PLAYER:
@@ -82,6 +91,8 @@ func _target_point() -> Vector3:
 	return targets.get(target, global_position)
 
 
+## Conta os obstáculos (`world` e `barriers`) entre ele e o jogador na altura dos olhos, até
+## `max_occluders`.
 func _count_occluders() -> int:
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var from: Vector3 = global_position + Vector3.UP * eye_height

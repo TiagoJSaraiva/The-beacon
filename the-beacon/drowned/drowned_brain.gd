@@ -17,11 +17,12 @@ var _config: DrownedConfig
 var _timer: float = 0.0
 
 
+## Cria o cérebro no estado inicial, indo para o alçapão.
 func _init(drowned_config: DrownedConfig) -> void:
 	_config = drowned_config
 
 
-## Para onde ele deve andar no estado atual.
+## Devolve para onde ele deve andar no estado atual.
 func target() -> Target:
 	match state:
 		State.GO_TRAPDOOR, State.BANG_TRAPDOOR:
@@ -33,15 +34,17 @@ func target() -> Target:
 	return Target.NONE
 
 
-## Parado agindo, em vez de andar.
+## Diz se ele está parado agindo, batendo ou descansando, em vez de andar.
 func is_acting() -> bool:
 	return state == State.BANG_TRAPDOOR or (state == State.REST and _timer > 0.0)
 
 
+## Diz se ele está batendo no alçapão.
 func is_banging() -> bool:
 	return state == State.BANG_TRAPDOOR
 
 
+## Aplica as regras da classe a este passo, mudando de estado, e devolve o efeito a executar.
 func update(delta: float, senses: DrownedSenses) -> Effect:
 	var trapdoor_open: bool = senses.trapdoor_state == Trapdoor.State.OPEN
 	if state != State.CHASE and (senses.player_in_reach or _trapdoor_reached_open(senses)):
@@ -69,6 +72,7 @@ func update(delta: float, senses: DrownedSenses) -> Effect:
 	return Effect.NONE
 
 
+## Diz se ele chegou ao alçapão, ou já batia nele, e o encontrou aberto.
 func _trapdoor_reached_open(senses: DrownedSenses) -> bool:
 	var at_trapdoor: bool = (
 		state == State.BANG_TRAPDOOR or (state == State.GO_TRAPDOOR and senses.arrived)
@@ -76,6 +80,7 @@ func _trapdoor_reached_open(senses: DrownedSenses) -> bool:
 	return at_trapdoor and senses.trapdoor_state == Trapdoor.State.OPEN
 
 
+## Muda de estado e zera o tempo.
 func _enter(new_state: State) -> void:
 	state = new_state
 	_timer = 0.0

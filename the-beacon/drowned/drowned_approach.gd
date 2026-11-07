@@ -9,10 +9,12 @@ var level: float = 0.0
 var has_entered: bool = false
 
 
+## Cria o medidor zerado, sem entrada nesta noite.
 func _init(drowned_config: DrownedConfig) -> void:
 	config = drowned_config
 
 
+## Devolve a subida do medidor por segundo com esta quantidade de pontos.
 func rate_per_second(points: int) -> float:
 	return config.approach_base_per_second + config.approach_per_point_per_second * points
 
