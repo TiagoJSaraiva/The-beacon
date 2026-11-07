@@ -78,10 +78,12 @@ var keys: Dictionary[StringName, int] = {}
 var buttons: Dictionary[StringName, int] = {}
 
 
+## Cria as ligações com os valores padrão.
 func _init() -> void:
 	reset_to_defaults()
 
 
+## Volta todas as teclas e botões ao padrão.
 func reset_to_defaults() -> void:
 	keys.clear()
 	for action: StringName in KEYBOARD_ACTIONS:
@@ -91,15 +93,17 @@ func reset_to_defaults() -> void:
 		buttons[action] = DEFAULT_BUTTONS[action]
 
 
+## Dá a tecla física à ação. Se outra ação já a usa, as duas trocam.
 func bind_key(action: StringName, physical_keycode: int) -> void:
 	_bind(keys, action, physical_keycode)
 
 
+## Dá o botão de controle à ação. Se outra ação já o usa, as duas trocam.
 func bind_button(action: StringName, button: int) -> void:
 	_bind(buttons, action, button)
 
 
-## Rótulo da tecla ou do botão atual da ação.
+## Devolve o rótulo da tecla ou do botão atual da ação; vazio se a ação não tiver.
 func label_for(action: StringName, joypad: bool) -> String:
 	if joypad:
 		if buttons.has(action):
@@ -111,6 +115,7 @@ func label_for(action: StringName, joypad: bool) -> String:
 	return OS.get_keycode_string(keycode)
 
 
+## Devolve as ligações em forma de dicionário, para gravar no arquivo de configurações.
 func to_dict() -> Dictionary:
 	return {"keys": _codes_to_dict(keys), "buttons": _codes_to_dict(buttons)}
 
@@ -128,7 +133,8 @@ func from_dict(data: Dictionary) -> void:
 		reset_to_defaults()
 
 
-## Dar a uma ação o código de outra troca os dois.
+## Dá o código à ação; se outra ação já o usa, ela recebe o código antigo. Ação desconhecida é
+## ignorada.
 static func _bind(codes: Dictionary[StringName, int], action: StringName, code: int) -> void:
 	if not codes.has(action):
 		return
@@ -138,6 +144,7 @@ static func _bind(codes: Dictionary[StringName, int], action: StringName, code: 
 	codes[action] = code
 
 
+## Devolve as ligações com os nomes das ações em texto.
 static func _codes_to_dict(codes: Dictionary[StringName, int]) -> Dictionary:
 	var result: Dictionary = {}
 	for action: StringName in codes:
@@ -145,6 +152,7 @@ static func _codes_to_dict(codes: Dictionary[StringName, int]) -> Dictionary:
 	return result
 
 
+## Copia os códigos numéricos encontrados para as ações conhecidas. O resto é ignorado.
 static func _read_codes(codes: Dictionary[StringName, int], loaded: Dictionary) -> void:
 	for action: StringName in codes:
 		var value: Variant = loaded.get(String(action))
@@ -152,7 +160,7 @@ static func _read_codes(codes: Dictionary[StringName, int], loaded: Dictionary) 
 			codes[action] = int(value)
 
 
-## Códigos abaixo de `min_code` ou repetidos.
+## Diz se há códigos abaixo de `min_code` ou repetidos.
 static func _has_invalid(codes: Dictionary[StringName, int], min_code: int) -> bool:
 	var seen: Array[int] = []
 	for action: StringName in codes:

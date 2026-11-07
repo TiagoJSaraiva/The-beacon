@@ -4,6 +4,8 @@ extends SceneTree
 ## Fica em scripts/ (ignorado pelo Godot) porque não faz parte do jogo.
 
 
+## Compila os scripts recebidos na linha de comando, lista os que falharem e sai com o código do
+## resultado.
 func _initialize() -> void:
 	var paths: PackedStringArray = OS.get_cmdline_user_args()
 	var failed: PackedStringArray = []

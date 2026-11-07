@@ -8,10 +8,12 @@ const GAME_SCENE := "res://game/game.tscn"
 var _pending_run: RunRequest
 
 
+## Troca para o menu principal.
 func go_to_main_menu() -> void:
 	_change_scene(MAIN_MENU_SCENE)
 
 
+## Começa um plantão novo na dificuldade dada, na primeira noite.
 func start_new_run(difficulty: DifficultyConfig) -> void:
 	play_night(difficulty, RunState.new_run(difficulty))
 
@@ -30,10 +32,12 @@ func take_run_request() -> RunRequest:
 	return request
 
 
+## Fecha o jogo.
 func quit_game() -> void:
 	get_tree().quit()
 
 
-# Adiado: a troca acontece fora do handler de botão ou de sinal que a pediu.
+## Troca de cena de forma adiada, para acontecer fora do handler de botão ou de sinal que a
+## pediu.
 func _change_scene(path: String) -> void:
 	get_tree().change_scene_to_file.call_deferred(path)

@@ -52,6 +52,7 @@ var _queue: Array[String] = []
 var _message_time_left: float = 0.0
 
 
+## Dispara o passo de pouco combustível e troca a mensagem quando o tempo dela acaba.
 func _process(delta: float) -> void:
 	if not is_active:
 		return
@@ -63,7 +64,8 @@ func _process(delta: float) -> void:
 			_show_next_message()
 
 
-## Liga os gatilhos. Sem `enabled` (dificuldade sem tutorial), o diretor fica parado.
+## Cria o controle dos passos e liga os gatilhos aos sinais dos sistemas. Sem `enabled`
+## (dificuldade sem tutorial) ou sem conteúdo, o diretor fica parado.
 func setup(
 	enabled: bool,
 	night: NightDirector,
@@ -102,14 +104,17 @@ func show_step(step_id: StringName) -> void:
 		_show_next_message()
 
 
+## Devolve uma cópia dos passos já mostrados, para passar à noite seguinte.
 func shown_ids() -> Array[StringName]:
 	return tracker.shown_ids.duplicate()
 
 
+## Retoma os passos mostrados em noites anteriores.
 func restore_shown(ids: Array[StringName]) -> void:
 	tracker.restore(ids)
 
 
+## Mostra o próximo texto da fila por `message_seconds`; com a fila vazia, esconde o texto.
 func _show_next_message() -> void:
 	if _queue.is_empty():
 		_message_time_left = 0.0
@@ -119,16 +124,19 @@ func _show_next_message() -> void:
 	message_changed.emit(_queue.pop_front())
 
 
+## Mostra o passo quando o sinal ligado a ele avisa que a situação começou.
 func _show_when(active: bool, step_id: StringName) -> void:
 	if active:
 		show_step(step_id)
 
 
+## Mostra os passos de início e da lanterna.
 func _on_night_started(_night: int) -> void:
 	show_step(STEP_START)
 	show_step(STEP_FLASHLIGHT)
 
 
+## Mostra os passos do nevoeiro conforme o estágio.
 func _on_fog_stage_changed(stage: FogStage.Stage) -> void:
 	if stage != FogStage.Stage.NONE:
 		show_step(STEP_FOG)

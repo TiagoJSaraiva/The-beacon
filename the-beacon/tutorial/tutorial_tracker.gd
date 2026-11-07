@@ -7,6 +7,7 @@ var step_ids: Array[StringName] = []
 var shown_ids: Array[StringName] = []
 
 
+## Cria o controle com os ids existentes no conteúdo, sem nenhum mostrado.
 func _init(ids: Array[StringName]) -> void:
 	step_ids = ids
 
@@ -19,6 +20,7 @@ func mark_shown(step_id: StringName) -> bool:
 	return true
 
 
+## Diz se todos os passos já apareceram.
 func is_finished() -> bool:
 	return shown_ids.size() >= step_ids.size()
 

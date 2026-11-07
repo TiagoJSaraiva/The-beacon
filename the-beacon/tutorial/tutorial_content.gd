@@ -7,6 +7,7 @@ extends Resource
 @export var message_seconds: float = 8.0
 
 
+## Devolve os ids de todos os passos do conteúdo.
 func step_ids() -> Array[StringName]:
 	var ids: Array[StringName] = []
 	for step: TutorialStep in steps:
@@ -14,6 +15,7 @@ func step_ids() -> Array[StringName]:
 	return ids
 
 
+## Devolve o texto do passo; vazio se o id não existir.
 func text_for(step_id: StringName) -> String:
 	for step: TutorialStep in steps:
 		if step.id == step_id:

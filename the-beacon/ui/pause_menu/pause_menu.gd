@@ -18,11 +18,14 @@ var enabled: bool = true
 @onready var _resume_button: Button = %ResumeButton
 
 
+## Começa escondido e liga o Voltar das configurações ao índice.
 func _ready() -> void:
 	visible = false
 	_settings_panel.back_requested.connect(_show_index)
 
 
+## Abre com `pause`, se estiver habilitado. Aberto, `pause` e `ui_cancel` voltam uma página e, no
+## índice, fecham.
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		if enabled and event.is_action_pressed("pause"):
@@ -42,6 +45,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_show_index()
 
 
+## Pausa a árvore, mostra o índice e emite `paused_changed`.
 func open() -> void:
 	visible = true
 	get_tree().paused = true
@@ -49,41 +53,49 @@ func open() -> void:
 	paused_changed.emit(true)
 
 
+## Esconde o menu, despausa a árvore e emite `paused_changed`.
 func close() -> void:
 	visible = false
 	get_tree().paused = false
 	paused_changed.emit(false)
 
 
+## Mostra só a página dada.
 func _show_page(page: Control) -> void:
 	for candidate: Control in [_index_page, _settings_panel, _exit_page]:
 		candidate.visible = candidate == page
 
 
+## Abre o índice, com o foco em Continuar.
 func _show_index() -> void:
 	_show_page(_index_page)
 	_resume_button.grab_focus()
 
 
+## Fecha o menu e retoma a partida.
 func _on_resume_button_pressed() -> void:
 	close()
 
 
+## Abre as configurações com os valores atuais.
 func _on_settings_button_pressed() -> void:
 	_settings_panel.refresh()
 	_show_page(_settings_panel)
 	_settings_panel.focus_first()
 
 
+## Abre a confirmação de saída.
 func _on_exit_button_pressed() -> void:
 	_show_page(_exit_page)
 
 
+## Despausa a árvore e pede a saída para o menu.
 func _on_exit_confirm_button_pressed() -> void:
 	# A troca de cena manteria a árvore pausada.
 	get_tree().paused = false
 	exit_requested.emit()
 
 
+## Cancela a saída e volta ao índice.
 func _on_exit_cancel_button_pressed() -> void:
 	_show_index()

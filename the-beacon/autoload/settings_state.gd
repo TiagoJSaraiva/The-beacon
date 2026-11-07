@@ -14,6 +14,7 @@ var sfx_volume: float = 1.0
 var sensitivity_scale: float = 1.0
 
 
+## Devolve as preferências em forma de dicionário.
 func to_dict() -> Dictionary:
 	return {
 		"master_volume": master_volume,
@@ -23,7 +24,8 @@ func to_dict() -> Dictionary:
 	}
 
 
-## Valores fora da faixa (arquivo editado à mão) são trazidos para dentro dela.
+## Lê as preferências do dicionário, trazendo para a faixa valores fora dela, como os de um
+## arquivo editado à mão.
 func from_dict(data: Dictionary) -> void:
 	master_volume = _volume(data.get("master_volume", master_volume))
 	music_volume = _volume(data.get("music_volume", music_volume))
@@ -35,5 +37,6 @@ func from_dict(data: Dictionary) -> void:
 	)
 
 
+## Devolve o valor como volume, limitado à faixa válida.
 static func _volume(value: Variant) -> float:
 	return clampf(float(value), MIN_VOLUME, MAX_VOLUME)

@@ -10,10 +10,12 @@ const SAVE_VERSION := 3
 var progress: ProgressState = ProgressState.new()
 
 
+## Carrega o progresso de desbloqueio ao abrir o jogo.
 func _ready() -> void:
 	progress.from_dict(_read_json(PROGRESS_PATH))
 
 
+## Diz se existe uma partida válida para continuar.
 func has_run_save() -> bool:
 	return not read_run().is_empty()
 
@@ -26,24 +28,29 @@ func read_run() -> Dictionary:
 	return data.get("run", {})
 
 
+## Grava a partida no arquivo de save, com a versão atual do formato.
 func write_run(run: Dictionary) -> void:
 	_write_json(RUN_SAVE_PATH, {"version": SAVE_VERSION, "run": run})
 
 
+## Apaga o save da partida, se existir. O progresso de desbloqueio não muda.
 func delete_run() -> void:
 	if FileAccess.file_exists(RUN_SAVE_PATH):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(RUN_SAVE_PATH))
 
 
+## Diz se a dificuldade está liberada para jogar.
 func is_unlocked(difficulty_id: StringName, catalog: DifficultyCatalog) -> bool:
 	return progress.is_unlocked(difficulty_id, catalog)
 
 
+## Registra a vitória e grava o progresso só se ela liberou algo novo.
 func register_victory(difficulty_id: StringName, catalog: DifficultyCatalog) -> void:
 	if progress.register_victory(difficulty_id, catalog) != &"":
 		_write_json(PROGRESS_PATH, progress.to_dict())
 
 
+## Devolve o conteúdo do arquivo JSON. Se ele não existe ou está ilegível, devolve vazio.
 func _read_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
@@ -54,6 +61,7 @@ func _read_json(path: String) -> Dictionary:
 	return {}
 
 
+## Grava o dicionário como JSON. Em caso de falha, registra o erro.
 func _write_json(path: String, data: Dictionary) -> void:
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	if file == null:

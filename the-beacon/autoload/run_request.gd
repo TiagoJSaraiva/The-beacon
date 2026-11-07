@@ -7,6 +7,7 @@ var difficulty: DifficultyConfig
 var run: RunState
 
 
+## Cria o pedido com a dificuldade e o plantão a continuar.
 func _init(chosen: DifficultyConfig, run_state: RunState) -> void:
 	difficulty = chosen
 	run = run_state

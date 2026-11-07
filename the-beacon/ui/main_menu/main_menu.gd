@@ -12,6 +12,8 @@ extends Control
 @onready var _difficulty_buttons: VBoxContainer = %DifficultyButtons
 
 
+## Libera o mouse, habilita Continuar só com save válido, monta as dificuldades e abre a página
+## principal.
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_continue_button.disabled = not SaveService.has_run_save()
@@ -20,7 +22,7 @@ func _ready() -> void:
 	_show_main_page()
 
 
-## Voltar (Esc, B no controle) sobe uma página.
+## Sobe uma página ao voltar (Esc, B no controle), gravando as configurações ao sair delas.
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel") or _main_page.visible:
 		return
@@ -32,6 +34,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	_show_main_page()
 
 
+## Cria um botão por dificuldade do catálogo, desabilitado enquanto ela estiver bloqueada.
 func _build_difficulty_buttons() -> void:
 	for difficulty: DifficultyConfig in catalog.difficulties:
 		var unlocked: bool = SaveService.is_unlocked(difficulty.id, catalog)
@@ -44,16 +47,19 @@ func _build_difficulty_buttons() -> void:
 		_difficulty_buttons.add_child(button)
 
 
+## Mostra só a página dada.
 func _show_page(page: Control) -> void:
 	for candidate: Control in [_main_page, _difficulty_page, _settings_panel]:
 		candidate.visible = candidate == page
 
 
+## Abre a página principal, com o foco em Novo Jogo.
 func _show_main_page() -> void:
 	_show_page(_main_page)
 	_new_game_button.grab_focus()
 
 
+## Abre a seleção de dificuldade, com o foco na primeira.
 func _on_new_game_button_pressed() -> void:
 	_show_page(_difficulty_page)
 	var first_button := _difficulty_buttons.get_child(0) as Button
@@ -61,6 +67,7 @@ func _on_new_game_button_pressed() -> void:
 		first_button.grab_focus()
 
 
+## Carrega o save e joga a noite seguinte. Com dificuldade desconhecida, descarta o save.
 func _on_continue_button_pressed() -> void:
 	var run := RunState.new()
 	run.from_dict(SaveService.read_run())
@@ -73,21 +80,25 @@ func _on_continue_button_pressed() -> void:
 	SceneRouter.play_night(difficulty, run)
 
 
+## Abre as configurações com os valores atuais.
 func _on_settings_button_pressed() -> void:
 	_settings_panel.refresh()
 	_show_page(_settings_panel)
 	_settings_panel.focus_first()
 
 
+## Fecha o jogo.
 func _on_quit_button_pressed() -> void:
 	SceneRouter.quit_game()
 
 
+## Apaga o save existente e começa um plantão novo na dificuldade escolhida.
 func _on_difficulty_chosen(difficulty: DifficultyConfig) -> void:
 	# Novo Jogo sobrescreve o save existente (GDD 1.2.22).
 	SaveService.delete_run()
 	SceneRouter.start_new_run(difficulty)
 
 
+## Volta da seleção de dificuldade à página principal.
 func _on_difficulty_back_button_pressed() -> void:
 	_show_main_page()

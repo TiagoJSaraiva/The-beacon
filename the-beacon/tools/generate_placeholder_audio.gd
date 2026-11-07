@@ -10,6 +10,7 @@ const AMPLITUDE := 0.4
 var _noise: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
+## Gera e grava todos os sons placeholder, sempre com a mesma semente, e encerra.
 func _init() -> void:
 	_noise.seed = 42
 	_save("radio_ring", _tone(900.0, 0.4) + _silence(0.15) + _tone(900.0, 0.4) + _silence(1.0))
@@ -21,6 +22,7 @@ func _init() -> void:
 	quit()
 
 
+## Devolve as amostras de um tom senoidal com rampa nas pontas.
 func _tone(frequency: float, seconds: float) -> PackedFloat32Array:
 	var samples := PackedFloat32Array()
 	for i in int(seconds * MIX_RATE):
@@ -28,6 +30,7 @@ func _tone(frequency: float, seconds: float) -> PackedFloat32Array:
 	return samples
 
 
+## Devolve as amostras de uma onda quadrada com rampa nas pontas.
 func _square(frequency: float, seconds: float) -> PackedFloat32Array:
 	var samples := PackedFloat32Array()
 	for i in int(seconds * MIX_RATE):
@@ -36,6 +39,7 @@ func _square(frequency: float, seconds: float) -> PackedFloat32Array:
 	return samples
 
 
+## Devolve as amostras de uma pancada: tom grave com ruído, decaindo até zero.
 func _thump(seconds: float, frequency: float) -> PackedFloat32Array:
 	var samples := PackedFloat32Array()
 	var count: int = int(seconds * MIX_RATE)
@@ -46,6 +50,7 @@ func _thump(seconds: float, frequency: float) -> PackedFloat32Array:
 	return samples
 
 
+## Devolve as amostras de um zumbido com dois tons graves, para tocar em loop.
 func _hum(seconds: float) -> PackedFloat32Array:
 	var samples := PackedFloat32Array()
 	for i in int(seconds * MIX_RATE):
@@ -54,19 +59,21 @@ func _hum(seconds: float) -> PackedFloat32Array:
 	return samples
 
 
+## Devolve amostras zeradas com a duração dada.
 func _silence(seconds: float) -> PackedFloat32Array:
 	var samples := PackedFloat32Array()
 	samples.resize(int(seconds * MIX_RATE))
 	return samples
 
 
-## Rampa curta de entrada e saída para não estalar.
+## Devolve o ganho da rampa curta de entrada e saída, que evita estalos.
 func _envelope(index: int, seconds: float) -> float:
 	var fade: float = 0.01 * MIX_RATE
 	var count: float = seconds * MIX_RATE
 	return clampf(minf(index / fade, (count - index) / fade), 0.0, 1.0)
 
 
+## Grava as amostras como WAV de 16 bits na pasta de saída e imprime o resultado.
 func _save(sound_name: String, samples: PackedFloat32Array) -> void:
 	var data := PackedByteArray()
 	data.resize(samples.size() * 2)

@@ -10,6 +10,7 @@ extends Node3D
 @onready var _camera: Camera3D = %Camera
 
 
+## Aplica a resolução, mira o alvo e copia a pose para a câmera dentro do SubViewport.
 func _ready() -> void:
 	_viewport.size = resolution
 	if target != null:
@@ -18,5 +19,6 @@ func _ready() -> void:
 	_camera.global_transform = global_transform
 
 
+## Devolve a imagem da câmera, para exibir num monitor.
 func get_feed() -> ViewportTexture:
 	return _viewport.get_texture()

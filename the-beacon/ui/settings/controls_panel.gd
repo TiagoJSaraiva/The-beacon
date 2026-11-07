@@ -30,13 +30,15 @@ var _joypad_labels: Dictionary[StringName, Label] = {}
 @onready var _grid: GridContainer = %Grid
 
 
+## Monta as linhas das ações, passa a acompanhar as mudanças e mostra as ligações atuais.
 func _ready() -> void:
 	_build_rows()
 	Settings.changed.connect(refresh)
 	refresh()
 
 
-## Captura antes dos menus, para Esc e os botões não fecharem nada durante a espera.
+## Captura a tecla ou o botão esperado antes dos menus, para Esc e os botões não fecharem nada
+## durante a espera. Esc cancela.
 func _input(event: InputEvent) -> void:
 	if _waiting_action == &"" or not event.is_pressed() or event.is_echo():
 		return
@@ -67,10 +69,13 @@ func refresh() -> void:
 		_joypad_labels[action].text = Settings.bindings.label_for(action, true)
 
 
+## Põe o foco na tecla da primeira ação.
 func focus_first() -> void:
 	_key_buttons[InputBindings.KEYBOARD_ACTIONS[0]].grab_focus()
 
 
+## Cria uma linha por ação: nome, tecla e botão de controle, ou o texto fixo das ações sem botão
+## remapeável.
 func _build_rows() -> void:
 	for action: StringName in InputBindings.KEYBOARD_ACTIONS:
 		var name_label := Label.new()
@@ -87,6 +92,7 @@ func _build_rows() -> void:
 			_joypad_labels[action] = fixed
 
 
+## Cria o botão que inicia a espera da nova tecla ou do novo botão e o devolve.
 func _add_binding_button(action: StringName, joypad: bool) -> Button:
 	var button := Button.new()
 	button.custom_minimum_size = Vector2(150, 0)
@@ -95,6 +101,7 @@ func _add_binding_button(action: StringName, joypad: bool) -> Button:
 	return button
 
 
+## Passa a esperar a nova tecla ou botão da ação e mostra o aviso no botão dela.
 func _start_waiting(action: StringName, joypad: bool) -> void:
 	refresh()
 	_waiting_action = action
@@ -103,16 +110,19 @@ func _start_waiting(action: StringName, joypad: bool) -> void:
 	buttons[action].text = WAITING_TEXT
 
 
+## Encerra a espera e mostra as ligações atuais.
 func _stop_waiting() -> void:
 	_waiting_action = &""
 	refresh()
 
 
+## Cancela a espera e volta os controles ao padrão.
 func _on_reset_button_pressed() -> void:
 	_stop_waiting()
 	Settings.reset_bindings()
 
 
+## Cancela a espera, grava as configurações e pede para voltar.
 func _on_back_button_pressed() -> void:
 	_stop_waiting()
 	Settings.save()

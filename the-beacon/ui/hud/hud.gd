@@ -20,11 +20,13 @@ var _tutorial_template: String = ""
 @onready var _tutorial_text: Label = %TutorialText
 
 
+## Passa a acompanhar as mudanças de teclas e mostra as atuais.
 func _ready() -> void:
 	Settings.changed.connect(_refresh_texts)
 	_refresh_texts()
 
 
+## Detecta o último dispositivo usado e, ao trocar, atualiza as teclas mostradas.
 func _input(event: InputEvent) -> void:
 	var joypad: bool = false
 	if event is InputEventJoypadButton:
@@ -40,16 +42,18 @@ func _input(event: InputEvent) -> void:
 		_refresh_texts()
 
 
+## Mostra ou esconde a tecla de interagir.
 func show_prompt(visible_now: bool) -> void:
 	_prompt.visible = visible_now
 
 
+## Atualiza a barra de progresso (0 a 1) e a mostra só com a interação ativa.
 func show_hold_progress(ratio: float, active: bool) -> void:
 	_hold_bar.value = ratio
 	_hold_bar.visible = active
 
 
-## Tela preta por `seconds` (pulo da carranca), voltando aos poucos.
+## Cobre a tela de preto por `seconds` (pulo da carranca), voltando aos poucos.
 func show_blindness(seconds: float) -> void:
 	if _blind_tween != null:
 		_blind_tween.kill()
@@ -59,18 +63,20 @@ func show_blindness(seconds: float) -> void:
 	_blind_tween.tween_property(_blindness, "modulate:a", 0.0, blind_fade_seconds)
 
 
-## Único texto da HUD, e só durante o tutorial. Vazio esconde.
+## Mostra o texto do tutorial, o único da HUD, com as teclas atuais no lugar das marcações
+## `{ação}`. Vazio esconde.
 func show_tutorial(text: String) -> void:
 	_tutorial_template = text
 	_tutorial_text.visible = not text.is_empty()
 	_refresh_texts()
 
 
-## Borda vermelha enquanto a corrida está bloqueada por queda.
+## Mostra a borda vermelha enquanto a corrida está bloqueada por queda.
 func set_hurt_border(active: bool) -> void:
 	_hurt_border.visible = active
 
 
+## Reescreve o prompt e o tutorial com as teclas atuais do dispositivo em uso.
 func _refresh_texts() -> void:
 	_prompt.text = Settings.bindings.label_for(&"interact", _using_joypad)
 	var text: String = _tutorial_template

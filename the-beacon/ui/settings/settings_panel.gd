@@ -15,6 +15,7 @@ signal back_requested
 @onready var _controls_panel: ControlsPanel = %ControlsPanel
 
 
+## Aplica as faixas e os valores atuais aos controles deslizantes e os liga ao autoload Settings.
 func _ready() -> void:
 	for slider: HSlider in [_master_slider, _music_slider, _sfx_slider]:
 		slider.min_value = SettingsState.MIN_VOLUME
@@ -38,11 +39,12 @@ func refresh() -> void:
 	_sensitivity_slider.set_value_no_signal(Settings.state.sensitivity_scale)
 
 
+## Põe o foco no primeiro controle deslizante.
 func focus_first() -> void:
 	_master_slider.grab_focus()
 
 
-## Numa subpágina (controles), volta à página geral e diz que tratou o pedido.
+## Volta da subpágina de controles à página geral e devolve true. Fora dela, devolve false.
 func go_back_from_subpage() -> bool:
 	if not _controls_panel.visible:
 		return false
@@ -51,11 +53,13 @@ func go_back_from_subpage() -> bool:
 	return true
 
 
+## Mostra a página geral e esconde a de controles.
 func _show_general() -> void:
 	_general.visible = true
 	_controls_panel.visible = false
 
 
+## Abre a página de controles com as ligações atuais.
 func _on_controls_button_pressed() -> void:
 	_general.visible = false
 	_controls_panel.visible = true
@@ -63,6 +67,7 @@ func _on_controls_button_pressed() -> void:
 	_controls_panel.focus_first()
 
 
+## Grava as configurações e pede para voltar.
 func _on_back_button_pressed() -> void:
 	Settings.save()
 	back_requested.emit()
