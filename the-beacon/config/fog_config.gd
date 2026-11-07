@@ -29,7 +29,8 @@ extends Resource
 @export var advance_per_second: float = 0.008
 
 @export_group("Recuo")
-## Depois de o farol voltar a operar com o nevoeiro perto, ele ainda bloqueia por este tempo.
+## Depois de o farol voltar a operar com o nevoeiro perto, o avanço fica parado por este tempo
+## antes de recuar. O feixe só volta quando o recuo leva o avanço abaixo de `near_advance`.
 @export var unblock_seconds: float = 8.0
 ## Até onde ele recua; abaixo de `near_advance`.
 @export_range(0.0, 1.0, 0.01) var recede_to_advance: float = 0.15

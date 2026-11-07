@@ -23,6 +23,16 @@ A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, e
 - Alcance: distância + `occlusion_penalty` por obstáculo (`world`/`barriers`) entre os olhos dele e os do jogador, comparado a `perception_range`.
 - Mais lento que o jogador (`move_speed`). A noite seguinte começa sem ele e com o medidor zerado.
 
+## Comportamento atual a revisar
+A feature ainda vai mudar; isto descreve o código de hoje, sem correção prevista.
+
+- **O jogador perto do alçapão impede as batidas.** O alcance vale com `distância + occlusion_penalty × obstáculos ≤ perception_range` (6 e 10 nas três dificuldades): até 10 m sem obstáculo, até 4 m com um, nunca com dois ou mais. As distâncias são entre os pés (`global_position`); os obstáculos, contados num raio entre os dois na altura dos olhos (`Drowned._count_occluders`).
+  - `TrapdoorBelow` fica cerca de 2 m abaixo do piso da cabine. Com um obstáculo entre eles (o piso ou o painel), o jogador está ao alcance em qualquer ponto do piso da cabine a até ~3,4 m na horizontal da vertical de `TrapdoorBelow`; em cima do alçapão, a ~2,3 m, dá ~8,3.
+  - Ao alcance, o `DrownedBrain` passa a `CHASE` em vez de bater. O caminho até o jogador passa pelo vão do alçapão (a navmesh não tem as barreiras, decisão 0009), então ele sobe a rampa e empurra o painel fechado.
+  - Sem bater: `TrapdoorRules.tick` repõe `resistance_seconds` a cada frame, e o tempo de cansaço (`tire_seconds`) não conta. Com o trinco desligado, o alçapão nunca abre; com ele ligado, o Afogado nunca cansa e não vai descansar.
+  - Quando o jogador sai do alcance, ele volta a `GO_TRAPDOOR`, chega e recomeça a bater do zero.
+  - A confirmar jogando: quantos obstáculos o raio conta com o jogador em cima do alçapão (com dois, ele fica fora do alcance).
+
 ## Sinais
 - `Drowned.effect_triggered(effect)` → `DrownedDirector` → `Player.kill(CAUSE_DROWNED)`.
 - `DrownedDirector.approaching_changed(approaching)`, `drowned_entered` → tutorial.

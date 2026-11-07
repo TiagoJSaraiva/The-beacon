@@ -1,7 +1,8 @@
 class_name SettingsState
 extends RefCounted
-## Preferências do jogador (GDD 15.2): volumes de 0 a 1 e escala da sensibilidade do mouse.
-## Vídeo e controles estão fora do MVP.
+## Preferências do jogador (GDD 15.2): volumes de 0 a 1 e escala da sensibilidade do olhar
+## (mouse e analógico). Os controles remapeáveis ficam em `InputBindings` (decisão 0018);
+## vídeo está fora do MVP.
 
 const MIN_VOLUME := 0.0
 const MAX_VOLUME := 1.0

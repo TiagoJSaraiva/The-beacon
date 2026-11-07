@@ -14,7 +14,7 @@ Ameaça que avança do mar até a cabine enquanto o farol está parado (entrega 
 - Surge no mar (`start_advance`) pelo evento `fog` ou depois de `idle_grace_seconds` com o farol sem operar.
 - Farol operando, nevoeiro no mar: adensa a `sea_densify_per_second` até `sea_max_advance` (abaixo de `NEAR`). Dura um tempo sorteado entre `min_duration_seconds` e `max_duration_seconds`, contado só nessa fase; ao fim, dissipa a `recede_per_second`.
 - Farol parado: avança a `advance_per_second` até 1.
-- Farol volta a operar com o nevoeiro em `NEAR` ou acima: segue bloqueando o feixe por `unblock_seconds` e recua até `recede_to_advance`; daí volta a se comportar como no mar. Abaixo de `NEAR`, só para de avançar.
+- Farol volta a operar com o nevoeiro em `NEAR` ou acima: o avanço fica parado por `unblock_seconds` e depois recua a `recede_per_second` até `recede_to_advance`; daí volta a se comportar como no mar. O feixe segue bloqueado até o avanço ficar abaixo de `near_advance` (ver "Comportamento atual a revisar"). Abaixo de `NEAR`, só para de avançar.
 - Efeitos por estágio:
   - `NEAR` ou acima: bloqueia o feixe (`Lighthouse.set_fog_stage`); o anel em volta do farol aparece na câmera da porta e como neblina geral nas câmeras do mar.
   - `GROUND_FLOOR` ou acima: na primeira vez, estoura a mangueira. Volume no térreo. Aproximação do Afogado. Carrancas no térreo.
@@ -24,6 +24,15 @@ Ameaça que avança do mar até a cabine enquanto o farol está parado (entrega 
 - Cada volume esmaece ao entrar e sair do seu estágio (`FogVisuals.fade_per_second`).
 - Os volumes internos são cilindros retos dentro de um farol cônico: o raio de cada um cabe na parede no topo do trecho, para não vazar por fora, e sobra folga na parte baixa.
 - A noite seguinte começa sem nevoeiro.
+
+## Comportamento atual a revisar
+A feature ainda vai mudar; isto descreve o código de hoje (`FogState`), sem correção prevista. Valores das três dificuldades, que usam os padrões de `FogConfig`.
+
+- **O feixe fica bloqueado bem mais que `unblock_seconds`.** O bloqueio vem do estágio (`blocks_beam`: avanço `>= near_advance`), não da fase. Ao voltar a operar com o nevoeiro em `NEAR` ou acima, o avanço fica parado em `HOLDING` por `unblock_seconds` (8 s) e recua em `RECEDING` a `recede_per_second` (0,03/s). Tempo total sem feixe depois de o farol voltar: `unblock_seconds + (avanço − near_advance) / recede_per_second` = `8 + (avanço − 0,3) / 0,03` s. Em `NEAR` (0,3): 8 s; no térreo (0,45): 13 s; na cabine (0,9): 28 s; no máximo (1,0): ~31 s. Nesse recuo os estágios descem um a um (o nevoeiro sai da cabine, do alçapão, da escada e do térreo nessa ordem). Se o farol parar antes, volta a `ADVANCING`.
+- **O trecho na rota pode saltar de lugar enquanto o nevoeiro se dissipa.** Ao fim da duração no mar, a fase vira `CLEAR`, mas o avanço só cai a 0,03/s. Como `CLEAR` só vem de `SEA`, que fica abaixo de `near_advance`, isso leva no máximo ~10 s. Nesse tempo, `route_segment()` ainda cobre um trecho em volta do centro antigo, e `can_start()` já é verdadeiro.
+  - Se o evento `fog` disparar nessa janela (tentativa a cada 30 s, das 20h30 às 5h, até 3 por noite) ou o farol ficar 45 s sem operar, `start()` sorteia outro `route_center` (entre 0,25 e 0,75) e mantém o avanço (no mínimo `start_advance`).
+  - O trecho muda de lugar no mesmo frame, com meia-largura `max_route_coverage × min(avanço / near_advance, 1) / 2`. A faixa no mar é reposicionada direto (`FogVisuals._place_sea_band`); só a opacidade esmaece.
+  - Um barco que estava fora do trecho antigo e cai dentro do novo afunda no passo seguinte (`BoatPassage.tick`), sem chance de aviso. Um barco antes do trecho novo que ainda não foi atendido passa a chamar.
 
 ## Sinais
 - `FogSystem.stage_changed(stage)` → `Lighthouse.set_fog_stage`, `DrownedDirector.set_fog_stage`, `FigureheadDirector.set_fog_stage`, tutorial.

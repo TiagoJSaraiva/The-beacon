@@ -14,7 +14,7 @@ Barcos que cruzam o mar e precisam de aviso quando há nevoeiro (entrega 2).
 - Sem nevoeiro, o rádio não toca e o barco passa.
 - Com nevoeiro adiante do barco, ele chama: o rádio toca enquanto houver algum barco chamando.
 - Atender vale para todos os barcos que estão chamando: com o feixe aceso, eles param e desviam; com o feixe apagado, param de chamar e seguem em frente.
-- Dentro do trecho de nevoeiro sem ter desviado, o barco afunda na hora e soma 1 ponto de Afogado. Isso inclui o nevoeiro que cresce por cima de um barco (premissa a validar).
+- Dentro do trecho de nevoeiro sem ter desviado, o barco afunda na hora e soma 1 ponto de Afogado. Isso inclui o nevoeiro que cresce por cima de um barco (premissa a validar) e o trecho que salta de lugar quando o nevoeiro ressurge enquanto se dissipa (`nevoeiro.md`, "Comportamento atual a revisar").
 - Não há mais piratas.
 - A noite seguinte começa sem barcos.
 

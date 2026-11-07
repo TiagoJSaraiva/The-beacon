@@ -6,9 +6,11 @@ extends RefCounted
 ##   `idle_grace_seconds` com o farol parado.
 ## - SEA: no mar, se adensa até `sea_max_advance`; ao fim da duração sorteada, dissipa.
 ## - ADVANCING: farol parado; avança até 1.
-## - HOLDING: o farol voltou a operar com o nevoeiro perto; ainda bloqueia por
+## - HOLDING: o farol voltou a operar com o nevoeiro perto; o avanço fica parado por
 ##   `unblock_seconds`.
 ## - RECEDING: recua até `recede_to_advance` e volta ao mar.
+## O feixe fica bloqueado enquanto o avanço estiver em `near_advance` ou acima, em qualquer
+## fase: em HOLDING e também em parte do RECEDING.
 
 enum Phase { CLEAR, SEA, ADVANCING, HOLDING, RECEDING }
 
