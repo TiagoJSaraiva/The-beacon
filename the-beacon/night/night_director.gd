@@ -16,6 +16,7 @@ var is_running: bool = false
 var _shown_text: String = ""
 
 
+## Avança o relógio e publica o horário. Às 06:00, para e emite `night_ended`.
 func _process(delta: float) -> void:
 	if not is_running:
 		return
@@ -27,6 +28,7 @@ func _process(delta: float) -> void:
 		night_ended.emit(current_night)
 
 
+## Cria o relógio da noite. Precisa vir antes de `start_night`.
 func configure(config: TimeConfig) -> void:
 	clock = NightClock.new(config)
 
@@ -41,6 +43,7 @@ func start_night(night: int) -> void:
 	night_started.emit(night)
 
 
+## Emite `time_changed` só quando o texto muda, ou seja, a cada minuto do jogo.
 func _publish_time() -> void:
 	var text: String = clock.display_text()
 	if text == _shown_text:

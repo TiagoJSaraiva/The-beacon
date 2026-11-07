@@ -28,7 +28,7 @@ extends Resource
 @export var fall: FallConfig
 
 
-## Multiplicador de chance dos eventos na noite indicada (a primeira noite é 1).
+## Devolve o multiplicador de chance dos eventos na noite indicada (a primeira noite é 1).
 func chance_multiplier_for_night(night: int) -> float:
 	return event_chance_multiplier * (1.0 + chance_increase_per_night * float(night - 1))
 
@@ -80,6 +80,7 @@ func validate() -> PackedStringArray:
 	return errors
 
 
+## Diz se nenhum id se repete na lista. Definições nulas são ignoradas aqui; `validate` as acusa.
 static func _ids_are_unique(definitions: Array[EventDefinition]) -> bool:
 	var seen: Array[StringName] = []
 	for definition: EventDefinition in definitions:

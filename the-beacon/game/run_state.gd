@@ -16,25 +16,29 @@ var flashlight_battery_seconds: float = 0.0
 var tutorial_shown_ids: Array[StringName] = []
 
 
+## Cria o estado na primeira noite com os valores dados. Para um plantão novo, use `new_run`.
 func _init(difficulty: StringName = &"", nights: int = 1, battery_seconds: float = 0.0) -> void:
 	difficulty_id = difficulty
 	total_nights = nights
 	flashlight_battery_seconds = battery_seconds
 
 
-## Plantão novo, na primeira noite e com a lanterna carregada.
+## Cria um plantão novo, na primeira noite e com a lanterna carregada.
 static func new_run(difficulty: DifficultyConfig) -> RunState:
 	return RunState.new(difficulty.id, difficulty.nights, difficulty.flashlight.battery_seconds)
 
 
+## Diz se a noite atual é a última do plantão.
 func is_last_night() -> bool:
 	return current_night >= total_nights
 
 
+## Passa para a próxima noite, sem ultrapassar a última.
 func advance_night() -> void:
 	current_night = mini(current_night + 1, total_nights)
 
 
+## Devolve o estado em tipos aceitos pelo JSON, pronto para o save.
 func to_dict() -> Dictionary:
 	var shown: Array[String] = []
 	for step_id: StringName in tutorial_shown_ids:
@@ -50,7 +54,8 @@ func to_dict() -> Dictionary:
 	}
 
 
-## O JSON devolve números como float; os inteiros são convertidos aqui.
+## Restaura o estado a partir do save, limitando os valores às faixas válidas. O JSON devolve
+## números como float; os inteiros são convertidos aqui.
 func from_dict(data: Dictionary) -> void:
 	difficulty_id = StringName(str(data.get("difficulty_id", String(difficulty_id))))
 	total_nights = maxi(int(data.get("total_nights", total_nights)), 1)

@@ -5,6 +5,7 @@ extends Resource
 @export var difficulties: Array[DifficultyConfig] = []
 
 
+## Devolve a dificuldade com este id, ou null se não houver.
 func find_by_id(difficulty_id: StringName) -> DifficultyConfig:
 	for difficulty: DifficultyConfig in difficulties:
 		if difficulty.id == difficulty_id:

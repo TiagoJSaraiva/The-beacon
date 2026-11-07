@@ -36,6 +36,8 @@ var run: RunState
 @onready var _carryover: RunCarryover = %RunCarryover
 
 
+## Monta a noite: lê o pedido, consome o save, configura e liga os sistemas, aplica o estado
+## persistente, inicia a noite e assa a navmesh um frame depois.
 func _ready() -> void:
 	_read_run_request()
 	# Começar a noite consome o save: qualquer saída antes do próximo "Salvar e sair",
@@ -51,6 +53,8 @@ func _ready() -> void:
 	_navigation.bake_navigation_mesh(false)
 
 
+## Passa a dificuldade e as referências aos sistemas, registra os eventos e liga as câmeras aos
+## monitores.
 func _configure_systems() -> void:
 	_player.configure(difficulty)
 	_lighthouse.configure(difficulty)
@@ -83,6 +87,7 @@ func _configure_systems() -> void:
 	_fog_visuals.setup(_fog, _exterior.boat_path)
 
 
+## Liga os sinais entre jogador, farol, sistemas, HUD e telas (lista em `docs/arquitetura.md`).
 func _connect_signals() -> void:
 	_player.interaction.focus_changed.connect(_hud.show_prompt)
 	_player.interaction.hold_progress_changed.connect(_hud.show_hold_progress)
@@ -129,6 +134,7 @@ func _read_run_request() -> void:
 	run = request.run
 
 
+## Repassa ao jogador a sensibilidade atual. Roda ao montar a noite e a cada `Settings.changed`.
 func _apply_settings() -> void:
 	_player.sensitivity_scale = Settings.state.sensitivity_scale
 
@@ -143,12 +149,14 @@ func _set_simulation_running(running: bool) -> void:
 		_hud.show_hold_progress(0.0, false)
 
 
+## Zera o sorteio de eventos para a noite que começa.
 func _on_night_started(_night: int) -> void:
 	_event_director.reset_night()
 
 
-## Às 06:00 a noite termina mesmo com algo em andamento (GDD 1.2.1). Só o estado
-## persistente segue; a próxima noite recarrega a cena do zero.
+## Congela a simulação, recolhe o estado persistente e segue para a vitória ou para a tela de fim
+## de noite. Às 06:00 a noite termina mesmo com algo em andamento (GDD 1.2.1); a próxima noite
+## recarrega a cena do zero.
 func _on_night_ended(night: int) -> void:
 	_set_simulation_running(false)
 	_carryover.capture(run)
@@ -159,27 +167,31 @@ func _on_night_ended(night: int) -> void:
 		_night_end.show_night(night)
 
 
+## Carrega a noite seguinte sem gravar o save.
 func _on_night_end_continue_requested() -> void:
 	SceneRouter.play_night(difficulty, run)
 
 
-## O save já aponta para a noite seguinte (decisão 0014).
+## Grava o save, que já aponta para a noite seguinte (decisão 0014), e volta ao menu.
 func _on_night_end_save_and_exit_requested() -> void:
 	SaveService.write_run(run.to_dict())
 	SceneRouter.go_to_main_menu()
 
 
+## Trava ou libera os controles do jogador e, ao pausar, esconde a barra de progresso.
 func _on_pause_menu_paused_changed(paused: bool) -> void:
 	_player.set_controls_enabled(not paused)
 	if paused:
 		_hud.show_hold_progress(0.0, false)
 
 
-## O save já foi consumido ao começar a noite: sair daqui perde a partida (decisão 0014).
+## Volta ao menu. O save já foi consumido ao começar a noite, então sair daqui perde a partida
+## (decisão 0014).
 func _on_pause_menu_exit_requested() -> void:
 	SceneRouter.go_to_main_menu()
 
 
+## Congela a simulação, apaga o save, mostra a tela de morte e emite `run_lost` com a causa.
 func _on_player_died(cause: StringName) -> void:
 	_set_simulation_running(false)
 	# Morrer perde o plantão inteiro (GDD 1.2.15).
@@ -188,11 +200,13 @@ func _on_player_died(cause: StringName) -> void:
 	run_lost.emit(cause)
 
 
+## Começa um plantão novo na mesma dificuldade.
 func _on_game_over_retry_requested() -> void:
 	SceneRouter.start_new_run(difficulty)
 
 
-## Vencer apaga o save e libera a próxima dificuldade (GDD 1.2.14 e 1.2.15).
+## Apaga o save, libera a próxima dificuldade, mostra a vitória e emite `run_won` (GDD 1.2.14 e
+## 1.2.15).
 func _win_run() -> void:
 	SaveService.delete_run()
 	SaveService.register_victory(difficulty.id, catalog)

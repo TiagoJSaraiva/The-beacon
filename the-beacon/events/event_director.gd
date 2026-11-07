@@ -15,6 +15,7 @@ var _can_trigger: Dictionary[StringName, Callable] = {}
 var _trigger: Dictionary[StringName, Callable] = {}
 
 
+## Prepara o RNG. Sem `night` atribuído, avisa e desliga o sorteio.
 func _ready() -> void:
 	rng.randomize()
 	if night == null:
@@ -22,6 +23,8 @@ func _ready() -> void:
 		set_process(false)
 
 
+## Roda o sorteio enquanto a noite corre, aciona quem trata cada evento sorteado e emite
+## `event_triggered`.
 func _process(delta: float) -> void:
 	if _difficulty == null or not night.is_running:
 		return
@@ -34,6 +37,8 @@ func _process(delta: float) -> void:
 		event_triggered.emit(definition.id)
 
 
+## Guarda a dificuldade e recria o sorteio com os eventos dela. Os registros feitos em `register`
+## são mantidos.
 func configure(difficulty: DifficultyConfig) -> void:
 	_difficulty = difficulty
 	_scheduler = EventScheduler.new()
@@ -47,10 +52,12 @@ func register(event_id: StringName, can_trigger: Callable, trigger: Callable) ->
 	_trigger[event_id] = trigger
 
 
+## Zera os intervalos e as contagens do sorteio para a noite que começa.
 func reset_night() -> void:
 	_scheduler.reset_night()
 
 
+## Diz se o evento tem quem o trate e se esse sistema aceita dispará-lo agora.
 func _is_eligible(definition: EventDefinition) -> bool:
 	if not _can_trigger.has(definition.id):
 		return false

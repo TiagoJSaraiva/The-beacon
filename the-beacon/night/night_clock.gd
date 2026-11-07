@@ -10,6 +10,7 @@ var config: TimeConfig
 var elapsed_seconds: float = 0.0
 
 
+## Cria o relógio no início da noite, com a configuração de tempo.
 func _init(time_config: TimeConfig) -> void:
 	config = time_config
 
@@ -21,10 +22,12 @@ static func is_hour_in_window(hour: float, window_start: float, window_end: floa
 	return hour >= window_start or hour < window_end
 
 
+## Devolve a duração da noite em horas do jogo, cruzando a meia-noite (20h a 6h = 10).
 func night_length_hours() -> float:
 	return fposmod(float(config.night_end_hour - config.night_start_hour), HOURS_PER_DAY)
 
 
+## Devolve a duração da noite em segundos reais.
 func duration_seconds() -> float:
 	return night_length_hours() * config.real_seconds_per_game_hour
 
@@ -35,22 +38,24 @@ func advance(delta: float) -> bool:
 	return is_finished()
 
 
+## Diz se o tempo decorrido já chegou ao fim da noite.
 func is_finished() -> bool:
 	return elapsed_seconds >= duration_seconds()
 
 
-## Hora atual do relógio, de 0 a 24 (ex.: 23.5 = 23:30).
+## Devolve a hora atual do relógio, de 0 a 24 (ex.: 23.5 = 23:30).
 func clock_hour() -> float:
 	var hours_elapsed: float = elapsed_seconds / config.real_seconds_per_game_hour
 	return fposmod(config.night_start_hour + hours_elapsed, HOURS_PER_DAY)
 
 
-## Horário no formato do relógio digital de parede.
+## Devolve o horário no formato do relógio digital de parede, como `23:30`.
 func display_text() -> String:
 	var total_minutes: int = floori(clock_hour() * MINUTES_PER_HOUR)
 	@warning_ignore("integer_division")
 	return "%02d:%02d" % [total_minutes / MINUTES_PER_HOUR, total_minutes % MINUTES_PER_HOUR]
 
 
+## Volta o relógio ao início da noite.
 func reset() -> void:
 	elapsed_seconds = 0.0

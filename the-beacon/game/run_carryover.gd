@@ -9,7 +9,8 @@ extends Node
 @export var tutorial: TutorialDirector
 
 
-## O tutorial vem antes da mangueira: estourada numa noite anterior, ela não repete o texto.
+## Aplica o estado persistente aos sistemas da noite. O tutorial vem antes da mangueira:
+## estourada numa noite anterior, ela não repete o texto.
 func apply(run: RunState) -> void:
 	tutorial.restore_shown(run.tutorial_shown_ids)
 	drowned.drowned_points = run.drowned_points
@@ -18,6 +19,8 @@ func apply(run: RunState) -> void:
 	player.flashlight.set_battery_seconds(run.flashlight_battery_seconds)
 
 
+## Copia para o `RunState` o que passa à noite seguinte: pontos de Afogado, mangueira, bateria e
+## tutorial.
 func capture(run: RunState) -> void:
 	run.drowned_points = drowned.drowned_points
 	run.hose_burst = lighthouse.is_hose_burst()

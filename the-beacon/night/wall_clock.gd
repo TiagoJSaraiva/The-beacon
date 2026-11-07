@@ -5,5 +5,6 @@ extends Node3D
 @onready var _display: Label3D = %Display
 
 
+## Mostra no visor o texto recebido, como `23:30`.
 func show_time(text: String) -> void:
 	_display.text = text

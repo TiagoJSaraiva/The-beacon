@@ -8,6 +8,7 @@ var _timers: Dictionary[StringName, float] = {}
 var _counts: Dictionary[StringName, int] = {}
 
 
+## Inclui um evento no sorteio, com intervalo e contagem zerados.
 func add(definition: EventDefinition) -> void:
 	_definitions.append(definition)
 	_timers[definition.id] = 0.0
@@ -37,16 +38,19 @@ func update(
 	return fired
 
 
+## Devolve quantas vezes o evento disparou nesta noite; 0 para um evento desconhecido.
 func count_tonight(event_id: StringName) -> int:
 	return _counts.get(event_id, 0)
 
 
+## Zera intervalos e contagens de todos os eventos, mantendo as definições.
 func reset_night() -> void:
 	for event_id: StringName in _timers:
 		_timers[event_id] = 0.0
 		_counts[event_id] = 0
 
 
+## Diz se o evento ainda está abaixo do limite da noite e se a hora cai na janela dele.
 func _can_roll(definition: EventDefinition, clock_hour: float) -> bool:
 	if definition.max_per_night > 0 and _counts[definition.id] >= definition.max_per_night:
 		return false
