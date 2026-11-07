@@ -5,6 +5,7 @@ extends Node3D
 @onready var _screen: MeshInstance3D = %Screen
 
 
+## Mostra a imagem da câmera na tela, sem depender da iluminação da cena.
 func show_feed(feed: Texture2D) -> void:
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED

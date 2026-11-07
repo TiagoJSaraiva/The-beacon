@@ -16,6 +16,7 @@ var is_on: bool = false
 @onready var _indicator: OmniLight3D = %Indicator
 
 
+## Mostra o painel no estado inicial, sem feixe.
 func _ready() -> void:
 	show_status(false)
 
@@ -27,6 +28,7 @@ func show_status(beam_active: bool) -> void:
 	_indicator.light_color = COLOR_ACTIVE if beam_active else COLOR_FAILURE
 
 
+## Inverte a alavanca e emite `switched`. O farol recalcula o estado e atualiza o painel.
 func _on_switch_point_interacted() -> void:
 	is_on = not is_on
 	switched.emit(is_on)

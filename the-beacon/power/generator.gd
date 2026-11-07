@@ -21,6 +21,7 @@ var _was_running: bool = false
 @onready var _hum: LoopingSound = %Hum
 
 
+## Cria o estado com valores padrão e mostra medidor, tampa e boca só no papel por combustível.
 func _ready() -> void:
 	# Valores padrão até o configure(): o farol consulta o estado logo ao montar.
 	state = GeneratorState.new(PowerConfig.new(), feed)
@@ -32,11 +33,13 @@ func _ready() -> void:
 	_refresh()
 
 
+## Gasta combustível, se estiver em uso, e atualiza medidor, som e sinal.
 func _process(delta: float) -> void:
 	state.tick(delta)
 	_refresh()
 
 
+## Recria o estado com os valores da dificuldade, mantendo a condição da mangueira.
 func configure(power: PowerConfig) -> void:
 	var hose_intact: bool = state.hose_intact
 	state = GeneratorState.new(power, feed)
@@ -45,20 +48,25 @@ func configure(power: PowerConfig) -> void:
 	_refresh()
 
 
+## Diz se o gerador fornece energia agora.
 func is_running() -> bool:
 	return state.is_running()
 
 
+## Informa se a mangueira está inteira. Só afeta o gerador alimentado por ela.
 func set_hose_intact(intact: bool) -> void:
 	state.hose_intact = intact
 	_refresh()
 
 
+## Informa se o gerador é a fonte ativa do farol ligado, condição para gastar e zumbir no papel
+## por combustível.
 func set_in_use(in_use: bool) -> void:
 	state.in_use = in_use
 	_refresh()
 
 
+## Atualiza medidor e zumbido e emite `power_changed` só quando a energia muda.
 func _refresh() -> void:
 	_gauge_pivot.scale.y = maxf(state.fuel_ratio(), 0.001)
 	var running: bool = state.is_running()
@@ -69,5 +77,6 @@ func _refresh() -> void:
 		power_changed.emit(running)
 
 
+## Pede para despejar o galão ao completar a barra.
 func _on_pour_point_hold_completed() -> void:
 	refuel_requested.emit()

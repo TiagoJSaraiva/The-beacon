@@ -13,6 +13,8 @@ var hose_intact: bool = true
 var in_use: bool = false
 
 
+## Cria o gerador com o tipo de alimentação dado. Por combustível, começa com o valor inicial da
+## configuração, limitado à capacidade.
 func _init(power_config: PowerConfig, generator_feed: Feed = Feed.FUEL) -> void:
 	config = power_config
 	feed = generator_feed
@@ -20,12 +22,14 @@ func _init(power_config: PowerConfig, generator_feed: Feed = Feed.FUEL) -> void:
 		fuel = clampf(config.generator_start_fuel, 0.0, config.generator_capacity)
 
 
+## Diz se há energia: mangueira inteira ou combustível acima de zero, conforme o tipo.
 func is_running() -> bool:
 	if feed == Feed.HOSE:
 		return hose_intact
 	return fuel > 0.0
 
 
+## Gasta combustível se o gerador for por combustível e estiver em uso.
 func tick(delta: float) -> void:
 	if feed == Feed.FUEL and in_use:
 		fuel = maxf(0.0, fuel - config.generator_consumption_per_second * delta)
@@ -40,6 +44,7 @@ func add_fuel(amount: float) -> float:
 	return accepted
 
 
+## Devolve o combustível de 0 a 1. Pela mangueira ou sem capacidade, devolve 0.
 func fuel_ratio() -> float:
 	if feed == Feed.HOSE or config.generator_capacity <= 0.0:
 		return 0.0

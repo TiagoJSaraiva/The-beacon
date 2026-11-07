@@ -37,6 +37,7 @@ var _was_lit: bool = false
 @onready var _trapdoor_below: Marker3D = %TrapdoorBelow
 
 
+## Liga os sinais internos, assenta o galão no slot e calcula o estado inicial do farol.
 func _ready() -> void:
 	fuel_tank.hose_burst.connect(_on_fuel_tank_hose_burst)
 	fuel_tank.slot.return_requested.connect(_on_jerrycan_slot_return_requested)
@@ -52,6 +53,7 @@ func _ready() -> void:
 	_refresh_beam()
 
 
+## Repassa aos sistemas do farol os valores da dificuldade.
 func configure(difficulty: DifficultyConfig) -> void:
 	main_generator.configure(difficulty.power)
 	emergency_generator.configure(difficulty.power)
@@ -75,6 +77,7 @@ func burst_hose(with_sound: bool = true) -> void:
 	fuel_tank.burst_hose(with_sound)
 
 
+## Diz se a mangueira já estourou.
 func is_hose_burst() -> bool:
 	return fuel_tank.is_hose_burst
 
@@ -87,7 +90,7 @@ func drop_jerrycan(at: Vector3, throw_velocity: Vector3) -> void:
 	jerrycan_carried_changed.emit(false)
 
 
-## Pontos onde o Afogado age dentro do farol.
+## Devolve os pontos onde o Afogado age dentro do farol.
 func drowned_targets() -> Dictionary[DrownedBrain.Target, Vector3]:
 	return {
 		DrownedBrain.Target.TRAPDOOR_BELOW: _trapdoor_below.global_position,
@@ -95,19 +98,20 @@ func drowned_targets() -> Dictionary[DrownedBrain.Target, Vector3]:
 	}
 
 
-## Onde o Afogado aparece depois de arrombar a porta.
+## Devolve o ponto onde o Afogado aparece depois de arrombar a porta.
 func drowned_entry_point() -> Vector3:
 	return _door_inside.global_position
 
 
+## Liga as imagens das câmeras aos três monitores da mesa.
 func show_camera_feeds(sea_left: Texture2D, sea_right: Texture2D, door: Texture2D) -> void:
 	_sea_monitor_left.show_feed(sea_left)
 	_sea_monitor_right.show_feed(sea_right)
 	_door_monitor.show_feed(door)
 
 
-## Perto do farol, o nevoeiro bloqueia o feixe. Na primeira vez que entra no farol, estoura
-## a mangueira (decisão 0017). No alçapão, desliga o trinco.
+## Aplica o estágio do nevoeiro: perto do farol, bloqueia o feixe; ao entrar pela primeira vez,
+## estoura a mangueira (decisão 0017); no alçapão, desliga o trinco.
 func set_fog_stage(stage: FogStage.Stage) -> void:
 	beam.fog_blocking = FogStage.blocks_beam(stage)
 	if FogStage.is_inside(stage):
@@ -116,6 +120,7 @@ func set_fog_stage(stage: FogStage.Stage) -> void:
 	_refresh_beam()
 
 
+## Mostra o horário no relógio de parede.
 func show_time(text: String) -> void:
 	_wall_clock.show_time(text)
 
@@ -142,15 +147,18 @@ func _refresh_beam() -> void:
 		beam_lit_changed.emit(lit)
 
 
+## Assenta o galão no slot e passa a enchê-lo.
 func _dock_jerrycan() -> void:
 	jerrycan.dock(fuel_tank.slot.dock_transform())
 	fuel_tank.slot.hold(jerrycan)
 
 
+## Para de vez o gerador principal quando a mangueira estoura.
 func _on_fuel_tank_hose_burst() -> void:
 	main_generator.set_hose_intact(false)
 
 
+## Passa o galão para a mão, do slot ou do chão, e avisa que ele está sendo carregado.
 func _on_jerrycan_pick_up_requested() -> void:
 	if jerrycan.place == Jerrycan.Place.SLOT:
 		fuel_tank.slot.release()
@@ -158,6 +166,7 @@ func _on_jerrycan_pick_up_requested() -> void:
 	jerrycan_carried_changed.emit(true)
 
 
+## Devolve ao slot o galão que está na mão e avisa que as mãos ficaram livres.
 func _on_jerrycan_slot_return_requested() -> void:
 	if jerrycan.place != Jerrycan.Place.HAND:
 		return
@@ -165,10 +174,12 @@ func _on_jerrycan_slot_return_requested() -> void:
 	jerrycan_carried_changed.emit(false)
 
 
+## Despeja o galão no gerador de emergência. O que não couber fica no galão.
 func _on_emergency_generator_refuel_requested() -> void:
 	jerrycan.state.pour_into(emergency_generator.state)
 
 
+## Mostra a lâmpada queimada na casa de máquinas e recalcula o farol.
 func _on_lamp_burned_changed(burned: bool) -> void:
 	machine_house.show_lamp_burned(burned)
 	_refresh_beam()

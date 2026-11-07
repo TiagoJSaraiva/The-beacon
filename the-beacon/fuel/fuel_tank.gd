@@ -17,17 +17,20 @@ var is_hose_burst: bool = false
 @onready var _burst_sound: AudioStreamPlayer3D = %BurstSound
 
 
+## Mostra a mangueira inteira e, com `debug_burst_on_start`, a estoura depois de a cena montar.
 func _ready() -> void:
 	_refresh()
 	if debug_burst_on_start:
 		burst_hose.call_deferred(false)
 
 
+## Repassa ao slot do galão os valores de combustível da dificuldade.
 func configure(power: PowerConfig) -> void:
 	slot.configure(power)
 
 
-## Estoura de vez. Sem som quando vem de uma noite anterior.
+## Estoura a mangueira de vez e emite `hose_burst`; repetir não faz nada. Sem som quando vem de
+## uma noite anterior.
 func burst_hose(with_sound: bool = true) -> void:
 	if is_hose_burst:
 		return
@@ -38,6 +41,7 @@ func burst_hose(with_sound: bool = true) -> void:
 	hose_burst.emit()
 
 
+## Mostra a mangueira inteira ou o toco com a poça, conforme o estado.
 func _refresh() -> void:
 	_hose.visible = not is_hose_burst
 	_burst.visible = is_hose_burst

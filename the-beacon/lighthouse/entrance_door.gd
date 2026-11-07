@@ -20,12 +20,13 @@ var _swing: Tween
 @onready var _approach_noise: LoopingSound = %ApproachNoise
 
 
-## Barulho do lado de fora, crescendo com a aproximação (0 a 1).
+## Toca o barulho do lado de fora, mais alto com a aproximação (0 a 1). Em 0, ele para.
 func show_approach(level: float) -> void:
 	_approach_noise.set_active(level > 0.0)
 	_approach_noise.volume_db = lerpf(approach_quiet_db, approach_loud_db, level)
 
 
+## Toca o som do arrombamento e anima a folha abrindo e voltando. A colisão não muda.
 func burst_open() -> void:
 	_burst_sound.play()
 	if _swing != null:

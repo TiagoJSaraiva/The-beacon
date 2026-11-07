@@ -18,19 +18,25 @@ var _relock_left: float = 0.0
 var _reclose_left: float = 0.0
 
 
+## Cria o alçapão fechado, sem trinco, com a resistência cheia.
 func _init(trapdoor_config: TrapdoorConfig) -> void:
 	config = trapdoor_config
 	_resistance_left = config.resistance_seconds
 
 
+## Diz se o trinco pode ser ligado: alçapão fechado, sem nevoeiro e fora do intervalo depois do
+## nevoeiro.
 func can_latch() -> bool:
 	return not is_open and not fog_present and _relock_left <= 0.0
 
 
+## Diz se o jogador pode mexer no trinco: desligar é sempre possível; ligar depende de
+## `can_latch`.
 func can_toggle_latch() -> bool:
 	return is_latched or can_latch()
 
 
+## Desliga o trinco ligado ou, se `can_latch` permitir, liga o desligado.
 func toggle_latch() -> void:
 	if is_latched:
 		is_latched = false
@@ -38,13 +44,15 @@ func toggle_latch() -> void:
 		is_latched = true
 
 
+## Diz se o jogador pode mexer no painel: fechar só fora do intervalo depois do arrombamento;
+## abrir só sem o trinco.
 func can_toggle_open() -> bool:
 	if is_open:
 		return _reclose_left <= 0.0
 	return not is_latched
 
 
-## Jogador abrindo ou fechando. Devolve se mudou.
+## Abre ou fecha pelo jogador, se permitido, e devolve se mudou.
 func toggle_open() -> bool:
 	if not can_toggle_open():
 		return false
@@ -52,6 +60,8 @@ func toggle_open() -> bool:
 	return true
 
 
+## Registra o nevoeiro no alçapão: ao chegar, desliga o trinco; ao sair, começa o intervalo para
+## religá-lo.
 func set_fog_present(present: bool) -> void:
 	if present:
 		is_latched = false

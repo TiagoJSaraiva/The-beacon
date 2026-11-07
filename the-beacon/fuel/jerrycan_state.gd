@@ -7,6 +7,7 @@ var capacity: float
 var amount: float
 
 
+## Cria o galão cheio, com a capacidade dada.
 func _init(jerrycan_capacity: float) -> void:
 	capacity = jerrycan_capacity
 	amount = capacity
@@ -27,6 +28,7 @@ func pour_into(generator: GeneratorState) -> float:
 	return poured
 
 
+## Devolve o nível de 0 a 1. Sem capacidade, devolve 0.
 func ratio() -> float:
 	if capacity <= 0.0:
 		return 0.0

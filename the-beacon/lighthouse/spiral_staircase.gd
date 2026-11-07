@@ -65,12 +65,13 @@ var _generated: Array[Node] = []
 var _build_queued: bool = false
 
 
+## Coloca a escada na camada world e gera os nós dela.
 func _ready() -> void:
 	collision_layer = CollisionLayers.WORLD
 	_build()
 
 
-## Ponto central do degrau no ângulo e altura da posição relativa (0 = base, 1 = topo).
+## Devolve o ponto central do degrau na posição relativa `progress` (0 = base, 1 = topo).
 func point_at(progress: float) -> Vector3:
 	var angle: float = deg_to_rad(start_angle_degrees) + TAU * turns * progress
 	var radius: float = (inner_radius + outer_radius) * 0.5 - radius_shrink * progress
@@ -78,6 +79,8 @@ func point_at(progress: float) -> Vector3:
 	return Vector3(radius * cos(angle), height, radius * sin(angle))
 
 
+## Agenda uma única reconstrução adiada, para vários parâmetros mudados juntos. Fora da árvore,
+## não faz nada.
 func _queue_build() -> void:
 	if not is_inside_tree() or _build_queued:
 		return
@@ -85,6 +88,8 @@ func _queue_build() -> void:
 	_build.call_deferred()
 
 
+## Apaga os nós gerados e recria os segmentos de colisão e visual, mais o guarda-corpo do trecho
+## baixo.
 func _build() -> void:
 	_build_queued = false
 	for node: Node in _generated:
@@ -116,6 +121,7 @@ func _build() -> void:
 			_add_rail(middle, along, outward, length, end.y)
 
 
+## Cria um trecho do guarda-corpo na borda interna, do chão até `rail_height` acima de `top`.
 func _add_rail(
 	middle: Vector3, along: Vector3, outward: Vector3, length: float, top: float
 ) -> void:
@@ -137,6 +143,7 @@ func _add_rail(
 	_add_generated(_make_mesh(mesh, rail_transform))
 
 
+## Devolve um nó de colisão com a forma e a transformação dadas.
 func _make_collision(shape: Shape3D, segment_transform: Transform3D) -> CollisionShape3D:
 	var collision := CollisionShape3D.new()
 	collision.shape = shape
@@ -144,6 +151,7 @@ func _make_collision(shape: Shape3D, segment_transform: Transform3D) -> Collisio
 	return collision
 
 
+## Devolve um nó visual com a malha e a transformação dadas.
 func _make_mesh(mesh: Mesh, segment_transform: Transform3D) -> MeshInstance3D:
 	var instance := MeshInstance3D.new()
 	instance.mesh = mesh
@@ -151,6 +159,7 @@ func _make_mesh(mesh: Mesh, segment_transform: Transform3D) -> MeshInstance3D:
 	return instance
 
 
+## Adiciona o nó à escada e o registra para ser apagado na próxima reconstrução.
 func _add_generated(node: Node) -> void:
 	add_child(node)
 	_generated.append(node)
