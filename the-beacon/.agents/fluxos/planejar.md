@@ -7,7 +7,7 @@
    - **Arquivos**: criar / alterar, com uma linha de propósito cada.
    - **Cenas, nós e sinais**: o que entra na árvore e quem conecta a quem.
    - **Testes**: unitários previstos e, se houver, o teste de cena.
-   - **Passos**: sequência de passos pequenos, cada um verificável com `check.ps1 -Fast`.
+   - **Passos**: sequência de passos pequenos, cada um verificável com `check.ps1 -Fast` e com o commit que vai gerar.
    - **Alternativas descartadas**: no máximo 2, com o motivo.
    - **Riscos**: o que pode quebrar ou ficar difícil de mudar depois.
 4. Pare e aguarde aprovação. Não escreva código antes dela.

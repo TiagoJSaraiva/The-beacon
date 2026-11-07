@@ -32,7 +32,14 @@ Regras gerais:
 - Mudanças pequenas e incrementais. Um passo verificável por vez.
 - Não refatore o que não foi pedido; sugira no resumo.
 - Dúvida real de design ou escopo: pergunte em vez de supor.
-- Nunca faça `git commit`, `push` ou reescreva histórico sem pedido explícito.
+
+Commits:
+- Em tarefa de implementação pedida pelo desenvolvedor, faça um commit por módulo ou passo verificável, na branch atual, sem criar outra, salvo pedido do desenvolvedor.
+- Antes de cada commit, `check.ps1 -Fast` passando. O último commit da tarefa exige o check completo passando.
+- Inclua no commit só os arquivos daquele módulo, citados um a um (nunca `git add -A` ou `git add .`), com a nota de `docs/` que a mudança afetou.
+- Mensagem em português, no imperativo, com um único assunto. Sem `Co-Authored-By` nem qualquer outra menção ao agente.
+- Se algo falhar depois, corrija em um commit novo.
+- Nunca faça `push`, nem reescreva histórico (`--amend`, `rebase`, `reset`), nem pule hooks sem pedido explícito.
 
 ## Regras essenciais de GDScript
 

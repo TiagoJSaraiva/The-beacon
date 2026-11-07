@@ -8,9 +8,9 @@
    - `arquitetura.md`: se cenas, autoloads, sinais, input map ou camadas mudaram.
    - `sistemas/`: nota do sistema criado ou alterado.
    - `decisoes/`: nova nota para cada decisão estrutural tomada.
-3. Responda com:
+3. Faça o commit final do que falta da tarefa, seguindo as regras de commits em `AGENTS.md`. Não faça push.
+4. Responda com:
    - Resumo das mudanças de código (arquivos e propósito).
    - Arquivos de `docs/` alterados.
    - O que o desenvolvedor deve validar jogando (game feel, visual).
-   - Uma sugestão de mensagem de commit.
-4. Não faça commit.
+   - Os commits feitos (hash e mensagem).
