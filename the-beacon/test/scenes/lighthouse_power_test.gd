@@ -52,8 +52,9 @@ func test_jerrycan_goes_from_slot_to_floor_and_back() -> void:
 	await runner.simulate_frames(2)
 	assert_int(jerrycan.place).is_equal(Jerrycan.Place.SLOT)
 
+	# No slot, o ponto de devolução desativado envolve o galão e não pode bloquear a mira.
 	monitor_signals(lighthouse)
-	jerrycan.pick_up_requested.emit()
+	await _pick_up_with_ray(runner, lighthouse)
 	assert_int(jerrycan.place).is_equal(Jerrycan.Place.HAND)
 	await assert_signal(lighthouse).is_emitted("jerrycan_carried_changed", [true])
 
@@ -63,7 +64,14 @@ func test_jerrycan_goes_from_slot_to_floor_and_back() -> void:
 	await runner.simulate_frames(90)
 	assert_float(jerrycan.global_position.y).is_between(-0.05, 0.3)
 
+	# Na prateleira vazia, o ponto de devolução exige o galão na mão e também não bloqueia.
 	jerrycan.pick_up_requested.emit()
+	var shelf_top: Vector3 = lighthouse.fuel_tank.slot.dock_transform().origin
+	lighthouse.drop_jerrycan(shelf_top + Vector3.UP * 0.1, Vector3.ZERO)
+	await runner.simulate_frames(60)
+	await _pick_up_with_ray(runner, lighthouse)
+	assert_int(jerrycan.place).is_equal(Jerrycan.Place.HAND)
+
 	jerrycan.state.amount = 0.0
 	lighthouse.fuel_tank.slot.return_requested.emit()
 	assert_int(jerrycan.place).is_equal(Jerrycan.Place.SLOT)
@@ -74,3 +82,19 @@ func test_jerrycan_goes_from_slot_to_floor_and_back() -> void:
 	var poured_in: float = jerrycan.state.amount
 	lighthouse.emergency_generator.refuel_requested.emit()
 	assert_float(lighthouse.emergency_generator.state.fuel).is_equal_approx(10.0 + poured_in, 0.001)
+
+
+## Mira o galão de cima, como o jogador em pé, e usa a tecla de interagir pelo raio real.
+func _pick_up_with_ray(runner: GdUnitSceneRunner, lighthouse: Lighthouse) -> void:
+	var center: Vector3 = lighthouse.jerrycan.global_position + Vector3.UP * 0.2
+	var ray := InteractionRay.new()
+	ray.target_position = Vector3.FORWARD * 2.2
+	monitor_signals(ray)
+	lighthouse.add_child(ray)
+	ray.global_position = center + Vector3(1.2, 1.0, 0.0)
+	ray.look_at(center)
+	await assert_signal(ray).wait_until(2000).is_emitted("focus_changed", [true])
+	runner.simulate_action_press("interact")
+	await await_millis(100)
+	runner.simulate_action_release("interact")
+	ray.queue_free()

@@ -30,4 +30,4 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 
 ## Testes
 - `test/unit/generator_state_test.gd` (modo mangueira e modo combustível), `jerrycan_state_test.gd` (encher no slot, despejar).
-- `test/scenes/lighthouse_power_test.gd`: o gerador de emergência assume quando a mangueira estoura e o feixe apaga sem combustível; galão do slot para a mão, para o chão (cai e para), de volta ao slot (enche) e despejado no gerador.
+- `test/scenes/lighthouse_power_test.gd`: o gerador de emergência assume quando a mangueira estoura e o feixe apaga sem combustível; galão do slot para a mão e da prateleira vazia para a mão pelo raio de interação real, para o chão (cai e para), de volta ao slot (enche) e despejado no gerador.

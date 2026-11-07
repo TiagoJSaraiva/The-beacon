@@ -7,7 +7,7 @@ Ameaça que avança do mar até a cabine enquanto o farol está parado (entrega 
 - `fog/fog_state.gd` (`FogState`, puro): avanço de 0 a 1, fases e trecho da rota dos barcos.
 - `fog/fog_stage.gd` (`FogStage`, puro): estágios pelo avanço e o que cada um implica.
 - `fog/fog_system.gd` (`FogSystem`, nó no `World`): roda o estado conforme o farol opera e avisa estágio e trecho da rota.
-- `fog/fog_visuals.tscn` (`FogVisuals`, nó no `World`) e `fog/fog_volume.gdshader`: volumes de nevoeiro falso (o renderizador Compatibility não tem névoa volumétrica). O shader mede quanto do raio de visão atravessa a caixa ou o cilindro até a primeira superfície da cena: paredes cortam o nevoeiro e dá para estar dentro dele.
+- `fog/fog_visuals.tscn` (`FogVisuals`, nó no `World`) e `fog/fog_volume.gdshader`: volumes de nevoeiro falso (o renderizador Compatibility não tem névoa volumétrica). O shader mede quanto do raio de visão atravessa a caixa ou o cilindro até a primeira superfície da cena: paredes cortam o nevoeiro e dá para estar dentro dele. Com `edge_fade` ou `top_fade`, usados só na faixa e no anel, amostra o raio em `march_steps` passos para a densidade cair até zero nas bordas (decisão 0020).
 
 ## Regras
 - Estágios (`FogConfig`): `NONE` (0), `SEA` (> 0), `NEAR` (`near_advance`), `GROUND_FLOOR`, `STAIRS`, `TRAPDOOR`, `CABIN`.
@@ -16,11 +16,11 @@ Ameaça que avança do mar até a cabine enquanto o farol está parado (entrega 
 - Farol parado: avança a `advance_per_second` até 1.
 - Farol volta a operar com o nevoeiro em `NEAR` ou acima: segue bloqueando o feixe por `unblock_seconds` e recua até `recede_to_advance`; daí volta a se comportar como no mar. Abaixo de `NEAR`, só para de avançar.
 - Efeitos por estágio:
-  - `NEAR` ou acima: bloqueia o feixe (`Lighthouse.set_fog_stage`); o anel em volta do farol aparece na câmera da porta.
+  - `NEAR` ou acima: bloqueia o feixe (`Lighthouse.set_fog_stage`); o anel em volta do farol aparece na câmera da porta e como neblina geral nas câmeras do mar.
   - `GROUND_FLOOR` ou acima: na primeira vez, estoura a mangueira. Volume no térreo. Aproximação do Afogado. Carrancas no térreo.
   - `STAIRS`, `CABIN`: volumes e carrancas na escada e na cabine.
   - `TRAPDOOR` ou acima: desliga o trinco do alçapão e impede ligá-lo.
-- Rota dos barcos: o nevoeiro cobre um trecho em volta de um centro sorteado ao surgir. A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho e fica mais densa com o avanço.
+- Rota dos barcos: o nevoeiro cobre um trecho em volta de um centro sorteado ao surgir. A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho e fica mais densa com o avanço; altura e profundidade crescem com o comprimento até `sea_band_half_height` e `sea_band_half_depth`, e no máximo ela passa do topo da imagem das câmeras.
 - Cada volume esmaece ao entrar e sair do seu estágio (`FogVisuals.fade_per_second`).
 - Os volumes internos são cilindros retos dentro de um farol cônico: o raio de cada um cabe na parede no topo do trecho, para não vazar por fora, e sobra folga na parte baixa.
 - A noite seguinte começa sem nevoeiro.

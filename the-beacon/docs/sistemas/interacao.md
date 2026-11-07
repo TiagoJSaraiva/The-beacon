@@ -12,7 +12,7 @@ Uso dos objetos do cenário com a ação `interact` (E, Y no controle). A HUD s�
 ## Regras
 - Modos: `PRESS` (toque), `HOLD` (segurar até completar `hold_seconds`; soltar ou trocar de alvo zera), `HOLD_CONTINUOUS` (efeito enquanto segura, ex.: trinco).
 - Depois de completar, só aceita outra interação ao soltar a tecla. Segurar E enquanto vira para outro objeto não dispara o novo.
-- O raio colide com `world` e `barriers`: paredes bloqueiam a mira.
+- O raio colide com `world` e `barriers`: paredes bloqueiam a mira. Um `Interactable` que não pode ser usado agora não bloqueia: o raio segue até o próximo (ex.: o ponto de devolução do slot envolve o galão).
 - Com `input_enabled` desligado (pausa, telas), nada fica em foco e a hotkey some.
 - `hands_rule`: `ANY`, `FREE` ou `CARRYING` (só com o galão), conforme `InteractionRay.hands_busy`. Com o galão na mão, um alvo `FREE` continua em foco, mas a interação só solta o galão (`InteractionRay.drop_requested`); a seguinte o usa.
 - `usable_check`: checagem opcional do dono, recebe o corpo de quem interage (ex.: alçapão só por cima).

@@ -5,9 +5,10 @@ extends Node3D
 ## volume esmaece ao entrar e sair do seu estágio. Lê o estado do FogSystem a cada frame.
 
 @export var fade_per_second: float = 0.5
-## Metade da altura e da largura da faixa no mar; o comprimento vem do trecho da rota.
-@export var sea_band_half_height: float = 8.0
-@export var sea_band_half_depth: float = 15.0
+## Limites da metade da altura e da largura da faixa no mar; o comprimento vem do trecho da
+## rota. A altura passa do topo da imagem das câmeras.
+@export var sea_band_half_height: float = 60.0
+@export var sea_band_half_depth: float = 45.0
 ## Menor meio-comprimento da faixa: escala zero deixaria o volume degenerado.
 @export var sea_band_min_half_length: float = 0.5
 
@@ -58,10 +59,12 @@ func _place_sea_band(route: Vector2) -> void:
 	var along: Vector3 = end - start
 	var x_axis: Vector3 = along.normalized()
 	var half_length: float = maxf(along.length() * 0.5, sea_band_min_half_length)
+	# Altura e profundidade acompanham o comprimento: um trecho ainda estreito não vira uma
+	# coluna alta nem um rastro, e o nevoeiro sobe à medida que se espalha pela rota.
 	var band_basis := Basis(
 		x_axis * half_length,
-		Vector3.UP * sea_band_half_height,
-		x_axis.cross(Vector3.UP) * sea_band_half_depth
+		Vector3.UP * minf(half_length, sea_band_half_height),
+		x_axis.cross(Vector3.UP) * minf(half_length, sea_band_half_depth)
 	)
 	_sea_band.global_transform = Transform3D(band_basis, (start + end) * 0.5)
 

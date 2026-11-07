@@ -3,6 +3,8 @@
 // primeira superfície da cena: paredes cortam o nevoeiro e dá para estar dentro dele.
 // Malhas: BoxMesh de tamanho 2 ou CylinderMesh de raio 1 e altura 2; a escala do nó dá o
 // tamanho real.
+// Sem esmaecimento, a densidade é uniforme e o cálculo é direto (interior do farol). Com
+// esmaecimento, ela varia dentro do volume e o raio é amostrado em passos (exterior).
 shader_type spatial;
 render_mode unshaded, cull_front, depth_draw_never, depth_test_disabled, blend_mix;
 
@@ -15,6 +17,12 @@ uniform bool is_cylinder = false;
 // Furo central do cilindro, em fração do raio (0 = cheio). O anel em volta do farol não
 // pode encher o interior da torre.
 uniform float inner_radius : hint_range(0.0, 1.0) = 0.0;
+// Fração das laterais em que a densidade cai até zero na borda (0 = corte seco).
+uniform float edge_fade : hint_range(0.0, 1.0) = 0.0;
+// Fração da metade de cima do volume em que a densidade cai até zero no topo.
+uniform float top_fade : hint_range(0.0, 1.0) = 0.0;
+// Amostras por raio quando há esmaecimento.
+uniform int march_steps : hint_range(1, 64) = 16;
 uniform sampler2D depth_texture : hint_depth_texture, filter_nearest;
 
 // Entrada e saída do raio no volume, em distância ao longo do raio.
@@ -54,6 +62,36 @@ vec2 cylinder_hit(vec3 origin, vec3 direction) {
 	return vec2(max(side.x, min(y0, y1)), min(side.y, max(y0, y1)));
 }
 
+// Densidade relativa (0 a 1) num ponto do espaço local do volume.
+float density_shape(vec3 point) {
+	float shape = 1.0 - smoothstep(1.0 - top_fade, 1.0, point.y);
+	if (is_cylinder) {
+		float radius = length(point.xz);
+		if (radius < inner_radius) {
+			return 0.0;
+		}
+		return shape * (1.0 - smoothstep(1.0 - edge_fade, 1.0, radius));
+	}
+	shape *= 1.0 - smoothstep(1.0 - edge_fade, 1.0, abs(point.x));
+	return shape * (1.0 - smoothstep(1.0 - edge_fade, 1.0, abs(point.z)));
+}
+
+// Metros de nevoeiro atravessados, ponderados pela densidade relativa.
+float marched_thickness(vec3 origin, vec3 direction, float entry_t, float exit_t, vec2 pixel) {
+	float step_length = (exit_t - entry_t) / float(march_steps);
+	if (step_length <= 0.0) {
+		return 0.0;
+	}
+	// Deslocar o início por pixel troca as faixas visíveis entre os passos por um grão fino.
+	float jitter = fract(52.9829189 * fract(dot(pixel, vec2(0.06711056, 0.00583715))));
+	float sum = 0.0;
+	for (int i = 0; i < march_steps; i++) {
+		float t = entry_t + (float(i) + jitter) * step_length;
+		sum += density_shape(origin + direction * t);
+	}
+	return sum * step_length;
+}
+
 void fragment() {
 	vec3 camera_world = INV_VIEW_MATRIX[3].xyz;
 	vec3 direction_world = normalize((INV_VIEW_MATRIX * vec4(VERTEX, 0.0)).xyz);
@@ -74,10 +112,23 @@ void fragment() {
 
 	float entry_t = max(hit.x, 0.0);
 	float exit_t = min(hit.y, scene_distance);
-	float thickness = max(exit_t - entry_t, 0.0);
-	if (is_cylinder && inner_radius > 0.0) {
-		vec2 hole = side_hit(origin, direction, inner_radius);
-		thickness -= max(min(exit_t, hole.y) - max(entry_t, hole.x), 0.0);
+	float thickness = 0.0;
+	if (edge_fade > 0.0 || top_fade > 0.0) {
+		if (is_cylinder && inner_radius > 0.0) {
+			// De dentro do furo, começa onde ele termina: o jogador dentro do farol não paga
+			// amostras em todos os pixels por um nevoeiro que a parede esconde.
+			vec2 hole = side_hit(origin, direction, inner_radius);
+			if (hole.x <= entry_t && entry_t < hole.y) {
+				entry_t = hole.y;
+			}
+		}
+		thickness = marched_thickness(origin, direction, entry_t, exit_t, FRAGCOORD.xy);
+	} else {
+		thickness = max(exit_t - entry_t, 0.0);
+		if (is_cylinder && inner_radius > 0.0) {
+			vec2 hole = side_hit(origin, direction, inner_radius);
+			thickness -= max(min(exit_t, hole.y) - max(entry_t, hole.x), 0.0);
+		}
 	}
 	ALBEDO = fog_color;
 	ALPHA = opacity * (1.0 - exp(-density * thickness));

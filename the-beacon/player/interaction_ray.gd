@@ -83,13 +83,23 @@ func _change_focus(target: Interactable) -> void:
 
 
 func _find_target() -> Interactable:
-	if not is_colliding():
-		return null
-	var target := get_collider() as Interactable
-	if target == null:
-		return null
+	# Áreas podem se sobrepor (o ponto de devolução envolve o galão no slot): o que não pode
+	# ser usado agora deixa o raio seguir até o próximo alvo. Só paredes e barreiras o param.
+	var target: Interactable = null
+	while is_colliding():
+		var candidate := get_collider() as Interactable
+		if candidate == null:
+			break
+		if _can_focus(candidate):
+			target = candidate
+			break
+		add_exception(candidate)
+		force_raycast_update()
+	clear_exceptions()
+	return target
+
+
+func _can_focus(target: Interactable) -> bool:
 	# De mãos ocupadas, o que exige mãos livres continua em foco: usar solta o galão.
 	var free_hands_target: bool = target.hands_rule == Interactable.HandsRule.FREE
-	if not target.can_be_used(hands_busy and not free_hands_target, user):
-		return null
-	return target
+	return target.can_be_used(hands_busy and not free_hands_target, user)

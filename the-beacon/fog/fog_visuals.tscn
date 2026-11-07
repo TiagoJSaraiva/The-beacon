@@ -16,14 +16,18 @@ rings = 1
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sea"]
 render_priority = 1
 shader = ExtResource("2_shader")
-shader_parameter/density = 0.06
+shader_parameter/density = 0.05
+shader_parameter/edge_fade = 0.9
+shader_parameter/top_fade = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_near"]
 render_priority = 1
 shader = ExtResource("2_shader")
-shader_parameter/density = 0.08
+shader_parameter/density = 0.05
 shader_parameter/is_cylinder = true
 shader_parameter/inner_radius = 0.306
+shader_parameter/edge_fade = 0.6
+shader_parameter/top_fade = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ground_floor"]
 render_priority = 1
@@ -56,7 +60,7 @@ material_override = SubResource("ShaderMaterial_sea")
 [node name="NearRing" type="MeshInstance3D" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(23.5, 0, 0, 0, 5, 0, 0, 0, 23.5, 0, 3, 0)
+transform = Transform3D(23.5, 0, 0, 0, 11, 0, 0, 0, 23.5, 0, 9, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_near")
