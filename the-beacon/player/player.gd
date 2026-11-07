@@ -77,7 +77,7 @@ func _process(delta: float) -> void:
 
 
 ## Atualiza a derrubada e a altura da cabeça, lê o input e move o corpo. Sentado, não se move:
-## mover ou pular só levanta. Derrubado, ignora andar e pular.
+## mover ou pular só levanta. Derrubado, ignora andar, pular e soltar o galão.
 func _physics_process(delta: float) -> void:
 	_update_knockdown(delta)
 	_head.position.y = move_toward(
@@ -89,7 +89,8 @@ func _physics_process(delta: float) -> void:
 	if _controls_enabled:
 		input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		jump_pressed = Input.is_action_just_pressed("jump")
-		if interaction.hands_busy and Input.is_action_just_pressed("drop_item"):
+		var can_drop: bool = interaction.hands_busy and not is_knocked_down
+		if can_drop and Input.is_action_just_pressed("drop_item"):
 			_request_drop()
 	if is_seated:
 		# Mover ou pular só levanta; o movimento começa no frame seguinte.
@@ -120,10 +121,11 @@ func configure(difficulty: DifficultyConfig) -> void:
 	flashlight.configure(difficulty.flashlight)
 
 
-## Liga ou desliga movimento e olhar (ex.: enquanto o menu de pausa está aberto).
+## Liga ou desliga movimento, olhar, interação e lanterna (ex.: enquanto o menu de pausa está
+## aberto). Durante a derrubada, a interação continua desligada mesmo com os controles ligados.
 func set_controls_enabled(enabled: bool) -> void:
 	_controls_enabled = enabled
-	interaction.input_enabled = enabled
+	_update_interaction_enabled()
 	flashlight.input_enabled = enabled
 	_capture_mouse(enabled)
 
@@ -135,9 +137,10 @@ func set_carrying(carrying: bool) -> void:
 
 
 ## Senta com os pés em `seat.origin`, de frente para onde o assento aponta. O olhar vira
-## até `yaw_limit_degrees` para cada lado; mover ou pular levanta.
+## até `yaw_limit_degrees` para cada lado; mover ou pular levanta. Ignorado com o jogador já
+## sentado, morto ou derrubado.
 func sit(seat: Transform3D, yaw_limit_degrees: float) -> void:
-	if is_seated or is_dead:
+	if is_seated or is_dead or is_knocked_down:
 		return
 	is_seated = true
 	velocity = Vector3.ZERO
@@ -149,11 +152,13 @@ func sit(seat: Transform3D, yaw_limit_degrees: float) -> void:
 
 
 ## Derruba o jogador por `seconds`, ou pelo tempo que ainda restar, se for maior: ajoelha, sai da
-## cadeira e não anda nem pula, mas o olhar continua livre.
+## cadeira e não anda, não pula, não interage nem solta o galão. O olhar e a lanterna continuam
+## livres. Desligar a interação tira o foco e cancela uma barra em andamento.
 func knock_down(seconds: float) -> void:
 	is_seated = false
 	is_knocked_down = true
 	_knockdown_left = maxf(_knockdown_left, seconds)
+	_update_interaction_enabled()
 
 
 ## Devolve a posição e a direção da câmera, o olho do jogador.
@@ -205,13 +210,19 @@ func _target_head_height() -> float:
 	return _standing_head_height
 
 
-## Desconta o tempo da derrubada e libera o jogador quando ele acaba.
+## Desconta o tempo da derrubada e, quando ele acaba, libera o jogador e a interação.
 func _update_knockdown(delta: float) -> void:
 	if not is_knocked_down:
 		return
 	_knockdown_left -= delta
 	if _knockdown_left <= 0.0:
 		is_knocked_down = false
+		_update_interaction_enabled()
+
+
+## Liga a interação só com os controles ligados e o jogador fora da derrubada.
+func _update_interaction_enabled() -> void:
+	interaction.input_enabled = _controls_enabled and not is_knocked_down
 
 
 ## Devolve a velocidade de corrida com a tecla segura e sem bloqueio; senão, a de caminhada.

@@ -14,7 +14,7 @@ Armadilha do nevoeiro dentro do farol: cega o jogador e, com o tempo, o derruba 
 - O ponto é aleatório na navmesh do interior (até `spawn_attempts` tentativas): fora do campo de visão do jogador (`view_half_angle_degrees` 60° a partir do olhar) e a pelo menos `min_spawn_distance`. Ela surge virada para o jogador.
 - No máximo `max_simultaneous` (3) ao mesmo tempo, com `spawn_interval_seconds` entre uma aparição e a seguinte.
 - Com o jogador a até `trigger_range` e linha de visão livre (`world`/`barriers`), ela pula nele: cega por `blind_seconds` (tela preta) e some.
-- Depois de `blinds_before_knockdown` cegueiras, o ataque seguinte derruba: o jogador ajoelha e não se move nem pula por `knockdown_seconds` (`Player.knock_down`); o olhar continua livre. A contagem recomeça.
+- Depois de `blinds_before_knockdown` cegueiras, o ataque seguinte derruba: o jogador ajoelha e não se move, não pula, não interage nem solta o galão por `knockdown_seconds` (`Player.knock_down`); o olhar e a lanterna continuam livres. A contagem recomeça.
 - Sob o cone aceso da lanterna, com linha de visão livre, por `dissolve_seconds` contínuos, ela se dissolve.
 - A vaga de uma carranca volta depois de `respawn_after_destroyed_seconds` (dissolvida) ou `respawn_after_attack_seconds` (atacou). Se o nevoeiro deixa a área dela, ela some e a vaga volta na hora.
 - A noite seguinte começa sem carrancas e com a contagem zerada.
@@ -26,4 +26,4 @@ Armadilha do nevoeiro dentro do farol: cega o jogador e, com o tempo, o derruba 
 ## Testes
 - `test/unit/figurehead_tracker_test.gd`, `figurehead_spawn_rules_test.gd`.
 - `test/scenes/figurehead_test.gd`: com o nevoeiro no farol, surge longe do jogador e, com ele perto e à vista, pula e cega.
-- `test/scenes/player_test.gd`: a derrubada segura o jogador e depois o solta.
+- `test/scenes/player_test.gd`: a derrubada segura o jogador, bloqueia interagir e sentar, e depois o solta.

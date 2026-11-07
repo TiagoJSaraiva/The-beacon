@@ -20,7 +20,7 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 - Lanterna: `toggle_flashlight` liga/desliga; segurar `check_battery` traz a barra de carga para a frente da câmera, sem parar o movimento. A bateria (`FlashlightConfig.battery_seconds`) só gasta ligada e não recarrega, nem entre noites; zerada, apaga e não liga mais.
 - `Flashlight.illuminates(point)` diz se um ponto está no cone aceso (alcance e meio-ângulo da config); obstáculos são checados por quem pergunta.
 - Efeitos de tela (não são HUD de estado): borda vermelha enquanto a corrida está bloqueada (`Hud.set_hurt_border`) e tela preta do pulo da carranca (`Hud.show_blindness`).
-- Derrubada (`knock_down(seconds)`, carranca): ajoelha (`kneeling_head_height`), sem andar nem pular, com o olhar livre; tira da cadeira. `eye_transform()` dá a posição e a direção da câmera.
+- Derrubada (`knock_down(seconds)`, carranca): ajoelha (`kneeling_head_height`), sem andar, pular, interagir (nem sentar) ou soltar o galão; o olhar e a lanterna continuam livres. Tira da cadeira e cancela uma barra de interação em andamento. Ao levantar, a interação volta só se os controles estiverem ligados. `eye_transform()` dá a posição e a direção da câmera.
 
 ## Sinais
 - `Player.died(cause)`, `Player.sprint_blocked_changed(active)`.
@@ -30,4 +30,4 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 
 ## Testes
 - `test/unit/fall_rules_test.gd`, `seat_rules_test.gd`, `flashlight_battery_test.gd`, `flashlight_cone_test.gd`.
-- `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média bloqueia a corrida, queda alta mata; altura do pulo (faixa); sentar segura o jogador parado e mover levanta; a derrubada segura o jogador e depois o solta.
+- `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média bloqueia a corrida, queda alta mata; altura do pulo (faixa); sentar segura o jogador parado e mover levanta; a derrubada segura o jogador, bloqueia interagir e sentar, e depois o solta (com os controles desligados, a interação segue desligada).

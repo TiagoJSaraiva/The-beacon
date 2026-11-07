@@ -13,7 +13,9 @@
 - Iluminação provisória mais clara em `game/game.tscn` só para testes.
 - **Farol cônico** (experimento, a avaliar jogando): raio interno de 6,5 m no chão (1,3x o original) a 5,5 m na cabine (1,1x), com a cabine em y=10,8 (1,2x a altura anterior), escada de 0,9 volta e 8,4 m seguindo a parede, porta e alçapão alinhados e cada passagem como uma cena só, com o buraco na raiz (decisão 0019). Objetos internos continuam onde estavam: o espaço novo está livre para organizar.
 - **Correções do playtest**: o galão agora pode ser pego no slot (o ponto de devolução desativado bloqueava o raio de interação). O nevoeiro externo ficou mais alto e esvaece nas bordas; o interno não mudou (decisão 0020).
-- **Documentação do código**: toda função fora de `test/` e `addons/` tem `##`, e o check reprova função sem ele (decisão 0021). O check não avalia se o texto está certo: isso fica para a revisão.
+- **Documentação do código**: toda função fora de `test/` e `addons/` tem `##`, e o check reprova função sem ele (decisão 0021) e função alterada com o `##` nem alterado nem confirmado (decisão 0022). O check não avalia se o texto está certo: isso fica para a revisão.
+- **Comportamentos a revisar** (features que ainda vão mudar, sem correção prevista): seções "Comportamento atual a revisar" em `sistemas/afogados.md` (jogador perto do alçapão impede as batidas) e `sistemas/nevoeiro.md` (feixe bloqueado além de `unblock_seconds`; trecho da rota que salta ao ressurgir).
+- **Correções**: derrubado, o jogador não interage, não senta e não solta o galão; o modo de interação contínua, sem uso, saiu.
 
 ## Próximo passo
 Playtest da entrega 2: montar o roteiro a partir da lista abaixo, jogar e balancear. Depois, arte e áudio finais.
@@ -25,7 +27,7 @@ Validar jogando (por fase):
 - **C**: leitura da cabine (casa de máquinas, câmara da lâmpada, gerador de emergência, alavanca); volante e zumbido com o farol operando; conserto da casa de máquinas e troca da lâmpada; subir a escada com o galão, despejar no gerador de emergência, física do galão solto (chão e escada), devolver ao slot e ver o medidor encher. `FuelTank.debug_burst_on_start` estoura a mangueira desde o início.
 - **D**: legibilidade do nevoeiro nas três câmeras e dentro do farol; altura e bordas da faixa no mar; base da faixa no mar e divisão entre os dois monitores; barcos fora do nevoeiro legíveis na neblina de `NEAR`; tempo até surgir com o farol parado (45 s) e ritmo de avanço; travessia de 12 s no panorama; rádio só com nevoeiro; atender com o feixe aceso desvia; barco que entra no nevoeiro afunda. Premissa: o nevoeiro que cresce por cima de um barco também o afunda.
 - **E**: barulho de aproximação na porta; arrombamento; perseguição e morte; trinco ligado → bate, cansa, descansa e volta; trinco desligado → abre o alçapão e sobe; nevoeiro no alçapão destranca; barra de 0,8 s do trinco; se ficar em cima do alçapão (ou a até ~3,4 m dele na cabine) impede as batidas (`sistemas/afogados.md`, "Comportamento atual a revisar"). Atalho: `DrownedDirector.add_drowned_point` e farol parado.
-- **F**: susto da carranca (pulo a 3 m), cegueira de 4 s, derrubada de 3 s na terceira vez, dissolução pela lanterna (0,3 s), pontos de surgimento parecem aleatórios e escondidos, ritmo (12 s entre aparições, volta em 40 s).
+- **F**: susto da carranca (pulo a 3 m), cegueira de 4 s, derrubada de 3 s na terceira vez (sem interagir, sentar nem soltar o galão; lanterna livre; barra em andamento cancelada), dissolução pela lanterna (0,3 s), pontos de surgimento parecem aleatórios e escondidos, ritmo (12 s entre aparições, volta em 40 s).
 - **G**: textos do tutorial com as teclas certas no teclado e no controle (o prompt troca ao usar o outro dispositivo); remapear tecla e botão, conflito vira troca, Esc cancela a espera, "Restaurar padrão", gravar e reabrir o jogo; navegar todos os menus só com o controle, B voltando uma página.
 
 ## Bloqueios

@@ -70,7 +70,7 @@ func test_sitting_holds_still_and_moving_stands_up() -> void:
 	assert_float(player.global_position.distance_to(seat.origin)).is_greater(0.3)
 
 
-func test_knockdown_holds_the_player_then_lets_go() -> void:
+func test_knockdown_holds_the_player_and_blocks_interaction_then_lets_go() -> void:
 	var runner := scene_runner(LEVEL)
 	var player: Player = runner.find_child("Player")
 	await runner.simulate_frames(10)
@@ -80,11 +80,22 @@ func test_knockdown_holds_the_player_then_lets_go() -> void:
 	runner.simulate_action_press("move_forward")
 	await runner.simulate_frames(15)
 	assert_bool(player.is_knocked_down).is_true()
+	assert_bool(player.interaction.input_enabled).is_false()
+	player.sit(Transform3D(Basis(), start + Vector3(2.0, 0.0, 0.0)), 75.0)
+	assert_bool(player.is_seated).is_false()
 	assert_float(player.global_position.distance_to(start)).is_less(0.05)
 	await runner.simulate_frames(60)
 	runner.simulate_action_release("move_forward")
 	assert_bool(player.is_knocked_down).is_false()
+	assert_bool(player.interaction.input_enabled).is_true()
 	assert_float(player.global_position.distance_to(start)).is_greater(0.3)
+
+	# Com os controles desligados (pausa, morte), o fim da derrubada não religa a interação.
+	player.set_controls_enabled(false)
+	player.knock_down(0.2)
+	await runner.simulate_frames(30)
+	assert_bool(player.is_knocked_down).is_false()
+	assert_bool(player.interaction.input_enabled).is_false()
 
 
 func _horizontal_speed(player: Player) -> float:
