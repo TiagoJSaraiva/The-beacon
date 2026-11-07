@@ -19,6 +19,7 @@ var _stage_volumes: Dictionary[MeshInstance3D, FogStage.Stage] = {}
 @onready var _sea_band: MeshInstance3D = %SeaBand
 
 
+## Associa cada volume ao estágio em que ele aparece e começa com todos invisíveis.
 func _ready() -> void:
 	_stage_volumes = {
 		%NearRing: FogStage.Stage.NEAR,
@@ -30,6 +31,8 @@ func _ready() -> void:
 		_set_opacity(volume, 0.0)
 
 
+## Esmaece cada volume conforme o estágio atual e posiciona a faixa no mar sobre o trecho da
+## rota.
 func _process(delta: float) -> void:
 	if _fog == null:
 		return
@@ -46,11 +49,13 @@ func _process(delta: float) -> void:
 	_fade(_sea_band, growth if has_route_fog else 0.0, delta)
 
 
+## Recebe o sistema de nevoeiro e a rota dos barcos. Antes disso, nada é atualizado.
 func setup(fog: FogSystem, boat_path: Path3D) -> void:
 	_fog = fog
 	_boat_path = boat_path
 
 
+## Posiciona e dimensiona a faixa sobre o trecho da rota (início, fim, em fração).
 func _place_sea_band(route: Vector2) -> void:
 	var curve: Curve3D = _boat_path.curve
 	var length: float = curve.get_baked_length()
@@ -69,18 +74,21 @@ func _place_sea_band(route: Vector2) -> void:
 	_sea_band.global_transform = Transform3D(band_basis, (start + end) * 0.5)
 
 
+## Aproxima a opacidade do volume do valor-alvo, na velocidade `fade_per_second`.
 func _fade(volume: MeshInstance3D, target: float, delta: float) -> void:
 	var material := volume.material_override as ShaderMaterial
 	var opacity: float = material.get_shader_parameter("opacity")
 	_set_opacity(volume, move_toward(opacity, target, fade_per_second * delta))
 
 
+## Aplica a opacidade ao shader e esconde o volume quando ela é zero.
 func _set_opacity(volume: MeshInstance3D, opacity: float) -> void:
 	var material := volume.material_override as ShaderMaterial
 	material.set_shader_parameter("opacity", opacity)
 	volume.visible = opacity > 0.0
 
 
+## Devolve a faixa no mar e todos os volumes por estágio.
 func _all_volumes() -> Array[MeshInstance3D]:
 	var volumes: Array[MeshInstance3D] = [_sea_band]
 	volumes.append_array(_stage_volumes.keys())

@@ -17,36 +17,44 @@ var _published_stage: FogStage.Stage = FogStage.Stage.NONE
 var _published_route: Vector2 = Vector2.ZERO
 
 
+## Sorteia a semente do RNG.
 func _ready() -> void:
 	rng.randomize()
 
 
+## Avança o nevoeiro conforme o farol e publica o que mudou.
 func _process(delta: float) -> void:
 	state.tick(delta, _beam_operational, rng)
 	_publish()
 
 
+## Recria o nevoeiro com a configuração da dificuldade e publica o estado inicial.
 func configure(config: FogConfig) -> void:
 	state = FogState.new(config)
 	_publish()
 
 
+## Registra o evento `fog`, tratado por `can_start` e `start`.
 func register_events(events: EventDirector) -> void:
 	events.register(EVENT_FOG, can_start, start)
 
 
+## Diz se o evento pode fazer o nevoeiro surgir agora.
 func can_start() -> bool:
 	return state.can_start()
 
 
+## Faz o nevoeiro surgir no mar.
 func start() -> void:
 	state.start(rng)
 
 
+## Guarda se o farol está operando, o que decide se o nevoeiro avança ou recua.
 func set_beam_operational(operational: bool) -> void:
 	_beam_operational = operational
 
 
+## Emite `stage_changed` e `route_fog_changed` só quando os valores mudam.
 func _publish() -> void:
 	var stage: FogStage.Stage = state.stage()
 	if stage != _published_stage:

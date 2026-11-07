@@ -5,6 +5,7 @@ extends RefCounted
 enum Stage { NONE, SEA, NEAR, GROUND_FLOOR, STAIRS, TRAPDOOR, CABIN }
 
 
+## Devolve o estágio do avanço: zero é NONE, e cada estágio começa no limiar dele.
 static func for_advance(advance: float, config: FogConfig) -> Stage:
 	if advance <= 0.0:
 		return Stage.NONE
@@ -21,11 +22,12 @@ static func for_advance(advance: float, config: FogConfig) -> Stage:
 	return Stage.SEA
 
 
-## Perto do farol o nevoeiro cobre a cabeça do farol: o feixe não sai.
+## Diz se o estágio bloqueia o feixe: perto do farol, o nevoeiro cobre a cabeça e a luz não sai.
 static func blocks_beam(stage: Stage) -> bool:
 	return stage >= Stage.NEAR
 
 
-## Dentro do farol: Afogado se aproximando, mangueira estourada, carrancas.
+## Diz se o nevoeiro já está dentro do farol, o que aproxima o Afogado, estoura a mangueira e
+## libera as carrancas.
 static func is_inside(stage: Stage) -> bool:
 	return stage >= Stage.GROUND_FLOOR

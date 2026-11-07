@@ -23,15 +23,18 @@ var _idle_seconds: float = 0.0
 var _hold_left: float = 0.0
 
 
+## Cria o nevoeiro em CLEAR, sem avanço, com a configuração dada.
 func _init(fog_config: FogConfig) -> void:
 	config = fog_config
 
 
+## Diz se o nevoeiro pode surgir agora, ou seja, se está em CLEAR.
 func can_start() -> bool:
 	return phase == Phase.CLEAR
 
 
-## Surge no mar.
+## Faz o nevoeiro surgir no mar, se estiver em CLEAR, e sorteia a duração e o centro do trecho na
+## rota.
 func start(rng: RandomNumberGenerator) -> void:
 	if not can_start():
 		return
@@ -42,6 +45,8 @@ func start(rng: RandomNumberGenerator) -> void:
 	route_center = rng.randf_range(half_coverage, 1.0 - half_coverage)
 
 
+## Avança `delta` segundos conforme o farol opera ou não, mudando de fase pelas regras descritas
+## na classe.
 func tick(delta: float, operational: bool, rng: RandomNumberGenerator) -> void:
 	_idle_seconds = 0.0 if operational else _idle_seconds + delta
 	if phase == Phase.CLEAR:
@@ -80,16 +85,18 @@ func tick(delta: float, operational: bool, rng: RandomNumberGenerator) -> void:
 				)
 
 
+## Devolve o estágio do avanço atual.
 func stage() -> FogStage.Stage:
 	return FogStage.for_advance(advance, config)
 
 
+## Diz se o avanço atual bloqueia o feixe.
 func blocks_beam() -> bool:
 	return FogStage.blocks_beam(stage())
 
 
-## Trecho coberto da rota dos barcos, em fração da rota (início, fim). Cresce com o avanço
-## até `max_route_coverage`, que é atingido em `near_advance`. Sem nevoeiro, vazio.
+## Devolve o trecho coberto da rota dos barcos, em fração da rota (início, fim). Cresce com o
+## avanço até `max_route_coverage`, atingido em `near_advance`. Sem nevoeiro, é vazio.
 func route_segment() -> Vector2:
 	if advance <= 0.0:
 		return Vector2.ZERO
