@@ -27,10 +27,12 @@ var _stage: FogStage.Stage = FogStage.Stage.NONE
 var _figureheads: Array[Figurehead] = []
 
 
+## Sorteia a semente do RNG.
 func _ready() -> void:
 	rng.randomize()
 
 
+## Conta os tempos, tenta surgir com o nevoeiro dentro do farol e atualiza cada carranca.
 func _physics_process(delta: float) -> void:
 	if _player == null:
 		return
@@ -41,14 +43,17 @@ func _physics_process(delta: float) -> void:
 		_update(figurehead, delta)
 
 
+## Recria as regras com os valores da dificuldade, com as contagens zeradas.
 func configure(config: FigureheadConfig) -> void:
 	tracker = FigureheadTracker.new(config)
 
 
+## Recebe o jogador. Antes disso, nada acontece.
 func setup(player: Player) -> void:
 	_player = player
 
 
+## Guarda o estágio e dissolve as carrancas cuja área saiu do nevoeiro, liberando a vaga na hora.
 func set_fog_stage(stage: FogStage.Stage) -> void:
 	_stage = stage
 	for figurehead: Figurehead in _figureheads.duplicate():
@@ -59,6 +64,8 @@ func set_fog_stage(stage: FogStage.Stage) -> void:
 			figurehead.dissolve()
 
 
+## Conta o tempo sob a lanterna e dissolve a carranca ao atingir o limite. Com o jogador perto e
+## à vista, faz ela pular.
 func _update(figurehead: Figurehead, delta: float) -> void:
 	if figurehead.is_finishing:
 		return
@@ -75,6 +82,8 @@ func _update(figurehead: Figurehead, delta: float) -> void:
 		figurehead.jump_at(_player.global_position)
 
 
+## Testa pontos aleatórios da navmesh até achar um no nevoeiro, escondido e longe. Sem nenhum,
+## não surge neste passo.
 func _try_spawn() -> void:
 	var map: RID = _player.get_world_3d().navigation_map
 	var eye: Transform3D = _player.eye_transform()
@@ -97,6 +106,7 @@ func _try_spawn() -> void:
 		return
 
 
+## Cria a carranca no ponto, virada para o jogador, e registra a aparição.
 func _spawn(point: Vector3, area: FigureheadSpawnRules.Area) -> void:
 	var figurehead: Figurehead = figurehead_scene.instantiate()
 	figurehead.area = area
@@ -108,6 +118,7 @@ func _spawn(point: Vector3, area: FigureheadSpawnRules.Area) -> void:
 	appeared.emit()
 
 
+## Diz se o peito da carranca está no cone aceso da lanterna, sem obstáculo no caminho.
 func _is_lit(figurehead: Figurehead) -> bool:
 	var chest: Vector3 = figurehead.chest_position()
 	if not _player.flashlight.illuminates(chest):
@@ -116,10 +127,12 @@ func _is_lit(figurehead: Figurehead) -> bool:
 	return _is_clear(_player.flashlight.global_position, chest)
 
 
+## Diz se há linha de visão livre do peito dela até o olho do jogador.
 func _sees_player(figurehead: Figurehead) -> bool:
 	return _is_clear(figurehead.chest_position(), _player.eye_transform().origin)
 
 
+## Diz se nenhuma parede ou barreira corta o segmento entre os dois pontos.
 func _is_clear(from: Vector3, to: Vector3) -> bool:
 	var query := PhysicsRayQueryParameters3D.create(
 		from, to, CollisionLayers.WORLD | CollisionLayers.BARRIERS
@@ -127,6 +140,7 @@ func _is_clear(from: Vector3, to: Vector3) -> bool:
 	return _player.get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 
+## Apaga a carranca, registra o ataque e emite a cegueira ou a derrubada.
 func _on_figurehead_landed(figurehead: Figurehead) -> void:
 	_figureheads.erase(figurehead)
 	figurehead.queue_free()

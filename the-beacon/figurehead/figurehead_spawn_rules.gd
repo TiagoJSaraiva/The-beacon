@@ -6,7 +6,7 @@ extends RefCounted
 enum Area { GROUND_FLOOR, STAIRS, CABIN }
 
 
-## Área pela altura do ponto; os limites vêm da geometria do farol.
+## Devolve a área pela altura do ponto; os limites vêm da geometria do farol.
 static func area_for_height(height: float, stairs_from: float, cabin_from: float) -> Area:
 	if height >= cabin_from:
 		return Area.CABIN
@@ -15,6 +15,7 @@ static func area_for_height(height: float, stairs_from: float, cabin_from: float
 	return Area.GROUND_FLOOR
 
 
+## Diz se o estágio do nevoeiro já tomou a área.
 static func is_fogged(area: Area, stage: FogStage.Stage) -> bool:
 	match area:
 		Area.GROUND_FLOOR:
@@ -26,7 +27,8 @@ static func is_fogged(area: Area, stage: FogStage.Stage) -> bool:
 	return false
 
 
-## Longe do olho e fora do cone de visão (ângulo a partir da direção do olhar).
+## Diz se o ponto está longe do olho e fora do cone de visão (ângulo a partir da direção do
+## olhar).
 static func is_hidden_and_far(
 	point: Vector3,
 	eye: Vector3,

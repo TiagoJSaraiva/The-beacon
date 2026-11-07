@@ -18,7 +18,7 @@ var lit_seconds: float = 0.0
 var is_finishing: bool = false
 
 
-## Ponto que a lanterna precisa iluminar.
+## Devolve o ponto que a lanterna precisa iluminar.
 func chest_position() -> Vector3:
 	return global_position + Vector3.UP * chest_height
 
@@ -30,6 +30,7 @@ func face(point: Vector3) -> void:
 		look_at(flat, Vector3.UP)
 
 
+## Salta até o ponto dado e emite `landed` ao chegar. A partir daqui, ela não reage a mais nada.
 func jump_at(target: Vector3) -> void:
 	is_finishing = true
 	face(target)
