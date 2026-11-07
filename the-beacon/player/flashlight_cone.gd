@@ -3,6 +3,8 @@ extends RefCounted
 ## Geometria do cone da lanterna, sem checar obstáculos.
 
 
+## Diz se o ponto está dentro do alcance e do meio-ângulo, em graus, do cone. Um ponto na própria
+## origem conta como dentro.
 static func contains(
 	origin: Vector3, forward: Vector3, point: Vector3, max_range: float, half_angle_degrees: float
 ) -> bool:

@@ -22,6 +22,8 @@ var _lit: bool = false
 @onready var _gauge: BatteryGauge = %BatteryGauge
 
 
+## Põe a lanterna na posição de repouso e aplica a configuração. Sem `config`, usa os valores
+## padrão.
 func _ready() -> void:
 	position = rest_position
 	# O Game chama configure() com a dificuldade; o padrão serve para cenas de teste.
@@ -30,6 +32,8 @@ func _ready() -> void:
 	configure(config)
 
 
+## Lê as teclas, move a lanterna entre repouso e inspeção e, acesa, gasta a bateria. Zerada,
+## apaga e emite `battery_depleted`.
 func _process(delta: float) -> void:
 	if input_enabled and Input.is_action_just_pressed("toggle_flashlight"):
 		toggle()
@@ -53,6 +57,7 @@ func configure(new_config: FlashlightConfig) -> void:
 	_refresh_display()
 
 
+## Apaga se estiver acesa; se estiver apagada, acende, desde que ainda haja carga.
 func toggle() -> void:
 	if _lit:
 		_set_lit(false)
@@ -60,11 +65,13 @@ func toggle() -> void:
 		_set_lit(true)
 
 
+## Diz se a lanterna está acesa.
 func is_lit() -> bool:
 	return _lit
 
 
-## Carga que sobrou da noite anterior; a lanterna começa desligada.
+## Aplica a carga que sobrou da noite anterior, limitada à capacidade, e deixa a lanterna
+## apagada.
 func set_battery_seconds(seconds: float) -> void:
 	battery.remaining_seconds = clampf(seconds, 0.0, battery.capacity_seconds)
 	_set_lit(false)
@@ -84,6 +91,7 @@ func illuminates(point: Vector3) -> bool:
 	)
 
 
+## Acende ou apaga a luz e emite `toggled` só quando o estado muda.
 func _set_lit(lit: bool) -> void:
 	if _lit == lit:
 		_light.visible = lit
@@ -93,6 +101,7 @@ func _set_lit(lit: bool) -> void:
 	toggled.emit(lit)
 
 
+## Aproxima a posição e o giro da pose de inspeção ou da de repouso.
 func _update_pose(inspecting: bool, delta: float) -> void:
 	var weight: float = clampf(pose_speed * delta, 0.0, 1.0)
 	var target_position: Vector3 = inspect_position if inspecting else rest_position
@@ -101,5 +110,6 @@ func _update_pose(inspecting: bool, delta: float) -> void:
 	rotation.y = lerp_angle(rotation.y, target_yaw, weight)
 
 
+## Mostra a carga atual na barra da lanterna.
 func _refresh_display() -> void:
 	_gauge.show_ratio(battery.ratio())

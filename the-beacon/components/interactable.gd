@@ -24,12 +24,15 @@ var is_held: bool = false
 var usable_check: Callable
 
 
+## Coloca a área na camada interactable, só para ser encontrada pelo raio: ela não detecta nada.
 func _ready() -> void:
 	collision_layer = CollisionLayers.INTERACTABLE
 	collision_mask = 0
 	monitoring = false
 
 
+## Diz se o objeto aceita uso agora: precisa estar ligado, respeitar a regra das mãos e passar
+## pela checagem opcional do dono.
 func can_be_used(hands_busy: bool, user: Node3D) -> bool:
 	if not enabled:
 		return false
@@ -40,14 +43,18 @@ func can_be_used(hands_busy: bool, user: Node3D) -> bool:
 	return not usable_check.is_valid() or usable_check.call(user)
 
 
+## Emite `interacted`, o toque do modo PRESS.
 func interact() -> void:
 	interacted.emit()
 
 
+## Emite `hold_completed`, a barra cheia do modo HOLD.
 func complete_hold() -> void:
 	hold_completed.emit()
 
 
+## Atualiza se a tecla está segura no modo HOLD_CONTINUOUS e emite `hold_state_changed` só quando
+## isso muda.
 func set_held(held: bool) -> void:
 	if is_held == held:
 		return

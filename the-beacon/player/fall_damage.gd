@@ -14,6 +14,7 @@ var _peak_height: float = 0.0
 var _sprint_block_left: float = 0.0
 
 
+## Sem `body`, avisa e desliga a medição. Sem `config`, usa os valores padrão.
 func _ready() -> void:
 	if body == null:
 		push_warning("FallDamage sem body atribuído")
@@ -23,6 +24,8 @@ func _ready() -> void:
 		config = FallConfig.new()
 
 
+## Conta o bloqueio da corrida e guarda o ponto mais alto no ar. Ao pousar, aplica a consequência
+## da queda.
 func _physics_process(delta: float) -> void:
 	_update_sprint_block(delta)
 	var height: float = body.global_position.y
@@ -42,10 +45,12 @@ func _physics_process(delta: float) -> void:
 			_block_sprint()
 
 
+## Diz se a corrida ainda está bloqueada por uma queda média.
 func is_sprint_blocked() -> bool:
 	return _sprint_block_left > 0.0
 
 
+## Começa ou recomeça a contagem do bloqueio. Emite o sinal só se ele ainda não estava ativo.
 func _block_sprint() -> void:
 	var was_blocked: bool = is_sprint_blocked()
 	# Outra queda média durante o bloqueio recomeça a contagem.
@@ -54,6 +59,7 @@ func _block_sprint() -> void:
 		sprint_blocked_changed.emit(true)
 
 
+## Desconta o bloqueio ativo e emite o sinal quando ele termina.
 func _update_sprint_block(delta: float) -> void:
 	if not is_sprint_blocked():
 		return

@@ -49,12 +49,14 @@ var _knockdown_left: float = 0.0
 @onready var _carried_jerrycan: Node3D = %CarriedJerrycan
 
 
+## Guarda a altura da cabeça em pé, liga o pedido de soltar o galão e captura o mouse.
 func _ready() -> void:
 	_standing_head_height = _head.position.y
 	interaction.drop_requested.connect(_request_drop)
 	_capture_mouse(true)
 
 
+## Vira o olhar com o movimento do mouse, se os controles estiverem ligados e o mouse capturado.
 func _unhandled_input(event: InputEvent) -> void:
 	if not _controls_enabled or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		return
@@ -64,6 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	_look(motion.relative * mouse_sensitivity * sensitivity_scale)
 
 
+## Vira o olhar com o analógico direito.
 func _process(delta: float) -> void:
 	if not _controls_enabled:
 		return
@@ -73,6 +76,8 @@ func _process(delta: float) -> void:
 	_look(stick * deg_to_rad(stick_look_degrees_per_second) * sensitivity_scale * delta)
 
 
+## Atualiza a derrubada e a altura da cabeça, lê o input e move o corpo. Sentado, não se move:
+## mover ou pular só levanta. Derrubado, ignora andar e pular.
 func _physics_process(delta: float) -> void:
 	_update_knockdown(delta)
 	_head.position.y = move_toward(
@@ -143,14 +148,15 @@ func sit(seat: Transform3D, yaw_limit_degrees: float) -> void:
 	_head.rotation.x = 0.0
 
 
-## Derrubado (carranca): ajoelha e não se move por `seconds`; o olhar continua livre.
+## Derruba o jogador por `seconds`, ou pelo tempo que ainda restar, se for maior: ajoelha, sai da
+## cadeira e não anda nem pula, mas o olhar continua livre.
 func knock_down(seconds: float) -> void:
 	is_seated = false
 	is_knocked_down = true
 	_knockdown_left = maxf(_knockdown_left, seconds)
 
 
-## Olho do jogador: posição e direção da câmera.
+## Devolve a posição e a direção da câmera, o olho do jogador.
 func eye_transform() -> Transform3D:
 	return _camera.global_transform
 
@@ -164,6 +170,8 @@ func kill(cause: StringName) -> void:
 	died.emit(cause)
 
 
+## Calcula o ponto e a velocidade de saída do galão e emite `drop_requested`. Quem solta de fato
+## é o farol.
 func _request_drop() -> void:
 	var forward: Vector3 = -_camera.global_basis.z
 	var at: Vector3 = _carried_jerrycan.global_position
@@ -178,6 +186,8 @@ func _request_drop() -> void:
 	drop_requested.emit(at, carried_velocity + forward * drop_throw_speed)
 
 
+## Gira o corpo no eixo Y e a cabeça no eixo X, em radianos, respeitando os limites do olhar e o
+## limite sentado.
 func _look(turn: Vector2) -> void:
 	rotation.y -= turn.x
 	if is_seated:
@@ -186,6 +196,7 @@ func _look(turn: Vector2) -> void:
 	_head.rotation.x = clampf(_head.rotation.x - turn.y, -max_pitch, max_pitch)
 
 
+## Devolve a altura da cabeça para o estado atual: ajoelhado, sentado ou em pé.
 func _target_head_height() -> float:
 	if is_knocked_down:
 		return kneeling_head_height
@@ -194,6 +205,7 @@ func _target_head_height() -> float:
 	return _standing_head_height
 
 
+## Desconta o tempo da derrubada e libera o jogador quando ele acaba.
 func _update_knockdown(delta: float) -> void:
 	if not is_knocked_down:
 		return
@@ -202,19 +214,23 @@ func _update_knockdown(delta: float) -> void:
 		is_knocked_down = false
 
 
+## Devolve a velocidade de corrida com a tecla segura e sem bloqueio; senão, a de caminhada.
 func _current_speed() -> float:
 	if Input.is_action_pressed("sprint") and not _fall_damage.is_sprint_blocked():
 		return sprint_speed
 	return walk_speed
 
 
+## Captura o mouse para o jogo ou o libera para os menus.
 func _capture_mouse(captured: bool) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if captured else Input.MOUSE_MODE_VISIBLE
 
 
+## Mata o jogador com a causa de queda.
 func _on_fall_damage_fatal_fall() -> void:
 	kill(CAUSE_FALL)
 
 
+## Repassa o bloqueio da corrida para quem está fora do jogador.
 func _on_fall_damage_sprint_blocked_changed(active: bool) -> void:
 	sprint_blocked_changed.emit(active)

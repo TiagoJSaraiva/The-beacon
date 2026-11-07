@@ -5,6 +5,8 @@ extends RefCounted
 enum Outcome { NONE, SPRINT_BLOCK, FATAL }
 
 
+## Devolve a consequência de uma queda desta altura, em metros. Cada limite já vale na altura
+## exata.
 static func evaluate(height: float, config: FallConfig) -> Outcome:
 	if height >= config.fatal_height:
 		return Outcome.FATAL

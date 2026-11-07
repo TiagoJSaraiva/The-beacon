@@ -6,10 +6,12 @@ extends AudioStreamPlayer3D
 var is_active: bool = false
 
 
+## Liga o fim do som ao reinício do loop.
 func _ready() -> void:
 	finished.connect(_on_finished)
 
 
+## Inicia ou para o som. Repetir o estado atual não reinicia a reprodução.
 func set_active(active: bool) -> void:
 	if is_active == active:
 		return
@@ -20,6 +22,7 @@ func set_active(active: bool) -> void:
 		stop()
 
 
+## Toca de novo enquanto o som estiver ativo.
 func _on_finished() -> void:
 	if is_active:
 		play()

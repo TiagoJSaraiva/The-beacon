@@ -8,6 +8,8 @@ extends Node3D
 @onready var _fill: MeshInstance3D = $Fill
 
 
+## Mostra a carga de 0 a 1 encolhendo o preenchimento. Valores fora da faixa são limitados; em
+## zero, ele some.
 func show_ratio(ratio: float) -> void:
 	var clamped: float = clampf(ratio, 0.0, 1.0)
 	# Escala zero deixa a transformação degenerada; vazia, a barra só some.

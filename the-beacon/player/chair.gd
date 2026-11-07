@@ -10,5 +10,6 @@ signal sit_requested(seat: Transform3D, yaw_limit_degrees: float)
 @export var yaw_limit_degrees: float = 75.0
 
 
+## Pede para sentar neste assento, com o limite de giro do olhar.
 func _on_sit_point_interacted() -> void:
 	sit_requested.emit(global_transform, yaw_limit_degrees)
