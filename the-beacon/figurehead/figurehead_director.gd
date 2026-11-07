@@ -12,8 +12,8 @@ signal player_knocked_down(seconds: float)
 
 @export var figurehead_scene: PackedScene
 ## Alturas que separam térreo, escada e cabine no farol.
-@export var stairs_from_height: float = 3.2
-@export var cabin_from_height: float = 8.8
+@export var stairs_from_height: float = 3.84
+@export var cabin_from_height: float = 10.6
 ## Metade do campo de visão considerado ao esconder o ponto de surgimento.
 @export var view_half_angle_degrees: float = 60.0
 ## Pontos aleatórios testados por tentativa de surgir.

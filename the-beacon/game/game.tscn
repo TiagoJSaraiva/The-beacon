@@ -43,7 +43,7 @@ agent_height = 1.8
 agent_radius = 0.4
 agent_max_climb = 0.3
 agent_max_slope = 40.0
-filter_baking_aabb = AABB(-12, -1, -12, 24, 14, 24)
+filter_baking_aabb = AABB(-12, -1, -12, 24, 16, 24)
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_game")
@@ -70,7 +70,7 @@ unique_name_in_owner = true
 
 [node name="Player" parent="World" instance=ExtResource("3_player")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 9.05, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 10.85, 1.5)
 
 [node name="NightDirector" type="Node" parent="World"]
 unique_name_in_owner = true

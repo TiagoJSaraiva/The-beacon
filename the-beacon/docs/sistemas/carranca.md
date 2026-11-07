@@ -10,7 +10,7 @@ Armadilha do nevoeiro dentro do farol: cega o jogador e, com o tempo, o derruba 
 - `figurehead/figurehead_director.gd` (`FigureheadDirector`, nó no `World`, recebe o `Player` em `setup()`): surgimento, gatilho, luz, ataques.
 
 ## Regras
-- Surge só nas áreas já tomadas pelo nevoeiro: térreo (`GROUND_FLOOR`), escada (`STAIRS`) e cabine (`CABIN`). A área de um ponto vem da altura (`stairs_from_height` 3.2, `cabin_from_height` 8.8).
+- Surge só nas áreas já tomadas pelo nevoeiro: térreo (`GROUND_FLOOR`), escada (`STAIRS`) e cabine (`CABIN`). A área de um ponto vem da altura (`stairs_from_height` 3.84, `cabin_from_height` 10.6).
 - O ponto é aleatório na navmesh do interior (até `spawn_attempts` tentativas): fora do campo de visão do jogador (`view_half_angle_degrees` 60° a partir do olhar) e a pelo menos `min_spawn_distance`. Ela surge virada para o jogador.
 - No máximo `max_simultaneous` (3) ao mesmo tempo, com `spawn_interval_seconds` entre uma aparição e a seguinte.
 - Com o jogador a até `trigger_range` e linha de visão livre (`world`/`barriers`), ela pula nele: cega por `blind_seconds` (tela preta) e some.
