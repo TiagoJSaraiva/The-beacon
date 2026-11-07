@@ -9,7 +9,7 @@
    - **Robustez** (dados inválidos, nós ausentes, saves corrompidos)
    - **Responsabilidade e acoplamento** (script com mais de uma responsabilidade, regra de jogo presa ao nó, referência direta entre irmãos fora da exceção da decisão 0006, variação de conteúdo em `if`/`match`; ver `docs/convencoes-gdscript.md`)
    - **Manutenibilidade**
-   - **Legibilidade**
+   - **Legibilidade** (inclui `##` que repete o nome da função ou não corresponde mais ao código; o check só vê se ele existe)
    - **Preferência de estilo** (opinativo, baixa prioridade)
 4. Para cada item: arquivo e linha, o problema e a sugestão. Ordene por gravidade.
 5. Não altere nada até o desenvolvedor escolher o que aplicar.

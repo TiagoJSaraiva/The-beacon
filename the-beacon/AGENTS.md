@@ -50,7 +50,8 @@ Detalhes e exemplos em `docs/convencoes-gdscript.md`. O mínimo inegociável:
 - "Call down, signal up": pai chama filho; filho emite sinal. Sem `get_parent().get_parent()`.
 - Um script, uma responsabilidade: comportamento novo nasce em componente próprio, e regras de jogo ficam em funções puras testáveis, fora do nó.
 - Sem números mágicos: `@export` para ajuste por instância, constantes para valores globais.
-- Comentários explicam **por quê**, não o quê.
+- `##` em **toda função** fora de `test/` e `addons/`: diz a quem chama o que ela faz ou devolve, sem repetir o nome. O check reprova função sem ele (decisão 0021).
+- `#` comum explica **por quê**. Nenhum comentário repete o código.
 
 ## Verificação
 
