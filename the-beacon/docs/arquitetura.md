@@ -25,7 +25,7 @@ assets/             arte, áudio e fontes compartilhados
 autoload/           singletons (cada um com decisão registrada) e as regras puras deles
 config/             classes de configuração e .tres de dificuldades e eventos
 tools/              scripts headless de manutenção do jogo
-scripts/            pipeline de verificação (check.ps1, check-docs.ps1, parse_check.gd); tem .gdignore, fora do res://
+scripts/            pipeline de verificação (check.ps1, check-docs.ps1, check-doc-review.ps1, parse_check.gd); tem .gdignore, fora do res://
 test/unit/          testes de regras puras
 test/scenes/        testes de cena (gdUnit4 scene runner)
 ```

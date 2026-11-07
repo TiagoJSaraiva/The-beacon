@@ -118,4 +118,4 @@ func set_fog_stage(stage: FogStage.Stage) -> void:
 func set_fog_stage(stage: FogStage.Stage) -> void:
 ```
 
-- Mudou o que a função faz: atualize o `##` no mesmo passo.
+- Alterou uma função (assinatura ou corpo): revise o `##` no mesmo passo (decisão 0022). O check compara com o HEAD e reprova a função alterada cujo `##` não mudou. Se ele continua correto (correção de bug, refatoração), confirme com `scripts/check-doc-review.ps1 -Reviewed "<arquivo>::<função>"`; mexer de novo na função invalida a confirmação.

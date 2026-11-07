@@ -51,6 +51,7 @@ Detalhes e exemplos em `docs/convencoes-gdscript.md`. O mínimo inegociável:
 - Um script, uma responsabilidade: comportamento novo nasce em componente próprio, e regras de jogo ficam em funções puras testáveis, fora do nó.
 - Sem números mágicos: `@export` para ajuste por instância, constantes para valores globais.
 - `##` em **toda função** fora de `test/` e `addons/`: diz a quem chama o que ela faz ou devolve, sem repetir o nome. O check reprova função sem ele (decisão 0021).
+- Alterou uma função (assinatura ou corpo): revise o `##` dela no mesmo passo. Se continuar correto, confirme com `scripts/check-doc-review.ps1 -Reviewed "<arquivo>::<função>"` e cite a função no resumo. O check reprova função alterada com o `##` nem alterado nem confirmado (decisão 0022).
 - `#` comum explica **por quê**. Nenhum comentário repete o código.
 
 ## Verificação
@@ -60,6 +61,7 @@ Comandos (rodar a partir da raiz do projeto):
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check.ps1 -Fix -Fast   # formata + check rápido
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check.ps1              # check completo
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-doc-review.ps1 -Reviewed "player/player.gd::sit,player/player.gd::kill"   # confirma ## revisados
 ```
 
 - `-Fix` aplica `gdformat` nos scripts do projeto (nunca em `addons/`).

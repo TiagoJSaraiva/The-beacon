@@ -10,3 +10,6 @@ reports/
 
 # Diretório de build do Godot
 dist/
+
+# Confirmações locais de ## revisado (scripts/check-doc-review.ps1)
+.doc-review

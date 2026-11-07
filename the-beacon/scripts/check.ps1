@@ -51,9 +51,13 @@ if ($gdFiles.Count -gt 0) {
     Write-Host "`n(sem scripts .gd do projeto: formatação e lint pulados)" -ForegroundColor DarkGray
 }
 
-# 4. Toda função do jogo com ## logo acima (decisão 0021).
+# 4. Toda função do jogo com ## logo acima (decisão 0021), revisado quando a função mudou
+#    (decisão 0022).
 Invoke-Step "Documentação das funções" {
     & (Join-Path $PSScriptRoot "check-docs.ps1")
+}
+Invoke-Step "Revisão do ## das funções alteradas" {
+    & (Join-Path $PSScriptRoot "check-doc-review.ps1")
 }
 
 # 5. Parse de todos os scripts (decisão 0013, substitui a 0007).
