@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-  Pipeline de verificação: versão do Godot, formatação, lint, parse e testes.
+  Pipeline de verificação: versão do Godot, formatação, lint, documentação, parse e testes.
   Para na primeira etapa que falhar e retorna exit code 1.
 
 .PARAMETER Fast
@@ -51,7 +51,12 @@ if ($gdFiles.Count -gt 0) {
     Write-Host "`n(sem scripts .gd do projeto: formatação e lint pulados)" -ForegroundColor DarkGray
 }
 
-# 4. Parse de todos os scripts (decisão 0013, substitui a 0007).
+# 4. Toda função do jogo com ## logo acima (decisão 0021).
+Invoke-Step "Documentação das funções" {
+    & (Join-Path $PSScriptRoot "check-docs.ps1")
+}
+
+# 5. Parse de todos os scripts (decisão 0013, substitui a 0007).
 #    O --import só atualiza cache e .uid: ele não compila scripts que nenhuma cena usa.
 #    Por isso scripts/parse_check.gd compila cada script numa única execução headless.
 #    Não é --check-only: nesse modo o Godot não registra os autoloads e todo script que
@@ -81,7 +86,7 @@ Invoke-Step "Parse dos scripts (Godot headless)" {
     $global:LASTEXITCODE = 0
 }
 
-# 5. Testes (gdUnit4). O runtest.cmd lê o executável do Godot em GODOT_BIN.
+# 6. Testes (gdUnit4). O runtest.cmd lê o executável do Godot em GODOT_BIN.
 $testDir = if ($Fast) { "test/unit" } else { "test" }
 if (Test-Path (Join-Path $root $testDir)) {
     Invoke-Step "Testes gdUnit4 ($testDir)" {

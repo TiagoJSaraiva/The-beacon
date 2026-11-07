@@ -13,6 +13,7 @@
 - Iluminação provisória mais clara em `game/game.tscn` só para testes.
 - **Farol cônico** (experimento, a avaliar jogando): raio interno de 6,5 m no chão (1,3x o original) a 5,5 m na cabine (1,1x), com a cabine em y=10,8 (1,2x a altura anterior), escada de 0,9 volta e 8,4 m seguindo a parede, porta e alçapão alinhados e cada passagem como uma cena só, com o buraco na raiz (decisão 0019). Objetos internos continuam onde estavam: o espaço novo está livre para organizar.
 - **Correções do playtest**: o galão agora pode ser pego no slot (o ponto de devolução desativado bloqueava o raio de interação). O nevoeiro externo ficou mais alto e esvaece nas bordas; o interno não mudou (decisão 0020).
+- **Documentação do código**: toda função fora de `test/` e `addons/` tem `##`, e o check reprova função sem ele (decisão 0021). O check não avalia se o texto está certo: isso fica para a revisão.
 
 ## Próximo passo
 Playtest da entrega 2: montar o roteiro a partir da lista abaixo, jogar e balancear. Depois, arte e áudio finais.
@@ -35,4 +36,4 @@ Validar jogando (por fase):
   - Saves e progresso ficam em `user://` (`%APPDATA%/Godot/app_userdata/the-beacon/`). Para testar o desbloqueio do zero, apague `progress.json`. Rodar `game.tscn` direto ou os testes de cena apaga o save de partida (começar a noite consome o save).
   - Afogado: se o alçapão fechar com ele em cima e o jogador fora do alcance, ele pode ficar preso tentando descer pelo painel fechado.
   - Mover a porta não leva `DoorInside`, a câmera da porta nem as fendas acima dela (decisão 0019).
-  - `game.gd` está com ~195 linhas: a próxima responsabilidade nova deve nascer em componente próprio.
+  - `game.gd` está com ~150 linhas de código, abaixo do alerta de ~200 (decisão 0021), mas continua concentrando a fiação da noite: responsabilidade nova deve nascer em componente próprio.
