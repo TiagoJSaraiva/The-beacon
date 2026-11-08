@@ -2,10 +2,7 @@
 
 [ext_resource type="Script" path="res://player/chair.gd" id="1_chair"]
 [ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
-albedo_color = Color(0.33, 0.22, 0.13, 1)
-roughness = 0.85
+[ext_resource type="PackedScene" path="res://assets/models/old_wooden_chair/old_wooden_chair.tscn" id="3_model"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sit"]
 size = Vector3(0.5, 0.9, 0.5)
@@ -13,35 +10,8 @@ size = Vector3(0.5, 0.9, 0.5)
 [node name="Chair" type="Node3D"]
 script = ExtResource("1_chair")
 
-[node name="Seat" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
-size = Vector3(0.48, 0.06, 0.48)
-material = SubResource("StandardMaterial3D_wood")
-
-[node name="Back" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0.22)
-size = Vector3(0.48, 0.6, 0.05)
-material = SubResource("StandardMaterial3D_wood")
-
-[node name="LegFrontLeft" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.21, -0.2)
-size = Vector3(0.05, 0.42, 0.05)
-material = SubResource("StandardMaterial3D_wood")
-
-[node name="LegFrontRight" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.21, -0.2)
-size = Vector3(0.05, 0.42, 0.05)
-material = SubResource("StandardMaterial3D_wood")
-
-[node name="LegBackLeft" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.21, 0.2)
-size = Vector3(0.05, 0.42, 0.05)
-material = SubResource("StandardMaterial3D_wood")
-
-[node name="LegBackRight" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.21, 0.2)
-size = Vector3(0.05, 0.42, 0.05)
-material = SubResource("StandardMaterial3D_wood")
+[node name="Model" parent="." instance=ExtResource("3_model")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 
 [node name="SitPoint" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)

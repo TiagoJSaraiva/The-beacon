@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/old_wooden_chair/scene.gltf" id="1_model"]
+
+[node name="OldWoodenChair" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(2.35, 0, 0, 0, 2.35, 0, 0, 0, 2.35, 0, 0, 0)
