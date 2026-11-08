@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://boats/radio.tscn" id="14_radio"]
 [ext_resource type="PackedScene" path="res://player/chair.tscn" id="15_chair"]
 [ext_resource type="PackedScene" path="res://machine_house/machine_house.tscn" id="16_machine"]
+[ext_resource type="PackedScene" path="res://assets/models/old_wooden_table/old_wooden_table.tscn" id="17_table"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -26,6 +27,9 @@ roughness = 0.95
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.4, 0.28, 0.16, 1)
 roughness = 0.85
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_desk"]
+size = Vector3(2.4, 0.8, 0.7)
 
 [node name="Lighthouse" type="Node3D" unique_id=976432629 groups=["navigation_source"]]
 script = ExtResource("4_lighthouse")
@@ -174,11 +178,14 @@ material = SubResource("StandardMaterial3D_stone")
 [node name="Desk" type="Node3D" parent="." unique_id=442308190]
 transform = Transform3D(-0.033360563, 0, -0.99944335, 0, 1, 0, 0.99944335, 0, -0.033360563, -2.6731043, 10.8, 0.38975644)
 
-[node name="Top" type="CSGBox3D" parent="Desk" unique_id=1345031572]
+[node name="Top" type="StaticBody3D" parent="Desk" unique_id=1345031572]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Desk/Top"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
-use_collision = true
-size = Vector3(2.4, 0.8, 0.7)
-material = SubResource("StandardMaterial3D_wood")
+shape = SubResource("BoxShape3D_desk")
+
+[node name="Model" parent="Desk/Top" instance=ExtResource("17_table")]
+transform = Transform3D(1.4256, 0, 0, 0, 1.0526, 0, 0, 0, 0.7073, 0, 0, 0)
 
 [node name="SeaMonitorLeft" parent="Desk" unique_id=323299548 instance=ExtResource("13_monitor")]
 unique_name_in_owner = true
