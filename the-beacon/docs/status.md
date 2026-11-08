@@ -16,6 +16,7 @@
 - **Documentação do código**: toda função fora de `test/` e `addons/` tem `##`, e o check reprova função sem ele (decisão 0021) e função alterada com o `##` nem alterado nem confirmado (decisão 0022). O check não avalia se o texto está certo: isso fica para a revisão.
 - **Comportamentos a revisar** (features que ainda vão mudar, sem correção prevista): seções "Comportamento atual a revisar" em `sistemas/afogados.md` (jogador perto do alçapão impede as batidas) e `sistemas/nevoeiro.md` (feixe bloqueado além de `unblock_seconds`; trecho da rota que salta ao ressurgir).
 - **Correções**: derrubado, o jogador não interage, não senta e não solta o galão; o modo de interação contínua, sem uso, saiu.
+- **Modelos de terceiros** (decisão 0023, `arquitetura.md` "Modelos 3D"): cadeira, mesa (esticada a 2,4 m), lanterna, carcaça da casa de máquinas, os dois geradores e o galão trocados por modelos texturizados em `assets/models/`, com créditos em `assets/models/CREDITOS.md`. Ferramentas: `tools/import_store_model.gd` (extrai e reduz texturas a 2K) e `tools/configure_model_textures.gd` (VRAM, mipmaps, normal map). A casa de máquinas encolheu (1,6×0,75×0,74 m), o tubo desce até ela e o volante foi para a frente do motor; os geradores ficaram com 1,15×0,97×0,91 m, e o principal chegou 13 cm para perto do tanque para encostar na mangueira.
 
 ## Próximo passo
 Playtest da entrega 2: montar o roteiro a partir da lista abaixo, jogar e balancear. Depois, arte e áudio finais.
@@ -28,6 +29,7 @@ Validar jogando (por fase):
 - **D**: legibilidade do nevoeiro nas três câmeras e dentro do farol; altura e bordas da faixa no mar; base da faixa no mar e divisão entre os dois monitores; barcos fora do nevoeiro legíveis na neblina de `NEAR`; tempo até surgir com o farol parado (45 s) e ritmo de avanço; travessia de 12 s no panorama; rádio só com nevoeiro; atender com o feixe aceso desvia; barco que entra no nevoeiro afunda. Premissa: o nevoeiro que cresce por cima de um barco também o afunda.
 - **E**: barulho de aproximação na porta; arrombamento; perseguição e morte; trinco ligado → bate, cansa, descansa e volta; trinco desligado → abre o alçapão e sobe; nevoeiro no alçapão destranca; barra de 0,8 s do trinco; se ficar em cima do alçapão (ou a até ~3,4 m dele na cabine) impede as batidas (`sistemas/afogados.md`, "Comportamento atual a revisar"). Atalho: `DrownedDirector.add_drowned_point` e farol parado.
 - **F**: susto da carranca (pulo a 3 m), cegueira de 4 s, derrubada de 3 s na terceira vez (sem interagir, sentar nem soltar o galão; lanterna livre; barra em andamento cancelada), dissolução pela lanterna (0,3 s), pontos de surgimento parecem aleatórios e escondidos, ritmo (12 s entre aparições, volta em 40 s).
+- **Modelos**: escala e leitura de cada modelo jogando; sentar na cadeira nova (altura do assento); lanterna na mão e na inspeção da bateria (barra na lateral do corpo); galão na mão, solto (colisão de 0,31×0,4×0,13) e no slot; tampa e medidor do gerador de emergência; volante girando com o farol operando; normal maps com relevo certo (os da Megascans podem precisar de `normal_map_invert_y`); andar em volta da casa de máquinas e dos geradores sem atravessar a malha.
 - **G**: textos do tutorial com as teclas certas no teclado e no controle (o prompt troca ao usar o outro dispositivo); remapear tecla e botão, conflito vira troca, Esc cancela a espera, "Restaurar padrão", gravar e reabrir o jogo; navegar todos os menus só com o controle, B voltando uma página.
 
 ## Bloqueios
@@ -38,4 +40,7 @@ Validar jogando (por fase):
   - Saves e progresso ficam em `user://` (`%APPDATA%/Godot/app_userdata/the-beacon/`). Para testar o desbloqueio do zero, apague `progress.json`. Rodar `game.tscn` direto ou os testes de cena apaga o save de partida (começar a noite consome o save).
   - Afogado: se o alçapão fechar com ele em cima e o jogador fora do alcance, ele pode ficar preso tentando descer pelo painel fechado.
   - Mover a porta não leva `DoorInside`, a câmera da porta nem as fendas acima dela (decisão 0019).
+  - Licença dos modelos não aparece nas páginas do Fab: confirmar antes de publicar (`assets/models/CREDITOS.md`).
+  - O documento de modelos indica outro modelo para o gerador principal ("Old School Generator"); hoje os dois geradores usam o "Power Generator", porque a cena `power/generator.tscn` é única.
+  - O rádio (`assets/RadiostationMCKINLEY_GameReady.fbx`) é anterior ao formato da decisão 0023 e aparece sem textura.
   - `game.gd` está com ~150 linhas de código, abaixo do alerta de ~200 (decisão 0021), mas continua concentrando a fiação da noite: responsabilidade nova deve nascer em componente próprio.
