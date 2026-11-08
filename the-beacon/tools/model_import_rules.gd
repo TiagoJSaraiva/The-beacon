@@ -11,6 +11,12 @@ const UNUSED_MAP_MARKERS: PackedStringArray = [
 	"_cavity", "_displacement", "_gloss", "_specular", "_height"
 ]
 
+## Valores das opções do importador de texturas do Godot (`compress/mode`,
+## `detect_3d/compress_to`, `compress/normal_map`).
+const COMPRESS_VRAM := 2
+const DETECT_3D_DISABLED := 0
+const NORMAL_MAP_ENABLED := 1
+
 
 ## Devolve `size` reduzido para que o maior lado caiba em `max_side`, mantendo a proporção
 ## e com no mínimo 1 px por lado. Um tamanho que já cabe volta igual: a regra nunca amplia.
@@ -43,6 +49,25 @@ static func is_wanted(entry: String, extra_skips: PackedStringArray = []) -> boo
 ## Diz se a entrada é uma textura, que passa pela redução de tamanho.
 static func is_texture(entry: String) -> bool:
 	return entry.get_extension().to_lower() in TEXTURE_EXTENSIONS
+
+
+## Diz se a textura é um mapa de normal, pelo nome (ex.: `chair_normal.png`).
+static func is_normal_map(file_name: String) -> bool:
+	return file_name.get_file().to_lower().contains("normal")
+
+
+## Devolve as opções de import (seção `[params]` do `.import`) de uma textura de modelo:
+## compressão de VRAM com mipmaps, sem a detecção de uso em 3D, que só mudaria o arquivo
+## ao abrir o editor; nos mapas de normal, também o modo de normal map.
+static func texture_import_params(file_name: String) -> Dictionary:
+	var params: Dictionary = {
+		"compress/mode": COMPRESS_VRAM,
+		"mipmaps/generate": true,
+		"detect_3d/compress_to": DETECT_3D_DISABLED,
+	}
+	if is_normal_map(file_name):
+		params["compress/normal_map"] = NORMAL_MAP_ENABLED
+	return params
 
 
 ## Devolve a pasta de topo comum a todas as entradas (ex.: `"Generator/"`), ou `""` se não

@@ -47,6 +47,21 @@ func test_extra_skips_drop_matching_textures_only() -> void:
 	assert_bool(ModelImportRules.is_wanted("scene_rusted.gltf", skips)).is_true()
 
 
+func test_textures_get_vram_compression_and_mipmaps() -> void:
+	var params: Dictionary = ModelImportRules.texture_import_params("chair_baseColor.png")
+	assert_int(params["compress/mode"]).is_equal(ModelImportRules.COMPRESS_VRAM)
+	assert_bool(params["mipmaps/generate"]).is_true()
+	assert_int(params["detect_3d/compress_to"]).is_equal(ModelImportRules.DETECT_3D_DISABLED)
+	assert_bool(params.has("compress/normal_map")).is_false()
+
+
+func test_normal_maps_get_normal_map_mode() -> void:
+	var params: Dictionary = ModelImportRules.texture_import_params("Pack_4K_Normal.jpg")
+	assert_int(params["compress/normal_map"]).is_equal(ModelImportRules.NORMAL_MAP_ENABLED)
+	assert_bool(ModelImportRules.is_normal_map("Generator_low_Tank_Normal.png")).is_true()
+	assert_bool(ModelImportRules.is_normal_map("Generator_low_Tank_Roughness.png")).is_false()
+
+
 func test_common_root_is_found_only_when_shared() -> void:
 	var nested: PackedStringArray = ["Generator/", "Generator/Generator.fbx", "Generator/a.png"]
 	assert_str(ModelImportRules.common_root(nested)).is_equal("Generator/")

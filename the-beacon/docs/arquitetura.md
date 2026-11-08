@@ -108,7 +108,7 @@ Buses em `default_bus_layout.tres`: `Master` → `Music`, `SFX`. Sons placeholde
 ## Modelos 3D
 Modelos de terceiros em `assets/models/<nome>/` (decisão 0023), extraídos dos pacotes em `../notes/modelos-store/` (fora do git) por `tools/import_store_model.gd`:
 `godot --headless --path . --script res://tools/import_store_model.gd -- <zip> <nome> [--inner <zip interno>] [--max-size 2048] [--skip <marcador>]`.
-A ferramenta reduz as texturas a 2048 px e descarta os mapas sem uso. Cada modelo tem a cena-embrulho `<nome>.tscn` (metros, base em y=0, centro em XZ, frente em +Z), que é o que as cenas do jogo instanciam. A colisão é sempre uma forma simples, separada da malha. Créditos em `assets/models/CREDITOS.md`. O rádio (`assets/RadiostationMCKINLEY_GameReady.fbx`) é anterior a esse formato.
+A ferramenta reduz as texturas a 2048 px e descarta os mapas sem uso. Depois do primeiro `--import`, `tools/configure_model_textures.gd -- <nome>` ajusta o `.import` das texturas (compressão de VRAM, mipmaps, normal map), e o `--import` seguinte as reimporta. Sem isso, o Godot importa sem mipmaps e só corrige ao abrir o editor. Cada modelo tem a cena-embrulho `<nome>.tscn` (metros, base em y=0, centro em XZ, frente em +Z), que é o que as cenas do jogo instanciam. A colisão é sempre uma forma simples, separada da malha. Créditos em `assets/models/CREDITOS.md`. O rádio (`assets/RadiostationMCKINLEY_GameReady.fbx`) é anterior a esse formato.
 
 ## Navegação
 Navmesh assada em runtime no `Game`, sem porta e alçapão (decisão 0009), só do interior: o grupo `navigation_source` fica só no `Lighthouse`. `project.godot`: `navigation/3d/default_cell_size` e `default_cell_height` = 0.1.
