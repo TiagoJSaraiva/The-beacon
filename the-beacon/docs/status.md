@@ -19,7 +19,7 @@
 - **Modelos de terceiros** (decisão 0023, `arquitetura.md` "Modelos 3D"): cadeira, mesa (esticada a 2,4 m), lanterna, carcaça da casa de máquinas, os dois geradores e o galão trocados por modelos texturizados em `assets/models/`, com créditos em `assets/models/CREDITOS.md`. Ferramentas: `tools/import_store_model.gd` (extrai e reduz texturas a 2K) e `tools/configure_model_textures.gd` (VRAM, mipmaps, normal map). A casa de máquinas encolheu (1,6×0,75×0,74 m), o tubo desce até ela e o volante foi para a frente do motor; os geradores ficaram com 1,15×0,97×0,91 m, e o principal chegou 13 cm para perto do tanque para encostar na mangueira.
 
 ## Próximo passo
-Playtest da entrega 2: montar o roteiro a partir da lista abaixo, jogar e balancear. Depois, arte e áudio finais.
+Playtest da entrega 2: montar o roteiro a partir da lista abaixo, jogar e balancear. Em paralelo, seguir trocando o greybox por modelos da lista em `../notes/modelos-link.txt`, pelo fluxo de `arquitetura.md` "Modelos 3D". Os candidatos imediatos são o gerador principal ("Old School Generator") e a migração do rádio. Depois, áudio final.
 
 Validar jogando (por fase):
 - **Farol cônico**: sem frestas em volta da porta e do alçapão (conferência visual, sem teste automático); leitura da porta vertical na parede inclinada; andar rente à parede na escada; enquadramento da câmera da porta e das câmeras do mar; nevoeiro no anel e nos volumes internos; arrombamento (folha não atravessa a parede); iluminação da cabine; trecho alto da escada, onde a queda já é fatal (acima de 6 m); ritmo com a subida mais longa do jogador e do Afogado.
