@@ -10,7 +10,7 @@ O greybox começa a ser substituído por modelos baixados (Sketchfab/Fab, Megasc
 - Os pacotes originais ficam fora do git, em `notes/modelos-store/` (ignorado). `tools/import_store_model.gd` extrai cada um para `assets/models/<nome>/`. Ele reduz as texturas para no máximo 2048 px e descarta os mapas que o `StandardMaterial3D` não usa (cavity, displacement, gloss, specular, height).
 - Cada modelo tem uma cena-embrulho `assets/models/<nome>/<nome>.tscn` que o normaliza: metros, base em y=0, centrado em XZ e frente voltada para +Z. As cenas do jogo instanciam o embrulho, nunca o arquivo importado. O ajuste ao objeto (tamanho do placeholder) é a escala dessa instância.
 - glTF: o importador liga as texturas. FBX: um `StandardMaterial3D` por material em `assets/models/<nome>/materials/`, ligado como material externo nas opções de import (`_subresources` do `.import`).
-- A colisão continua em formas simples, separada da malha, com o mesmo tamanho do placeholder. A malha do modelo não colide.
+- A colisão continua em formas simples (caixas), separada da malha e ajustada ao volume visível do modelo. A malha do modelo não colide.
 - Origem e licença de cada modelo em `assets/models/CREDITOS.md`.
 
 ## Alternativas descartadas
@@ -19,4 +19,4 @@ O greybox começa a ser substituído por modelos baixados (Sketchfab/Fab, Megasc
 - **Git LFS**: exige configurar o LFS em cada clone e tem cota no GitHub; com 2K, o peso ainda é aceitável sem ele.
 
 ## Consequências
-Trocar um modelo mexe só no embrulho, e a navmesh e a física não mudam com a arte. Se um modelo precisar de mais definição, roda-se a ferramenta de novo com `--max-size`. O rádio ainda segue o formato antigo (`assets/RadiostationMCKINLEY_GameReady.fbx`) até ser migrado.
+Trocar um modelo mexe só no embrulho. A navmesh e a física só mudam se a caixa de colisão mudar de tamanho, como na casa de máquinas. Se um modelo precisar de mais definição, roda-se a ferramenta de novo com `--max-size`. O rádio ainda segue o formato antigo (`assets/RadiostationMCKINLEY_GameReady.fbx`) até ser migrado.

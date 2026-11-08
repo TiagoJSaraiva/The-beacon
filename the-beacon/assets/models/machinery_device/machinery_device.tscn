@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/machinery_device/scene.gltf" id="1_model"]
+
+[node name="MachineryDevice" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(-0.01, 0, 0, 0, 0.01, 0, 0, 0, -0.01, -0.0043, 0, 1.6209)
