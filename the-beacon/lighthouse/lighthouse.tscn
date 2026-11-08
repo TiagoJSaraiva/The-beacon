@@ -125,7 +125,7 @@ transform = Transform3D(-0.77301, 0, -0.63439, 0, 1, 0, 0.63439, 0, -0.77301, 3.
 
 [node name="MainGenerator" parent="." unique_id=904717009 instance=ExtResource("6_generator")]
 unique_name_in_owner = true
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6, 0, -0.3)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6, 0, -0.17)
 feed = 0
 
 [node name="EmergencyGenerator" parent="." instance=ExtResource("6_generator")]
