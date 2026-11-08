@@ -4,15 +4,11 @@
 [ext_resource type="Script" path="res://player/fall_damage.gd" id="2_fall"]
 [ext_resource type="Script" path="res://player/interaction_ray.gd" id="3_ray"]
 [ext_resource type="PackedScene" path="res://player/flashlight.tscn" id="4_flashlight"]
-[ext_resource type="Material" path="res://fuel/jerrycan_material.tres" id="5_jerrycan"]
+[ext_resource type="PackedScene" path="res://assets/models/oil_containers/oil_containers.tscn" id="5_jerrycan"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
 height = 1.8
-
-[sub_resource type="BoxMesh" id="BoxMesh_jerrycan"]
-material = ExtResource("5_jerrycan")
-size = Vector3(0.3, 0.4, 0.15)
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 4
@@ -38,11 +34,13 @@ user = NodePath("../../..")
 [node name="Flashlight" parent="Head/Camera3D" instance=ExtResource("4_flashlight")]
 unique_name_in_owner = true
 
-[node name="CarriedJerrycan" type="MeshInstance3D" parent="Head/Camera3D"]
+[node name="CarriedJerrycan" type="Node3D" parent="Head/Camera3D"]
 unique_name_in_owner = true
 visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, -0.42, -0.5)
-mesh = SubResource("BoxMesh_jerrycan")
+
+[node name="Model" parent="Head/Camera3D/CarriedJerrycan" instance=ExtResource("5_jerrycan")]
+transform = Transform3D(1.82, 0, 0, 0, 1.82, 0, 0, 0, 1.82, 0, -0.2, 0)
 
 [node name="FallDamage" type="Node" parent="." node_paths=PackedStringArray("body")]
 unique_name_in_owner = true

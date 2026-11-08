@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/models/oil_containers/Oil_Containers_Pack_tlzkdilva_High_4K_BaseColor.jpg" id="1_albedo"]
+[ext_resource type="Texture2D" path="res://assets/models/oil_containers/Oil_Containers_Pack_tlzkdilva_High_4K_Roughness.jpg" id="2_roughness"]
+[ext_resource type="Texture2D" path="res://assets/models/oil_containers/Oil_Containers_Pack_tlzkdilva_High_4K_Normal.jpg" id="3_normal"]
+[ext_resource type="Texture2D" path="res://assets/models/oil_containers/Oil_Containers_Pack_tlzkdilva_High_4K_AO.jpg" id="4_ao"]
+
+[resource]
+resource_name = "MatID_1"
+albedo_texture = ExtResource("1_albedo")
+roughness_texture = ExtResource("2_roughness")
+normal_enabled = true
+normal_texture = ExtResource("3_normal")
+ao_enabled = true
+ao_texture = ExtResource("4_ao")
