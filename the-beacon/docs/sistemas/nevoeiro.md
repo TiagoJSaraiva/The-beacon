@@ -16,11 +16,11 @@ Ameaça que surge no mar e avança até cobrir o feixe enquanto o farol está pa
 - Farol volta a operar depois de uma parada: devolve de uma vez `recoil_ratio` (50%) do que avançou nessa parada. Depois, enquanto opera, recua a `recede_per_second` (mais lento que o avanço; o `validate()` exige) até `start_advance`.
 - No estágio `BEAM`, o recuo de uma vez espera `unblock_seconds` de farol operando; parar de novo reinicia a espera. Só nesse estágio o feixe fica bloqueado (`Lighthouse.set_fog_stage`).
 - Efeitos por estágio:
-  - `NEAR` ou acima: o anel em volta do farol aparece na câmera da porta e como neblina geral nas câmeras do mar.
+  - `NEAR` ou acima: o anel em volta do farol aparece na câmera da porta. As câmeras do mar não o veem (camada de render `fog_near_ring`, fora do `cull_mask` delas).
   - `GROUND_FLOOR` ou acima: na primeira vez, estoura a mangueira. Volume no térreo. Aproximação do Afogado. Carrancas no térreo.
   - `STAIRS`, `CABIN`: volumes e carrancas na escada e na cabine.
   - `TRAPDOOR` ou acima: desliga o trinco do alçapão e impede ligá-lo.
-  - `BEAM`: bloqueia o feixe.
+  - `BEAM`: bloqueia o feixe; volume denso em volta da cabeça do farol (`LampShroud`).
 - Rota dos barcos: o nevoeiro cobre um trecho centrado em `route_center` (fixo). A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho e fica mais densa com o avanço; altura e profundidade crescem com o comprimento até `sea_band_half_height` e `sea_band_half_depth`, e no máximo ela passa do topo da imagem das câmeras.
 - Cada volume esmaece ao entrar e sair do seu estágio (`FogVisuals.fade_per_second`).
 - Os volumes internos são cilindros retos dentro de um farol cônico: o raio de cada um cabe na parede no topo do trecho, para não vazar por fora, e sobra folga na parte baixa.

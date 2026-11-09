@@ -1,8 +1,9 @@
 class_name FogVisuals
 extends Node3D
 ## Nevoeiro visível (entrega 2): uma faixa no trecho coberto da rota dos barcos, um anel em
-## volta do farol a partir de NEAR (câmera da porta) e um volume por área interna. Cada
-## volume esmaece ao entrar e sair do seu estágio. Lê o estado do FogSystem a cada frame.
+## volta do farol a partir de NEAR (só na câmera da porta: a camada de render dele fica fora das
+## câmeras do mar), um volume por área interna e um em volta da cabeça do farol no estágio BEAM.
+## Cada volume esmaece ao entrar e sair do seu estágio. Lê o estado do FogSystem a cada frame.
 
 @export var fade_per_second: float = 0.5
 ## Limites da metade da altura e da largura da faixa no mar; o comprimento vem do trecho da
@@ -26,6 +27,7 @@ func _ready() -> void:
 		%GroundFloor: FogStage.Stage.GROUND_FLOOR,
 		%Stairs: FogStage.Stage.STAIRS,
 		%Cabin: FogStage.Stage.CABIN,
+		%LampShroud: FogStage.Stage.BEAM,
 	}
 	for volume: MeshInstance3D in _all_volumes():
 		_set_opacity(volume, 0.0)

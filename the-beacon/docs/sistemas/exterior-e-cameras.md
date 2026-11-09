@@ -13,7 +13,7 @@ Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelos monitores f
 ## Regras
 - A câmera da esquerda mira o lado +X da rota, que aparece à esquerda na tela; os barcos vão da direita para a esquerda no panorama.
 - Monitores funcionam sem energia.
-- O nevoeiro aparece pelos volumes do `FogVisuals` (`nevoeiro.md`), que as câmeras renderizam como qualquer objeto.
+- O nevoeiro aparece pelos volumes do `FogVisuals` (`nevoeiro.md`), que as câmeras renderizam como qualquer objeto. Exceção: as câmeras do mar têm `cull_mask` sem a camada de render `fog_near_ring`, e o anel em volta do farol não as cobre.
 
 ## Sinais
 - O `Game` passa as texturas com `Lighthouse.show_camera_feeds(sea_left, sea_right, door)`.

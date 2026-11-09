@@ -47,6 +47,14 @@ shader = ExtResource("2_shader")
 shader_parameter/density = 0.15
 shader_parameter/is_cylinder = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lamp_shroud"]
+render_priority = 1
+shader = ExtResource("2_shader")
+shader_parameter/density = 0.4
+shader_parameter/is_cylinder = true
+shader_parameter/edge_fade = 0.5
+shader_parameter/top_fade = 0.5
+
 [node name="FogVisuals" type="Node3D"]
 script = ExtResource("1_visuals")
 
@@ -61,6 +69,7 @@ material_override = SubResource("ShaderMaterial_sea")
 unique_name_in_owner = true
 visible = false
 transform = Transform3D(23.5, 0, 0, 0, 11, 0, 0, 0, 23.5, 0, 9, 0)
+layers = 2
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_near")
@@ -88,3 +97,11 @@ transform = Transform3D(5.5, 0, 0, 0, 1.5, 0, 0, 0, 5.5, 0, 12.3, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_volume")
 material_override = SubResource("ShaderMaterial_cabin")
+
+[node name="LampShroud" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(2.5, 0, 0, 0, 1.6, 0, 0, 0, 2.5, -0.4, 14.6, -2.4)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_volume")
+material_override = SubResource("ShaderMaterial_lamp_shroud")

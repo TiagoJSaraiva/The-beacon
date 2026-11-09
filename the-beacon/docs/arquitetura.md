@@ -102,6 +102,10 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay), q
 7 — (livre)
 8 — `props` — objetos com física (galão) / colidem com `world`, `barriers` e entre si; o jogador os atravessa
 
+## Camadas de render
+1 — `default` — tudo
+2 — `fog_near_ring` — anel de nevoeiro em volta do farol / fora do `cull_mask` das câmeras do mar
+
 ## Áudio
 Buses em `default_bus_layout.tres`: `Master` → `Music`, `SFX`. Sons placeholder (tons sintéticos) em `assets/audio/placeholder/`, gerados por `tools/generate_placeholder_audio.gd` (rodar com `godot --headless --path . --script res://tools/generate_placeholder_audio.gd`). Sons em loop usam `components/looping_sound.gd`.
 
