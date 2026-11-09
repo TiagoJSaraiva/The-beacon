@@ -26,7 +26,7 @@ func test_emergency_generator_takes_over_when_hose_bursts() -> void:
 	await assert_signal(lighthouse).wait_until(1000).is_emitted("beam_lit_changed", [false])
 
 
-func test_near_fog_blocks_the_beam_and_inside_fog_bursts_the_hose() -> void:
+func test_covering_fog_blocks_the_beam_and_inside_fog_bursts_the_hose() -> void:
 	var runner := scene_runner(LIGHTHOUSE)
 	var lighthouse: Lighthouse = runner.scene()
 	await runner.simulate_frames(2)
@@ -34,14 +34,17 @@ func test_near_fog_blocks_the_beam_and_inside_fog_bursts_the_hose() -> void:
 	lighthouse.beam_control.switched.emit(true)
 
 	lighthouse.set_fog_stage(FogStage.Stage.NEAR)
-	assert_bool(lighthouse.beam.is_operational()).is_true()
-	assert_bool(lighthouse.beam.is_lit()).is_false()
+	assert_bool(lighthouse.beam.is_lit()).is_true()
 	assert_bool(lighthouse.is_hose_burst()).is_false()
 
 	lighthouse.set_fog_stage(FogStage.Stage.GROUND_FLOOR)
 	assert_bool(lighthouse.is_hose_burst()).is_true()
 
-	lighthouse.set_fog_stage(FogStage.Stage.SEA)
+	lighthouse.set_fog_stage(FogStage.Stage.BEAM)
+	assert_bool(lighthouse.beam.is_operational()).is_true()
+	assert_bool(lighthouse.beam.is_lit()).is_false()
+
+	lighthouse.set_fog_stage(FogStage.Stage.CABIN)
 	assert_bool(lighthouse.beam.is_lit()).is_true()
 
 

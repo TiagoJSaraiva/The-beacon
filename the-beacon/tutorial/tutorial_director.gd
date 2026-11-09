@@ -16,6 +16,7 @@ const STEP_HOSE_BURST := &"hose_burst"
 const STEP_MACHINE_BROKEN := &"machine_broken"
 const STEP_FOG := &"fog"
 const STEP_FOG_NEAR := &"fog_near"
+const STEP_FOG_BEAM := &"fog_beam"
 const STEP_LATCH := &"latch"
 const STEP_BOAT := &"boat"
 const STEP_DROWNED_APPROACHING := &"drowned_approaching"
@@ -32,6 +33,7 @@ const KNOWN_STEPS: Array[StringName] = [
 	STEP_MACHINE_BROKEN,
 	STEP_FOG,
 	STEP_FOG_NEAR,
+	STEP_FOG_BEAM,
 	STEP_LATCH,
 	STEP_BOAT,
 	STEP_DROWNED_APPROACHING,
@@ -140,7 +142,9 @@ func _on_night_started(_night: int) -> void:
 func _on_fog_stage_changed(stage: FogStage.Stage) -> void:
 	if stage != FogStage.Stage.NONE:
 		show_step(STEP_FOG)
-	if FogStage.blocks_beam(stage):
+	if stage >= FogStage.Stage.NEAR:
 		show_step(STEP_FOG_NEAR)
+	if FogStage.blocks_beam(stage):
+		show_step(STEP_FOG_BEAM)
 	if stage >= FogStage.Stage.TRAPDOOR:
 		show_step(STEP_LATCH)

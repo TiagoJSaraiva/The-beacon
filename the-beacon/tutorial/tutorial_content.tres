@@ -41,12 +41,17 @@ text = "A casa de máquinas quebrou e o farol parou de girar. Segure {interact} 
 [sub_resource type="Resource" id="Resource_fog"]
 script = ExtResource("1_step")
 id = &"fog"
-text = "Nevoeiro no mar, nas câmeras. Com o farol parado, ele avança até o farol."
+text = "Nevoeiro no mar, nas câmeras. Ele não vai embora: com o farol parado, avança até o farol."
 
 [sub_resource type="Resource" id="Resource_fog_near"]
 script = ExtResource("1_step")
 id = &"fog_near"
-text = "O nevoeiro chegou perto do farol e cobre o feixe. Mantenha o farol operando para ele recuar."
+text = "O nevoeiro chegou à entrada do farol. Religue o farol e ele recua um pouco."
+
+[sub_resource type="Resource" id="Resource_fog_beam"]
+script = ExtResource("1_step")
+id = &"fog_beam"
+text = "O nevoeiro cobriu o feixe. Mantenha o farol operando: depois de alguns segundos, a luz o afasta."
 
 [sub_resource type="Resource" id="Resource_latch"]
 script = ExtResource("1_step")
@@ -75,5 +80,5 @@ text = "Carranca. Ela pula em quem chega perto e cega; depois de algumas vezes, 
 
 [resource]
 script = ExtResource("2_content")
-steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_fog_near"), SubResource("Resource_latch"), SubResource("Resource_boat"), SubResource("Resource_drowned_approaching"), SubResource("Resource_drowned"), SubResource("Resource_figurehead")])
+steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_fog_near"), SubResource("Resource_fog_beam"), SubResource("Resource_latch"), SubResource("Resource_boat"), SubResource("Resource_drowned_approaching"), SubResource("Resource_drowned"), SubResource("Resource_figurehead")])
 message_seconds = 8.0

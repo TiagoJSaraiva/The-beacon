@@ -1,25 +1,24 @@
 class_name FogConfig
 extends Resource
-## Nevoeiro (entrega 2): um avanço de 0 (sem nevoeiro) a 1 (cabine tomada), com estágios
+## Nevoeiro (entrega 2): um avanço de 0 (acabou de surgir) a 1 (cobre o feixe), com estágios
 ## nos limiares abaixo (`FogStage`). Velocidades em avanço por segundo.
 
 @export_group("Estágios")
-## Começa a aparecer na câmera da porta e bloqueia o feixe.
+## Começa a aparecer perto da entrada do farol (câmera da porta).
 @export_range(0.0, 1.0, 0.01) var near_advance: float = 0.3
 @export_range(0.0, 1.0, 0.01) var ground_floor_advance: float = 0.45
 @export_range(0.0, 1.0, 0.01) var stairs_advance: float = 0.6
 @export_range(0.0, 1.0, 0.01) var trapdoor_advance: float = 0.75
 @export_range(0.0, 1.0, 0.01) var cabin_advance: float = 0.9
+## Cobre a cabeça do farol e bloqueia o feixe; é o último estágio.
+@export_range(0.0, 1.0, 0.01) var beam_cover_advance: float = 1.0
 
 @export_group("No mar")
-## Avanço com que o nevoeiro surge.
+## Avanço com que o nevoeiro surge; ele nunca recua abaixo disso até o fim da noite.
 @export_range(0.0, 1.0, 0.01) var start_advance: float = 0.05
-## Teto do adensamento no mar com o farol operando; fica abaixo de `near_advance`.
-@export_range(0.0, 1.0, 0.01) var sea_max_advance: float = 0.25
-@export var sea_densify_per_second: float = 0.002
-## Duração sorteada do nevoeiro no mar, contada só com o farol operando.
-@export var min_duration_seconds: float = 90.0
-@export var max_duration_seconds: float = 240.0
+## Centro do trecho coberto da rota dos barcos (fração da rota), no trecho em comum das
+## câmeras do mar.
+@export_range(0.0, 1.0, 0.01) var route_center: float = 0.5
 ## Maior fração da rota dos barcos que o nevoeiro cobre; menor que 1 para nunca fechá-la.
 @export_range(0.0, 0.95, 0.01) var max_route_coverage: float = 0.5
 
@@ -29,12 +28,13 @@ extends Resource
 @export var advance_per_second: float = 0.008
 
 @export_group("Recuo")
-## Depois de o farol voltar a operar com o nevoeiro perto, o avanço fica parado por este tempo
-## antes de recuar. O feixe só volta quando o recuo leva o avanço abaixo de `near_advance`.
+## Fração do avanço da última parada do farol que o nevoeiro devolve assim que o farol volta a
+## operar.
+@export_range(0.0, 1.0, 0.01) var recoil_ratio: float = 0.5
+## Com o feixe coberto, o recuo imediato só acontece depois deste tempo com o farol operando.
 @export var unblock_seconds: float = 8.0
-## Até onde ele recua; abaixo de `near_advance`.
-@export_range(0.0, 1.0, 0.01) var recede_to_advance: float = 0.15
-@export var recede_per_second: float = 0.03
+## Recuo contínuo com o farol operando; menor que `advance_per_second`.
+@export var recede_per_second: float = 0.002
 
 
 ## Lista os problemas desta config; vazia quando está pronta.
@@ -47,13 +47,15 @@ func validate() -> PackedStringArray:
 		stairs_advance,
 		trapdoor_advance,
 		cabin_advance,
+		beam_cover_advance,
 	]
 	for index: int in range(1, thresholds.size()):
 		if thresholds[index] <= thresholds[index - 1]:
 			errors.append("fog: limiares dos estágios precisam crescer")
 			break
-	if sea_max_advance >= near_advance or recede_to_advance >= near_advance:
-		errors.append("fog: teto no mar e recuo precisam ficar abaixo de near_advance")
-	if min_duration_seconds > max_duration_seconds:
-		errors.append("fog: duração mínima acima da máxima")
+	if recede_per_second >= advance_per_second:
+		errors.append("fog: recuo contínuo precisa ser mais lento que o avanço")
+	var half_coverage: float = max_route_coverage * 0.5
+	if route_center - half_coverage < 0.0 or route_center + half_coverage > 1.0:
+		errors.append("fog: trecho máximo da rota sai da rota")
 	return errors
