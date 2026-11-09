@@ -61,7 +61,7 @@ text = "O nevoeiro chegou ao alçapão e soltou o trinco. Só dá para trancar d
 [sub_resource type="Resource" id="Resource_boat"]
 script = ExtResource("1_step")
 id = &"boat"
-text = "Um barco está chamando. Atenda o rádio com o feixe aceso e ele desvia; se entrar no nevoeiro, afunda."
+text = "Um barco está chamando. O rádio só toca com o barco na câmera aberta no monitor ({interact} troca o canal). Atenda com o feixe aceso e ele desvia; se entrar no nevoeiro, afunda."
 
 [sub_resource type="Resource" id="Resource_drowned_approaching"]
 script = ExtResource("1_step")

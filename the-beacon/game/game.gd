@@ -54,7 +54,7 @@ func _ready() -> void:
 
 
 ## Passa a dificuldade e as referências aos sistemas, registra os eventos e liga as câmeras ao
-## monitor.
+## monitor e aos barcos (o rádio só ouve o canal aberto).
 func _configure_systems() -> void:
 	_player.configure(difficulty)
 	_lighthouse.configure(difficulty)
@@ -80,6 +80,7 @@ func _configure_systems() -> void:
 	_fog.register_events(_event_director)
 	_boats.register_events(_event_director)
 	_lighthouse.show_camera_feeds(_exterior.channel_feeds())
+	_boats.watch_cameras(_exterior.channel_cameras(), _lighthouse.monitor.channels.current)
 	_fog_visuals.setup(_fog, _exterior.boat_path)
 
 
@@ -108,6 +109,7 @@ func _connect_signals() -> void:
 	_lighthouse.beam_operational_changed.connect(_fog.set_beam_operational)
 	_lighthouse.beam_lit_changed.connect(_boats.set_beam_lit)
 	_lighthouse.radio.answered.connect(_boats.warn_calling_boats)
+	_lighthouse.monitor.channel_changed.connect(_boats.set_watched_channel)
 	_fog.stage_changed.connect(_lighthouse.set_fog_stage)
 	_fog.stage_changed.connect(_figurehead.set_fog_stage)
 	_fog.stage_changed.connect(_drowned.set_fog_stage)

@@ -27,10 +27,15 @@ func show_feeds(feeds: Array[Texture2D]) -> void:
 
 
 ## Passa ao próximo canal e emite `channel_changed`.
-func _on_switch_point_interacted() -> void:
+func next_channel() -> void:
 	channels.next()
 	_show_current()
 	channel_changed.emit(channels.current)
+
+
+## Troca de canal ao interagir com o monitor.
+func _on_switch_point_interacted() -> void:
+	next_channel()
 
 
 ## Mostra na tela a imagem do canal aberto; sem canais, a tela fica vazia.

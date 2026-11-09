@@ -57,6 +57,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.3, 6.7)
 target = NodePath("../SeaViewLeft")
 cull_mask = 1048573
 fov = 75.0
+shows_boat_route = true
 
 [node name="SeaCameraRight" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
@@ -64,6 +65,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.3, 6.7)
 target = NodePath("../SeaViewRight")
 cull_mask = 1048573
 fov = 75.0
+shows_boat_route = true
 
 [node name="DoorCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true

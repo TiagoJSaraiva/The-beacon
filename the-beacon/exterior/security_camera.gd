@@ -10,6 +10,9 @@ extends Node3D
 ## Camadas de render que a câmera enxerga; as do mar deixam de fora o anel de nevoeiro em volta do
 ## farol.
 @export_flags_3d_render var cull_mask: int = 0xFFFFF
+## Câmera feita para vigiar a rota dos barcos: só nela o rádio ouve os barcos. A da porta
+## também alcança o mar distante pelo enquadramento, mas não serve para isso.
+@export var shows_boat_route: bool = false
 
 @onready var _viewport: SubViewport = %Viewport
 @onready var _camera: Camera3D = %Camera

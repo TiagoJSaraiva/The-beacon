@@ -68,7 +68,7 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `Player.died` → `Game` → `run_lost`. `Player.sprint_blocked_changed` → `Hud.set_hurt_border`.
 - `Lighthouse.beam_operational_changed` → `FogSystem.set_beam_operational`. `FogSystem.stage_changed` → `Lighthouse.set_fog_stage` (bloqueio do feixe, mangueira), `FigureheadDirector.set_fog_stage`. `FogSystem.route_fog_changed` → `BoatDirector.set_route_fog`. `FogVisuals` lê o `FogSystem` direto (recebe-o em `setup()`).
 - `Lighthouse.beam_lit_changed` → `BoatDirector.set_beam_lit`.
-- `BoatDirector.calling_changed` → `Radio.set_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.warn_calling_boats`.
+- `BoatDirector.calling_changed` → `Radio.set_ringing`; `boat_sank` → `DrownedDirector.add_drowned_point`. `Radio.answered` → `BoatDirector.warn_calling_boats`. `Lighthouse.monitor.channel_changed` → `BoatDirector.set_watched_channel` (o rádio só ouve barcos no canal aberto).
 - `FigureheadDirector.player_blinded` → `Hud.show_blindness`; `player_knocked_down` → `Player.knock_down`.
 - `Drowned.effect_triggered` → `DrownedDirector` → `Player.kill`. `FogSystem.stage_changed` → `DrownedDirector.set_fog_stage` (aproximação). O `DrownedDirector` chama direto `EntranceDoor.show_approach`/`burst_open` e `Trapdoor.set_banging`.
 - `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).
