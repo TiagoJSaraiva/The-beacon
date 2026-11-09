@@ -19,8 +19,9 @@ extends Resource
 ## Centro do trecho coberto da rota dos barcos (fração da rota), no trecho em comum das
 ## câmeras do mar.
 @export_range(0.0, 1.0, 0.01) var route_center: float = 0.5
-## Maior fração da rota dos barcos que o nevoeiro cobre; menor que 1 para nunca fechá-la.
-@export_range(0.0, 0.95, 0.01) var max_route_coverage: float = 0.5
+## Maior fração da rota dos barcos que o nevoeiro cobre; menor que 1 para nunca fechá-la. Cabe no
+## trecho em comum das câmeras do mar.
+@export_range(0.0, 0.95, 0.01) var max_route_coverage: float = 0.2
 
 @export_group("Farol parado")
 ## Tempo do farol sem operar até o nevoeiro surgir sozinho.

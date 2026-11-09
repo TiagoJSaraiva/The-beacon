@@ -43,10 +43,10 @@ unique_name_in_owner = true
 curve = SubResource("Curve3D_boats")
 
 [node name="SeaViewLeft" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 2, 70)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 2, 70)
 
 [node name="SeaViewRight" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 2, 70)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 2, 70)
 
 [node name="DoorView" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.2, -5.64)
@@ -56,12 +56,14 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.3, 6.7)
 target = NodePath("../SeaViewLeft")
 cull_mask = 1048573
+fov = 75.0
 
 [node name="SeaCameraRight" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.3, 6.7)
 target = NodePath("../SeaViewRight")
 cull_mask = 1048573
+fov = 75.0
 
 [node name="DoorCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
