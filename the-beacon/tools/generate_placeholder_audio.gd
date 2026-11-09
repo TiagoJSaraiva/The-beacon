@@ -6,6 +6,8 @@ extends SceneTree
 const MIX_RATE := 22050
 const OUTPUT_DIR := "res://assets/audio/placeholder/"
 const AMPLITUDE := 0.4
+## Melodia da música ambiente do rádio, em Hz (pentatônica de dó).
+const RADIO_TUNE: Array[float] = [523.25, 659.25, 783.99, 880.0, 783.99, 659.25, 587.33, 523.25]
 
 var _noise: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -19,6 +21,7 @@ func _init() -> void:
 	_save("footstep", _thump(0.14, 90.0) + _silence(0.4))
 	_save("bang", _thump(0.3, 55.0))
 	_save("generator_hum", _hum(1.0))
+	_save("radio_ambient", _melody(RADIO_TUNE, 0.35, 0.5))
 	quit()
 
 
@@ -27,6 +30,16 @@ func _tone(frequency: float, seconds: float) -> PackedFloat32Array:
 	var samples := PackedFloat32Array()
 	for i in int(seconds * MIX_RATE):
 		samples.append(sin(TAU * frequency * i / MIX_RATE) * _envelope(i, seconds))
+	return samples
+
+
+## Devolve as amostras de uma melodia de tons suaves, uma nota após a outra com pausa curta,
+## no volume relativo dado, para tocar em loop.
+func _melody(frequencies: Array[float], note_seconds: float, volume: float) -> PackedFloat32Array:
+	var samples := PackedFloat32Array()
+	for frequency: float in frequencies:
+		for sample: float in _tone(frequency, note_seconds) + _silence(0.05):
+			samples.append(sample * volume)
 	return samples
 
 

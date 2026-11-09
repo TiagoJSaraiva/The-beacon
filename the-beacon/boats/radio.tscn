@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://cmcdvxu6x8t5y" path="res://assets/audio/placeholder/radio_ring.wav" id="4_ring"]
 [ext_resource type="AudioStream" uid="uid://3gvs3a7ear5m" path="res://assets/audio/placeholder/radio_allowed.wav" id="5_allowed"]
 [ext_resource type="PackedScene" uid="uid://bgv1ya0eo5710" path="res://assets/RadiostationMCKINLEY_GameReady.fbx" id="7_3iwy5"]
+[ext_resource type="AudioStream" path="res://assets/audio/placeholder/radio_ambient.wav" id="8_ambient"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_answer"]
 size = Vector3(0.5, 0.35, 0.35)
@@ -25,6 +26,13 @@ omni_range = 1.5
 unique_name_in_owner = true
 stream = ExtResource("4_ring")
 bus = &"SFX"
+script = ExtResource("3_loop")
+
+[node name="Ambient" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("8_ambient")
+volume_db = -8.0
+bus = &"Music"
 script = ExtResource("3_loop")
 
 [node name="Message" type="AudioStreamPlayer3D" parent="." unique_id=1070440389]

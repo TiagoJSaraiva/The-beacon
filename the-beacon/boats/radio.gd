@@ -1,7 +1,8 @@
 class_name Radio
 extends Node3D
 ## Rádio da mesa: toca enquanto um barco precisa de aviso no nevoeiro. Atender confirma
-## por som; quem decide o efeito é o BoatDirector. Funciona sem energia.
+## por som; quem decide o efeito é o BoatDirector. Sem tocar, toca uma música ambiente.
+## Funciona sem energia.
 
 signal answered
 
@@ -13,12 +14,13 @@ var is_ringing: bool = false
 var _blink_time: float = 0.0
 
 @onready var _ring: LoopingSound = %Ring
+@onready var _ambient: LoopingSound = %Ambient
 @onready var _message: AudioStreamPlayer3D = %Message
 @onready var _call_light: OmniLight3D = %CallLight
 @onready var _answer_point: Interactable = %AnswerPoint
 
 
-## Começa sem tocar.
+## Começa sem tocar, com a música ambiente.
 func _ready() -> void:
 	set_ringing(false)
 
@@ -31,11 +33,13 @@ func _process(delta: float) -> void:
 	_call_light.visible = fmod(_blink_time, blink_interval_seconds * 2.0) < blink_interval_seconds
 
 
-## Liga ou desliga o toque, a luz e o ponto de atender, que só fica ativo tocando.
+## Liga ou desliga o toque, a luz e o ponto de atender, que só fica ativo tocando. A música
+## ambiente toca quando o rádio não está tocando.
 func set_ringing(ringing: bool) -> void:
 	is_ringing = ringing
 	_blink_time = 0.0
 	_ring.set_active(ringing)
+	_ambient.set_active(not ringing)
 	_call_light.visible = ringing
 	_answer_point.enabled = ringing
 
