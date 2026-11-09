@@ -53,8 +53,8 @@ func _ready() -> void:
 	_navigation.bake_navigation_mesh(false)
 
 
-## Passa a dificuldade e as referências aos sistemas, registra os eventos e liga as câmeras aos
-## monitores.
+## Passa a dificuldade e as referências aos sistemas, registra os eventos e liga as câmeras ao
+## monitor.
 func _configure_systems() -> void:
 	_player.configure(difficulty)
 	_lighthouse.configure(difficulty)
@@ -79,11 +79,7 @@ func _configure_systems() -> void:
 	_lighthouse.register_events(_event_director)
 	_fog.register_events(_event_director)
 	_boats.register_events(_event_director)
-	_lighthouse.show_camera_feeds(
-		_exterior.sea_camera_left.get_feed(),
-		_exterior.sea_camera_right.get_feed(),
-		_exterior.door_camera.get_feed()
-	)
+	_lighthouse.show_camera_feeds(_exterior.channel_feeds())
 	_fog_visuals.setup(_fog, _exterior.boat_path)
 
 

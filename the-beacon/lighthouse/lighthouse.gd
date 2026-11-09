@@ -28,10 +28,8 @@ var _was_lit: bool = false
 @onready var beam_control: BeamControl = %BeamControl
 @onready var radio: Radio = %Radio
 @onready var chair: Chair = %Chair
+@onready var monitor: SecurityMonitor = %Monitor
 @onready var _wall_clock: WallClock = %WallClock
-@onready var _sea_monitor_left: SecurityMonitor = %SeaMonitorLeft
-@onready var _sea_monitor_right: SecurityMonitor = %SeaMonitorRight
-@onready var _door_monitor: SecurityMonitor = %DoorMonitor
 @onready var _door_inside: Marker3D = %DoorInside
 @onready var _rest_spot: Marker3D = %RestSpot
 @onready var _trapdoor_below: Marker3D = %TrapdoorBelow
@@ -103,15 +101,13 @@ func drowned_entry_point() -> Vector3:
 	return _door_inside.global_position
 
 
-## Liga as imagens das câmeras aos três monitores da mesa.
-func show_camera_feeds(sea_left: Texture2D, sea_right: Texture2D, door: Texture2D) -> void:
-	_sea_monitor_left.show_feed(sea_left)
-	_sea_monitor_right.show_feed(sea_right)
-	_door_monitor.show_feed(door)
+## Passa ao monitor da mesa as imagens das câmeras, na ordem dos canais.
+func show_camera_feeds(feeds: Array[Texture2D]) -> void:
+	monitor.show_feeds(feeds)
 
 
-## Aplica o estágio do nevoeiro: perto do farol, bloqueia o feixe; ao entrar pela primeira vez,
-## estoura a mangueira (decisão 0017); no alçapão, desliga o trinco.
+## Aplica o estágio do nevoeiro: no último, cobrindo a cabeça do farol, bloqueia o feixe; ao entrar
+## pela primeira vez, estoura a mangueira (decisão 0017); no alçapão, desliga o trinco.
 func set_fog_stage(stage: FogStage.Stage) -> void:
 	beam.fog_blocking = FogStage.blocks_beam(stage)
 	if FogStage.is_inside(stage):
