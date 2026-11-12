@@ -65,6 +65,30 @@ func add_drowned_point() -> void:
 	drowned_points += 1
 
 
+## Diz se o Afogado está dentro do farol.
+func has_drowned_inside() -> bool:
+	return _drowned != null
+
+
+## Faz o Afogado entrar agora, mesmo sem nevoeiro nem pontos, se ele não estiver dentro (painel de
+## debug). Conta como a entrada da noite.
+func force_enter() -> void:
+	if _drowned != null:
+		return
+	approach.has_entered = true
+	_enter()
+
+
+## Tira o Afogado do farol e para as batidas no alçapão (painel de debug). A entrada da noite
+## continua gasta.
+func remove_drowned() -> void:
+	if _drowned == null:
+		return
+	_drowned.queue_free()
+	_drowned = null
+	_lighthouse.trapdoor.set_banging(false)
+
+
 ## Arromba a porta, coloca o Afogado no ponto de entrada e emite `drowned_entered`.
 func _enter() -> void:
 	_lighthouse.entrance_door.burst_open()

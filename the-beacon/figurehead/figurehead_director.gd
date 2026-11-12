@@ -64,6 +64,35 @@ func set_fog_stage(stage: FogStage.Stage) -> void:
 			figurehead.dissolve()
 
 
+## Cria uma carranca no ponto da navmesh mais perto de `distance` metros à frente do jogador,
+## mesmo sem nevoeiro (painel de debug). Ela some na próxima mudança de estágio se a área dela
+## não estiver no nevoeiro.
+func spawn_in_front_of_player(distance: float) -> void:
+	var eye: Transform3D = _player.eye_transform()
+	var forward := Vector3(-eye.basis.z.x, 0.0, -eye.basis.z.z).normalized()
+	var wanted: Vector3 = _player.global_position + forward * distance
+	var map: RID = _player.get_world_3d().navigation_map
+	var point: Vector3 = NavigationServer3D.map_get_closest_point(map, wanted)
+	var area: FigureheadSpawnRules.Area = FigureheadSpawnRules.area_for_height(
+		point.y, stairs_from_height, cabin_from_height
+	)
+	_spawn(point, area)
+
+
+## Dissolve todas as carrancas sem contar como destruídas pela lanterna (painel de debug).
+func dissolve_all() -> void:
+	for figurehead: Figurehead in _figureheads.duplicate():
+		if figurehead.is_finishing:
+			continue
+		_figureheads.erase(figurehead)
+		figurehead.dissolve()
+
+
+## Devolve quantas carrancas estão no farol agora.
+func active_count() -> int:
+	return _figureheads.size()
+
+
 ## Conta o tempo sob a lanterna e dissolve a carranca ao atingir o limite. Com o jogador perto e
 ## à vista, faz ela pular.
 func _update(figurehead: Figurehead, delta: float) -> void:

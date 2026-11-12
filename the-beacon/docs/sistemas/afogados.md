@@ -8,7 +8,7 @@ A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, e
 - `drowned/perception_rules.gd` (`PerceptionRules`, puro): alcance com oclusão.
 - `drowned/drowned_brain.gd` (`DrownedBrain`, puro): perseguir, bater, cansar, descansar.
 - `drowned/drowned.tscn` (`Drowned`, `CharacterBody3D` na camada `drowned`, colide com `world` e `barriers`): navega com `NavigationAgent3D` pela navmesh do interior, conta obstáculos por raio, passos audíveis por proximidade.
-- `drowned/drowned_director.gd` (`DrownedDirector`, nó no `World`, recebe `Lighthouse` e `Player` em `setup()`): pontos, aproximação, entrada, efeitos e batidas no alçapão.
+- `drowned/drowned_director.gd` (`DrownedDirector`, nó no `World`, recebe `Lighthouse` e `Player` em `setup()`): pontos, aproximação, entrada, efeitos e batidas no alçapão. Para o painel de debug: `force_enter()` (entra sem nevoeiro nem pontos, se ele não estiver dentro), `remove_drowned()` e `has_drowned_inside()`.
 - Pontos no farol (`DrownedTargets/*`): `DoorInside` (onde aparece), `TrapdoorBelow` (rampa sob o alçapão), `RestSpot` (térreo).
 
 ## Regras

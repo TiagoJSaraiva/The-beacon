@@ -112,6 +112,20 @@ func warn_calling_boats() -> void:
 	_refresh_calling()
 
 
+## Afunda na hora todos os barcos na rota, cada um emitindo `boat_sank` (painel de debug).
+func sink_all() -> void:
+	for boat: Boat in _boats.duplicate():
+		_boats.erase(boat)
+		boat.sink()
+		boat_sank.emit()
+	_refresh_calling()
+
+
+## Devolve os barcos que estão na rota agora.
+func active_boats() -> Array[Boat]:
+	return _boats.duplicate()
+
+
 ## Emite `calling_changed` só quando passa a haver ou deixa de haver barco chamando no canal
 ## aberto.
 func _refresh_calling() -> void:

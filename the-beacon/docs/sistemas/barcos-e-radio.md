@@ -6,7 +6,7 @@ Barcos que cruzam o mar e precisam de aviso quando há nevoeiro (entrega 2).
 ## Componentes
 - `boats/boat_passage.gd` (`BoatPassage`, puro): travessia, aviso e desfecho de um barco.
 - `boats/boat.tscn` (`Boat`, `PathFollow3D`): visual na `BoatPath`; afunda ou desvia com animação.
-- `boats/boat_director.gd` (`BoatDirector`, nó no `World`): até `max_simultaneous_boats` barcos, evento `boat`.
+- `boats/boat_director.gd` (`BoatDirector`, nó no `World`): até `max_simultaneous_boats` barcos, evento `boat`. Para o painel de debug: `sink_all()` e `active_boats()`; `spawn()` direto ignora o limite.
 - `boats/radio.tscn` (`Radio`, na mesa da cabine): toca (som em loop e luz piscando) e é atendido com E; sem tocar, toca uma música ambiente em loop (`Ambient`, bus `Music`, placeholder `radio_ambient.wav`); funciona sem energia.
 
 ## Regras
