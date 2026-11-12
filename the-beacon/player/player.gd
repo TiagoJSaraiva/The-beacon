@@ -31,6 +31,8 @@ const CAUSE_DROWNED := &"drowned"
 var is_dead: bool = false
 var is_seated: bool = false
 var is_knocked_down: bool = false
+## Ligado, `kill` não mata (painel de debug).
+var invulnerable: bool = false
 ## Multiplica a sensibilidade do mouse e do analógico; vem das configurações do jogador.
 var sensitivity_scale: float = 1.0
 
@@ -166,13 +168,31 @@ func eye_transform() -> Transform3D:
 	return _camera.global_transform
 
 
-## Mata o jogador uma única vez e trava os controles.
+## Mata o jogador uma única vez e trava os controles. Invulnerável, não faz nada.
 func kill(cause: StringName) -> void:
-	if is_dead:
+	if is_dead or invulnerable:
 		return
 	is_dead = true
 	set_controls_enabled(false)
 	died.emit(cause)
+
+
+## Leva o jogador em pé, parado, até `point`, sem contar como queda (painel de debug).
+func teleport(point: Vector3) -> void:
+	is_seated = false
+	velocity = Vector3.ZERO
+	global_position = point
+	_fall_damage.cancel_fall()
+
+
+## Diz se a corrida está bloqueada por uma queda média.
+func is_sprint_blocked() -> bool:
+	return _fall_damage.is_sprint_blocked()
+
+
+## Encerra o bloqueio da corrida por queda (painel de debug).
+func clear_sprint_block() -> void:
+	_fall_damage.clear_sprint_block()
 
 
 ## Calcula o ponto e a velocidade de saída do galão e emite `drop_requested`. Quem solta de fato

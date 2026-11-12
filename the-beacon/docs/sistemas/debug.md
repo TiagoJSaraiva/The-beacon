@@ -11,6 +11,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - `debug/lighthouse_tab.gd` (`LighthouseTab`): aba Farol.
 - `debug/fog_tab.gd` (`FogTab`): aba Nevoeiro.
 - `debug/threats_tab.gd` (`ThreatsTab`): aba Ameaças.
+- `debug/player_tab.gd` (`PlayerTab`): aba Jogador.
 - `debug/balance_tab.gd` (`BalanceTab`): aba Balanceamento.
 - `debug/config_editor.gd` (`ConfigEditor`): linhas de um recurso (SpinBox para número, CheckBox para bool).
 - `debug/config_fields.gd` (`ConfigFields`): regras puras: campos editáveis de um recurso, seções da dificuldade, diferenças e cópia.
@@ -22,6 +23,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - Farol: queimar a lâmpada e quebrar a casa de máquinas mesmo no intervalo depois do conserto (`FailureState.skip_cooldown`), trocar e consertar, estourar a mangueira, definir o combustível do gerador de emergência (`GeneratorState.set_fuel_ratio`), encher e esvaziar o galão, inverter a alavanca (`BeamControl.toggle`) e o trinco (`Trapdoor.toggle_latch`, que segue as regras: nevoeiro, alçapão aberto, intervalo).
 - Nevoeiro: surgir agora (só se ainda não surgiu), limpar (volta a antes de surgir, `FogState.clear`; o que ele já causou, como a mangueira estourada, continua), congelar o avanço (`FogSystem.frozen`), fixar o avanço (`FogState.force_advance`, sem recuo pendente) e ir para o começo de um estágio (`FogStage.threshold`).
 - Ameaças: spawnar barco sem limite e afundar todos (cada um soma ponto de Afogado); +1 ponto, forçar a entrada, remover o Afogado e definir o nível de aproximação; invocar carranca a 4 m à frente do jogador (fora do alcance do pulo, 3 m), dissolver todas e zerar as cegueiras.
+- Jogador: invulnerável (cobre Afogado e queda fatal), bateria infinita, encher a bateria (apaga a lanterna), tirar o bloqueio da corrida e teleportar para o ponto da navmesh mais perto da porta (dentro), de baixo do alçapão, da casa de máquinas, de cima do alçapão e da cadeira da cabine.
 - Balanceamento: uma seção por parte da dificuldade (`difficulty`, cada sub-config pelo nome da propriedade e `events/<id>`), gerada dos `@export` float, int e bool. `nights` e `tutorial_enabled` ficam de fora (o `RunState` já os copiou).
 - A edição muda o recurso carregado em memória: vale na hora, nas noites seguintes e em plantões novos até fechar o jogo, e nunca é gravada em disco. Eventos são `.tres` compartilhados entre dificuldades, então a edição vale para todas.
 - Campos com `*` são copiados pelos sistemas ao montar a noite e só valem em "Recomeçar a noite": capacidade, enchimento e despejo do galão; todo o `repair`; tempo do trinco; toda a `flashlight` (`BalanceTab.RESTART_ONLY`). `boat.crossing_seconds` vale a partir do próximo barco.
@@ -36,5 +38,6 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - `test/unit/config_fields_test.gd`: campos, faixas, grupos, seções, diferenças e cópia.
 - `test/unit/night_clock_test.gd` (hora definida) e `test/unit/event_director_test.gd` (disparo manual).
 - `test/unit/fog_state_test.gd` (limiares, `force_advance`, `clear`).
+- `test/unit/flashlight_battery_test.gd` (bateria infinita).
 - `test/unit/failure_state_test.gd` (`skip_cooldown`) e `test/unit/generator_state_test.gd` (`set_fuel_ratio`).
-- `test/scenes/debug_panel_test.gd`: abrir, pausar o `World`, fechar com Esc sem abrir a pausa; não abrir com o painel desabilitado; comandos de barcos, Afogado e carranca.
+- `test/scenes/debug_panel_test.gd`: abrir, pausar o `World`, fechar com Esc sem abrir a pausa; não abrir com o painel desabilitado; comandos de barcos, Afogado, carranca e jogador.

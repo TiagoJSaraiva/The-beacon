@@ -67,6 +67,21 @@ func test_threat_commands_spawn_and_remove() -> void:
 	assert_int(figurehead.active_count()).is_equal(0)
 
 
+func test_invulnerable_player_survives_and_teleports() -> void:
+	var runner := scene_runner(GAME)
+	var player: Player = runner.find_child("Player")
+	await runner.simulate_frames(2)
+
+	player.invulnerable = true
+	player.kill(Player.CAUSE_DROWNED)
+	assert_bool(player.is_dead).is_false()
+
+	var target := Vector3(0.0, 12.0, 0.0)
+	player.teleport(target)
+	assert_float(player.global_position.distance_to(target)).is_less(0.01)
+	assert_bool(player.is_seated).is_false()
+
+
 func _tap(runner: GdUnitSceneRunner, action: String) -> void:
 	runner.simulate_action_pressed(action)
 	await runner.simulate_frames(2)

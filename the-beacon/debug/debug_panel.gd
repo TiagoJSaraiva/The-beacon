@@ -18,6 +18,7 @@ signal restart_night_requested
 @export var boats: BoatDirector
 @export var drowned: DrownedDirector
 @export var figurehead: FigureheadDirector
+@export var player: Player
 
 ## Desligado fora da simulação (fim de noite, morte, vitória). Desligar fecha o painel.
 var enabled: bool = true:
@@ -35,13 +36,14 @@ var _tabs: Array[DebugTab] = []
 @onready var _lighthouse_tab: LighthouseTab = %LighthouseTab
 @onready var _fog_tab: FogTab = %FogTab
 @onready var _threats_tab: ThreatsTab = %ThreatsTab
+@onready var _player_tab: PlayerTab = %PlayerTab
 @onready var _balance_tab: BalanceTab = %BalanceTab
 
 
 ## Começa escondido e repassa o pedido de recomeçar a noite da aba Noite.
 func _ready() -> void:
 	visible = false
-	_tabs = [_night_tab, _lighthouse_tab, _fog_tab, _threats_tab, _balance_tab]
+	_tabs = [_night_tab, _lighthouse_tab, _fog_tab, _threats_tab, _player_tab, _balance_tab]
 	_pause_check.toggled.connect(_on_pause_check_toggled)
 	_night_tab.restart_night_requested.connect(restart_night_requested.emit)
 
@@ -86,6 +88,7 @@ func setup(difficulty: DifficultyConfig) -> void:
 	_lighthouse_tab.setup(lighthouse)
 	_fog_tab.setup(fog)
 	_threats_tab.setup(boats, drowned, figurehead)
+	_player_tab.setup(player, lighthouse)
 	_balance_tab.setup(difficulty)
 
 

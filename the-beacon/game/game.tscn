@@ -136,7 +136,7 @@ player = NodePath("../World/Player")
 drowned = NodePath("../World/DrownedDirector")
 tutorial = NodePath("../World/TutorialDirector")
 
-[node name="DebugPanel" parent="." node_paths=PackedStringArray("world", "night_director", "event_director", "lighthouse", "fog", "boats", "drowned", "figurehead") instance=ExtResource("27_debug_panel")]
+[node name="DebugPanel" parent="." node_paths=PackedStringArray("world", "night_director", "event_director", "lighthouse", "fog", "boats", "drowned", "figurehead", "player") instance=ExtResource("27_debug_panel")]
 unique_name_in_owner = true
 world = NodePath("../World")
 night_director = NodePath("../World/NightDirector")
@@ -146,3 +146,4 @@ fog = NodePath("../World/FogSystem")
 boats = NodePath("../World/BoatDirector")
 drowned = NodePath("../World/DrownedDirector")
 figurehead = NodePath("../World/FigureheadDirector")
+player = NodePath("../World/Player")

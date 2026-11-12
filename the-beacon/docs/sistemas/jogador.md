@@ -4,7 +4,7 @@
 Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico), quedas, cadeira e lanterna.
 
 ## Componentes
-- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento, pulo e olhar; `sit(seat, yaw_limit_degrees)`, `knock_down(seconds)`, `kill(cause)`, `set_controls_enabled()`, `set_carrying()`. A carga da bateria passa de uma noite para a outra (`Flashlight.set_battery_seconds`, via `RunCarryover`). Expõe `interaction` e `flashlight`.
+- `player/player.tscn` → `Player` (`CharacterBody3D`): movimento, pulo e olhar; `sit(seat, yaw_limit_degrees)`, `knock_down(seconds)`, `kill(cause)`, `set_controls_enabled()`, `set_carrying()`. A carga da bateria passa de uma noite para a outra (`Flashlight.set_battery_seconds`, via `RunCarryover`). Expõe `interaction` e `flashlight`. Para o painel de debug: `invulnerable` (`kill` não mata), `teleport(point)` (em pé, parado, sem contar queda), `is_sprint_blocked()`, `clear_sprint_block()` e `FlashlightBattery.infinite`.
   - `Head/Camera3D/InteractionRay`: mira de interação (ver `interacao.md`).
   - `Head/Camera3D/Flashlight` (`player/flashlight.tscn`): lanterna na mão esquerda, com a barra de carga (`BatteryGauge`) no corpo.
   - `FallDamage`: mede a altura de cada queda e conta o bloqueio da corrida.

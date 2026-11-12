@@ -50,6 +50,19 @@ func is_sprint_blocked() -> bool:
 	return _sprint_block_left > 0.0
 
 
+## Encerra o bloqueio da corrida na hora e emite o sinal, se ele estava ativo (painel de debug).
+func clear_sprint_block() -> void:
+	if not is_sprint_blocked():
+		return
+	_sprint_block_left = 0.0
+	sprint_blocked_changed.emit(false)
+
+
+## Esquece a queda em andamento, para um teleporte não contar como queda.
+func cancel_fall() -> void:
+	_airborne = false
+
+
 ## Começa ou recomeça a contagem do bloqueio. Emite o sinal só se ele ainda não estava ativo.
 func _block_sprint() -> void:
 	var was_blocked: bool = is_sprint_blocked()

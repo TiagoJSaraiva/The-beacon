@@ -4,6 +4,8 @@ extends RefCounted
 
 var capacity_seconds: float
 var remaining_seconds: float
+## Ligada, a carga não cai (painel de debug).
+var infinite: bool = false
 
 
 ## Cria a bateria cheia, com a capacidade em segundos de uso.
@@ -12,8 +14,10 @@ func _init(capacity: float) -> void:
 	remaining_seconds = capacity
 
 
-## Gasta a bateria e diz se ainda resta carga.
+## Gasta a bateria, a não ser que ela seja infinita, e diz se ainda resta carga.
 func drain(delta: float) -> bool:
+	if infinite:
+		return not is_empty()
 	remaining_seconds = maxf(0.0, remaining_seconds - delta)
 	return not is_empty()
 
