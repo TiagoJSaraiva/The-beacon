@@ -49,3 +49,15 @@ func test_window_crossing_midnight() -> void:
 func test_window_within_same_day() -> void:
 	assert_bool(NightClock.is_hour_in_window(1.0, 0.5, 3.0)).is_true()
 	assert_bool(NightClock.is_hour_in_window(23.0, 0.5, 3.0)).is_false()
+
+
+func test_set_clock_hour_crosses_midnight_and_clamps() -> void:
+	var clock := _clock()
+	clock.set_clock_hour(2.5)
+	assert_str(clock.display_text()).is_equal("02:30")
+	assert_bool(clock.is_finished()).is_false()
+	clock.set_clock_hour(6.0)
+	assert_bool(clock.is_finished()).is_true()
+	# Fora da noite (meio-dia) prende no fim.
+	clock.set_clock_hour(12.0)
+	assert_float(clock.elapsed_seconds).is_equal_approx(900.0, 0.0001)

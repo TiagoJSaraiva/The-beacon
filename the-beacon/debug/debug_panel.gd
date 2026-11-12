@@ -11,6 +11,8 @@ signal restart_night_requested
 
 ## O nó que a caixa "Pausar simulação" congela.
 @export var world: Node3D
+@export var night_director: NightDirector
+@export var event_director: EventDirector
 
 ## Desligado fora da simulação (fim de noite, morte, vitória). Desligar fecha o painel.
 var enabled: bool = true:
@@ -19,16 +21,33 @@ var enabled: bool = true:
 ## Verdadeiro só enquanto o próprio painel mantém o `World` congelado, para não descongelar o que
 ## o `Game` congelou.
 var _froze_world: bool = false
+## Abas na ordem em que a leitura do topo as mostra.
+var _tabs: Array[DebugTab] = []
 
 @onready var _pause_check: CheckBox = %PauseCheck
+@onready var _readout: Label = %Readout
+@onready var _night_tab: NightTab = %NightTab
 @onready var _balance_tab: BalanceTab = %BalanceTab
 
 
-## Começa escondido.
+## Começa escondido e repassa o pedido de recomeçar a noite da aba Noite.
 func _ready() -> void:
 	visible = false
+	_tabs = [_night_tab, _balance_tab]
 	_pause_check.toggled.connect(_on_pause_check_toggled)
-	_balance_tab.restart_night_requested.connect(restart_night_requested.emit)
+	_night_tab.restart_night_requested.connect(restart_night_requested.emit)
+
+
+## Atualiza a leitura de estado do topo enquanto o painel está aberto.
+func _process(_delta: float) -> void:
+	if not visible:
+		return
+	var lines := PackedStringArray()
+	for tab: DebugTab in _tabs:
+		var text: String = tab.readout()
+		if not text.is_empty():
+			lines.append(text)
+	_readout.text = "\n".join(lines)
 
 
 ## Abre com `debug_menu`, se o modo debug estiver ativo, o painel habilitado e a árvore não
@@ -53,8 +72,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		close()
 
 
-## Monta as abas com a dificuldade da noite.
+## Monta as abas com a dificuldade da noite e os sistemas ligados por `@export`.
 func setup(difficulty: DifficultyConfig) -> void:
+	_night_tab.setup(night_director, event_director)
 	_balance_tab.setup(difficulty)
 
 

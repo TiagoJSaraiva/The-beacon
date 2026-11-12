@@ -8,6 +8,8 @@ signal event_triggered(event_id: StringName)
 @export var night: NightDirector
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+## Desligado, o sorteio para; `trigger_now` continua funcionando (painel de debug).
+var random_events_enabled: bool = true
 
 var _difficulty: DifficultyConfig
 var _scheduler: EventScheduler = EventScheduler.new()
@@ -23,10 +25,10 @@ func _ready() -> void:
 		set_process(false)
 
 
-## Roda o sorteio enquanto a noite corre, aciona quem trata cada evento sorteado e emite
-## `event_triggered`.
+## Roda o sorteio enquanto a noite corre e `random_events_enabled` está ligado, aciona quem
+## trata cada evento sorteado e emite `event_triggered`.
 func _process(delta: float) -> void:
-	if _difficulty == null or not night.is_running:
+	if _difficulty == null or not night.is_running or not random_events_enabled:
 		return
 	var multiplier: float = _difficulty.chance_multiplier_for_night(night.current_night)
 	var fired: Array[EventDefinition] = _scheduler.update(
@@ -50,6 +52,21 @@ func configure(difficulty: DifficultyConfig) -> void:
 func register(event_id: StringName, can_trigger: Callable, trigger: Callable) -> void:
 	_can_trigger[event_id] = can_trigger
 	_trigger[event_id] = trigger
+
+
+## Dispara o evento agora, fora do sorteio e sem contar no máximo da noite, se o sistema que o
+## trata aceitar. Devolve se disparou e, se sim, emite `event_triggered`.
+func trigger_now(event_id: StringName) -> bool:
+	if not _can_trigger.has(event_id) or not _can_trigger[event_id].call():
+		return false
+	_trigger[event_id].call()
+	event_triggered.emit(event_id)
+	return true
+
+
+## Devolve os ids dos eventos que têm quem os trate.
+func registered_events() -> Array[StringName]:
+	return _can_trigger.keys()
 
 
 ## Zera os intervalos e as contagens do sorteio para a noite que começa.

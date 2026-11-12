@@ -49,6 +49,13 @@ func clock_hour() -> float:
 	return fposmod(config.night_start_hour + hours_elapsed, HOURS_PER_DAY)
 
 
+## Leva o relógio à hora dada (0–24), contada a partir do início da noite. Uma hora fora da noite
+## (ex.: 12h) passa do fim e prende no fim da noite.
+func set_clock_hour(hour: float) -> void:
+	var hours_elapsed: float = fposmod(hour - config.night_start_hour, HOURS_PER_DAY)
+	elapsed_seconds = minf(hours_elapsed * config.real_seconds_per_game_hour, duration_seconds())
+
+
 ## Devolve o horário no formato do relógio digital de parede, como `23:30`.
 func display_text() -> String:
 	var total_minutes: int = floori(clock_hour() * MINUTES_PER_HOUR)
