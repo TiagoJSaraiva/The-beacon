@@ -73,6 +73,7 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 - `FigureheadDirector.player_blinded` → `Hud.show_blindness`; `player_knocked_down` → `Player.knock_down`.
 - `Drowned.effect_triggered` → `DrownedDirector` → `Player.kill`. `FogSystem.stage_changed` → `DrownedDirector.set_fog_stage` (aproximação). O `DrownedDirector` chama direto `EntranceDoor.show_approach`/`burst_open` e `Trapdoor.set_banging`.
 - `TutorialDirector.message_changed` → `Hud.show_tutorial`; o diretor escuta sozinho os sinais dos sistemas (`sistemas/tutorial.md`).
+- `DebugPanel.restart_night_requested` → `Game` → `SceneRouter.play_night` (`sistemas/debug.md`).
 - `PauseMenu.paused_changed` e `DebugPanel.opened_changed` → `Game` → `Player.set_controls_enabled`; `PauseMenu.exit_requested` → `Game` → `SceneRouter.go_to_main_menu`.
 - `NightEndScreen.continue_requested` → `Game` → `SceneRouter.play_night`; `NightEndScreen.save_and_exit_requested` → `Game` → `SaveService.write_run`, `SceneRouter`. `GameOverScreen`, `VictoryScreen` → `Game` ou direto `SceneRouter`. `Settings.changed` → `Game` → `Player.sensitivity_scale`; `Hud` e `ControlsPanel` também escutam (teclas atuais).
 

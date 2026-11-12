@@ -16,6 +16,9 @@ func test_panel_opens_pauses_world_and_closes() -> void:
 	await _tap(runner, "debug_menu")
 	assert_bool(panel.visible).is_true()
 	assert_int(world.process_mode).is_equal(Node.PROCESS_MODE_INHERIT)
+	# Uma seção por parte da dificuldade, montada com a dificuldade da noite.
+	var balance: BalanceTab = runner.find_child("BalanceTab")
+	assert_int(balance.find_children("*", "ConfigEditor", true, false).size()).is_greater(10)
 
 	pause_check.button_pressed = true
 	assert_int(world.process_mode).is_equal(Node.PROCESS_MODE_DISABLED)

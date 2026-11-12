@@ -83,6 +83,7 @@ func _configure_systems() -> void:
 	_lighthouse.show_camera_feeds(_exterior.channel_feeds())
 	_boats.watch_cameras(_exterior.channel_cameras(), _lighthouse.monitor.channels.current)
 	_fog_visuals.setup(_fog, _exterior.boat_path)
+	_debug_panel.setup(difficulty)
 
 
 ## Liga os sinais entre jogador, farol, sistemas, HUD e telas (lista em `docs/arquitetura.md`).
@@ -103,6 +104,7 @@ func _connect_signals() -> void:
 	_victory.menu_requested.connect(SceneRouter.go_to_main_menu)
 	_pause_menu.paused_changed.connect(_lock_player)
 	_debug_panel.opened_changed.connect(_lock_player)
+	_debug_panel.restart_night_requested.connect(_on_debug_panel_restart_night_requested)
 	_pause_menu.exit_requested.connect(_on_pause_menu_exit_requested)
 	Settings.changed.connect(_apply_settings)
 	_lighthouse.jerrycan_carried_changed.connect(_player.set_carrying)
@@ -193,6 +195,11 @@ func _lock_player(locked: bool) -> void:
 ## (decisão 0014).
 func _on_pause_menu_exit_requested() -> void:
 	SceneRouter.go_to_main_menu()
+
+
+## Recarrega a noite atual com o mesmo `RunState` e os valores editados no painel de debug.
+func _on_debug_panel_restart_night_requested() -> void:
+	SceneRouter.play_night(difficulty, run)
 
 
 ## Congela a simulação, apaga o save, mostra a tela de morte e emite `run_lost` com a causa.

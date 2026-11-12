@@ -6,6 +6,8 @@ extends CanvasLayer
 
 ## O painel abriu (true) ou fechou (false). O `Game` trava o jogador enquanto está aberto.
 signal opened_changed(opened: bool)
+## O testador pediu para recomeçar a noite (mesmo `RunState`, valores editados).
+signal restart_night_requested
 
 ## O nó que a caixa "Pausar simulação" congela.
 @export var world: Node3D
@@ -19,12 +21,14 @@ var enabled: bool = true:
 var _froze_world: bool = false
 
 @onready var _pause_check: CheckBox = %PauseCheck
+@onready var _balance_tab: BalanceTab = %BalanceTab
 
 
 ## Começa escondido.
 func _ready() -> void:
 	visible = false
 	_pause_check.toggled.connect(_on_pause_check_toggled)
+	_balance_tab.restart_night_requested.connect(restart_night_requested.emit)
 
 
 ## Abre com `debug_menu`, se o modo debug estiver ativo, o painel habilitado e a árvore não
@@ -47,6 +51,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	):
 		get_viewport().set_input_as_handled()
 		close()
+
+
+## Monta as abas com a dificuldade da noite.
+func setup(difficulty: DifficultyConfig) -> void:
+	_balance_tab.setup(difficulty)
 
 
 ## Mostra o painel, com a simulação rodando, e emite `opened_changed`.
