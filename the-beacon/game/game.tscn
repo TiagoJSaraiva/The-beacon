@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" path="res://ui/pause_menu/pause_menu.tscn" id="22_pause_menu"]
 [ext_resource type="Script" path="res://game/run_carryover.gd" id="25_carryover"]
 [ext_resource type="PackedScene" path="res://fog/fog_visuals.tscn" id="26_fog_visuals"]
+[ext_resource type="PackedScene" path="res://debug/debug_panel.tscn" id="27_debug_panel"]
 
 [sub_resource type="Environment" id="Environment_night"]
 background_mode = 1
@@ -134,3 +135,7 @@ lighthouse = NodePath("../World/Lighthouse")
 player = NodePath("../World/Player")
 drowned = NodePath("../World/DrownedDirector")
 tutorial = NodePath("../World/TutorialDirector")
+
+[node name="DebugPanel" parent="." node_paths=PackedStringArray("world") instance=ExtResource("27_debug_panel")]
+unique_name_in_owner = true
+world = NodePath("../World")

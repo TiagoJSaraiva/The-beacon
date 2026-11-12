@@ -34,6 +34,7 @@ var run: RunState
 @onready var _victory: VictoryScreen = %VictoryScreen
 @onready var _pause_menu: PauseMenu = %PauseMenu
 @onready var _carryover: RunCarryover = %RunCarryover
+@onready var _debug_panel: DebugPanel = %DebugPanel
 
 
 ## Monta a noite: lê o pedido, consome o save, configura e liga os sistemas, aplica o estado
@@ -100,7 +101,8 @@ func _connect_signals() -> void:
 	_game_over.menu_requested.connect(SceneRouter.go_to_main_menu)
 	_game_over.quit_requested.connect(SceneRouter.quit_game)
 	_victory.menu_requested.connect(SceneRouter.go_to_main_menu)
-	_pause_menu.paused_changed.connect(_on_pause_menu_paused_changed)
+	_pause_menu.paused_changed.connect(_lock_player)
+	_debug_panel.opened_changed.connect(_lock_player)
 	_pause_menu.exit_requested.connect(_on_pause_menu_exit_requested)
 	Settings.changed.connect(_apply_settings)
 	_lighthouse.jerrycan_carried_changed.connect(_player.set_carrying)
@@ -137,8 +139,11 @@ func _apply_settings() -> void:
 	_player.sensitivity_scale = Settings.state.sensitivity_scale
 
 
-## Congela (ou retoma) toda a simulação; HUD e telas continuam respondendo.
+## Congela (ou retoma) toda a simulação; HUD e telas continuam respondendo. Desliga o painel de
+## debug enquanto congelada.
 func _set_simulation_running(running: bool) -> void:
+	# Antes de congelar: fechar o painel de debug devolve os controles e o `World`.
+	_debug_panel.enabled = running
 	_world.process_mode = Node.PROCESS_MODE_INHERIT if running else Node.PROCESS_MODE_DISABLED
 	_player.set_controls_enabled(running)
 	_pause_menu.enabled = running
@@ -176,10 +181,11 @@ func _on_night_end_save_and_exit_requested() -> void:
 	SceneRouter.go_to_main_menu()
 
 
-## Trava ou libera os controles do jogador e, ao pausar, esconde a barra de progresso.
-func _on_pause_menu_paused_changed(paused: bool) -> void:
-	_player.set_controls_enabled(not paused)
-	if paused:
+## Trava ou libera os controles do jogador enquanto o menu de pausa ou o painel de debug está
+## aberto e, ao travar, esconde a barra de progresso.
+func _lock_player(locked: bool) -> void:
+	_player.set_controls_enabled(not locked)
+	if locked:
 		_hud.show_hold_progress(0.0, false)
 
 
