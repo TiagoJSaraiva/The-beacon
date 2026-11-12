@@ -4,9 +4,9 @@
 Ameaça que surge no mar e avança até cobrir o feixe enquanto o farol está parado (entrega 2; GDD 1.2.10).
 
 ## Componentes
-- `fog/fog_state.gd` (`FogState`, puro): avanço de 0 a 1, surgimento, recuo e trecho da rota dos barcos.
-- `fog/fog_stage.gd` (`FogStage`, puro): estágios pelo avanço e o que cada um implica.
-- `fog/fog_system.gd` (`FogSystem`, nó no `World`): roda o estado conforme o farol opera e avisa estágio e trecho da rota.
+- `fog/fog_state.gd` (`FogState`, puro): avanço de 0 a 1, surgimento, recuo e trecho da rota dos barcos. Para o painel de debug: `force_advance` e `clear`.
+- `fog/fog_stage.gd` (`FogStage`, puro): estágios pelo avanço, o avanço em que cada um começa (`threshold`) e o que cada um implica.
+- `fog/fog_system.gd` (`FogSystem`, nó no `World`): roda o estado conforme o farol opera e avisa estágio e trecho da rota. `frozen` (painel de debug) para o avanço.
 - `fog/fog_visuals.tscn` (`FogVisuals`, nó no `World`) e `fog/fog_volume.gdshader`: volumes de nevoeiro falso (o renderizador Compatibility não tem névoa volumétrica). O shader mede quanto do raio de visão atravessa a caixa ou o cilindro até a primeira superfície da cena: paredes cortam o nevoeiro e dá para estar dentro dele. Com `edge_fade` ou `top_fade`, usados só na faixa e no anel, amostra o raio em `march_steps` passos para a densidade cair até zero nas bordas (decisão 0020).
 
 ## Regras

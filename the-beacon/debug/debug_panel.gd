@@ -14,6 +14,7 @@ signal restart_night_requested
 @export var night_director: NightDirector
 @export var event_director: EventDirector
 @export var lighthouse: Lighthouse
+@export var fog: FogSystem
 
 ## Desligado fora da simulação (fim de noite, morte, vitória). Desligar fecha o painel.
 var enabled: bool = true:
@@ -29,13 +30,14 @@ var _tabs: Array[DebugTab] = []
 @onready var _readout: Label = %Readout
 @onready var _night_tab: NightTab = %NightTab
 @onready var _lighthouse_tab: LighthouseTab = %LighthouseTab
+@onready var _fog_tab: FogTab = %FogTab
 @onready var _balance_tab: BalanceTab = %BalanceTab
 
 
 ## Começa escondido e repassa o pedido de recomeçar a noite da aba Noite.
 func _ready() -> void:
 	visible = false
-	_tabs = [_night_tab, _lighthouse_tab, _balance_tab]
+	_tabs = [_night_tab, _lighthouse_tab, _fog_tab, _balance_tab]
 	_pause_check.toggled.connect(_on_pause_check_toggled)
 	_night_tab.restart_night_requested.connect(restart_night_requested.emit)
 
@@ -78,6 +80,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func setup(difficulty: DifficultyConfig) -> void:
 	_night_tab.setup(night_director, event_director)
 	_lighthouse_tab.setup(lighthouse)
+	_fog_tab.setup(fog)
 	_balance_tab.setup(difficulty)
 
 

@@ -10,15 +10,18 @@ signal route_fog_changed(start: float, end: float)
 const EVENT_FOG := &"fog"
 
 var state: FogState = FogState.new(FogConfig.new())
+## Ligado, o avanço fica parado onde está (painel de debug); o estado continua publicado.
+var frozen: bool = false
 
 var _beam_operational: bool = false
 var _published_stage: FogStage.Stage = FogStage.Stage.NONE
 var _published_route: Vector2 = Vector2.ZERO
 
 
-## Avança o nevoeiro conforme o farol e publica o que mudou.
+## Avança o nevoeiro conforme o farol, se não estiver congelado, e publica o que mudou.
 func _process(delta: float) -> void:
-	state.tick(delta, _beam_operational)
+	if not frozen:
+		state.tick(delta, _beam_operational)
 	_publish()
 
 

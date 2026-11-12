@@ -24,6 +24,26 @@ static func for_advance(advance: float, config: FogConfig) -> Stage:
 	return Stage.SEA
 
 
+## Devolve o avanço em que o estágio começa (o de SEA é o nível com que o nevoeiro surge).
+static func threshold(stage: Stage, config: FogConfig) -> float:
+	match stage:
+		Stage.SEA:
+			return config.start_advance
+		Stage.NEAR:
+			return config.near_advance
+		Stage.GROUND_FLOOR:
+			return config.ground_floor_advance
+		Stage.STAIRS:
+			return config.stairs_advance
+		Stage.TRAPDOOR:
+			return config.trapdoor_advance
+		Stage.CABIN:
+			return config.cabin_advance
+		Stage.BEAM:
+			return config.beam_cover_advance
+	return 0.0
+
+
 ## Diz se o estágio bloqueia o feixe: só no último, quando o nevoeiro cobre a cabeça do farol e a
 ## luz não sai.
 static func blocks_beam(stage: Stage) -> bool:

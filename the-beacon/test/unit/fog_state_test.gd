@@ -160,3 +160,27 @@ func test_config_rejects_recede_as_fast_as_the_advance() -> void:
 	assert_array(Array(config.validate())).contains(
 		["fog: recuo contínuo precisa ser mais lento que o avanço"]
 	)
+
+
+func test_each_stage_threshold_maps_back_to_its_stage() -> void:
+	var config := _config()
+	for stage: FogStage.Stage in FogStage.Stage.values():
+		var advance: float = FogStage.threshold(stage, config)
+		assert_int(FogStage.for_advance(advance, config)).is_equal(stage)
+
+
+func test_force_advance_and_clear() -> void:
+	var fog := FogState.new(_config())
+	fog.force_advance(0.8)
+	assert_bool(fog.can_start()).is_false()
+	assert_int(fog.stage()).is_equal(FogStage.Stage.TRAPDOOR)
+	# Sem recuo pendente: com o farol operando, só recua devagar.
+	_run(fog, 1.0, true)
+	assert_float(fog.advance).is_between(0.78, 0.8)
+
+	fog.clear()
+	assert_bool(fog.can_start()).is_true()
+	assert_int(fog.stage()).is_equal(FogStage.Stage.NONE)
+	# O tempo de farol parado recomeça do zero.
+	_run(fog, 5.0, false)
+	assert_bool(fog.can_start()).is_true()

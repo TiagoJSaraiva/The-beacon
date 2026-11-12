@@ -42,6 +42,24 @@ func start() -> void:
 	advance = config.start_advance
 
 
+## Põe o nevoeiro presente no avanço dado (limitado a 0–1), sem recuo pendente, como se nada
+## tivesse acontecido antes (painel de debug).
+func force_advance(value: float) -> void:
+	phase = Phase.PRESENT
+	advance = clampf(value, 0.0, 1.0)
+	_expanding = false
+	_hold_left = 0.0
+
+
+## Volta o nevoeiro ao começo da noite: ainda não surgiu e sem avanço (painel de debug).
+func clear() -> void:
+	phase = Phase.CLEAR
+	advance = 0.0
+	_idle_seconds = 0.0
+	_expanding = false
+	_hold_left = 0.0
+
+
 ## Avança `delta` segundos conforme o farol opera ou não, pelas regras descritas na classe.
 func tick(delta: float, operational: bool) -> void:
 	_idle_seconds = 0.0 if operational else _idle_seconds + delta
