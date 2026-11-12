@@ -79,6 +79,15 @@ func set_fog_present(present: bool) -> void:
 		latch_changed.emit(rules.is_latched)
 
 
+## Tenta inverter o trinco e, se mudou, atualiza a cena e emite `latch_changed`.
+func toggle_latch() -> void:
+	var was_latched: bool = rules.is_latched
+	rules.toggle_latch()
+	if rules.is_latched != was_latched:
+		_apply_state(true)
+		latch_changed.emit(rules.is_latched)
+
+
 ## Leva o painel e a trava à posição das regras, com ou sem animação, e atualiza o som e os
 ## interativos.
 func _apply_state(animate: bool) -> void:
@@ -101,15 +110,6 @@ func _refresh_interactables() -> void:
 	_latch_interactable.enabled = rules.can_toggle_latch()
 
 
-## Tenta inverter o trinco e, se mudou, atualiza a cena e emite `latch_changed`.
-func _toggle_latch() -> void:
-	var was_latched: bool = rules.is_latched
-	rules.toggle_latch()
-	if rules.is_latched != was_latched:
-		_apply_state(true)
-		latch_changed.emit(rules.is_latched)
-
-
 ## Diz se os pés de quem interage estão na altura mínima, o que impede operar por baixo.
 func _is_above(user: Node3D) -> bool:
 	return user != null and user.global_position.y >= _panel.global_position.y + min_user_height
@@ -124,9 +124,9 @@ func _on_panel_interactable_interacted() -> void:
 
 ## Inverte o trinco no toque (duração zero).
 func _on_latch_interactable_interacted() -> void:
-	_toggle_latch()
+	toggle_latch()
 
 
 ## Inverte o trinco ao completar a barra.
 func _on_latch_interactable_hold_completed() -> void:
-	_toggle_latch()
+	toggle_latch()

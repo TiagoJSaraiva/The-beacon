@@ -46,3 +46,17 @@ func test_add_fuel_caps_at_capacity() -> void:
 	assert_float(state.add_fuel(30.0)).is_equal_approx(30.0, 0.0001)
 	assert_float(state.add_fuel(30.0)).is_equal_approx(20.0, 0.0001)
 	assert_float(state.fuel).is_equal_approx(100.0, 0.0001)
+
+
+func test_set_fuel_ratio_clamps_and_ignores_hose() -> void:
+	var generator := GeneratorState.new(_config(), GeneratorState.Feed.FUEL)
+	generator.set_fuel_ratio(0.25)
+	assert_float(generator.fuel).is_equal_approx(25.0, 0.0001)
+	generator.set_fuel_ratio(2.0)
+	assert_float(generator.fuel_ratio()).is_equal_approx(1.0, 0.0001)
+	generator.set_fuel_ratio(0.0)
+	assert_bool(generator.is_running()).is_false()
+
+	var hose := GeneratorState.new(_config(), GeneratorState.Feed.HOSE)
+	hose.set_fuel_ratio(1.0)
+	assert_float(hose.fuel).is_equal(0.0)

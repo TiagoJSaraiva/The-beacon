@@ -33,3 +33,12 @@ func test_cooldown_does_not_run_while_broken() -> void:
 	failure.tick(100.0)
 	failure.repair()
 	assert_bool(failure.can_break()).is_false()
+
+
+func test_skip_cooldown_allows_breaking_right_after_repair() -> void:
+	var failure := FailureState.new(30.0)
+	failure.break_down()
+	failure.repair()
+	assert_bool(failure.can_break()).is_false()
+	failure.skip_cooldown()
+	assert_bool(failure.can_break()).is_true()

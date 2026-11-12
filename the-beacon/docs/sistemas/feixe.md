@@ -6,7 +6,7 @@ Luz giratória que protege os barcos no nevoeiro, e a máquina que a gira (GDD 1
 ## Componentes
 - `machine_house/machine_house.tscn` (`MachineHouse`, na cabine, regra `FailureState`): carcaça (modelo `machinery_device`) com volante na frente do motor, que gira com o farol operando; tubulação vertical até o telhado; câmara da lâmpada com portinha. Quebrada: luz vermelha, alarme e ponto de conserto (frente, mãos livres). Lâmpada queimada: luz laranja na câmara e ponto de troca na portinha (mãos livres).
 - `beam/lighthouse_lamp.tscn` (`LighthouseLamp`, regra `FailureState`): cabeça acima do telhado, na vertical da casa de máquinas. Gira com o farol operando; spot e cone só com o feixe aceso.
-- `beam/beam_control.tscn` (`BeamControl`): alavanca num poste ao lado da casa de máquinas, com luz indicadora.
+- `beam/beam_control.tscn` (`BeamControl`): alavanca num poste ao lado da casa de máquinas, com luz indicadora. `toggle()` inverte a alavanca (o jogador pelo `SwitchPoint`, o painel de debug direto).
 - `beam/beam_state.gd` (`BeamState`, no `Lighthouse`): junta alavanca, energia, lâmpada, casa de máquinas e nevoeiro.
 
 ## Regras

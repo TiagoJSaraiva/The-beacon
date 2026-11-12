@@ -4,7 +4,7 @@
 Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 
 ## Componentes
-- `power/generator.tscn` (`Generator`, regra `GeneratorState`): a mesma cena nos dois papéis, escolhidos por `feed`.
+- `power/generator.tscn` (`Generator`, regra `GeneratorState`): a mesma cena nos dois papéis, escolhidos por `feed`. `GeneratorState.set_fuel_ratio` define o combustível (painel de debug).
   - `MainGenerator` (térreo, `feed = HOSE`): funciona enquanto a mangueira está inteira; sem medidor nem boca de combustível.
   - `EmergencyGenerator` (cabine, ao lado da casa de máquinas, `feed = FUEL`): combustível, medidor (barra) e boca para o galão (topo).
 - `fuel/fuel_tank.tscn` (`FuelTank`, térreo): reserva infinita; mangueira até o gerador principal; estourada, some e fica o toco com a poça. Contém o `JerrycanSlot`. `debug_burst_on_start` começa a noite com ela estourada (só depuração).

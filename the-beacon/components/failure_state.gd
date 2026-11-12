@@ -30,6 +30,11 @@ func repair() -> void:
 	_cooldown_left = cooldown_seconds
 
 
+## Zera o intervalo que falta, para a peça poder quebrar já (painel de debug).
+func skip_cooldown() -> void:
+	_cooldown_left = 0.0
+
+
 ## Desconta o intervalo. Com a peça quebrada, a contagem fica parada.
 func tick(delta: float) -> void:
 	if not is_broken:

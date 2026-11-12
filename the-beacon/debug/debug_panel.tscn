@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://debug/debug_panel.gd" id="1_debug_panel"]
 [ext_resource type="Script" path="res://debug/balance_tab.gd" id="2_balance_tab"]
 [ext_resource type="Script" path="res://debug/night_tab.gd" id="3_night_tab"]
+[ext_resource type="Script" path="res://debug/lighthouse_tab.gd" id="4_lighthouse_tab"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_debug"]
 bg_color = Color(0.08, 0.09, 0.1, 0.92)
@@ -60,6 +61,16 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("3_night_tab")
+
+[node name="Farol" type="ScrollContainer" parent="Frame/Content/Tabs"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="LighthouseTab" type="VBoxContainer" parent="Frame/Content/Tabs/Farol"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_lighthouse_tab")
 
 [node name="Balanceamento" type="ScrollContainer" parent="Frame/Content/Tabs"]
 layout_mode = 2

@@ -29,6 +29,11 @@ func show_status(beam_active: bool) -> void:
 
 
 ## Inverte a alavanca e emite `switched`. O farol recalcula o estado e atualiza o painel.
-func _on_switch_point_interacted() -> void:
+func toggle() -> void:
 	is_on = not is_on
 	switched.emit(is_on)
+
+
+## Inverte a alavanca quando o jogador a usa.
+func _on_switch_point_interacted() -> void:
+	toggle()

@@ -44,6 +44,13 @@ func add_fuel(amount: float) -> float:
 	return accepted
 
 
+## Define o combustível como fração da capacidade (0 a 1, limitada). Pela mangueira, nada.
+func set_fuel_ratio(ratio: float) -> void:
+	if feed == Feed.HOSE:
+		return
+	fuel = clampf(ratio, 0.0, 1.0) * config.generator_capacity
+
+
 ## Devolve o combustível de 0 a 1. Pela mangueira ou sem capacidade, devolve 0.
 func fuel_ratio() -> float:
 	if feed == Feed.HOSE or config.generator_capacity <= 0.0:
