@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
 [ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
 [ext_resource type="AudioStream" uid="uid://budwy6cx4nsn6" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
-[ext_resource type="PackedScene" uid="uid://bueo80sfq8jwx" path="res://assets/models/emergency_genarator/power_generator.tscn" id="5_model"]
+[ext_resource type="PackedScene" uid="uid://bueo80sfq8jwx" path="res://assets/models/emergency_generator/emergency_generator.tscn" id="5_model"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(1.15, 0.97, 0.91)
