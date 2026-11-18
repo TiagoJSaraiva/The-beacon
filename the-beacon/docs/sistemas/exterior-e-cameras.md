@@ -14,7 +14,7 @@ Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da m
 - A câmera da esquerda mira o lado +X da rota, que aparece à esquerda na tela; os barcos vão da direita para a esquerda. Mudou a mira, o `fov` ou a rota: confira o trecho do nevoeiro dentro da sobreposição (`test/scenes/sea_cameras_test.gd`).
 - Canais, na ordem de `Exterior.channel_cameras()`: 0 porta, 1 mar à esquerda, 2 mar à direita; depois do último, volta ao primeiro. A noite começa no canal 0. A tela não mostra o número do canal.
 - O monitor funciona sem energia.
-- O nevoeiro aparece pelos volumes do `FogVisuals` (`nevoeiro.md`), que as câmeras renderizam como qualquer objeto. Exceção: as câmeras do mar têm `cull_mask` sem a camada de render `fog_near_ring`, e o anel em volta do farol não as cobre.
+- O nevoeiro aparece pelos volumes do `FogVisuals` (`nevoeiro.md`). O `Environment` das câmeras tem a névoa volumétrica ligada, com densidade global zero e alcance de 120 m, para cobrir a faixa no mar inteira (a rota fica a cerca de 70 m). Exceção: as câmeras do mar têm `cull_mask` sem a camada de render `fog_near_ring`, e o anel em volta do farol não as cobre.
 
 ## Sinais
 - O `Game` passa as texturas com `Lighthouse.show_camera_feeds(Exterior.channel_feeds())`.
