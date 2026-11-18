@@ -1,10 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dn75cym17wjl8"]
 
-[ext_resource type="Script" path="res://power/generator.gd" id="1_generator"]
-[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
-[ext_resource type="Script" path="res://components/looping_sound.gd" id="3_loop"]
-[ext_resource type="AudioStream" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
-[ext_resource type="PackedScene" path="res://assets/models/power_generator/power_generator.tscn" id="5_model"]
+[ext_resource type="Script" uid="uid://3je2wyxmhi87" path="res://power/generator.gd" id="1_generator"]
+[ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
+[ext_resource type="AudioStream" uid="uid://budwy6cx4nsn6" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
+[ext_resource type="PackedScene" uid="uid://bueo80sfq8jwx" path="res://assets/models/emergency_genarator/power_generator.tscn" id="5_model"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(1.15, 0.97, 0.91)
@@ -34,50 +34,50 @@ height = 0.1
 [sub_resource type="BoxShape3D" id="BoxShape3D_pour"]
 size = Vector3(0.4, 0.3, 0.4)
 
-[node name="Generator" type="Node3D"]
+[node name="Generator" type="Node3D" unique_id=773727027]
 script = ExtResource("1_generator")
 
-[node name="Body" type="StaticBody3D" parent="."]
+[node name="Body" type="StaticBody3D" parent="." unique_id=1390917271]
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body" unique_id=115812034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.485, 0)
 shape = SubResource("BoxShape3D_body")
 
-[node name="Model" parent="Body" instance=ExtResource("5_model")]
+[node name="Model" parent="Body" unique_id=2043614856 instance=ExtResource("5_model")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
 
-[node name="Gauge" type="Node3D" parent="."]
+[node name="Gauge" type="Node3D" parent="." unique_id=1343349441]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.47, 0.62, 0.47)
 
-[node name="Frame" type="MeshInstance3D" parent="Gauge"]
+[node name="Frame" type="MeshInstance3D" parent="Gauge" unique_id=886396514]
 mesh = SubResource("BoxMesh_frame")
 
-[node name="GaugePivot" type="Node3D" parent="Gauge"]
+[node name="GaugePivot" type="Node3D" parent="Gauge" unique_id=1239786967]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14, 0.005)
 
-[node name="Fill" type="MeshInstance3D" parent="Gauge/GaugePivot"]
+[node name="Fill" type="MeshInstance3D" parent="Gauge/GaugePivot" unique_id=1311692824]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
 mesh = SubResource("BoxMesh_fill")
 
-[node name="FuelCap" type="MeshInstance3D" parent="."]
+[node name="FuelCap" type="MeshInstance3D" parent="." unique_id=128484258]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.93, 0)
 mesh = SubResource("CylinderMesh_cap")
 
-[node name="PourPoint" type="Area3D" parent="."]
+[node name="PourPoint" type="Area3D" parent="." unique_id=1837830495]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1, 0)
 script = ExtResource("2_interactable")
 mode = 1
 hands_rule = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PourPoint"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PourPoint" unique_id=1481358765]
 shape = SubResource("BoxShape3D_pour")
 
-[node name="Hum" type="AudioStreamPlayer3D" parent="."]
+[node name="Hum" type="AudioStreamPlayer3D" parent="." unique_id=417770954]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 stream = ExtResource("4_hum")

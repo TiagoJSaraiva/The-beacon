@@ -5,15 +5,15 @@
 [ext_resource type="PackedScene" path="res://lighthouse/entrance_door.tscn" id="3_door"]
 [ext_resource type="Script" uid="uid://d015ev76gt87w" path="res://lighthouse/lighthouse.gd" id="4_lighthouse"]
 [ext_resource type="PackedScene" path="res://night/wall_clock.tscn" id="5_clock"]
-[ext_resource type="PackedScene" path="res://power/generator.tscn" id="6_generator"]
-[ext_resource type="PackedScene" path="res://fuel/fuel_tank.tscn" id="9_tank"]
-[ext_resource type="PackedScene" path="res://fuel/jerrycan.tscn" id="10_jerrycan"]
+[ext_resource type="PackedScene" uid="uid://dn75cym17wjl8" path="res://power/generator.tscn" id="6_generator"]
+[ext_resource type="PackedScene" uid="uid://dhxd7dkthwq2n" path="res://fuel/fuel_tank.tscn" id="9_tank"]
+[ext_resource type="PackedScene" uid="uid://clqfnk365k1p6" path="res://fuel/jerrycan.tscn" id="10_jerrycan"]
 [ext_resource type="PackedScene" uid="uid://tgoqtleobfy" path="res://beam/lighthouse_lamp.tscn" id="11_lamp"]
 [ext_resource type="PackedScene" path="res://beam/beam_control.tscn" id="12_control"]
 [ext_resource type="PackedScene" path="res://lighthouse/security_monitor.tscn" id="13_monitor"]
-[ext_resource type="PackedScene" path="res://boats/radio.tscn" id="14_radio"]
+[ext_resource type="PackedScene" uid="uid://blaj3p7cqy60x" path="res://boats/radio.tscn" id="14_radio"]
 [ext_resource type="PackedScene" path="res://player/chair.tscn" id="15_chair"]
-[ext_resource type="PackedScene" path="res://machine_house/machine_house.tscn" id="16_machine"]
+[ext_resource type="PackedScene" uid="uid://c4dtmuijputsa" path="res://machine_house/machine_house.tscn" id="16_machine"]
 [ext_resource type="PackedScene" path="res://assets/models/old_wooden_table/old_wooden_table.tscn" id="17_table"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
@@ -86,7 +86,8 @@ material = SubResource("StandardMaterial3D_wood")
 
 [node name="Trapdoor" parent="UpperFloor" unique_id=271035687 instance=ExtResource("2_trapdoor")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.52, 10.65, 0.75)
+transform = Transform3D(-0.0052065924, 0, -0.99998647, 0, 1, 0, 0.99998647, 0, -0.0052065924, 4.696926, 10.630921, 0.15951943)
+size = Vector3(1.8345093, 0.5, 1.5)
 
 [node name="Roof" type="CSGCylinder3D" parent="." unique_id=558988200]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.95, 0)
@@ -97,6 +98,7 @@ sides = 32
 material = SubResource("StandardMaterial3D_stone")
 
 [node name="SpiralStaircase" type="StaticBody3D" parent="." unique_id=1476225256]
+transform = Transform3D(0.46983027, 0, 0.88275677, 0, 1, 0, -0.88275677, 0, 0.46983027, 0, 0, 0)
 collision_mask = 0
 script = ExtResource("1_stairs")
 inner_radius = 4.9
@@ -125,16 +127,16 @@ transform = Transform3D(-0.77301, 0, -0.63439, 0, 1, 0, 0.63439, 0, -0.77301, 3.
 
 [node name="MainGenerator" parent="." unique_id=904717009 instance=ExtResource("6_generator")]
 unique_name_in_owner = true
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.6, 0, -0.17)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.4789524, 0, 3.3948839)
 feed = 0
 
-[node name="EmergencyGenerator" parent="." instance=ExtResource("6_generator")]
+[node name="EmergencyGenerator" parent="." unique_id=1992588035 instance=ExtResource("6_generator")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 10.8, -2.6)
+transform = Transform3D(0.00491732, 0, 0.9999879, 0, 1, 0, -0.9999879, 0, 0.00491732, -0.07406855, 0.035898924, -1.8564034)
 
-[node name="MachineHouse" parent="." instance=ExtResource("16_machine")]
+[node name="MachineHouse" parent="." unique_id=1241696885 instance=ExtResource("16_machine")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 10.8, -2.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021223217, -0.010761023, -0.016112566)
 
 [node name="UpperLights" type="Node3D" parent="." unique_id=1774744971]
 
@@ -155,11 +157,11 @@ omni_range = 6.6
 
 [node name="FuelTank" parent="." unique_id=968141463 instance=ExtResource("9_tank")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, 1.8)
+transform = Transform3D(0.990483, 0, -0.13763528, 0, 1, 0, 0.13763528, 0, 0.990483, -4.998049, 0, -1.020688)
 
 [node name="Jerrycan" parent="." unique_id=239970813 instance=ExtResource("10_jerrycan")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.5, 1.8)
+transform = Transform3D(0.9908605, 0, -0.13489027, 0, 1, 0, 0.13489027, 0, 0.9908605, -4.2828016, 0.5, -0.8934368)
 
 [node name="LighthouseLamp" parent="." unique_id=704315292 instance=ExtResource("11_lamp")]
 unique_name_in_owner = true
@@ -169,10 +171,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 14.1, -2.4)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 11.85, -2.1)
 
-[node name="LeverPost" type="CSGBox3D" parent="."]
+[node name="LeverPost" type="CSGBox3D" parent="." unique_id=1501372199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 11.3, -2.22)
 use_collision = true
-size = Vector3(0.12, 1.0, 0.12)
+size = Vector3(0.12, 1, 0.12)
 material = SubResource("StandardMaterial3D_stone")
 
 [node name="Desk" type="Node3D" parent="." unique_id=442308190]
@@ -180,11 +182,11 @@ transform = Transform3D(-0.033360563, 0, -0.99944335, 0, 1, 0, 0.99944335, 0, -0
 
 [node name="Top" type="StaticBody3D" parent="Desk" unique_id=1345031572]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Desk/Top"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Desk/Top" unique_id=731071374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("BoxShape3D_desk")
 
-[node name="Model" parent="Desk/Top" instance=ExtResource("17_table")]
+[node name="Model" parent="Desk/Top" unique_id=969655441 instance=ExtResource("17_table")]
 transform = Transform3D(1.4256, 0, 0, 0, 1.0526, 0, 0, 0, 0.7073, 0, 0, 0)
 
 [node name="Monitor" parent="Desk" unique_id=323299548 instance=ExtResource("13_monitor")]
@@ -195,21 +197,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.05)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.8, 0.05)
 
-[node name="Chair" parent="Desk" instance=ExtResource("15_chair")]
+[node name="Chair" parent="Desk" unique_id=1323796287 instance=ExtResource("15_chair")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.85)
 
 [node name="DrownedTargets" type="Node3D" parent="." unique_id=1056986253]
 
-[node name="DoorInside" type="Marker3D" parent="DrownedTargets"]
+[node name="DoorInside" type="Marker3D" parent="DrownedTargets" unique_id=1668177117]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.299, 0, -4.02)
 
-[node name="RestSpot" type="Marker3D" parent="DrownedTargets"]
+[node name="RestSpot" type="Marker3D" parent="DrownedTargets" unique_id=1910901143]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 
 [node name="TrapdoorBelow" type="Marker3D" parent="DrownedTargets" unique_id=1728830340]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72, 8.7, 0.75)
-

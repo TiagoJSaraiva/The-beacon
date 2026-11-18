@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" uid="uid://dayaut2d5dq6d" path="res://assets/models/emergency_genarator/Generator_low_Chasis_BaseColor.png" id="1_albedo"]
+[ext_resource type="Texture2D" uid="uid://ccl3o36b3qyss" path="res://assets/models/emergency_genarator/Generator_low_Chasis_Metallic.png" id="2_metallic"]
+[ext_resource type="Texture2D" uid="uid://03pin2jlklce" path="res://assets/models/emergency_genarator/Generator_low_Chasis_Roughness.png" id="3_roughness"]
+[ext_resource type="Texture2D" uid="uid://b0rdlbb4hq0bb" path="res://assets/models/emergency_genarator/Generator_low_Chasis_Normal.png" id="4_normal"]
+
+[resource]
+resource_name = "Chasis"
+albedo_texture = ExtResource("1_albedo")
+metallic = 1.0
+metallic_texture = ExtResource("2_metallic")
+roughness_texture = ExtResource("3_roughness")
+normal_enabled = true
+normal_texture = ExtResource("4_normal")

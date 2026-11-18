@@ -1,11 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c4dtmuijputsa"]
 
-[ext_resource type="Script" path="res://machine_house/machine_house.gd" id="1_machine"]
-[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
-[ext_resource type="Script" path="res://components/looping_sound.gd" id="3_loop"]
-[ext_resource type="AudioStream" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
-[ext_resource type="AudioStream" path="res://assets/audio/placeholder/alarm.wav" id="5_alarm"]
+[ext_resource type="Script" uid="uid://cckpg5pncwxfk" path="res://machine_house/machine_house.gd" id="1_machine"]
+[ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
+[ext_resource type="AudioStream" uid="uid://budwy6cx4nsn6" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
+[ext_resource type="AudioStream" uid="uid://cenpf5m38kvtl" path="res://assets/audio/placeholder/alarm.wav" id="5_alarm"]
 [ext_resource type="PackedScene" path="res://assets/models/machinery_device/machinery_device.tscn" id="6_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_housing"]
+size = Vector3(1.6, 0.75, 0.75)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.22, 0.27, 0.3, 1)
@@ -17,99 +20,81 @@ albedo_color = Color(0.6, 0.48, 0.2, 1)
 metallic = 0.8
 roughness = 0.35
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_housing"]
-size = Vector3(1.6, 0.75, 0.75)
+[sub_resource type="BoxShape3D" id="BoxShape3D_replace"]
+size = Vector3(0.55, 0.45, 0.25)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_repair"]
 size = Vector3(1.4, 0.7, 0.25)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_replace"]
-size = Vector3(0.55, 0.45, 0.25)
-
-[node name="MachineHouse" type="Node3D"]
+[node name="MachineHouse" type="Node3D" unique_id=12065675]
 script = ExtResource("1_machine")
 
-[node name="Housing" type="StaticBody3D" parent="."]
+[node name="Housing" type="StaticBody3D" parent="." unique_id=623183751]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Housing"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Housing" unique_id=760423497]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
 shape = SubResource("BoxShape3D_housing")
 
-[node name="Model" parent="Housing" instance=ExtResource("6_model")]
+[node name="Model" parent="Housing" unique_id=1247048510 instance=ExtResource("6_model")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
-[node name="Flywheel" type="Node3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.22, 0.33)
-
-[node name="Wheel" type="CSGCylinder3D" parent="Flywheel"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-radius = 0.18
-height = 0.06
-sides = 20
-material = SubResource("StandardMaterial3D_brass")
-
-[node name="Spoke" type="CSGBox3D" parent="Flywheel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
-size = Vector3(0.34, 0.05, 0.03)
-material = SubResource("StandardMaterial3D_body")
-
-[node name="Tube" type="CSGCylinder3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.075, 0)
+[node name="Tube" type="CSGCylinder3D" parent="." unique_id=1938045325]
+transform = Transform3D(1, 0, 0, 0, 4.1427517, 0, 0, 0, 1, 0, 8.452287, 0)
 use_collision = true
 radius = 0.22
-height = 2.65
+height = 3.7493165
 sides = 16
 material = SubResource("StandardMaterial3D_body")
 
-[node name="LampChamber" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+[node name="LampChamber" type="CSGBox3D" parent="." unique_id=976484765]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.910047, 0)
 use_collision = true
 size = Vector3(0.6, 0.5, 0.6)
 material = SubResource("StandardMaterial3D_body")
 
-[node name="LampDoor" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0.31)
+[node name="LampDoor" type="CSGBox3D" parent="." unique_id=519569412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.910047, 0.31)
 size = Vector3(0.4, 0.35, 0.03)
 material = SubResource("StandardMaterial3D_brass")
 
-[node name="BurnedLight" type="OmniLight3D" parent="."]
+[node name="BurnedLight" type="OmniLight3D" parent="." unique_id=97477298]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.910047, 0.45)
 visible = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0.45)
 light_color = Color(1, 0.45, 0.1, 1)
 light_energy = 1.2
 omni_range = 1.2
 
-[node name="ReplacePoint" type="Area3D" parent="."]
+[node name="ReplacePoint" type="Area3D" parent="." unique_id=1748644111]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.910047, 0.4)
 script = ExtResource("2_interactable")
 mode = 1
 hands_rule = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ReplacePoint"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ReplacePoint" unique_id=384626842]
 shape = SubResource("BoxShape3D_replace")
 
-[node name="RepairPoint" type="Area3D" parent="."]
+[node name="RepairPoint" type="Area3D" parent="." unique_id=1575071566]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.5)
 script = ExtResource("2_interactable")
 mode = 1
 hands_rule = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RepairPoint"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RepairPoint" unique_id=835562368]
 shape = SubResource("BoxShape3D_repair")
 
-[node name="BrokenLight" type="OmniLight3D" parent="."]
+[node name="BrokenLight" type="OmniLight3D" parent="." unique_id=1651121397]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.160047, 0.6)
 visible = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0.6)
 light_color = Color(1, 0.1, 0.05, 1)
 light_energy = 1.5
 omni_range = 3.0
 
-[node name="Hum" type="AudioStreamPlayer3D" parent="."]
+[node name="Hum" type="AudioStreamPlayer3D" parent="." unique_id=1009677778]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 stream = ExtResource("4_hum")
@@ -119,7 +104,7 @@ max_distance = 12.0
 bus = &"SFX"
 script = ExtResource("3_loop")
 
-[node name="Alarm" type="AudioStreamPlayer3D" parent="."]
+[node name="Alarm" type="AudioStreamPlayer3D" parent="." unique_id=1395927932]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 stream = ExtResource("5_alarm")

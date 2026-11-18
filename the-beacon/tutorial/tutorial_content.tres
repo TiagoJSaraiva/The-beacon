@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="TutorialContent" format=3]
+[gd_resource type="Resource" script_class="TutorialContent" format=3 uid="uid://co3omccyfvep"]
 
-[ext_resource type="Script" path="res://tutorial/tutorial_step.gd" id="1_step"]
-[ext_resource type="Script" path="res://tutorial/tutorial_content.gd" id="2_content"]
+[ext_resource type="Script" uid="uid://d50pr4hxckxw" path="res://tutorial/tutorial_step.gd" id="1_step"]
+[ext_resource type="Script" uid="uid://n2pt0abwjrxr" path="res://tutorial/tutorial_content.gd" id="2_content"]
 
 [sub_resource type="Resource" id="Resource_start"]
 script = ExtResource("1_step")
@@ -81,4 +81,3 @@ text = "Carranca. Ela pula em quem chega perto e cega; depois de algumas vezes, 
 [resource]
 script = ExtResource("2_content")
 steps = Array[ExtResource("1_step")]([SubResource("Resource_start"), SubResource("Resource_flashlight"), SubResource("Resource_low_fuel"), SubResource("Resource_jerrycan"), SubResource("Resource_lamp_burned"), SubResource("Resource_hose_burst"), SubResource("Resource_machine_broken"), SubResource("Resource_fog"), SubResource("Resource_fog_near"), SubResource("Resource_fog_beam"), SubResource("Resource_latch"), SubResource("Resource_boat"), SubResource("Resource_drowned_approaching"), SubResource("Resource_drowned"), SubResource("Resource_figurehead")])
-message_seconds = 8.0

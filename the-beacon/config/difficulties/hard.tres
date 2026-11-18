@@ -1,21 +1,21 @@
-[gd_resource type="Resource" script_class="DifficultyConfig" format=3]
+[gd_resource type="Resource" script_class="DifficultyConfig" format=3 uid="uid://cyuupgiwcra2l"]
 
-[ext_resource type="Script" path="res://config/boat_config.gd" id="1_83dqw"]
-[ext_resource type="Script" path="res://config/drowned_config.gd" id="2_rac0w"]
-[ext_resource type="Script" path="res://events/event_definition.gd" id="3_0up6b"]
+[ext_resource type="Script" uid="uid://xej0sxdeetv2" path="res://config/boat_config.gd" id="1_83dqw"]
+[ext_resource type="Script" uid="uid://mdne70pgyysh" path="res://config/drowned_config.gd" id="2_rac0w"]
+[ext_resource type="Script" uid="uid://dcsho071qqobc" path="res://events/event_definition.gd" id="3_0up6b"]
 [ext_resource type="Resource" path="res://config/events/lamp_burnout.tres" id="4_6yf4o"]
 [ext_resource type="Resource" path="res://config/events/machine_breakdown.tres" id="5_3kbr3"]
 [ext_resource type="Resource" path="res://config/events/fog.tres" id="7_hrpw4"]
 [ext_resource type="Resource" path="res://config/events/boat.tres" id="8_atx57"]
-[ext_resource type="Script" path="res://config/fall_config.gd" id="9_ldjh3"]
-[ext_resource type="Script" path="res://config/flashlight_config.gd" id="10_tvxx4"]
-[ext_resource type="Script" path="res://config/fog_config.gd" id="11_u6d7a"]
-[ext_resource type="Script" path="res://config/figurehead_config.gd" id="12_q1ajg"]
-[ext_resource type="Script" path="res://config/power_config.gd" id="13_ksepb"]
-[ext_resource type="Script" path="res://config/repair_config.gd" id="14_o2fdw"]
-[ext_resource type="Script" path="res://config/difficulty_config.gd" id="15_k8l5r"]
-[ext_resource type="Script" path="res://config/time_config.gd" id="17_doypv"]
-[ext_resource type="Script" path="res://config/trapdoor_config.gd" id="18_bf42e"]
+[ext_resource type="Script" uid="uid://dm4iojmcq5tcc" path="res://config/fall_config.gd" id="9_ldjh3"]
+[ext_resource type="Script" uid="uid://b4xulobdimfnr" path="res://config/flashlight_config.gd" id="10_tvxx4"]
+[ext_resource type="Script" uid="uid://ccgmkv73srnu1" path="res://config/fog_config.gd" id="11_u6d7a"]
+[ext_resource type="Script" uid="uid://c3oblfdja825m" path="res://config/figurehead_config.gd" id="12_q1ajg"]
+[ext_resource type="Script" uid="uid://b635ujq77fpwb" path="res://config/power_config.gd" id="13_ksepb"]
+[ext_resource type="Script" uid="uid://hh3sbbnjk2n8" path="res://config/repair_config.gd" id="14_o2fdw"]
+[ext_resource type="Script" uid="uid://chwdj2g3ngfvq" path="res://config/difficulty_config.gd" id="15_k8l5r"]
+[ext_resource type="Script" uid="uid://dtaq4xt2b7656" path="res://config/time_config.gd" id="17_doypv"]
+[ext_resource type="Script" uid="uid://c438uc3lakg47" path="res://config/trapdoor_config.gd" id="18_bf42e"]
 
 [sub_resource type="Resource" id="Resource_ucn1s"]
 script = ExtResource("1_83dqw")
@@ -26,15 +26,15 @@ script = ExtResource("2_rac0w")
 [sub_resource type="Resource" id="Resource_io18r"]
 script = ExtResource("9_ldjh3")
 
+[sub_resource type="Resource" id="Resource_243vo"]
+script = ExtResource("12_q1ajg")
+
 [sub_resource type="Resource" id="Resource_bcnhu"]
 script = ExtResource("10_tvxx4")
 battery_seconds = 1750.0
 
 [sub_resource type="Resource" id="Resource_6m6va"]
 script = ExtResource("11_u6d7a")
-
-[sub_resource type="Resource" id="Resource_243vo"]
-script = ExtResource("12_q1ajg")
 
 [sub_resource type="Resource" id="Resource_4aahe"]
 script = ExtResource("13_ksepb")

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bueo80sfq8jwx"]
+
+[ext_resource type="PackedScene" uid="uid://c5cypqm5jleej" path="res://assets/models/emergency_genarator/Generator.fbx" id="1_l2onu"]
+
+[node name="PowerGenerator" type="Node3D" unique_id=934582082]
+
+[node name="Generator" parent="." unique_id=20993090 instance=ExtResource("1_l2onu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008794427, 0, 0.050490856)

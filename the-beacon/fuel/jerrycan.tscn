@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://clqfnk365k1p6"]
 
-[ext_resource type="Script" path="res://fuel/jerrycan.gd" id="1_jerrycan"]
-[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://c3i5bch05i704" path="res://fuel/jerrycan.gd" id="1_jerrycan"]
+[ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
 [ext_resource type="PackedScene" path="res://assets/models/oil_containers/oil_containers.tscn" id="3_model"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jerrycan"]
@@ -14,30 +14,30 @@ size = Vector3(0.31, 0.4, 0.13)
 [sub_resource type="BoxShape3D" id="BoxShape3D_pick"]
 size = Vector3(0.45, 0.55, 0.35)
 
-[node name="Jerrycan" type="RigidBody3D"]
+[node name="Jerrycan" type="RigidBody3D" unique_id=1822284270]
 collision_layer = 128
 collision_mask = 131
 mass = 12.0
 physics_material_override = SubResource("PhysicsMaterial_jerrycan")
-continuous_cd = true
 freeze = true
+continuous_cd = true
 script = ExtResource("1_jerrycan")
 
-[node name="Shape" type="CollisionShape3D" parent="."]
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1537502495]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.2, 0)
 shape = SubResource("BoxShape3D_body")
 
-[node name="Model" parent="." instance=ExtResource("3_model")]
-transform = Transform3D(1.82, 0, 0, 0, 1.82, 0, 0, 0, 1.82, 0, 0, 0)
+[node name="Model" parent="." unique_id=813012574 instance=ExtResource("3_model")]
+transform = Transform3D(2.1, 0, 0, 0, 2.1, 0, 0, 0, 2.1, 0, 0, 0)
 
-[node name="PickPoint" type="Area3D" parent="."]
+[node name="PickPoint" type="Area3D" parent="." unique_id=253010334]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 script = ExtResource("2_interactable")
 hands_rule = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PickPoint"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickPoint" unique_id=4153092]
 shape = SubResource("BoxShape3D_pick")
 
 [connection signal="interacted" from="PickPoint" to="." method="_on_pick_point_interacted"]
