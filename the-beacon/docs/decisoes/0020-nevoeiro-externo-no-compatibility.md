@@ -1,7 +1,7 @@
 # 0020 — Nevoeiro externo com densidade variável no Compatibility
 
 - **Data**: 2026-11
-- **Status**: aceita
+- **Status**: substituída por 0025
 
 ## Contexto
 A faixa no mar e o anel em volta do farol apareciam nas câmeras como blocos baixos, de contorno seco. A causa era o modelo dos volumes (densidade uniforme, topo abaixo da câmera), não a falta de névoa volumétrica. O PC de desenvolvimento só roda o renderizador Compatibility, que não tem `FogVolume` nem névoa volumétrica. O nevoeiro do interior já está como o desejado: um filtro uniforme no ar.

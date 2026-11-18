@@ -7,6 +7,8 @@ Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de d
 
 **Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração. **Entrega 2** implementada: revisão das mecânicas (`planos/entrega-2.md`), à espera do playtest.
 
+Renderizador Forward+ com o driver D3D12 no Windows (decisão 0025).
+
 Princípios da implementação:
 - Regras em classes `RefCounted` puras (`*_state.gd`, `*_rules.gd`), testáveis. Nós só fazem tick, leem input e aplicam o resultado. Só o estado que passa de uma noite para a outra é serializado (`RunState`, decisão 0015).
 - Cada noite é uma carga nova de `game/game.tscn`; o `RunState` leva o que persiste.
