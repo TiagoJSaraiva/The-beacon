@@ -7,13 +7,8 @@ signal broken_changed(broken: bool)
 ## O jogador terminou a troca da lâmpada na câmara.
 signal lamp_replaced
 
-@export var flywheel_speed_degrees: float = 220.0
-
 var failure: FailureState = FailureState.new()
 
-var _running: bool = false
-
-@onready var _flywheel: Node3D = %Flywheel
 @onready var _repair_point: Interactable = %RepairPoint
 @onready var _replace_point: Interactable = %ReplacePoint
 @onready var _broken_light: Light3D = %BrokenLight
@@ -28,11 +23,9 @@ func _ready() -> void:
 	_refresh()
 
 
-## Conta o intervalo entre quebras e gira o volante enquanto o farol opera.
+## Conta o intervalo entre quebras.
 func _process(delta: float) -> void:
 	failure.tick(delta)
-	if _running:
-		_flywheel.rotate_z(deg_to_rad(flywheel_speed_degrees) * delta)
 
 
 ## Recria a casa de máquinas inteira e aplica o intervalo e as durações de conserto e troca.
@@ -72,9 +65,8 @@ func repair() -> void:
 	broken_changed.emit(false)
 
 
-## Faz o volante girar e a máquina zumbir enquanto o farol opera.
+## Faz a máquina zumbir enquanto o farol opera.
 func show_running(running: bool) -> void:
-	_running = running
 	_hum.set_active(running)
 
 
