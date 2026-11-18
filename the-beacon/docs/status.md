@@ -6,13 +6,13 @@
   - **A** — noites por recarga de cena a partir do `RunState`; save só entre noites; menu de pausa no lugar da agenda (decisões 0014–0017).
   - **B** — controle e teclado; pulo no lugar de agachar; queda média bloqueia a corrida; bateria em barra; cadeira.
   - **C** — cabine sem janelas; casa de máquinas e câmara da lâmpada; farol operando/aceso; gerador principal pela mangueira e de emergência pelo galão; galão com física; mangueira que estoura sem conserto.
-  - **D** — nevoeiro com avanço e estágios, visual por volumes de shader; bloqueio do feixe; panorama do mar; barcos reescritos (sem pirata).
+  - **D** — nevoeiro com avanço e estágios (o visual hoje é volumétrico, ver abaixo); bloqueio do feixe; panorama do mar; barcos reescritos (sem pirata).
   - **E** — alçapão com trinco que liga e desliga; porta só arrombada; Afogado que se aproxima com o nevoeiro dentro, entra uma vez e caça até o fim da noite.
   - **F** — carranca no lugar do Homem de Nevoeiro: armadilha imóvel que cega e derruba; a lanterna a dissolve.
   - **G** — tutorial com passos novos (nevoeiro perto, alçapão, Afogado se aproximando) e teclas como marcadores `{ação}`; controles remapeáveis com página própria nas configurações (decisão 0018); prompts e tutorial mostram a tecla do dispositivo em uso; voltar com Esc/B em todos os menus; limpeza (som do pirata) e `validate()` das dificuldades ampliado.
 - Iluminação provisória mais clara em `game/game.tscn` só para testes.
 - **Farol cônico** (experimento, a avaliar jogando): raio interno de 6,5 m no chão (1,3x o original) a 5,5 m na cabine (1,1x), com a cabine em y=10,8 (1,2x a altura anterior), escada de 0,9 volta e 8,4 m seguindo a parede, porta e alçapão alinhados e cada passagem como uma cena só, com o buraco na raiz (decisão 0019). Objetos internos continuam onde estavam: o espaço novo está livre para organizar.
-- **Correções do playtest**: o galão agora pode ser pego no slot (o ponto de devolução desativado bloqueava o raio de interação). O nevoeiro externo ficou mais alto e esvaece nas bordas; o interno não mudou (decisão 0020).
+- **Correções do playtest**: o galão agora pode ser pego no slot (o ponto de devolução desativado bloqueava o raio de interação). O nevoeiro externo ficou mais alto e esvaece nas bordas (a decisão 0020, que tratava disso, foi substituída pela 0025).
 - **Documentação do código**: toda função fora de `test/` e `addons/` tem `##`, e o check reprova função sem ele (decisão 0021) e função alterada com o `##` nem alterado nem confirmado (decisão 0022). O check não avalia se o texto está certo: isso fica para a revisão.
 - **Comportamentos a revisar** (features que ainda vão mudar, sem correção prevista): seção "Comportamento atual a revisar" em `sistemas/afogados.md` (jogador perto do alçapão impede as batidas).
 - **Monitor único e nevoeiro revisado** (pedido em `../notes/new-cam-feature.txt`):
