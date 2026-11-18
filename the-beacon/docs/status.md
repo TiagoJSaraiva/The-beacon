@@ -54,5 +54,4 @@ Validar jogando (por fase):
   - Afogado: se o alçapão fechar com ele em cima e o jogador fora do alcance, ele pode ficar preso tentando descer pelo painel fechado.
   - Mover a porta não leva `DoorInside`, a câmera da porta nem as fendas acima dela (decisão 0019).
   - Licença dos modelos não aparece nas páginas do Fab: confirmar antes de publicar (`assets/models/CREDITOS.md`).
-  - O rádio (`assets/RadiostationMCKINLEY_GameReady.fbx`) é anterior ao formato da decisão 0023 e aparece sem textura.
   - `game.gd` está com ~150 linhas de código, abaixo do alerta de ~200 (decisão 0021), mas continua concentrando a fiação da noite: responsabilidade nova deve nascer em componente próprio.
