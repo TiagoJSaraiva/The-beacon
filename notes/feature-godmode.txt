@@ -1,0 +1,12 @@
+planejamento de feature para o futuro.
+
+Essa feature se tratará de uma espécie de "godmode" ou debug mode.
+Ela é ativada pelo código como uma configuração: const DEBUG_MODE: boolean, ou algo do tipo.
+
+Quando ativada, ao começar uma run no jogo, o player pode pressionar uma hotkey determinada, vamos colocar como tecla R, e isso faz abrir um hud de debug mode. Esse hud dá acesso ao player mudar valores de balanceamento e ativar funções, como quebra de algo, conserto de algo, passagem de barco, passagem de pirata, determinar estado específico de nevoeiro, invocar carranca, adicionar Afogado, etc.
+A ideia é dar pra testar coisas melhor in game e testar numeros de balanceamento (como velocidade do barco) sem precisar mexer no código. 
+Você precisa fazer um levantamento detalhado das features que esse menu terá, com base nas features do jogo e oque pode ser interessante do tester possuir acesso, a respeito de numeros de balanceamento e funções.
+
+PROBLEMAS NADA A VER MAS PARA ANOTAR:
+- Parece que não está aparecendo nenhum barco.
+- Na câmera da entrada do farol, dá pra ver o feixe de luz atingindo a parede de fora do farol, oque não faz sentido nenhum

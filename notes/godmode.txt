@@ -1,0 +1,28 @@
+- Unlock de todas dificuldades
+
+Easy
+                noite 1  noite 2  noite 3
+chance tal
+Velocidade tal
+
+Médio
+                noite 1  noite 2  noite 3 noite 4 noite 5
+chance tal
+Velocidade tal
+
+Difícil
+                noite 1  noite 2  noite 3 noite 4 noite 5 noite 6 noite 7 noite 8
+chance tal
+Velocidade tal
+
+Divida entre coisas que quebram, monstro, coisas como
+- Change de trigger por minuto
+
+- Ajustar texturas
+- Modelo novo do generator
+- Ajustar godmode
+- Ajustar escada
+
+Estava null por algum motivo: flywheel_speed_degrees
+
+Maquina de escrever fudida amaldiçoada ideia

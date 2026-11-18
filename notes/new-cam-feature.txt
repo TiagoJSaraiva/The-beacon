@@ -1,0 +1,12 @@
+Refatorar mecânica de monitor.
+Atual: 3 monitores, um com fov da porta, dois com fov do mar (fovs complementam)
+Novo: Apenas um monitor. Interagir com E pra trocar de canal. Haverá 3 canais, cada um representando o fov de cada câmera que existe.
+
+Ajuste em atendimento de rádio: Rádio só toca quando barco estiver presente na câmera sincronizada com o monitor. Se houver barco em um canal do monitor que não está sendo exibido, rádio não toca. Quando canal é trocado enquanto rádio toca, rádio para de tocar, ele só toca enquanto houver barco no canal.
+
+Enquanto não há barco passando no canal aberto canal, tocar musiquinha ambiente de rádio.
+
+Presença da névoa: Vai ser mudada levemente:
+1 - A névoa ela aparece em algum momento da noite e não vai mais em bora. Apenas quando a noite vira, ela reseta. Quando aparece, fica em certo nível, e vai expandindo aos poucos, como já decidimos. 
+2 - Sobre a questão das duas cameras agora, que vão existir separamente para ter o ponto de vista pro mar, ambas pegam um trecho em comum, que é oque aparece a névoa, mas em uma ele aparece de um lado, em outra ele aparece do outro.
+3 - Uma das regras atuais do nevoeiro é que no fluxo de avanço dele, ele cobre as cameras que apontam pro mar em certo ponto, no mesmo momento em que começa a aparecer perto da entrada do farol, vamos remover isso, e em compensação, fazer com que, no nível máximo do nevoeiro, ele cubra o farol completamente, impedindo-o de iluminar o mar até que ele recue um pouco (por meio de exposição à luz do farol, que ainda continua pegando na nevoa, que está densa bem em volta da saída do feixe).
