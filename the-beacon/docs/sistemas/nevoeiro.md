@@ -23,7 +23,7 @@ Ameaça que surge no mar e avança até cobrir o feixe enquanto o farol está pa
   - `STAIRS`, `CABIN`: volumes e carrancas na escada e na cabine.
   - `TRAPDOOR` ou acima: desliga o trinco do alçapão e impede ligá-lo.
   - `BEAM`: bloqueia o feixe; volume denso em volta da cabeça do farol (`LampShroud`).
-- Rota dos barcos: o nevoeiro cobre um trecho centrado em `route_center` (fixo). A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho, centrada no nível da rota, e fica mais densa e mais alta com o avanço (`fog/sea_band_shape.gd`, `SeaBandShape`, puro). A profundidade acompanha o comprimento até `sea_band_half_depth`. A meia-altura começa igual ao meio-comprimento e chega a `sea_band_half_height` (60 m) em `NEAR`, passando do topo da imagem das câmeras do mar.
+- Rota dos barcos: o nevoeiro cobre um trecho centrado em `route_center` (fixo). A largura cresce com o avanço até `max_route_coverage` (< 1, nunca fecha a rota), atingida em `NEAR`. A faixa no mar acompanha esse trecho, centrada no nível da rota, e fica mais densa e mais alta com o avanço (`fog/sea_band_shape.gd`, `SeaBandShape`, puro). A profundidade acompanha o comprimento até `sea_band_half_depth`. A meia-altura começa igual ao meio-comprimento e chega a `sea_band_half_height` (60 m) em `NEAR`, passando do topo da imagem das câmeras do mar (`test/scenes/sea_cameras_test.gd`).
 - Cada volume esmaece ao entrar e sair do seu estágio (`FogVisuals.fade_per_second`).
 - Os volumes internos são cilindros retos dentro de um farol cônico: o raio de cada um cabe na parede no topo do trecho, para não vazar por fora, e sobra folga na parte baixa.
 - A noite seguinte começa sem nevoeiro.
@@ -36,4 +36,5 @@ Ameaça que surge no mar e avança até cobrir o feixe enquanto o farol está pa
 ## Testes
 - `test/unit/fog_state_test.gd`: surgimento por evento e por farol parado; não vai embora; avanço pelos estágios; recuo de uma vez só da última parada; recuo lento até o piso; espera com o feixe coberto; limiares; trecho da rota com centro fixo; `validate()` do recuo.
 - `test/unit/sea_band_shape_test.gd`: altura igual ao comprimento no surgimento e no máximo em `NEAR`, crescendo entre os dois; profundidade limitada; tamanho mínimo.
+- `test/scenes/sea_cameras_test.gd`: no crescimento máximo, o topo da face da frente da faixa passa da borda de cima das câmeras do mar.
 - `test/scenes/lighthouse_power_test.gd`: só `BEAM` bloqueia o feixe, sem parar o farol; dentro do farol estoura a mangueira.
