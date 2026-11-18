@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b0rdlbb4hq0bb"
-path.s3tc="res://.godot/imported/Generator_low_Chasis_Normal.png-8ffc2a04f3a6792474df6bb249b682e6.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Chasis_Normal.png-63fa66d9e87e5fd5388de5dedec554f9.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Chasis_Normal.png"
-dest_files=["res://.godot/imported/Generator_low_Chasis_Normal.png-8ffc2a04f3a6792474df6bb249b682e6.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Chasis_Normal.png"
+dest_files=["res://.godot/imported/Generator_low_Chasis_Normal.png-63fa66d9e87e5fd5388de5dedec554f9.s3tc.ctex"]
 
 [params]
 

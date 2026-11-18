@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d0fn0d605v03y"
-path.s3tc="res://.godot/imported/Generator_low_Wires_Normal.png-c1b6b4101c77827efa104407e8da9d32.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Wires_Normal.png-1ea44b694494c56bfd18e273f729ee27.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Wires_Normal.png"
-dest_files=["res://.godot/imported/Generator_low_Wires_Normal.png-c1b6b4101c77827efa104407e8da9d32.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Wires_Normal.png"
+dest_files=["res://.godot/imported/Generator_low_Wires_Normal.png-1ea44b694494c56bfd18e273f729ee27.s3tc.ctex"]
 
 [params]
 

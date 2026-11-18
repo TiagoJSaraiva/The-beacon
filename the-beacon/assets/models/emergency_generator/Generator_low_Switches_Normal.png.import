@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6bdoy1chnqo5"
-path.s3tc="res://.godot/imported/Generator_low_Switches_Normal.png-bab94eb9f8840162285ad2c2c06c6f55.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Switches_Normal.png-21fd79e6515cd1728284ee05f52643cb.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Switches_Normal.png"
-dest_files=["res://.godot/imported/Generator_low_Switches_Normal.png-bab94eb9f8840162285ad2c2c06c6f55.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Switches_Normal.png"
+dest_files=["res://.godot/imported/Generator_low_Switches_Normal.png-21fd79e6515cd1728284ee05f52643cb.s3tc.ctex"]
 
 [params]
 

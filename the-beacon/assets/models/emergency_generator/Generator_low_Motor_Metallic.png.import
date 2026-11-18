@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cjjr53ttnnqnx"
-path.s3tc="res://.godot/imported/Generator_low_Motor_Metallic.png-c31834066841d95088e93da57c66deb2.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Motor_Metallic.png-f7f300d03ad22ce3068e5505ddae9da5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Motor_Metallic.png"
-dest_files=["res://.godot/imported/Generator_low_Motor_Metallic.png-c31834066841d95088e93da57c66deb2.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Motor_Metallic.png"
+dest_files=["res://.godot/imported/Generator_low_Motor_Metallic.png-f7f300d03ad22ce3068e5505ddae9da5.s3tc.ctex"]
 
 [params]
 

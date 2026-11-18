@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2sbf8ej05h6m"
-path.s3tc="res://.godot/imported/Generator_low_Small_props_Roughness.png-14ac06bf3da55ce0857f2c90c1e8b487.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Small_props_Roughness.png-74241434c5daea86f8bd45c262e6e46c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Small_props_Roughness.png"
-dest_files=["res://.godot/imported/Generator_low_Small_props_Roughness.png-14ac06bf3da55ce0857f2c90c1e8b487.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Small_props_Roughness.png"
+dest_files=["res://.godot/imported/Generator_low_Small_props_Roughness.png-74241434c5daea86f8bd45c262e6e46c.s3tc.ctex"]
 
 [params]
 

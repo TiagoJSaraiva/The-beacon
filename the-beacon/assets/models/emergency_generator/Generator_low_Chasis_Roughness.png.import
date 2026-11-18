@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://03pin2jlklce"
-path.s3tc="res://.godot/imported/Generator_low_Chasis_Roughness.png-c54dd4f60c95f4be5c210a8eeaffd358.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Chasis_Roughness.png-8f9a4be19b4aa3a73aa6f494c56b0347.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Chasis_Roughness.png"
-dest_files=["res://.godot/imported/Generator_low_Chasis_Roughness.png-c54dd4f60c95f4be5c210a8eeaffd358.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Chasis_Roughness.png"
+dest_files=["res://.godot/imported/Generator_low_Chasis_Roughness.png-8f9a4be19b4aa3a73aa6f494c56b0347.s3tc.ctex"]
 
 [params]
 

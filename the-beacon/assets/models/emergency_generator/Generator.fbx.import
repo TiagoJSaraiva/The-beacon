@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c5cypqm5jleej"
-path="res://.godot/imported/Generator.fbx-e2ada1cc6620460a45c04f8e8dbd2445.scn"
+path="res://.godot/imported/Generator.fbx-7d21a0b8632a444e21550841405977b5.scn"
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator.fbx"
-dest_files=["res://.godot/imported/Generator.fbx-e2ada1cc6620460a45c04f8e8dbd2445.scn"]
+source_file="res://assets/models/emergency_generator/Generator.fbx"
+dest_files=["res://.godot/imported/Generator.fbx-7d21a0b8632a444e21550841405977b5.scn"]
 
 [params]
 
@@ -43,33 +43,33 @@ _subresources={
 "materials": {
 "Chasis": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/models/power_generator/materials/chasis.tres",
-"use_external/path": "res://assets/models/power_generator/materials/chasis.tres"
+"use_external/fallback_path": "res://assets/models/emergency_generator/materials/chasis.tres",
+"use_external/path": "res://assets/models/emergency_generator/materials/chasis.tres"
 },
 "Motor": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/models/power_generator/materials/motor.tres",
-"use_external/path": "res://assets/models/power_generator/materials/motor.tres"
+"use_external/fallback_path": "res://assets/models/emergency_generator/materials/motor.tres",
+"use_external/path": "res://assets/models/emergency_generator/materials/motor.tres"
 },
 "Small_props": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/models/power_generator/materials/small_props.tres",
-"use_external/path": "res://assets/models/power_generator/materials/small_props.tres"
+"use_external/fallback_path": "res://assets/models/emergency_generator/materials/small_props.tres",
+"use_external/path": "res://assets/models/emergency_generator/materials/small_props.tres"
 },
 "Switches": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/models/power_generator/materials/switches.tres",
-"use_external/path": "res://assets/models/power_generator/materials/switches.tres"
+"use_external/fallback_path": "res://assets/models/emergency_generator/materials/switches.tres",
+"use_external/path": "res://assets/models/emergency_generator/materials/switches.tres"
 },
 "Tank": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/models/power_generator/materials/tank.tres",
-"use_external/path": "res://assets/models/power_generator/materials/tank.tres"
+"use_external/fallback_path": "res://assets/models/emergency_generator/materials/tank.tres",
+"use_external/path": "res://assets/models/emergency_generator/materials/tank.tres"
 },
 "Wires": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/models/power_generator/materials/wires.tres",
-"use_external/path": "res://assets/models/power_generator/materials/wires.tres"
+"use_external/fallback_path": "res://assets/models/emergency_generator/materials/wires.tres",
+"use_external/path": "res://assets/models/emergency_generator/materials/wires.tres"
 }
 }
 }

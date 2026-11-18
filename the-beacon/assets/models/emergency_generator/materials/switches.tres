@@ -1,9 +1,9 @@
 [gd_resource type="StandardMaterial3D" format=3]
 
-[ext_resource type="Texture2D" uid="uid://bstpfgbg0wehj" path="res://assets/models/emergency_genarator/Generator_low_Switches_BaseColor.png" id="1_albedo"]
-[ext_resource type="Texture2D" uid="uid://0hrhktvt0f3w" path="res://assets/models/emergency_genarator/Generator_low_Switches_Metallic.png" id="2_metallic"]
-[ext_resource type="Texture2D" uid="uid://dl3mx7lu2272y" path="res://assets/models/emergency_genarator/Generator_low_Switches_Roughness.png" id="3_roughness"]
-[ext_resource type="Texture2D" uid="uid://6bdoy1chnqo5" path="res://assets/models/emergency_genarator/Generator_low_Switches_Normal.png" id="4_normal"]
+[ext_resource type="Texture2D" uid="uid://bstpfgbg0wehj" path="res://assets/models/emergency_generator/Generator_low_Switches_BaseColor.png" id="1_albedo"]
+[ext_resource type="Texture2D" uid="uid://0hrhktvt0f3w" path="res://assets/models/emergency_generator/Generator_low_Switches_Metallic.png" id="2_metallic"]
+[ext_resource type="Texture2D" uid="uid://dl3mx7lu2272y" path="res://assets/models/emergency_generator/Generator_low_Switches_Roughness.png" id="3_roughness"]
+[ext_resource type="Texture2D" uid="uid://6bdoy1chnqo5" path="res://assets/models/emergency_generator/Generator_low_Switches_Normal.png" id="4_normal"]
 
 [resource]
 resource_name = "Switches"

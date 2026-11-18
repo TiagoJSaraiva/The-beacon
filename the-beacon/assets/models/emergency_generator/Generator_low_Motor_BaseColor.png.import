@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://1fcbqr3bdyfi"
-path.s3tc="res://.godot/imported/Generator_low_Motor_BaseColor.png-d0d08ee4fb8afc4e703059a5a1e8b276.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Motor_BaseColor.png-655a50624b4d9e3eed3033cd060167b2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Motor_BaseColor.png"
-dest_files=["res://.godot/imported/Generator_low_Motor_BaseColor.png-d0d08ee4fb8afc4e703059a5a1e8b276.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Motor_BaseColor.png"
+dest_files=["res://.godot/imported/Generator_low_Motor_BaseColor.png-655a50624b4d9e3eed3033cd060167b2.s3tc.ctex"]
 
 [params]
 

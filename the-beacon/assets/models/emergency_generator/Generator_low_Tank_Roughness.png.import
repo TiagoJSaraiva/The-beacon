@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d0hiya4m3t22u"
-path.s3tc="res://.godot/imported/Generator_low_Tank_Roughness.png-80a166f01e78d0552dc30439d3ae6e35.s3tc.ctex"
+path.s3tc="res://.godot/imported/Generator_low_Tank_Roughness.png-81db3c83ee5efafc6b3eadf67cce9143.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/emergency_genarator/Generator_low_Tank_Roughness.png"
-dest_files=["res://.godot/imported/Generator_low_Tank_Roughness.png-80a166f01e78d0552dc30439d3ae6e35.s3tc.ctex"]
+source_file="res://assets/models/emergency_generator/Generator_low_Tank_Roughness.png"
+dest_files=["res://.godot/imported/Generator_low_Tank_Roughness.png-81db3c83ee5efafc6b3eadf67cce9143.s3tc.ctex"]
 
 [params]
 
