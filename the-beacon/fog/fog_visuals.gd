@@ -7,12 +7,13 @@ extends Node3D
 ## estado do FogSystem a cada frame.
 
 @export var fade_per_second: float = 0.5
-## Limites da metade da altura e da largura da faixa no mar; o comprimento vem do trecho da
-## rota. A altura passa do topo da imagem das câmeras.
+## Meia-altura da faixa no mar no crescimento máximo (NEAR): passa do topo da imagem das câmeras
+## do mar (`test/scenes/sea_cameras_test.gd`).
 @export var sea_band_half_height: float = 60.0
+## Limite da meia-profundidade da faixa; o comprimento vem do trecho da rota.
 @export var sea_band_half_depth: float = 45.0
-## Menor meio-comprimento da faixa: tamanho zero deixaria o volume degenerado.
-@export var sea_band_min_half_length: float = 0.5
+## Menor meia-medida da faixa: tamanho zero deixaria o volume degenerado.
+@export var sea_band_min_half_extent: float = 0.5
 
 var _fog: FogSystem
 var _boat_path: Path3D
@@ -21,13 +22,15 @@ var _stage_volumes: Dictionary[FogVolume, FogStage.Stage] = {}
 var _full_density: Dictionary[FogVolume, float] = {}
 ## Opacidade atual de cada volume, de 0 a 1.
 var _opacity: Dictionary[FogVolume, float] = {}
+var _sea_band_shape: SeaBandShape
 
 @onready var _sea_band: FogVolume = %SeaBand
 
 
-## Associa cada volume ao estágio em que ele aparece, guarda a densidade de cada um e começa
-## com todos invisíveis.
+## Associa cada volume ao estágio em que ele aparece, guarda a densidade de cada um, monta a regra
+## de tamanho da faixa e começa com todos invisíveis.
 func _ready() -> void:
+	_sea_band_shape = sea_band_shape()
 	_stage_volumes = {
 		%NearRing: FogStage.Stage.NEAR,
 		%GroundFloor: FogStage.Stage.GROUND_FLOOR,
@@ -51,10 +54,10 @@ func _process(delta: float) -> void:
 		_fade(volume, 1.0 if stage >= _stage_volumes[volume] else 0.0, delta)
 	var route: Vector2 = state.route_segment()
 	var has_route_fog: bool = route.y > route.x
-	if has_route_fog:
-		_place_sea_band(route)
-	# Mais denso à medida que avança, até o máximo em NEAR.
+	# Mais denso e mais alto à medida que avança, até o máximo em NEAR.
 	var growth: float = clampf(state.advance / state.config.near_advance, 0.0, 1.0)
+	if has_route_fog:
+		_place_sea_band(route, growth)
 	_fade(_sea_band, growth if has_route_fog else 0.0, delta)
 
 
@@ -64,28 +67,29 @@ func setup(fog: FogSystem, boat_path: Path3D) -> void:
 	_boat_path = boat_path
 
 
-## Posiciona, orienta e dimensiona a faixa sobre o trecho da rota (início, fim, em fração).
-func _place_sea_band(route: Vector2) -> void:
+## Devolve a regra de tamanho da faixa no mar com os limites deste nó.
+func sea_band_shape() -> SeaBandShape:
+	var shape := SeaBandShape.new()
+	shape.max_half_height = sea_band_half_height
+	shape.max_half_depth = sea_band_half_depth
+	shape.min_half_extent = sea_band_min_half_extent
+	return shape
+
+
+## Posiciona, orienta e dimensiona a faixa sobre o trecho da rota (início, fim, em fração),
+## conforme o crescimento do nevoeiro (0 a 1). O centro fica no nível da rota, onde a faixa é
+## mais densa.
+func _place_sea_band(route: Vector2, growth: float) -> void:
 	var curve: Curve3D = _boat_path.curve
 	var length: float = curve.get_baked_length()
 	var start: Vector3 = _boat_path.to_global(curve.sample_baked(route.x * length))
 	var end: Vector3 = _boat_path.to_global(curve.sample_baked(route.y * length))
 	var along: Vector3 = end - start
 	var x_axis: Vector3 = along.normalized()
-	var half_length: float = maxf(along.length() * 0.5, sea_band_min_half_length)
 	_sea_band.global_transform = Transform3D(
 		Basis(x_axis, Vector3.UP, x_axis.cross(Vector3.UP)), (start + end) * 0.5
 	)
-	# Altura e profundidade acompanham o comprimento: um trecho ainda estreito não vira uma
-	# coluna alta nem um rastro, e o nevoeiro sobe à medida que se espalha pela rota.
-	_sea_band.size = (
-		Vector3(
-			half_length,
-			minf(half_length, sea_band_half_height),
-			minf(half_length, sea_band_half_depth),
-		)
-		* 2.0
-	)
+	_sea_band.size = _sea_band_shape.half_extents(along.length() * 0.5, growth) * 2.0
 
 
 ## Aproxima a opacidade do volume do valor-alvo, na velocidade `fade_per_second`.
