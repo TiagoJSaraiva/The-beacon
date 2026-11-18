@@ -7,7 +7,9 @@ Ameaça que surge no mar e avança até cobrir o feixe enquanto o farol está pa
 - `fog/fog_state.gd` (`FogState`, puro): avanço de 0 a 1, surgimento, recuo e trecho da rota dos barcos. Para o painel de debug: `force_advance` e `clear`.
 - `fog/fog_stage.gd` (`FogStage`, puro): estágios pelo avanço, o avanço em que cada um começa (`threshold`) e o que cada um implica.
 - `fog/fog_system.gd` (`FogSystem`, nó no `World`): roda o estado conforme o farol opera e avisa estágio e trecho da rota. `frozen` (painel de debug) para o avanço.
-- `fog/fog_visuals.tscn` (`FogVisuals`, nó no `World`) e `fog/fog_volume.gdshader`: volumes de nevoeiro falso (o renderizador Compatibility não tem névoa volumétrica). O shader mede quanto do raio de visão atravessa a caixa ou o cilindro até a primeira superfície da cena: paredes cortam o nevoeiro e dá para estar dentro dele. Com `edge_fade` ou `top_fade`, usados só na faixa e no anel, amostra o raio em `march_steps` passos para a densidade cair até zero nas bordas (decisão 0020).
+- `fog/fog_visuals.tscn` (`FogVisuals`, nó no `World`): um `FogVolume` por área, cada um com `FogMaterial` próprio (decisão 0025). A névoa volumétrica está ligada no `Environment` do mundo e no das câmeras, com densidade global zero: só os volumes têm nevoeiro. Ele é iluminado pela luz ambiente (`volumetric_fog_ambient_inject`) e pelas luzes da cena. A faixa e o anel usam `edge_fade` alto para a densidade cair até zero nas bordas.
+  - Sem `emission` no `FogMaterial`: o Godot soma a emissão num inteiro compactado, e nos voxels distantes o azul transborda para o verde.
+  - Sem `height_falloff`: abaixo da origem do volume ele aumenta a densidade, e a faixa desce abaixo do mar.
 
 ## Regras
 - Avanço de 0% (acabou de surgir) a 100% (cobre o feixe). Estágios (`FogConfig`): `NONE` (0), `SEA` (> 0), `NEAR` (`near_advance`, perto da entrada), `GROUND_FLOOR`, `STAIRS`, `TRAPDOOR`, `CABIN`, `BEAM` (`beam_cover_advance`, 1,0).
@@ -16,7 +18,7 @@ Ameaça que surge no mar e avança até cobrir o feixe enquanto o farol está pa
 - Farol volta a operar depois de uma parada: devolve de uma vez `recoil_ratio` (50%) do que avançou nessa parada. Depois, enquanto opera, recua a `recede_per_second` (mais lento que o avanço; o `validate()` exige) até `start_advance`.
 - No estágio `BEAM`, o recuo de uma vez espera `unblock_seconds` de farol operando; parar de novo reinicia a espera. Só nesse estágio o feixe fica bloqueado (`Lighthouse.set_fog_stage`).
 - Efeitos por estágio:
-  - `NEAR` ou acima: o anel em volta do farol aparece na câmera da porta. As câmeras do mar não o veem (camada de render `fog_near_ring`, fora do `cull_mask` delas).
+  - `NEAR` ou acima: o anel em volta do farol aparece na câmera da porta. As câmeras do mar e a do jogador não o veem (camada de render `fog_near_ring`, fora do `cull_mask` delas): dentro do farol, ele somaria ao nevoeiro interno.
   - `GROUND_FLOOR` ou acima: na primeira vez, estoura a mangueira. Volume no térreo. Aproximação do Afogado. Carrancas no térreo.
   - `STAIRS`, `CABIN`: volumes e carrancas na escada e na cabine.
   - `TRAPDOOR` ou acima: desliga o trinco do alçapão e impede ligá-lo.

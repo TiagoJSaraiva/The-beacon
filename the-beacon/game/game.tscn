@@ -34,7 +34,7 @@ ambient_light_color = Color(0.25, 0.3, 0.4, 1)
 ambient_light_energy = 0.7
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
-volumetric_fog_ambient_inject = 1.0
+volumetric_fog_ambient_inject = 1.5
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_world"]
 geometry_parsed_geometry_type = 1

@@ -1,107 +1,79 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://our5wojy0jh7"]
 
-[ext_resource type="Script" path="res://fog/fog_visuals.gd" id="1_visuals"]
-[ext_resource type="Shader" path="res://fog/fog_volume.gdshader" id="2_shader"]
+[ext_resource type="Script" uid="uid://7yfeu4cfhyja" path="res://fog/fog_visuals.gd" id="1_visuals"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_volume"]
-size = Vector3(2, 2, 2)
+[sub_resource type="FogMaterial" id="FogMaterial_sea"]
+density = 0.05
+albedo = Color(1, 1, 1, 1)
+edge_fade = 0.9
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_volume"]
-top_radius = 1.0
-bottom_radius = 1.0
-height = 2.0
-radial_segments = 32
-rings = 1
+[sub_resource type="FogMaterial" id="FogMaterial_near"]
+density = 0.05
+albedo = Color(1, 1, 1, 1)
+edge_fade = 0.6
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sea"]
-render_priority = 1
-shader = ExtResource("2_shader")
-shader_parameter/density = 0.05
-shader_parameter/edge_fade = 0.9
-shader_parameter/top_fade = 1.0
+[sub_resource type="FogMaterial" id="FogMaterial_ground_floor"]
+density = 0.15
+albedo = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_near"]
-render_priority = 1
-shader = ExtResource("2_shader")
-shader_parameter/density = 0.05
-shader_parameter/is_cylinder = true
-shader_parameter/inner_radius = 0.306
-shader_parameter/edge_fade = 0.6
-shader_parameter/top_fade = 1.0
+[sub_resource type="FogMaterial" id="FogMaterial_stairs"]
+density = 0.15
+albedo = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ground_floor"]
-render_priority = 1
-shader = ExtResource("2_shader")
-shader_parameter/density = 0.15
-shader_parameter/is_cylinder = true
+[sub_resource type="FogMaterial" id="FogMaterial_cabin"]
+density = 0.15
+albedo = Color(1, 1, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_stairs"]
-render_priority = 1
-shader = ExtResource("2_shader")
-shader_parameter/density = 0.15
-shader_parameter/is_cylinder = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cabin"]
-render_priority = 1
-shader = ExtResource("2_shader")
-shader_parameter/density = 0.15
-shader_parameter/is_cylinder = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lamp_shroud"]
-render_priority = 1
-shader = ExtResource("2_shader")
-shader_parameter/density = 0.4
-shader_parameter/is_cylinder = true
-shader_parameter/edge_fade = 0.5
-shader_parameter/top_fade = 0.5
+[sub_resource type="FogMaterial" id="FogMaterial_lamp_shroud"]
+density = 0.4
+albedo = Color(1, 1, 1, 1)
+edge_fade = 0.5
 
 [node name="FogVisuals" type="Node3D"]
 script = ExtResource("1_visuals")
 
-[node name="SeaBand" type="MeshInstance3D" parent="."]
+[node name="SeaBand" type="FogVolume" parent="."]
 unique_name_in_owner = true
 visible = false
-cast_shadow = 0
-mesh = SubResource("BoxMesh_volume")
-material_override = SubResource("ShaderMaterial_sea")
+material = SubResource("FogMaterial_sea")
 
-[node name="NearRing" type="MeshInstance3D" parent="."]
+[node name="NearRing" type="FogVolume" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(23.5, 0, 0, 0, 11, 0, 0, 0, 23.5, 0, 9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 layers = 2
-cast_shadow = 0
-mesh = SubResource("CylinderMesh_volume")
-material_override = SubResource("ShaderMaterial_near")
+size = Vector3(47, 22, 47)
+shape = 2
+material = SubResource("FogMaterial_near")
 
-[node name="GroundFloor" type="MeshInstance3D" parent="."]
+[node name="GroundFloor" type="FogVolume" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(6.6, 0, 0, 0, 1.92, 0, 0, 0, 6.6, 0, 1.92, 0)
-cast_shadow = 0
-mesh = SubResource("CylinderMesh_volume")
-material_override = SubResource("ShaderMaterial_ground_floor")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.92, 0)
+size = Vector3(13.2, 3.84, 13.2)
+shape = 2
+material = SubResource("FogMaterial_ground_floor")
 
-[node name="Stairs" type="MeshInstance3D" parent="."]
+[node name="Stairs" type="FogVolume" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(6, 0, 0, 0, 3.38, 0, 0, 0, 6, 0, 7.22, 0)
-cast_shadow = 0
-mesh = SubResource("CylinderMesh_volume")
-material_override = SubResource("ShaderMaterial_stairs")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.22, 0)
+size = Vector3(12, 6.76, 12)
+shape = 2
+material = SubResource("FogMaterial_stairs")
 
-[node name="Cabin" type="MeshInstance3D" parent="."]
+[node name="Cabin" type="FogVolume" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(5.5, 0, 0, 0, 1.5, 0, 0, 0, 5.5, 0, 12.3, 0)
-cast_shadow = 0
-mesh = SubResource("CylinderMesh_volume")
-material_override = SubResource("ShaderMaterial_cabin")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.3, 0)
+size = Vector3(11, 3, 11)
+shape = 2
+material = SubResource("FogMaterial_cabin")
 
-[node name="LampShroud" type="MeshInstance3D" parent="."]
+[node name="LampShroud" type="FogVolume" parent="."]
 unique_name_in_owner = true
 visible = false
-transform = Transform3D(2.5, 0, 0, 0, 1.6, 0, 0, 0, 2.5, -0.4, 14.6, -2.4)
-cast_shadow = 0
-mesh = SubResource("CylinderMesh_volume")
-material_override = SubResource("ShaderMaterial_lamp_shroud")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 14.6, -2.4)
+size = Vector3(5, 3.2, 5)
+shape = 0
+material = SubResource("FogMaterial_lamp_shroud")

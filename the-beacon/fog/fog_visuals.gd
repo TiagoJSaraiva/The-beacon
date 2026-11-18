@@ -1,26 +1,32 @@
 class_name FogVisuals
 extends Node3D
-## Nevoeiro visível (entrega 2): uma faixa no trecho coberto da rota dos barcos, um anel em
-## volta do farol a partir de NEAR (só na câmera da porta: a camada de render dele fica fora das
-## câmeras do mar), um volume por área interna e um em volta da cabeça do farol no estágio BEAM.
-## Cada volume esmaece ao entrar e sair do seu estágio. Lê o estado do FogSystem a cada frame.
+## Nevoeiro visível (entrega 2), por névoa volumétrica (decisão 0025): uma faixa no trecho coberto
+## da rota dos barcos, um anel em volta do farol a partir de NEAR (só na câmera da porta: a camada
+## de render dele fica fora das outras câmeras), um volume por área interna e um em volta da
+## cabeça do farol no estágio BEAM. Cada volume esmaece ao entrar e sair do seu estágio. Lê o
+## estado do FogSystem a cada frame.
 
 @export var fade_per_second: float = 0.5
 ## Limites da metade da altura e da largura da faixa no mar; o comprimento vem do trecho da
 ## rota. A altura passa do topo da imagem das câmeras.
 @export var sea_band_half_height: float = 60.0
 @export var sea_band_half_depth: float = 45.0
-## Menor meio-comprimento da faixa: escala zero deixaria o volume degenerado.
+## Menor meio-comprimento da faixa: tamanho zero deixaria o volume degenerado.
 @export var sea_band_min_half_length: float = 0.5
 
 var _fog: FogSystem
 var _boat_path: Path3D
-var _stage_volumes: Dictionary[MeshInstance3D, FogStage.Stage] = {}
+var _stage_volumes: Dictionary[FogVolume, FogStage.Stage] = {}
+## Densidade de cada volume com opacidade total, lida do material da cena.
+var _full_density: Dictionary[FogVolume, float] = {}
+## Opacidade atual de cada volume, de 0 a 1.
+var _opacity: Dictionary[FogVolume, float] = {}
 
-@onready var _sea_band: MeshInstance3D = %SeaBand
+@onready var _sea_band: FogVolume = %SeaBand
 
 
-## Associa cada volume ao estágio em que ele aparece e começa com todos invisíveis.
+## Associa cada volume ao estágio em que ele aparece, guarda a densidade de cada um e começa
+## com todos invisíveis.
 func _ready() -> void:
 	_stage_volumes = {
 		%NearRing: FogStage.Stage.NEAR,
@@ -29,7 +35,8 @@ func _ready() -> void:
 		%Cabin: FogStage.Stage.CABIN,
 		%LampShroud: FogStage.Stage.BEAM,
 	}
-	for volume: MeshInstance3D in _all_volumes():
+	for volume: FogVolume in _all_volumes():
+		_full_density[volume] = (volume.material as FogMaterial).density
 		_set_opacity(volume, 0.0)
 
 
@@ -40,7 +47,7 @@ func _process(delta: float) -> void:
 		return
 	var state: FogState = _fog.state
 	var stage: FogStage.Stage = state.stage()
-	for volume: MeshInstance3D in _stage_volumes:
+	for volume: FogVolume in _stage_volumes:
 		_fade(volume, 1.0 if stage >= _stage_volumes[volume] else 0.0, delta)
 	var route: Vector2 = state.route_segment()
 	var has_route_fog: bool = route.y > route.x
@@ -57,7 +64,7 @@ func setup(fog: FogSystem, boat_path: Path3D) -> void:
 	_boat_path = boat_path
 
 
-## Posiciona e dimensiona a faixa sobre o trecho da rota (início, fim, em fração).
+## Posiciona, orienta e dimensiona a faixa sobre o trecho da rota (início, fim, em fração).
 func _place_sea_band(route: Vector2) -> void:
 	var curve: Curve3D = _boat_path.curve
 	var length: float = curve.get_baked_length()
@@ -66,32 +73,35 @@ func _place_sea_band(route: Vector2) -> void:
 	var along: Vector3 = end - start
 	var x_axis: Vector3 = along.normalized()
 	var half_length: float = maxf(along.length() * 0.5, sea_band_min_half_length)
+	_sea_band.global_transform = Transform3D(
+		Basis(x_axis, Vector3.UP, x_axis.cross(Vector3.UP)), (start + end) * 0.5
+	)
 	# Altura e profundidade acompanham o comprimento: um trecho ainda estreito não vira uma
 	# coluna alta nem um rastro, e o nevoeiro sobe à medida que se espalha pela rota.
-	var band_basis := Basis(
-		x_axis * half_length,
-		Vector3.UP * minf(half_length, sea_band_half_height),
-		x_axis.cross(Vector3.UP) * minf(half_length, sea_band_half_depth)
+	_sea_band.size = (
+		Vector3(
+			half_length,
+			minf(half_length, sea_band_half_height),
+			minf(half_length, sea_band_half_depth),
+		)
+		* 2.0
 	)
-	_sea_band.global_transform = Transform3D(band_basis, (start + end) * 0.5)
 
 
 ## Aproxima a opacidade do volume do valor-alvo, na velocidade `fade_per_second`.
-func _fade(volume: MeshInstance3D, target: float, delta: float) -> void:
-	var material := volume.material_override as ShaderMaterial
-	var opacity: float = material.get_shader_parameter("opacity")
-	_set_opacity(volume, move_toward(opacity, target, fade_per_second * delta))
+func _fade(volume: FogVolume, target: float, delta: float) -> void:
+	_set_opacity(volume, move_toward(_opacity[volume], target, fade_per_second * delta))
 
 
-## Aplica a opacidade ao shader e esconde o volume quando ela é zero.
-func _set_opacity(volume: MeshInstance3D, opacity: float) -> void:
-	var material := volume.material_override as ShaderMaterial
-	material.set_shader_parameter("opacity", opacity)
+## Escala a densidade do volume pela opacidade e esconde o volume quando ela é zero.
+func _set_opacity(volume: FogVolume, opacity: float) -> void:
+	_opacity[volume] = opacity
+	(volume.material as FogMaterial).density = _full_density[volume] * opacity
 	volume.visible = opacity > 0.0
 
 
 ## Devolve a faixa no mar e todos os volumes por estágio.
-func _all_volumes() -> Array[MeshInstance3D]:
-	var volumes: Array[MeshInstance3D] = [_sea_band]
+func _all_volumes() -> Array[FogVolume]:
+	var volumes: Array[FogVolume] = [_sea_band]
 	volumes.append_array(_stage_volumes.keys())
 	return volumes
