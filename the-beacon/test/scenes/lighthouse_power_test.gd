@@ -87,6 +87,20 @@ func test_jerrycan_goes_from_slot_to_floor_and_back() -> void:
 	assert_float(lighthouse.emergency_generator.state.fuel).is_equal_approx(10.0 + poured_in, 0.001)
 
 
+func test_only_the_emergency_generator_takes_the_jerrycan() -> void:
+	var runner := scene_runner(LIGHTHOUSE)
+	var lighthouse: Lighthouse = runner.scene()
+	await runner.simulate_frames(2)
+	assert_object(lighthouse.main_generator.fuel_inlet).is_null()
+	assert_object(lighthouse.emergency_generator.fuel_inlet).is_not_null()
+
+	# O despejo sai da boca de combustível e chega ao farol, que transfere o galão.
+	lighthouse.emergency_generator.state.fuel = 10.0
+	lighthouse.jerrycan.state.amount = 5.0
+	lighthouse.emergency_generator.fuel_inlet.pour_completed.emit()
+	assert_float(lighthouse.emergency_generator.state.fuel).is_equal_approx(15.0, 0.001)
+
+
 ## Mira o galão de cima, como o jogador em pé, e usa a tecla de interagir pelo raio real.
 func _pick_up_with_ray(runner: GdUnitSceneRunner, lighthouse: Lighthouse) -> void:
 	var center: Vector3 = lighthouse.jerrycan.global_position + Vector3.UP * 0.2

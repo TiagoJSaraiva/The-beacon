@@ -1,34 +1,31 @@
 class_name Generator
 extends Node3D
-## Gerador (decisão 0017). A mesma cena serve ao gerador principal, alimentado pela
-## mangueira do tanque, e ao de emergência, abastecido com o galão. Alimenta só a casa de
-## máquinas e a lâmpada; quem decide a fonte ativa é o farol.
+## Gerador (decisão 0017). Cada papel tem a sua cena: o principal (`main_generator.tscn`) é
+## alimentado pela mangueira do tanque, e o de emergência (`emergency_generator.tscn`) é
+## abastecido com o galão pela boca de combustível. Alimenta só a casa de máquinas e a lâmpada;
+## quem decide a fonte ativa é o farol.
 
 signal power_changed(powered: bool)
 ## Jogador segurou E na boca de combustível com o galão; o farol faz a transferência.
 signal refuel_requested
 
 @export var feed: GeneratorState.Feed = GeneratorState.Feed.FUEL
+## Boca de combustível com medidor. Só o gerador abastecido com o galão tem uma.
+@export var fuel_inlet: FuelInlet
 
 var state: GeneratorState
 
 var _was_running: bool = false
 
-@onready var _gauge: Node3D = %Gauge
-@onready var _gauge_pivot: Node3D = %GaugePivot
-@onready var _fuel_cap: Node3D = %FuelCap
-@onready var _pour_point: Interactable = %PourPoint
 @onready var _hum: LoopingSound = %Hum
 
 
-## Cria o estado com valores padrão e mostra medidor, tampa e boca só no papel por combustível.
+## Cria o estado com valores padrão e avisa se o papel por combustível ficou sem boca.
 func _ready() -> void:
+	if feed == GeneratorState.Feed.FUEL and fuel_inlet == null:
+		push_warning("%s: gerador por combustível sem FuelInlet; o galão não o abastece." % name)
 	# Valores padrão até o configure(): o farol consulta o estado logo ao montar.
 	state = GeneratorState.new(PowerConfig.new(), feed)
-	var uses_fuel: bool = feed == GeneratorState.Feed.FUEL
-	_gauge.visible = uses_fuel
-	_fuel_cap.visible = uses_fuel
-	_pour_point.enabled = uses_fuel
 	_was_running = state.is_running()
 	_refresh()
 
@@ -44,7 +41,8 @@ func configure(power: PowerConfig) -> void:
 	var hose_intact: bool = state.hose_intact
 	state = GeneratorState.new(power, feed)
 	state.hose_intact = hose_intact
-	_pour_point.hold_seconds = power.jerrycan_pour_seconds
+	if fuel_inlet != null:
+		fuel_inlet.set_pour_seconds(power.jerrycan_pour_seconds)
 	_refresh()
 
 
@@ -68,7 +66,8 @@ func set_in_use(in_use: bool) -> void:
 
 ## Atualiza medidor e zumbido e emite `power_changed` só quando a energia muda.
 func _refresh() -> void:
-	_gauge_pivot.scale.y = maxf(state.fuel_ratio(), 0.001)
+	if fuel_inlet != null:
+		fuel_inlet.show_fuel_ratio(state.fuel_ratio())
 	var running: bool = state.is_running()
 	# O de emergência só faz barulho quando está de fato alimentando o farol.
 	_hum.set_active(running and (feed == GeneratorState.Feed.HOSE or state.in_use))
@@ -77,6 +76,6 @@ func _refresh() -> void:
 		power_changed.emit(running)
 
 
-## Pede para despejar o galão ao completar a barra.
-func _on_pour_point_hold_completed() -> void:
+## Pede para despejar o galão quando a boca de combustível avisa o despejo.
+func _on_fuel_inlet_pour_completed() -> void:
 	refuel_requested.emit()

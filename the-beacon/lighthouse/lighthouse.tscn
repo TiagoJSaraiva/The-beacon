@@ -5,7 +5,8 @@
 [ext_resource type="PackedScene" path="res://lighthouse/entrance_door.tscn" id="3_door"]
 [ext_resource type="Script" uid="uid://d015ev76gt87w" path="res://lighthouse/lighthouse.gd" id="4_lighthouse"]
 [ext_resource type="PackedScene" path="res://night/wall_clock.tscn" id="5_clock"]
-[ext_resource type="PackedScene" uid="uid://dn75cym17wjl8" path="res://power/generator.tscn" id="6_generator"]
+[ext_resource type="PackedScene" uid="uid://dn75cym17wjl8" path="res://power/emergency_generator.tscn" id="6_generator"]
+[ext_resource type="PackedScene" path="res://power/main_generator.tscn" id="18_main_generator"]
 [ext_resource type="PackedScene" uid="uid://dhxd7dkthwq2n" path="res://fuel/fuel_tank.tscn" id="9_tank"]
 [ext_resource type="PackedScene" uid="uid://clqfnk365k1p6" path="res://fuel/jerrycan.tscn" id="10_jerrycan"]
 [ext_resource type="PackedScene" uid="uid://tgoqtleobfy" path="res://beam/lighthouse_lamp.tscn" id="11_lamp"]
@@ -125,10 +126,9 @@ material = SubResource("StandardMaterial3D_wood")
 unique_name_in_owner = true
 transform = Transform3D(-0.77301, 0, -0.63439, 0, 1, 0, 0.63439, 0, -0.77301, 3.4574, 13.453152, 4.2129)
 
-[node name="MainGenerator" parent="." unique_id=904717009 instance=ExtResource("6_generator")]
+[node name="MainGenerator" parent="." unique_id=904717009 instance=ExtResource("18_main_generator")]
 unique_name_in_owner = true
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.4789524, 0, 3.3948839)
-feed = 0
 
 [node name="EmergencyGenerator" parent="." unique_id=1992588035 instance=ExtResource("6_generator")]
 unique_name_in_owner = true
