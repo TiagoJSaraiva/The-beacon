@@ -3,7 +3,11 @@
 [ext_resource type="Script" uid="uid://drdowkcts05vw" path="res://fuel/fuel_tank.gd" id="1_tank"]
 [ext_resource type="PackedScene" path="res://fuel/jerrycan_slot.tscn" id="2_slot"]
 [ext_resource type="AudioStream" uid="uid://dtxhjisyvurp4" path="res://assets/audio/placeholder/bang.wav" id="3_bang"]
-[ext_resource type="PackedScene" uid="uid://c2i82ug1tcmt6" path="res://assets/models/gas_tank/PropaneTank01.fbx" id="4_d2inx"]
+[ext_resource type="PackedScene" path="res://assets/models/gas_tank/gas_tank.tscn" id="4_model"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vessel"]
+height = 9.0
+radius = 1.39
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hose"]
 albedo_color = Color(0.08, 0.08, 0.08, 1)
@@ -64,5 +68,12 @@ bus = &"SFX"
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, 0)
 
-[node name="PropaneTank01" parent="." unique_id=1643862937 instance=ExtResource("4_d2inx")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.167521, -0.85293996, 0.06971073)
+[node name="Body" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.1675, 1.81, 0.109)
+shape = SubResource("CylinderShape3D_vessel")
+
+[node name="Model" parent="Body" unique_id=1643862937 instance=ExtResource("4_model")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.167521, -0.85293996, 0.10831073)

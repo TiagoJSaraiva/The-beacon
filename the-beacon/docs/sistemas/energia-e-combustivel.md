@@ -8,7 +8,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
   - `power/main_generator.tscn` (`MainGenerator`, térreo, `feed = HOSE`, modelo `main_generator`): funciona enquanto a mangueira está inteira; sem medidor nem boca de combustível.
   - `power/emergency_generator.tscn` (`EmergencyGenerator`, `feed = FUEL`, modelo `emergency_generator`): combustível e o componente `FuelInlet`.
 - `power/fuel_inlet.tscn` (`FuelInlet`): medidor (barra), tampa e boca para o galão (topo). Mostra o nível que o gerador passa e emite `pour_completed`; o gerador o recebe por `@export var fuel_inlet` e reclama no console se o papel por combustível ficar sem ele.
-- `fuel/fuel_tank.tscn` (`FuelTank`, térreo): reserva infinita; mangueira até o gerador principal; estourada, some e fica o toco com a poça. Contém o `JerrycanSlot`. `debug_burst_on_start` começa a noite com ela estourada (só depuração).
+- `fuel/fuel_tank.tscn` (`FuelTank`, térreo, modelo `gas_tank`): reserva infinita; colisão cilíndrica só no corpo do tanque, deixando livre o vão do slot embaixo dele; mangueira até o gerador principal; estourada, some e fica o toco com a poça. Contém o `JerrycanSlot`. `debug_burst_on_start` começa a noite com ela estourada (só depuração).
 - `fuel/jerrycan_slot.tscn` (`JerrycanSlot`): prateleira no tanque; com o galão devolvido, enche-o e mostra o nível dele (barra).
 - `fuel/jerrycan.tscn` (`Jerrycan`, `RigidBody3D` na camada `props`, regra `JerrycanState`): no slot (parado), na mão (escondido, sem colisão) ou solto no mundo (com física).
 - Fiação em `Lighthouse` (energia, galão) e no `Player` (soltar).

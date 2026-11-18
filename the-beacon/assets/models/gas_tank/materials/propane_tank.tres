@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/models/gas_tank/textures/propane_tank_albedo.png" id="1_albedo"]
+[ext_resource type="Texture2D" path="res://assets/models/gas_tank/textures/propane_tank_roughness.png" id="2_roughness"]
+[ext_resource type="Texture2D" path="res://assets/models/gas_tank/textures/propane_tank_normal.png" id="3_normal"]
+
+[resource]
+resource_name = "PropaneTank"
+albedo_texture = ExtResource("1_albedo")
+roughness_texture = ExtResource("2_roughness")
+normal_enabled = true
+normal_texture = ExtResource("3_normal")
