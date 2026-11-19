@@ -5,8 +5,8 @@ Greybox dos dois andares, escada em caracol, porta de entrada e alçapão (GDD 1
 
 ## Componentes
 - `lighthouse/lighthouse.tscn` (`Lighthouse`, `lighthouse.gd`, grupo `navigation_source`): CSG com colisão. Farol cônico: `Outer` e `Inner` são `CSGPolygon3D` girados (32 lados planos). Raio interno de 6,5 m no chão a 5,5 m em y=10,8, reto na cabine; parede de 0,5 m na horizontal; térreo em y=0; cabine (andar de cima) em y=10,8, sem janelas; teto em 13,8 m.
-- `lighthouse/spiral_staircase.gd` (`@tool`): rampa em segmentos gerada por parâmetros. Hoje: na base, raio interno 4.9 e externo 6.5; os dois encolhem 0.778 até o topo (`radius_shrink`), acompanhando a parede. Vai de 0 a 8.4 m em 0.9 volta, começando em 36° e terminando em 360° (x≈4.9, z=0). Ao mudar a inclinação da parede, ajuste também `radius_shrink`. Guarda-corpo baixo na borda interna enquanto o degrau está abaixo de 1 m.
-- `Landing` (patamar em 8.4 m, à frente do fim da escada, x 4.12–5.52, z −0.1–1.5) e `Ramp` (35°, sobe em −X de x=4.12 até x=0.72 em y=10.8, z 0.05–1.45).
+- `lighthouse/spiral_staircase.gd` (`@tool`): rampa em segmentos gerada por parâmetros. Hoje: na base, raio interno 4.9 e externo 6.5; os dois encolhem 0.778 até o topo (`radius_shrink`), acompanhando a parede. O nó é girado 62° em Y; vai de 0 a 8.4 m em 1.045 volta, seguindo a parede, e termina em (4.85; 8.4; −0.84), na entrada do patamar sob o alçapão. Ao mudar a inclinação da parede, ajuste também `radius_shrink`. Guarda-corpo baixo na borda interna enquanto o degrau está abaixo de 1 m.
+- `LadderLanding` (patamar com topo em 8.4 m, x 4.05–5.75, z −0.9–1.1): embaixo do vão do alçapão, no fim da escada.
 - Passagens (decisão 0019): a raiz de cada cena é o buraco, um `CSGBox3D` de subtração. Para mover, arraste o nó dentro do pai CSG; ele precisa continuar filho direto desse pai.
 - `lighthouse/trapdoor.tscn` (`Trapdoor`, filho de `UpperFloor`): buraco no piso de cima em x 0.72–4.32, z 0–1.5. Dobradiça na borda longa (z=−0.05); o painel (3.7 × 1.6) abre girando para cima em X. Interativo para abrir e fechar, e trinco ao lado que liga e desliga (regras em `TrapdoorRules`; `toggle_latch()` é público para o painel de debug).
 - `lighthouse/entrance_door.tscn` (`EntranceDoor`, filho de `Shell`): buraco e folha de 1,4 × 2,2 m, no centro de uma face plana da parede (−50,625°). A folha é vertical, em r≈6,53, rente à face interna no chão; por dentro, o vão fica mais fundo no alto. Painel na camada `barriers`; a folha visível anima à parte no arrombamento; barulho de aproximação do lado de fora.
@@ -16,7 +16,7 @@ Greybox dos dois andares, escada em caracol, porta de entrada e alçapão (GDD 1
 
 ## Regras
 - Queda do patamar (8.4 m) até o térreo é fatal com a config padrão; do meio da escada, só bloqueia a corrida.
-- A geometria evita sobrepor, na mesma posição horizontal, piso andável de níveis diferentes no encontro escada/patamar: o Recast soldava vértices entre eles e quebrava a navmesh. A folga sob o piso de cima onde a rampa passa é de pelo menos 2.1 m.
+- A geometria evita sobrepor, na mesma posição horizontal, piso andável de níveis diferentes no encontro escada/patamar: o Recast soldava vértices entre eles e quebrava a navmesh. A escada não passa de 8.4 m, para deixar 2.1 m de folga sob a laje do piso de cima (fundo em 10.5).
 - Alçapão: `CLOSED` ou `OPEN`. Abre e fecha e liga o trinco só com os pés do jogador acima da dobradiça (`min_user_height`); exige mãos livres.
   - Trinco: liga e desliga com o alçapão fechado, segurando E por `latch_toggle_seconds` (0 = um toque). Trancado, o alçapão não abre.
   - Nevoeiro em `TRAPDOOR` ou acima desliga o trinco e impede ligá-lo; depois de ele sair, só passado `latch_relock_cooldown_seconds`.

@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://d015ev76gt87w" path="res://lighthouse/lighthouse.gd" id="4_lighthouse"]
 [ext_resource type="PackedScene" path="res://night/wall_clock.tscn" id="5_clock"]
 [ext_resource type="PackedScene" uid="uid://dn75cym17wjl8" path="res://power/emergency_generator.tscn" id="6_generator"]
-[ext_resource type="PackedScene" path="res://power/main_generator.tscn" id="18_main_generator"]
 [ext_resource type="PackedScene" uid="uid://dhxd7dkthwq2n" path="res://fuel/fuel_tank.tscn" id="9_tank"]
 [ext_resource type="PackedScene" uid="uid://clqfnk365k1p6" path="res://fuel/jerrycan.tscn" id="10_jerrycan"]
 [ext_resource type="PackedScene" uid="uid://tgoqtleobfy" path="res://beam/lighthouse_lamp.tscn" id="11_lamp"]
@@ -16,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://player/chair.tscn" id="15_chair"]
 [ext_resource type="PackedScene" uid="uid://c4dtmuijputsa" path="res://machine_house/machine_house.tscn" id="16_machine"]
 [ext_resource type="PackedScene" path="res://assets/models/old_wooden_table/old_wooden_table.tscn" id="17_table"]
+[ext_resource type="PackedScene" path="res://power/main_generator.tscn" id="18_main_generator"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -106,20 +106,14 @@ inner_radius = 4.9
 outer_radius = 6.5
 radius_shrink = 0.778
 end_height = 8.4
-turns = 0.9
+turns = 1.045
 start_angle_degrees = 36.0
 material = SubResource("StandardMaterial3D_wood")
 
-[node name="Landing" type="CSGBox3D" parent="." unique_id=1640779273]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.82, 8.275, 0.7)
+[node name="LadderLanding" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 8.275, 0.1)
 use_collision = true
-size = Vector3(1.4, 0.25, 1.6)
-material = SubResource("StandardMaterial3D_wood")
-
-[node name="Ramp" type="CSGBox3D" parent="." unique_id=988585718]
-transform = Transform3D(0.8169, 0.5767, 0, -0.5767, 0.8169, 0, 0, 0, 1, 2.42, 9.447, 0.75)
-use_collision = true
-size = Vector3(4.16, 0.25, 1.4)
+size = Vector3(1.7, 0.25, 2)
 material = SubResource("StandardMaterial3D_wood")
 
 [node name="WallClock" parent="." unique_id=390582730 instance=ExtResource("5_clock")]
@@ -213,4 +207,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 
 [node name="TrapdoorBelow" type="Marker3D" parent="DrownedTargets" unique_id=1728830340]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72, 8.7, 0.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 8.7, 0.1)

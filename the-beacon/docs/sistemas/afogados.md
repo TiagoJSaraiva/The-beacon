@@ -9,7 +9,7 @@ A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, e
 - `drowned/drowned_brain.gd` (`DrownedBrain`, puro): perseguir, bater, cansar, descansar.
 - `drowned/drowned.tscn` (`Drowned`, `CharacterBody3D` na camada `drowned`, colide com `world` e `barriers`): navega com `NavigationAgent3D` pela navmesh do interior, conta obstáculos por raio, passos audíveis por proximidade.
 - `drowned/drowned_director.gd` (`DrownedDirector`, nó no `World`, recebe `Lighthouse` e `Player` em `setup()`): pontos, aproximação, entrada, efeitos e batidas no alçapão. Para o painel de debug: `force_enter()` (entra sem nevoeiro nem pontos, se ele não estiver dentro), `remove_drowned()` e `has_drowned_inside()`.
-- Pontos no farol (`DrownedTargets/*`): `DoorInside` (onde aparece), `TrapdoorBelow` (rampa sob o alçapão), `RestSpot` (térreo).
+- Pontos no farol (`DrownedTargets/*`): `DoorInside` (onde aparece), `TrapdoorBelow` (patamar no fim da escada, sob o alçapão; provisório, ver "Comportamento atual a revisar"), `RestSpot` (térreo).
 
 ## Regras
 - Cada barco afundado soma um ponto de Afogado; os pontos passam de uma noite para a outra (`RunState`).
@@ -26,8 +26,10 @@ A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, e
 ## Comportamento atual a revisar
 A feature ainda vai mudar; isto descreve o código de hoje, sem correção prevista.
 
+- **Batidas do pé da escada de mão (provisório).** `TrapdoorBelow` fica no patamar (8.4 m), 2.4 m abaixo do painel: ele bate no alçapão dali, sem subir a escada de mão. Decidido como provisório pelo desenvolvedor; a ideia a avaliar é ele subir e bater pendurado embaixo do painel.
+
 - **O jogador perto do alçapão impede as batidas.** O alcance vale com `distância + occlusion_penalty × obstáculos ≤ perception_range` (6 e 10 nas três dificuldades): até 10 m sem obstáculo, até 4 m com um, nunca com dois ou mais. As distâncias são entre os pés (`global_position`); os obstáculos, contados num raio entre os dois na altura dos olhos (`Drowned._count_occluders`).
-  - `TrapdoorBelow` fica cerca de 2 m abaixo do piso da cabine. Com um obstáculo entre eles (o piso ou o painel), o jogador está ao alcance em qualquer ponto do piso da cabine a até ~3,4 m na horizontal da vertical de `TrapdoorBelow`; em cima do alçapão, a ~2,3 m, dá ~8,3.
+  - `TrapdoorBelow` fica cerca de 2 m abaixo do piso da cabine (valores medidos antes da escada de mão, a refazer). Com um obstáculo entre eles (o piso ou o painel), o jogador está ao alcance em qualquer ponto do piso da cabine a até ~3,4 m na horizontal da vertical de `TrapdoorBelow`; em cima do alçapão, a ~2,3 m, dá ~8,3.
   - Ao alcance, o `DrownedBrain` passa a `CHASE` em vez de bater. O caminho até o jogador passa pelo vão do alçapão (a navmesh não tem as barreiras, decisão 0009), então ele sobe a rampa e empurra o painel fechado.
   - Sem bater: `TrapdoorRules.tick` repõe `resistance_seconds` a cada frame, e o tempo de cansaço (`tire_seconds`) não conta. Com o trinco desligado, o alçapão nunca abre; com ele ligado, o Afogado nunca cansa e não vai descansar.
   - Quando o jogador sai do alcance, ele volta a `GO_TRAPDOOR`, chega e recomeça a bater do zero.
