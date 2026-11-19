@@ -49,6 +49,7 @@ var _knockdown_left: float = 0.0
 @onready var _camera: Camera3D = $Head/Camera3D
 @onready var _fall_damage: FallDamage = %FallDamage
 @onready var _carried_jerrycan: Node3D = %CarriedJerrycan
+@onready var _ladder_climber: LadderClimber = %LadderClimber
 
 
 ## Guarda a altura da cabeça em pé, liga o pedido de soltar o galão e captura o mouse.
@@ -78,8 +79,9 @@ func _process(delta: float) -> void:
 	_look(stick * deg_to_rad(stick_look_degrees_per_second) * sensitivity_scale * delta)
 
 
-## Atualiza a derrubada e a altura da cabeça, lê o input e move o corpo. Sentado, não se move:
-## mover ou pular só levanta. Derrubado, ignora andar, pular e soltar o galão.
+## Atualiza a derrubada e a altura da cabeça, lê o input e move o corpo, andando ou agarrado na
+## escada de mão. Sentado, não se move: mover ou pular só levanta. Derrubado, ignora andar,
+## pular e soltar o galão.
 func _physics_process(delta: float) -> void:
 	_update_knockdown(delta)
 	_head.position.y = move_toward(
@@ -103,17 +105,17 @@ func _physics_process(delta: float) -> void:
 	if is_knocked_down:
 		input = Vector2.ZERO
 		jump_pressed = false
-	if not is_on_floor():
-		velocity.y -= _gravity * delta
-	elif jump_pressed:
-		velocity.y = jump_velocity
 	# Sem normalizar: o analógico inclinado pela metade anda mais devagar.
 	var direction: Vector3 = transform.basis * Vector3(input.x, 0.0, input.y)
 	var speed: float = _current_speed()
-	var horizontal: Vector3 = Vector3(velocity.x, 0.0, velocity.z)
-	horizontal = horizontal.move_toward(direction * speed, acceleration * speed * delta)
-	velocity.x = horizontal.x
-	velocity.z = horizontal.z
+	if _ladder_climber.is_climbing():
+		velocity = _ladder_climber.climb_velocity(
+			direction * speed, input.y, _head.rotation.x, is_on_floor(), global_position
+		)
+		# Agarrado não há queda: a medição recomeça ao soltar a escada.
+		_fall_damage.cancel_fall()
+	else:
+		_walk(direction, speed, jump_pressed, delta)
 	move_and_slide()
 
 
@@ -209,6 +211,19 @@ func _request_drop() -> void:
 		at = hit["position"] - forward * drop_wall_margin
 	var carried_velocity := Vector3(velocity.x, 0.0, velocity.z)
 	drop_requested.emit(at, carried_velocity + forward * drop_throw_speed)
+
+
+## Aplica a gravidade e o pulo e acelera o horizontal até `direction × speed` (m/s), sem mover
+## o corpo.
+func _walk(direction: Vector3, speed: float, jump_pressed: bool, delta: float) -> void:
+	if not is_on_floor():
+		velocity.y -= _gravity * delta
+	elif jump_pressed:
+		velocity.y = jump_velocity
+	var horizontal: Vector3 = Vector3(velocity.x, 0.0, velocity.z)
+	horizontal = horizontal.move_toward(direction * speed, acceleration * speed * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
 
 
 ## Gira o corpo no eixo Y e a cabeça no eixo X, em radianos, respeitando os limites do olhar e o

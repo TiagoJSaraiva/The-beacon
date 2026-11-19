@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://player/interaction_ray.gd" id="3_ray"]
 [ext_resource type="PackedScene" path="res://player/flashlight.tscn" id="4_flashlight"]
 [ext_resource type="PackedScene" path="res://assets/models/oil_containers/oil_containers.tscn" id="5_jerrycan"]
+[ext_resource type="Script" path="res://player/ladder_climber.gd" id="6_ladder"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -47,6 +48,17 @@ transform = Transform3D(1.82, 0, 0, 0, 1.82, 0, 0, 0, 1.82, 0, -0.2, 0)
 unique_name_in_owner = true
 script = ExtResource("2_fall")
 body = NodePath("..")
+
+[node name="LadderClimber" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 16
+monitorable = false
+script = ExtResource("6_ladder")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LadderClimber"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
 
 [connection signal="fatal_fall" from="FallDamage" to="." method="_on_fall_damage_fatal_fall"]
 [connection signal="sprint_blocked_changed" from="FallDamage" to="." method="_on_fall_damage_sprint_blocked_changed"]
