@@ -102,7 +102,7 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay), q
 2 — `barriers` — porta de entrada e alçapão / jogador e Afogado colidem
 3 — `player` — jogador / detectado pelo Afogado
 4 — `drowned` — Afogados
-5 — (livre)
+5 — `ladders` — zona de agarrar da escada de mão / detectada pelo `LadderClimber` do jogador
 6 — `interactable` — objetos interativos / detectados pelo raio de interação do jogador
 7 — (livre)
 8 — `props` — objetos com física (galão) / colidem com `world`, `barriers` e entre si; o jogador os atravessa

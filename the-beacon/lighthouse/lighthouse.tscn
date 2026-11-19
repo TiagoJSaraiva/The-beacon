@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://c4dtmuijputsa" path="res://machine_house/machine_house.tscn" id="16_machine"]
 [ext_resource type="PackedScene" path="res://assets/models/old_wooden_table/old_wooden_table.tscn" id="17_table"]
 [ext_resource type="PackedScene" path="res://power/main_generator.tscn" id="18_main_generator"]
+[ext_resource type="PackedScene" path="res://lighthouse/ladder.tscn" id="19_ladder"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -114,6 +115,10 @@ material = SubResource("StandardMaterial3D_wood")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 8.275, 0.1)
 use_collision = true
 size = Vector3(1.7, 0.25, 2)
+material = SubResource("StandardMaterial3D_wood")
+
+[node name="Ladder" parent="." instance=ExtResource("19_ladder")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.7, 8.4, 1.03)
 material = SubResource("StandardMaterial3D_wood")
 
 [node name="WallClock" parent="." unique_id=390582730 instance=ExtResource("5_clock")]

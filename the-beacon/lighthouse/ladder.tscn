@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://lighthouse/ladder.gd" id="1_ladder"]
+
+[node name="Ladder" type="StaticBody3D"]
+collision_mask = 0
+script = ExtResource("1_ladder")
+
+[node name="ClimbZone" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_mask = 0
+monitoring = false
