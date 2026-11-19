@@ -16,7 +16,7 @@ material = SubResource("StandardMaterial3D_wood")
 size = Vector3(1.93, 0.1, 1.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel_use"]
-size = Vector3(1.93, 0.08, 1.6)
+size = Vector3(1.93, 0.18, 1.6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_latch"]
 albedo_color = Color(0.55, 0.12, 0.08, 1)
@@ -51,7 +51,7 @@ mesh = SubResource("BoxMesh_panel")
 
 [node name="PanelInteractable" type="Area3D" parent="Panel"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, 0.03, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, -0.05, 0.8)
 script = ExtResource("2_interactable")
 hands_rule = 1
 
