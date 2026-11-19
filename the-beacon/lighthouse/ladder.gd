@@ -2,8 +2,9 @@
 class_name Ladder
 extends StaticBody3D
 ## Escada de mão gerada por parâmetros. A origem fica no pé, no meio da largura; a escada sobe
-## em Y local e se sobe pelo lado +Z local. A colisão é uma placa fina que acaba em `height`,
-## para quem chega ao topo seguir em frente para o piso. A `ClimbZone` (camada `ladders`) marca
+## em Y local e se sobe pelo lado +Z local. Nenhuma peça passa de `height` (não atravessa o vão
+## acima). A colisão é uma placa fina que acaba em `height`, para quem chega ao topo seguir em
+## frente para o piso. A `ClimbZone` (camada `ladders`) marca
 ## onde o jogador se agarra; ela passa do topo e do plano da escada para cobrir a saída.
 ## Os nós gerados não são salvos na cena.
 
@@ -28,11 +29,6 @@ const PLATE_THICKNESS := 0.06
 @export var rail_thickness: float = 0.05:
 	set(value):
 		rail_thickness = value
-		_queue_build()
-## Quanto as laterais passam do topo, como apoio para as mãos. Só visual.
-@export var rail_extension: float = 0.9:
-	set(value):
-		rail_extension = value
 		_queue_build()
 ## Profundidade da zona de agarrar no lado de quem sobe.
 @export var climb_zone_depth: float = 0.7:
@@ -97,12 +93,12 @@ func _build() -> void:
 	plate.position = Vector3.UP * height * 0.5
 	_add_generated(plate, self)
 
-	var rail_height: float = height + rail_extension
 	for side: float in [-1.0, 1.0]:
-		var rail_center := Vector3(side * (width - rail_thickness) * 0.5, rail_height * 0.5, 0.0)
-		_add_box(Vector3(rail_thickness, rail_height, rail_thickness), rail_center)
+		var rail_center := Vector3(side * (width - rail_thickness) * 0.5, height * 0.5, 0.0)
+		_add_box(Vector3(rail_thickness, height, rail_thickness), rail_center)
+	# Só degraus inteiros abaixo do topo; a borda do piso faz o papel do último.
 	var rung_height: float = rung_spacing
-	while rung_height < height + rung_thickness:
+	while rung_height + rung_thickness * 0.5 <= height:
 		_add_box(Vector3(width, rung_thickness, rung_thickness), Vector3.UP * rung_height)
 		rung_height += rung_spacing
 
