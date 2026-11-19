@@ -18,6 +18,8 @@ extends Resource
 ## Metros somados à distância por obstáculo entre o Afogado e o jogador.
 @export var occlusion_penalty: float = 6.0
 @export var kill_distance: float = 1.0
+## Velocidade na escada de mão, subindo ou descendo, em m/s.
+@export var ladder_climb_speed: float = 1.0
 ## Com o trinco ligado, bate por este tempo e cansa.
 @export var tire_seconds: float = 20.0
 ## Cansado, descansa no térreo por este tempo antes de voltar a bater.

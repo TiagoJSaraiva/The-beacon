@@ -121,6 +121,10 @@ material = SubResource("StandardMaterial3D_wood")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.7, 8.4, 1.03)
 material = SubResource("StandardMaterial3D_wood")
 
+[node name="LadderLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(4.7, 8.4, 0.45)
+end_position = Vector3(4.7, 10.8, 1.6)
+
 [node name="WallClock" parent="." unique_id=390582730 instance=ExtResource("5_clock")]
 unique_name_in_owner = true
 transform = Transform3D(-0.77301, 0, -0.63439, 0, 1, 0, 0.63439, 0, -0.77301, 3.4574, 13.453152, 4.2129)

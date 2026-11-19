@@ -2,6 +2,7 @@ class_name Drowned
 extends CharacterBody3D
 ## O Afogado dentro do farol: anda pela navmesh até o alvo que o DrownedBrain escolhe,
 ## percebe o jogador por distância com oclusão e informa ao diretor os efeitos das ações.
+## Na escada de mão (link da navmesh), sobe ou desce em percurso fixo, só com o alçapão aberto.
 
 signal effect_triggered(effect: DrownedBrain.Effect)
 
@@ -17,6 +18,8 @@ var player: Player
 
 var _config: DrownedConfig
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var _trapdoor_open: bool = false
+var _ladder: LadderTraversal
 
 @onready var _agent: NavigationAgent3D = %Agent
 @onready var _footsteps: LoopingSound = %Footsteps
@@ -35,15 +38,17 @@ func setup(
 	player = target_player
 
 
-## Limita a distância em que os passos são ouvidos.
+## Limita a distância em que os passos são ouvidos e passa a tratar a chegada à escada de mão.
 func _ready() -> void:
 	_footsteps.max_distance = _config.footstep_audible_distance
+	_agent.link_reached.connect(_on_agent_link_reached)
 
 
 ## Executa um passo de decisão e movimento e emite `effect_triggered` se a decisão gerar um
 ## efeito. `senses` vem do diretor com o estado do farol.
 func think(delta: float, senses: DrownedSenses) -> void:
 	_sense(senses)
+	_trapdoor_open = senses.trapdoor_state == Trapdoor.State.OPEN
 	var effect: DrownedBrain.Effect = brain.update(delta, senses)
 	if effect != DrownedBrain.Effect.NONE:
 		effect_triggered.emit(effect)
@@ -63,9 +68,12 @@ func _sense(senses: DrownedSenses) -> void:
 	senses.arrived = global_position.distance_to(_target_point()) <= arrive_distance
 
 
-## Aplica a gravidade e, se não estiver parado agindo, anda pela navmesh até o alvo do cérebro,
-## com os passos tocando.
+## Na escada de mão, segue o percurso dela. Fora, aplica a gravidade e, se não estiver parado
+## agindo, anda pela navmesh até o alvo do cérebro, com os passos tocando.
 func _move(delta: float) -> void:
+	if _ladder != null:
+		_climb(delta)
+		return
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	var horizontal := Vector3.ZERO
@@ -81,6 +89,16 @@ func _move(delta: float) -> void:
 	velocity.z = horizontal.z
 	_footsteps.set_active(horizontal.length() > 0.0)
 	move_and_slide()
+
+
+## Avança no percurso da escada de mão, sem física nem passos, e o encerra ao chegar à saída ou
+## ao voltar à entrada com o alçapão fechado.
+func _climb(delta: float) -> void:
+	velocity = Vector3.ZERO
+	_footsteps.set_active(false)
+	global_position = _ladder.advance(_config.ladder_climb_speed * delta, _trapdoor_open)
+	if _ladder.is_finished(_trapdoor_open):
+		_ladder = null
 
 
 ## Devolve a posição do alvo atual; sem alvo conhecido, a própria posição.
@@ -110,3 +128,11 @@ func _count_occluders() -> int:
 		count += 1
 		excluded.append(hit["rid"])
 	return count
+
+
+## Começa o percurso da escada de mão ao chegar à entrada do link, se o alçapão estiver aberto.
+## Fechado, ele fica no pé da escada; o agente avisa de novo a cada novo caminho.
+func _on_agent_link_reached(details: Dictionary) -> void:
+	if _ladder != null or not _trapdoor_open:
+		return
+	_ladder = LadderTraversal.new(global_position, details["link_exit_position"])

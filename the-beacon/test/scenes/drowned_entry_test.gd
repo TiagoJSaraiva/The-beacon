@@ -1,8 +1,11 @@
 extends GdUnitTestSuite
 ## Com o nevoeiro dentro do farol e um ponto de Afogado, ele arromba a porta, aparece do
-## lado de dentro e sobe pela navmesh do interior até o alçapão.
+## lado de dentro e sobe pela navmesh do interior até o alçapão; de lá, o link da escada de
+## mão leva à cabine.
 
 const GAME := "res://game/game.tscn"
+## Ponto no piso da cabine, longe do vão do alçapão.
+const CABIN_POINT := Vector3(3.0, 10.8, 2.5)
 
 
 func test_drowned_bursts_in_and_heads_to_the_trapdoor() -> void:
@@ -31,5 +34,10 @@ func test_drowned_bursts_in_and_heads_to_the_trapdoor() -> void:
 	)
 	assert_int(path.size()).is_greater(1)
 	assert_float(path[path.size() - 1].distance_to(trapdoor_below)).is_less(1.0)
+	# Do patamar à cabine, só pelo link da escada de mão.
+	var path_up: PackedVector3Array = NavigationServer3D.map_get_path(
+		drowned.get_world_3d().navigation_map, trapdoor_below, CABIN_POINT, true
+	)
+	assert_float(path_up[path_up.size() - 1].distance_to(CABIN_POINT)).is_less(0.5)
 	await runner.simulate_frames(120)
 	assert_float(drowned.global_position.distance_to(entry)).is_greater(2.0)

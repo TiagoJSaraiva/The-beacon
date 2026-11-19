@@ -66,6 +66,8 @@ func validate() -> PackedStringArray:
 		errors.append("boat: travessia precisa de tempo e de ao menos um barco")
 	if drowned.approach_base_per_second <= 0.0 or drowned.approach_recede_per_second <= 0.0:
 		errors.append("drowned: aproximação precisa subir e descer")
+	if drowned.ladder_climb_speed <= 0.0:
+		errors.append("drowned: velocidade na escada de mão precisa ser positiva")
 	if trapdoor.resistance_seconds <= 0.0:
 		errors.append("trapdoor: resistência precisa ser positiva")
 	if figurehead.max_simultaneous < 1:
