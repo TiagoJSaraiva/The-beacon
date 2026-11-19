@@ -6,17 +6,17 @@
 [ext_resource type="AudioStream" path="res://assets/audio/placeholder/bang.wav" id="4_bang"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
-size = Vector3(3.7, 0.1, 1.6)
+size = Vector3(1.93, 0.1, 1.6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.36, 0.24, 0.13, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_panel"]
 material = SubResource("StandardMaterial3D_wood")
-size = Vector3(3.7, 0.1, 1.6)
+size = Vector3(1.93, 0.1, 1.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel_use"]
-size = Vector3(3.7, 0.08, 1.6)
+size = Vector3(1.93, 0.08, 1.6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_latch"]
 albedo_color = Color(0.55, 0.12, 0.08, 1)
@@ -31,27 +31,27 @@ size = Vector3(0.35, 0.35, 0.45)
 
 [node name="Trapdoor" type="CSGBox3D"]
 operation = 2
-size = Vector3(3.6, 0.5, 1.5)
+size = Vector3(1.83, 0.5, 1.5)
 script = ExtResource("1_trapdoor")
 
 [node name="Panel" type="AnimatableBody3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0.15, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965, 0.15, -0.8)
 collision_layer = 2
 collision_mask = 0
 sync_to_physics = false
 
 [node name="PanelCollision" type="CollisionShape3D" parent="Panel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, -0.05, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, -0.05, 0.8)
 shape = SubResource("BoxShape3D_panel")
 
 [node name="Mesh" type="MeshInstance3D" parent="Panel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, -0.05, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, -0.05, 0.8)
 mesh = SubResource("BoxMesh_panel")
 
 [node name="PanelInteractable" type="Area3D" parent="Panel"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, 0.03, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, 0.03, 0.8)
 script = ExtResource("2_interactable")
 hands_rule = 1
 
