@@ -18,6 +18,14 @@ var _relock_left: float = 0.0
 var _reclose_left: float = 0.0
 
 
+## Diz se `point`, no plano do vão e relativo ao centro do painel fechado, fica fora da área que
+## o painel varre ao girar, com `clearance` de folga em volta. Quem está dentro dela seria
+## arremessado pelo painel.
+static func is_clear_of_panel(point: Vector2, panel_size: Vector2, clearance: float) -> bool:
+	var half: Vector2 = panel_size * 0.5 + Vector2.ONE * clearance
+	return absf(point.x) > half.x or absf(point.y) > half.y
+
+
 ## Cria o alçapão fechado, sem trinco, com a resistência cheia.
 func _init(trapdoor_config: TrapdoorConfig) -> void:
 	config = trapdoor_config

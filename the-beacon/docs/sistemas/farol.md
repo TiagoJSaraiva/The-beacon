@@ -19,7 +19,7 @@ Greybox dos dois andares, escada em caracol, porta de entrada e alçapão (GDD 1
 ## Regras
 - Queda do patamar (8.4 m) até o térreo é fatal com a config padrão; do meio da escada, só bloqueia a corrida.
 - A geometria evita sobrepor, na mesma posição horizontal, piso andável de níveis diferentes no encontro escada/patamar: o Recast soldava vértices entre eles e quebrava a navmesh. A escada não passa de 8.4 m, para deixar 2.1 m de folga sob a laje do piso de cima (fundo em 10.5).
-- Alçapão: `CLOSED` ou `OPEN`. Abre e fecha e liga o trinco só com os pés do jogador acima da dobradiça (`min_user_height`); exige mãos livres.
+- Alçapão: `CLOSED` ou `OPEN`. Abre e fecha e liga o trinco só com os pés do jogador acima da dobradiça (`min_user_height`); exige mãos livres. O painel também exige os pés fora da área que ele varre ao girar, com folga `user_clearance` (0.35 m, o raio da cápsula): em cima dele, o jogador seria arremessado (`TrapdoorRules.is_clear_of_panel`).
   - Trinco: liga e desliga com o alçapão fechado, segurando E por `latch_toggle_seconds` (0 = um toque). Trancado, o alçapão não abre.
   - Nevoeiro em `TRAPDOOR` ou acima desliga o trinco e impede ligá-lo; depois de ele sair, só passado `latch_relock_cooldown_seconds`.
   - O Afogado batendo com o trinco desligado abre o alçapão em `resistance_seconds` (acumula enquanto ele bate; recomeça quando para). Aberto por ele, só fecha passado `reclose_cooldown_seconds`.
@@ -31,6 +31,6 @@ Greybox dos dois andares, escada em caracol, porta de entrada e alçapão (GDD 1
 - `Lighthouse.set_fog_stage` → `Trapdoor.set_fog_present`; `DrownedDirector` → `Trapdoor.set_banging`, `EntranceDoor.show_approach`, `EntranceDoor.burst_open`.
 
 ## Testes
-- `test/unit/trapdoor_rules_test.gd`: trinco só fechado e trava o alçapão; nevoeiro destranca e o intervalo para religar; batidas só abrem destrancado; resistência recomeça; intervalo para fechar depois de aberto pelo Afogado.
-- `test/scenes/trapdoor_test.gd`: com o painel aberto, rente à parede, o jogador o fecha de dentro da cabine.
+- `test/unit/trapdoor_rules_test.gd`: trinco só fechado e trava o alçapão; nevoeiro destranca e o intervalo para religar; batidas só abrem destrancado; resistência recomeça; intervalo para fechar depois de aberto pelo Afogado; área do painel com a folga.
+- `test/scenes/trapdoor_test.gd`: em cima do painel, o jogador não o usa; com o painel aberto, rente à parede, o fecha de dentro da cabine.
 - A navegação na escada é coberta por `test/scenes/drowned_entry_test.gd`.

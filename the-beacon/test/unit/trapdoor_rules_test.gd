@@ -9,6 +9,15 @@ func _rules() -> TrapdoorRules:
 	return TrapdoorRules.new(config)
 
 
+func test_panel_area_includes_the_clearance_around_it() -> void:
+	var size := Vector2(2.0, 1.0)
+	assert_bool(TrapdoorRules.is_clear_of_panel(Vector2.ZERO, size, 0.3)).is_false()
+	assert_bool(TrapdoorRules.is_clear_of_panel(Vector2(1.2, 0.0), size, 0.3)).is_false()
+	assert_bool(TrapdoorRules.is_clear_of_panel(Vector2(0.0, -0.7), size, 0.3)).is_false()
+	assert_bool(TrapdoorRules.is_clear_of_panel(Vector2(1.4, 0.0), size, 0.3)).is_true()
+	assert_bool(TrapdoorRules.is_clear_of_panel(Vector2(0.0, -0.9), size, 0.3)).is_true()
+
+
 func test_latch_toggles_only_while_closed_and_locks_the_trapdoor() -> void:
 	var rules := _rules()
 	rules.toggle_latch()

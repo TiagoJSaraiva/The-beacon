@@ -14,6 +14,9 @@ enum State { CLOSED, OPEN }
 @export var swing_seconds: float = 0.35
 ## Altura mínima dos pés de quem interage, relativa à dobradiça. Impede operar por baixo.
 @export var min_user_height: float = -0.25
+## Distância mínima dos pés de quem usa o painel até a borda dele (o raio da cápsula do
+## jogador). Mais perto, o painel o arremessaria ao girar.
+@export var user_clearance: float = 0.35
 @export var latched_bolt_degrees: float = 90.0
 
 var rules: TrapdoorRules = TrapdoorRules.new(TrapdoorConfig.new())
@@ -25,15 +28,17 @@ var _swing: Tween
 var _banging: bool = false
 
 @onready var _panel: Node3D = %Panel
+@onready var _panel_collision: CollisionShape3D = %PanelCollision
 @onready var _panel_interactable: Interactable = %PanelInteractable
 @onready var _latch_interactable: Interactable = %LatchInteractable
 @onready var _latch_bolt: Node3D = %LatchBolt
 @onready var _bang_sound: LoopingSound = %BangSound
 
 
-## Restringe o painel e o trinco a quem está em cima e aplica o estado inicial.
+## Restringe o trinco a quem está em cima, o painel a quem está em cima e fora dele, e aplica o
+## estado inicial.
 func _ready() -> void:
-	_panel_interactable.usable_check = _is_above
+	_panel_interactable.usable_check = _can_use_panel
 	_latch_interactable.usable_check = _is_above
 	_apply_state(false)
 
@@ -113,6 +118,18 @@ func _refresh_interactables() -> void:
 ## Diz se os pés de quem interage estão na altura mínima, o que impede operar por baixo.
 func _is_above(user: Node3D) -> bool:
 	return user != null and user.global_position.y >= _panel.global_position.y + min_user_height
+
+
+## Diz se quem interage pode usar o painel: em cima e com os pés fora da área que ele varre. O
+## painel fechado fica centrado na origem da raiz (o centro do vão).
+func _can_use_panel(user: Node3D) -> bool:
+	if not _is_above(user):
+		return false
+	var feet: Vector3 = to_local(user.global_position)
+	var size: Vector3 = (_panel_collision.shape as BoxShape3D).size
+	return TrapdoorRules.is_clear_of_panel(
+		Vector2(feet.x, feet.z), Vector2(size.x, size.z), user_clearance
+	)
 
 
 ## Abre ou fecha o painel, se as regras permitirem, e emite `state_changed`.
