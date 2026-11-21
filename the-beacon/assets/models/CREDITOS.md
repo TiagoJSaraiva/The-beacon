@@ -12,6 +12,6 @@ A página do Fab de nenhum destes mostra os termos de licença (campo "License t
 | `machinery_device/` | Machinery device | maxpsr | https://www.fab.com/listings/eb1cdc1d-d44c-429e-a2e9-a2e05bed3f65 | Carcaça da casa de máquinas (versão enferrujada) |
 | `main_generator/` | Generator (a confirmar) | a confirmar | https://www.fab.com/listings/1d962814-8a9e-420c-9aa6-506fcb07633a (a confirmar) | Gerador principal (`power/main_generator.tscn`). Sem mapa de rugosidade (valor fixo no material) |
 | `emergency_generator/` | Power Generator | RamananTitus | https://www.fab.com/listings/c8b5eb88-9944-433a-b69a-a0442040be69 | Gerador de emergência (`power/emergency_generator.tscn`) |
-| `oil_containers/` | Oil Containers Pack | Quixel Megascans | https://www.fab.com/listings/eb64095e-bfec-4ca2-b7df-b5b274c537c3 | Galão (recipiente `_001` do pack) |
+| `fuel_container/` | Props_FuelContainer (a confirmar) | a confirmar | a confirmar (export glTF do Sketchfab) | Galão com bico (`fuel/jerrycan.tscn`, `player/player.tscn`). O embrulho centra o corpo, sem o bico, que aponta para +X |
 | `gas_tank/` | Propane Tank (a confirmar) | a confirmar | a confirmar (um dos links de tanques em `../notes/modelos-link.txt`) | Tanque de combustível (`fuel/fuel_tank.tscn`) |
 | `radio_station/` | Radiostation McKinley (a confirmar) | a confirmar | a confirmar | Rádio da mesa (`boats/radio.tscn`) |
