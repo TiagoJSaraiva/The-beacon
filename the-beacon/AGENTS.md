@@ -41,6 +41,10 @@ Commits:
 - Se algo falhar depois, corrija em um commit novo.
 - Nunca faça `push`, nem reescreva histórico (`--amend`, `rebase`, `reset`), nem pule hooks sem pedido explícito.
 
+## Branches preservadas
+
+- `teste/tanques-verticais`: versão de demonstração com dois tanques verticais no lugar do tanque deitado, para o parceiro do desenvolvedor avaliar. **Não apague, não mescle na `main` e não faça rebase.** Só mexa nela a pedido do desenvolvedor. Se a versão for aprovada, os tanques entram na `main` por uma tarefa nova.
+
 ## Regras essenciais de GDScript
 
 Detalhes e exemplos em `docs/convencoes-gdscript.md`. O mínimo inegociável:
