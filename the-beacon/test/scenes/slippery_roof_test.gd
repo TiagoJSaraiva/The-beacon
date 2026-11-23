@@ -1,6 +1,6 @@
 extends GdUnitTestSuite
-## O telhado invisível sobre as máquinas: o jogador e o galão soltos em cima do gerador de emergência
-## escorregam até o chão. Física: só faixas de valores.
+## O telhado invisível sobre as máquinas: o jogador e o galão soltos em cima do gerador de
+## emergência escorregam até o chão. Física: só faixas de valores.
 
 const LEVEL := "res://test/scenes/fixtures/flat_level.tscn"
 const GENERATOR := "res://power/emergency_generator.tscn"
