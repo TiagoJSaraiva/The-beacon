@@ -12,6 +12,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 - `fuel/jerrycan_slot.tscn` (`JerrycanSlot`): prateleira no tanque; com o galão devolvido, enche-o e mostra o nível dele (barra).
 - `fuel/jerrycan.tscn` (`Jerrycan`, `RigidBody3D` na camada `props`, regra `JerrycanState`, modelo `fuel_container` com o bico para +X; a caixa de colisão cobre só o corpo): no slot (parado), na mão (escondido, sem colisão) ou solto no mundo (com física).
 - Fiação em `Lighthouse` (energia, galão) e no `Player` (soltar).
+- Topo do gerador de emergência: telhado invisível de duas águas a 60° (`components/slippery_roof.gd`, `SlipperyRoof`, geometria em `RidgeRoof`), na camada `slippery_tops`. O jogador e o galão escorregam dele; os raios (mira na boca do gerador) e a navmesh o ignoram. O gerador principal e o tanque não têm: a escada em caracol passa logo acima deles, e o telhado furaria os degraus.
 
 ## Regras
 - Energia alimenta só a casa de máquinas e a lâmpada. Relógio, luzes, monitores e rádio funcionam sem ela (provisório).
@@ -30,5 +31,6 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 - `Player.drop_requested(at, throw_velocity)` → `Game` → `Lighthouse.drop_jerrycan`. `InteractionRay.drop_requested` → `Player`.
 
 ## Testes
-- `test/unit/generator_state_test.gd` (modo mangueira e modo combustível), `jerrycan_state_test.gd` (encher no slot, despejar).
+- `test/unit/generator_state_test.gd` (modo mangueira e modo combustível), `jerrycan_state_test.gd` (encher no slot, despejar), `ridge_roof_test.gd` (inclinação e cobertura do telhado).
+- `test/scenes/slippery_roof_test.gd`: o jogador e o galão soltos sobre o gerador de emergência escorregam até o chão.
 - `test/scenes/lighthouse_power_test.gd`: o gerador de emergência assume quando a mangueira estoura e o feixe apaga sem combustível; galão do slot para a mão e da prateleira vazia para a mão pelo raio de interação real, para o chão (cai e para), de volta ao slot (enche) e despejado no gerador; só o gerador de emergência tem boca de combustível, e o despejo nela chega ao farol.

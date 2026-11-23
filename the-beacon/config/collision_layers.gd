@@ -8,4 +8,5 @@ const PLAYER := 4
 const DROWNED := 8
 const LADDERS := 16
 const INTERACTABLE := 32
+const SLIPPERY_TOPS := 64
 const PROPS := 128

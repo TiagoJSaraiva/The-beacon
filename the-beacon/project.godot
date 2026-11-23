@@ -134,6 +134,7 @@ debug_menu={
 3d_physics/layer_4="drowned"
 3d_physics/layer_5="ladders"
 3d_physics/layer_6="interactable"
+3d_physics/layer_7="slippery_tops"
 3d_physics/layer_8="props"
 
 [navigation]

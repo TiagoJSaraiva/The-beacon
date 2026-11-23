@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://budwy6cx4nsn6" path="res://assets/audio/placeholder/generator_hum.wav" id="4_hum"]
 [ext_resource type="PackedScene" uid="uid://bueo80sfq8jwx" path="res://assets/models/emergency_generator/emergency_generator.tscn" id="5_model"]
 [ext_resource type="PackedScene" path="res://power/fuel_inlet.tscn" id="6_inlet"]
+[ext_resource type="Script" path="res://components/slippery_roof.gd" id="90_roof"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(1.15, 0.97, 0.91)
@@ -22,6 +23,15 @@ shape = SubResource("BoxShape3D_body")
 
 [node name="Model" parent="Body" unique_id=2043614856 instance=ExtResource("5_model")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+
+[node name="Roof" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.97, 0)
+collision_layer = 64
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Roof"]
+script = ExtResource("90_roof")
+box_top_size = Vector2(1.15, 0.91)
 
 [node name="FuelInlet" parent="." instance=ExtResource("6_inlet")]
 

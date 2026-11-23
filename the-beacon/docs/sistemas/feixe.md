@@ -5,6 +5,7 @@ Luz giratória que protege os barcos no nevoeiro, e a máquina que a gira (GDD 1
 
 ## Componentes
 - `machine_house/machine_house.tscn` (`MachineHouse`, na cabine, regra `FailureState`): carcaça (modelo `machinery_device`), que zumbe com o farol operando; tubulação vertical até o telhado; câmara da lâmpada com portinha. Quebrada: luz vermelha, alarme e ponto de conserto (frente, mãos livres). Lâmpada queimada: luz laranja na câmara e ponto de troca na portinha (mãos livres).
+- A carcaça da casa de máquinas tem o mesmo telhado invisível do gerador de emergência (`SlipperyRoof`, `energia-e-combustivel.md`).
 - `beam/lighthouse_lamp.tscn` (`LighthouseLamp`, regra `FailureState`): cabeça acima do telhado, na vertical da casa de máquinas. Gira com o farol operando; spot e facho só com o feixe aceso. O spot alcança 110 m, além da faixa de nevoeiro no mar (~70 m), e ilumina o nevoeiro volumétrico. O facho (`Shaft`) é um cone de 90 m com `beam/beam_shaft.gdshader`: somado à imagem, mais forte perto da lente e apagando até a ponta, com as bordas suaves, fundido com a geometria que o corta e apagado perto da câmera. As câmeras do mar ficam abaixo da cabeça (`exterior-e-cameras.md`): o facho cruza o céu da imagem.
 - `beam/beam_control.tscn` (`BeamControl`): alavanca num poste ao lado da casa de máquinas, com luz indicadora. `toggle()` inverte a alavanca (o jogador pelo `SwitchPoint`, o painel de debug direto).
 - `beam/beam_state.gd` (`BeamState`, no `Lighthouse`): junta alavanca, energia, lâmpada, casa de máquinas e nevoeiro.

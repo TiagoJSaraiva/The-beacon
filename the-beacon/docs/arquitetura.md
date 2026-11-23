@@ -104,8 +104,8 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay), q
 4 — `drowned` — Afogados
 5 — `ladders` — zona de agarrar da escada de mão / detectada pelo `LadderClimber` do jogador
 6 — `interactable` — objetos interativos / detectados pelo raio de interação do jogador
-7 — (livre)
-8 — `props` — objetos com física (galão) / colidem com `world`, `barriers` e entre si; o jogador os atravessa
+7 — `slippery_tops` — telhados invisíveis sobre as máquinas (`SlipperyRoof`) / jogador e props colidem; raios e navmesh os ignoram
+8 — `props` — objetos com física (galão) / colidem com `world`, `barriers`, `slippery_tops` e entre si; o jogador os atravessa
 
 ## Camadas de render
 1 — `default` — tudo
