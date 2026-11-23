@@ -5,6 +5,9 @@ extends Node3D
 ## de render dele fica fora das outras câmeras), um volume por área interna e um em volta da
 ## cabeça do farol no estágio BEAM. Cada volume esmaece ao entrar e sair do seu estágio. Lê o
 ## estado do FogSystem a cada frame.
+## Teste (branch teste/nevoeiro-shader-e-volume): cada volume tem um filho `ShaderLayer`, uma malha
+## com o shader antigo (`fog_volume.gdshader`), que esmaece junto. As duas camadas somam; a
+## densidade de cada uma é multiplicada por `volume_density_scale` e `shader_density_scale`.
 
 @export var fade_per_second: float = 0.5
 ## Meia-altura da faixa no mar no crescimento máximo (NEAR): passa do topo da imagem das câmeras
@@ -14,6 +17,10 @@ extends Node3D
 @export var sea_band_half_depth: float = 45.0
 ## Menor meia-medida da faixa: tamanho zero deixaria o volume degenerado.
 @export var sea_band_min_half_extent: float = 0.5
+## Multiplica a densidade dos `FogVolume` (0 desliga a névoa volumétrica).
+@export_range(0.0, 2.0, 0.05) var volume_density_scale: float = 1.0
+## Multiplica a densidade das camadas de shader (0 desliga o shader).
+@export_range(0.0, 2.0, 0.05) var shader_density_scale: float = 1.0
 
 var _fog: FogSystem
 var _boat_path: Path3D
@@ -23,12 +30,15 @@ var _full_density: Dictionary[FogVolume, float] = {}
 ## Opacidade atual de cada volume, de 0 a 1.
 var _opacity: Dictionary[FogVolume, float] = {}
 var _sea_band_shape: SeaBandShape
+## Camada de shader de cada volume, com material próprio, e a densidade dela na cena.
+var _shader_layers: Dictionary[FogVolume, ShaderMaterial] = {}
+var _shader_density: Dictionary[FogVolume, float] = {}
 
 @onready var _sea_band: FogVolume = %SeaBand
 
 
-## Associa cada volume ao estágio em que ele aparece, guarda a densidade de cada um, monta a regra
-## de tamanho da faixa e começa com todos invisíveis.
+## Associa cada volume ao estágio em que ele aparece, guarda a densidade de cada um e da camada de
+## shader dele, monta a regra de tamanho da faixa e começa com todos invisíveis.
 func _ready() -> void:
 	_sea_band_shape = sea_band_shape()
 	_stage_volumes = {
@@ -40,6 +50,7 @@ func _ready() -> void:
 	}
 	for volume: FogVolume in _all_volumes():
 		_full_density[volume] = (volume.material as FogMaterial).density
+		_take_shader_layer(volume)
 		_set_opacity(volume, 0.0)
 
 
@@ -90,6 +101,10 @@ func _place_sea_band(route: Vector2, growth: float) -> void:
 		Basis(x_axis, Vector3.UP, x_axis.cross(Vector3.UP)), (start + end) * 0.5
 	)
 	_sea_band.size = _sea_band_shape.half_extents(along.length() * 0.5, growth) * 2.0
+	# A malha do shader tem lado 2: a escala é a meia-medida.
+	var layer := _sea_band.get_node_or_null(^"ShaderLayer") as Node3D
+	if layer != null:
+		layer.scale = _sea_band.size * 0.5
 
 
 ## Aproxima a opacidade do volume do valor-alvo, na velocidade `fade_per_second`.
@@ -97,11 +112,30 @@ func _fade(volume: FogVolume, target: float, delta: float) -> void:
 	_set_opacity(volume, move_toward(_opacity[volume], target, fade_per_second * delta))
 
 
-## Escala a densidade do volume pela opacidade e esconde o volume quando ela é zero.
+## Escala a densidade do volume e da camada de shader dele pela opacidade e esconde o volume
+## quando ela é zero.
 func _set_opacity(volume: FogVolume, opacity: float) -> void:
 	_opacity[volume] = opacity
-	(volume.material as FogMaterial).density = _full_density[volume] * opacity
+	var material := volume.material as FogMaterial
+	material.density = _full_density[volume] * opacity * volume_density_scale
+	if _shader_layers.has(volume):
+		_shader_layers[volume].set_shader_parameter(&"opacity", opacity)
+		_shader_layers[volume].set_shader_parameter(
+			&"density", _shader_density[volume] * shader_density_scale
+		)
 	volume.visible = opacity > 0.0
+
+
+## Guarda a camada de shader do volume, se houver, com uma cópia do material: o da cena é
+## compartilhado entre recargas e não pode levar o estado de uma noite para a outra.
+func _take_shader_layer(volume: FogVolume) -> void:
+	var layer := volume.get_node_or_null(^"ShaderLayer") as MeshInstance3D
+	if layer == null:
+		return
+	var material := (layer.material_override as ShaderMaterial).duplicate() as ShaderMaterial
+	layer.material_override = material
+	_shader_layers[volume] = material
+	_shader_density[volume] = material.get_shader_parameter(&"density")
 
 
 ## Devolve a faixa no mar e todos os volumes por estágio.
