@@ -4,7 +4,7 @@ extends Node3D
 ## instanciadas): multiplica a energia de cada uma por `light_scale`, sem perder a da cena.
 
 ## Força das luzes do interior: 1 é a energia que cada luminária tem na própria cena.
-@export_range(0.0, 2.0, 0.05) var light_scale: float = 0.6:
+@export_range(0.0, 2.0, 0.05) var light_scale: float = 0.4:
 	set(value):
 		light_scale = value
 		_apply()

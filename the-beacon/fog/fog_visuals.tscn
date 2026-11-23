@@ -59,18 +59,21 @@ shader_parameter/top_fade = 1.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ground_floor"]
 render_priority = 1
 shader = ExtResource("2_shader")
+shader_parameter/fog_color = Color(0.06, 0.062, 0.066, 1)
 shader_parameter/density = 0.15
 shader_parameter/is_cylinder = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_stairs"]
 render_priority = 1
 shader = ExtResource("2_shader")
+shader_parameter/fog_color = Color(0.06, 0.062, 0.066, 1)
 shader_parameter/density = 0.15
 shader_parameter/is_cylinder = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cabin"]
 render_priority = 1
 shader = ExtResource("2_shader")
+shader_parameter/fog_color = Color(0.06, 0.062, 0.066, 1)
 shader_parameter/density = 0.15
 shader_parameter/is_cylinder = true
 
