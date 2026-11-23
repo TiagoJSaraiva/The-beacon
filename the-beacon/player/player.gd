@@ -12,7 +12,7 @@ const CAUSE_FALL := &"fall"
 const CAUSE_DROWNED := &"drowned"
 
 @export var walk_speed: float = 3.5
-@export var sprint_speed: float = 5.5
+@export var sprint_speed: float = 4.125
 @export var acceleration: float = 12.0
 ## Velocidade vertical ao pular: cerca de 0,8 m de altura com a gravidade padrão.
 @export var jump_velocity: float = 4.0

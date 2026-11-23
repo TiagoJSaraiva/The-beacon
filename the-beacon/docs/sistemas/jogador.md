@@ -13,7 +13,7 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 - Regras puras: `FallRules` (altura → nada / corrida bloqueada / fatal), `SeatRules` (limite do olhar sentado), `LadderRules` (sentido e velocidade na escada de mão), `FlashlightBattery`, `FlashlightCone`.
 
 ## Regras
-- Velocidades por `@export` no `Player` (andar 3.5, correr 5.5 m/s). O analógico esquerdo inclinado pela metade anda mais devagar.
+- Velocidades por `@export` no `Player` (andar 3.5, correr 4.125 m/s). O analógico esquerdo inclinado pela metade anda mais devagar.
 - Pulo: só no chão, `jump_velocity` 4.0 m/s (cerca de 0,8 m). Não há agachar.
 - Olhar: mouse (`mouse_sensitivity`) ou analógico direito (`stick_look_degrees_per_second`), os dois multiplicados por `sensitivity_scale`, que vem de `Settings` pelo `Game`.
 - Queda: altura = pico − pouso. `>= FallConfig.sprint_block_height` bloqueia a corrida por `sprint_block_seconds` (30 s; outra queda média recomeça a contagem); `>= fatal_height` mata (`CAUSE_FALL`).
