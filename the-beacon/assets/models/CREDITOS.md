@@ -29,6 +29,9 @@ Da Poly Haven, licença CC0 (domínio público, sem atribuição obrigatória). 
 | `concrete_floor_worn_001/` | Concrete Floor Worn 001 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_floor_worn_001 | Piso do térreo |
 | `dark_wooden_planks/` | Dark Wooden Planks | Amal Kumar | https://polyhaven.com/a/dark_wooden_planks | Piso da cabine e patamar da escada de mão |
 | `concrete_wall_003/` | Concrete Wall 003 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_wall_003 | Teto da cabine |
+| `coast_sand_01/` | Coast Sand 01 | Rob Tuytel | https://polyhaven.com/a/coast_sand_01 | Praia da ilha (`exterior/island_ground.tres`) |
+| `aerial_grass_rock/` | Aerial Grass Rock | Rob Tuytel | https://polyhaven.com/a/aerial_grass_rock | Platô de grama da ilha |
+| `coast_land_rocks_01/` | Coast Land Rocks 01 | Rob Tuytel, Rico Cilliers | https://polyhaven.com/a/coast_land_rocks_01 | Encostas íngremes da ilha |
 | `metal_plate/` | Metal Plate | Rob Tuytel | https://polyhaven.com/a/metal_plate | Degraus da escada em caracol |
 
 ## Addons

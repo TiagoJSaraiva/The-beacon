@@ -8,7 +8,7 @@ O mar era um plano liso de cor chapada. O desenvolvedor pediu um componente pron
 
 ## Decisão
 - O addon **Boujie Water Shader** (Chrisknyfe, MIT, branch `main`) fica em `addons/boujie_water_shader/`, sem as capturas de tela do repositório.
-- O nó `Sea` do `Exterior` é um `Ocean` do addon: anéis de malha com detalhe decrescente centrados na ilha (`levels_of_detail` 4, `outermost_resolution` 16, `far_edge` 300 = o `far` das câmeras). Sem o `CameraFollower3D`: as câmeras são três e paradas.
+- O nó `Sea` do `Exterior` é um `Ocean` do addon: anéis de malha com detalhe decrescente centrados na ilha (`levels_of_detail` 4, `outermost_resolution` 16, `far_edge` 1000; ele precisa passar da borda dos anéis, a 448 m, senão o addon não gera o plano distante). Sem o `CameraFollower3D`: as câmeras são três e paradas.
 - O material é `exterior/sea_material.tres`, cópia do `deep_ocean_material` do addon com cores de mar à noite, água mais lisa (`roughness` 0,05) e ondas baixas. (Corrigido: a altura das ondas vem da `steepness`, não da amplitude; ver a decisão 0030, que também desceu o mar.)
 - O reflexo da lua vem do céu da Sky3D (reflexo do céu no ambiente do mundo) e do brilho especular da luz da lua (decisão 0028).
 

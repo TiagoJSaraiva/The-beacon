@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://exterior/island_ground.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/textures/coast_sand_01/coast_sand_01_albedo.jpg" id="2_sand"]
+[ext_resource type="Texture2D" path="res://assets/textures/coast_sand_01/coast_sand_01_arm.jpg" id="3_sand_arm"]
+[ext_resource type="Texture2D" path="res://assets/textures/aerial_grass_rock/aerial_grass_rock_albedo.jpg" id="4_grass"]
+[ext_resource type="Texture2D" path="res://assets/textures/aerial_grass_rock/aerial_grass_rock_arm.jpg" id="5_grass_arm"]
+[ext_resource type="Texture2D" path="res://assets/textures/coast_land_rocks_01/coast_land_rocks_01_albedo.jpg" id="6_rock"]
+[ext_resource type="Texture2D" path="res://assets/textures/coast_land_rocks_01/coast_land_rocks_01_arm.jpg" id="7_rock_arm"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/sand_albedo = ExtResource("2_sand")
+shader_parameter/sand_arm = ExtResource("3_sand_arm")
+shader_parameter/grass_albedo = ExtResource("4_grass")
+shader_parameter/grass_arm = ExtResource("5_grass_arm")
+shader_parameter/rock_albedo = ExtResource("6_rock")
+shader_parameter/rock_arm = ExtResource("7_rock_arm")

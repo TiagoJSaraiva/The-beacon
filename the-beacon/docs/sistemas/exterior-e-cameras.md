@@ -4,7 +4,7 @@
 Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da mesa (GDD 1.2.17).
 
 ## Componentes
-- `exterior/exterior.tscn` (`Exterior`): `Island` (CSG), `Sea` (`Ocean` da Boujie Water Shader com `exterior/sea_material.tres`: ondas baixas, cores de noite, reflexo do céu e da lua; decisão 0029), com o nível em y = −2,9, 2 m abaixo do farol (decisão 0030; a altura das ondas é a média das `WaveSteepnesses`), `BoatPath` (`Path3D` de x −140 a 140 em z=70, y = −2,6), marcadores `SeaViewLeft`/`SeaViewRight`/`DoorView`. Fora da navmesh: o Afogado só anda dentro do farol.
+- `exterior/exterior.tscn` (`Exterior`): `Island` (`exterior/island.gd`, `@tool`: malha em anéis gerada pelo relevo de `IslandShape` (puro): platô de grama até ~13 m em volta do farol, 3 cm abaixo do térreo, encosta, praia no nível do mar por volta de 27 m e fundo raso; contorno irregular por ruído; material `exterior/island_ground.tres` (`island_ground.gdshader`: areia embaixo, grama no alto, rocha onde é íngreme, areia molhada perto da água); só visual, sem colisão), `Sea` (`Ocean` da Boujie Water Shader com `exterior/sea_material.tres`: ondas baixas, cores de noite, reflexo do céu e da lua; decisão 0029), com o nível em y = −2,9, 2 m abaixo do farol (decisão 0030; a altura das ondas é a média das `WaveSteepnesses`), `BoatPath` (`Path3D` de x −140 a 140 em z=70, y = −2,6), marcadores `SeaViewLeft`/`SeaViewRight`/`DoorView`. Fora da navmesh: o Afogado só anda dentro do farol.
 - `exterior/security_camera.tscn` (`SecurityCamera`): `SubViewport` com `Camera3D`, sem `Environment` próprio (usa o do mundo, o da Sky3D); mira o `target` em `_ready`.
   - `SeaCameraLeft` e `SeaCameraRight`: no alto da torre, com `fov` de 75°, miram x = 23 e x = −23 da rota. Juntas cobrem a rota inteira e enxergam em comum o meio dela (x de −30 a 30, cerca de 21% da rota), onde fica o nevoeiro (`FogConfig.route_center`, `max_route_coverage` = 0,2): ele aparece no lado direito de uma imagem e no esquerdo da outra.
   - `DoorCamera`: fora da porta de entrada, mirando-a.
@@ -21,6 +21,7 @@ Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da m
 - `SecurityMonitor.channel_changed(index)` ao trocar de canal.
 
 ## Testes
+- `test/unit/island_shape_test.gd`: platô plano sob o farol em todo ângulo, praia no nível do mar, fundo abaixo dele, perfil sempre descendo e malha virada para cima.
 - `test/scenes/sea_level_test.gd`: a crista mais alta das ondas fica ao menos 1,5 m abaixo do térreo do farol.
 - `test/unit/monitor_channels_test.gd`: começa no primeiro canal, passa por todos e volta ao início.
 - `test/scenes/sea_cameras_test.gd`: as duas câmeras do mar enxergam as pontas do trecho máximo do nevoeiro, e cada uma cobre a ponta da rota do seu lado.
