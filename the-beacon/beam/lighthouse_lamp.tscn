@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://tgoqtleobfy"]
 
 [ext_resource type="Script" uid="uid://cm4vyx3yoqhur" path="res://beam/lighthouse_lamp.gd" id="1_lamp"]
+[ext_resource type="Shader" path="res://beam/beam_shaft.gdshader" id="2_shaft"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
 albedo_color = Color(0.3, 0.3, 0.32, 1)
@@ -27,18 +28,17 @@ material = SubResource("StandardMaterial3D_bulb")
 radius = 0.18
 height = 0.36
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cone"]
-transparency = 1
-blend_mode = 1
-cull_mode = 2
-shading_mode = 0
-albedo_color = Color(1, 0.95, 0.7, 0.05)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shaft"]
+shader = ExtResource("2_shaft")
+shader_parameter/length = 90.0
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_cone"]
-material = SubResource("StandardMaterial3D_cone")
-top_radius = 2.5
-bottom_radius = 0.15
-height = 40.0
+[sub_resource type="CylinderMesh" id="CylinderMesh_shaft"]
+material = SubResource("ShaderMaterial_shaft")
+top_radius = 4.0
+bottom_radius = 0.18
+height = 90.0
+radial_segments = 32
+rings = 8
 cap_top = false
 cap_bottom = false
 
@@ -74,10 +74,10 @@ mesh = SubResource("SphereMesh_bulb")
 [node name="Light" type="SpotLight3D" parent="Head/Beam" unique_id=1896880921]
 light_color = Color(1, 0.95, 0.75, 1)
 light_energy = 8.0
-spot_range = 60.0
-spot_angle = 6.0
+spot_range = 110.0
+spot_angle = 4.0
 
-[node name="Cone" type="MeshInstance3D" parent="Head/Beam" unique_id=902201131]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -20)
+[node name="Shaft" type="MeshInstance3D" parent="Head/Beam" unique_id=902201131]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -45)
 cast_shadow = 0
-mesh = SubResource("CylinderMesh_cone")
+mesh = SubResource("CylinderMesh_shaft")
