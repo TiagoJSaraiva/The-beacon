@@ -1,7 +1,7 @@
 class_name SettingsPanel
 extends VBoxContainer
-## Opções do jogo (GDD 15.2): volumes, sensibilidade do olhar e a página de controles
-## (decisão 0018). Usado no menu principal e no menu de pausa; cada mudança vale na hora e
+## Opções do jogo (GDD 15.2): volumes, sensibilidade do olhar, resolução 3D e a página de
+## controles (decisão 0018). Usado no menu principal e no menu de pausa; cada mudança vale na hora e
 ## é gravada ao voltar.
 
 signal back_requested
@@ -10,6 +10,7 @@ signal back_requested
 @onready var _music_slider: HSlider = %MusicSlider
 @onready var _sfx_slider: HSlider = %SfxSlider
 @onready var _sensitivity_slider: HSlider = %SensitivitySlider
+@onready var _render_scale_slider: HSlider = %RenderScaleSlider
 @onready var _general: Control = %General
 @onready var _controls_button: Button = %ControlsButton
 @onready var _controls_panel: ControlsPanel = %ControlsPanel
@@ -22,11 +23,14 @@ func _ready() -> void:
 		slider.max_value = SettingsState.MAX_VOLUME
 	_sensitivity_slider.min_value = SettingsState.MIN_SENSITIVITY_SCALE
 	_sensitivity_slider.max_value = SettingsState.MAX_SENSITIVITY_SCALE
+	_render_scale_slider.min_value = SettingsState.MIN_RENDER_SCALE
+	_render_scale_slider.max_value = SettingsState.MAX_RENDER_SCALE
 	refresh()
 	_master_slider.value_changed.connect(Settings.set_master_volume)
 	_music_slider.value_changed.connect(Settings.set_music_volume)
 	_sfx_slider.value_changed.connect(Settings.set_sfx_volume)
 	_sensitivity_slider.value_changed.connect(Settings.set_sensitivity_scale)
+	_render_scale_slider.value_changed.connect(Settings.set_render_scale)
 	_controls_panel.back_requested.connect(go_back_from_subpage)
 
 
@@ -37,6 +41,7 @@ func refresh() -> void:
 	_music_slider.set_value_no_signal(Settings.state.music_volume)
 	_sfx_slider.set_value_no_signal(Settings.state.sfx_volume)
 	_sensitivity_slider.set_value_no_signal(Settings.state.sensitivity_scale)
+	_render_scale_slider.set_value_no_signal(Settings.state.render_scale)
 
 
 ## Põe o foco no primeiro controle deslizante.

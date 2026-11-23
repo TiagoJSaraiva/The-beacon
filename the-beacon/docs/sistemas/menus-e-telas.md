@@ -5,7 +5,7 @@ Fluxo fora da simulação (GDD 15.1, 15.2): menu principal, seleção de dificul
 
 ## Componentes
 - `ui/main_menu/main_menu.tscn` (`MainMenu`, Main Scene): Novo Jogo → seleção de dificuldade; Continuar (desabilitado sem save válido); Configurações; Sair. Os botões de dificuldade saem do `DifficultyCatalog`, com as bloqueadas desabilitadas e marcadas "(bloqueada)".
-- `ui/settings/settings_panel.tscn` (`SettingsPanel`): volumes geral, música e efeitos, sensibilidade do olhar e o botão Controles, que abre a página `ControlsPanel` (`ui/settings/controls_panel.tscn`, decisão 0018). Usado no menu principal e no menu de pausa.
+- `ui/settings/settings_panel.tscn` (`SettingsPanel`): volumes geral, música e efeitos, sensibilidade do olhar, resolução 3D (50% a 100% da tela, ampliada por interpolação simples, porque o FSR pesou mais do que aliviou na GPU integrada; só a visão do jogador, as câmeras de segurança têm resolução própria) e o botão Controles, que abre a página `ControlsPanel` (`ui/settings/controls_panel.tscn`, decisão 0018). Usado no menu principal e no menu de pausa.
 - `ui/pause_menu/pause_menu.tscn` (`PauseMenu`, `process_mode = ALWAYS`): índice (Continuar, Configurações, Sair para o menu), configurações e confirmação de saída (decisão 0016).
 - `ui/night_end/night_end_screen.tscn` (`NightEndScreen`), `ui/game_over/game_over_screen.tscn` (`GameOverScreen`), `ui/victory/victory_screen.tscn` (`VictoryScreen`): instanciadas no `Game`, fora do `World`, como o `PauseMenu`.
 - Autoloads: `SceneRouter` (troca de cena e pedido de noite, decisões 0010 e 0015), `Settings` (decisão 0012). Save e desbloqueio em `save-e-progresso.md`.

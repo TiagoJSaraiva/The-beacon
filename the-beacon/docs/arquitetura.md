@@ -53,7 +53,7 @@ Os diretores que mexem em outros sistemas (`DrownedDirector`, `FigureheadDirecto
 |---|---|---|---|
 | `SceneRouter` | `autoload/scene_router.gd` | Troca menu ↔ jogo; `play_night(difficulty, run)` carrega cada noite e entrega o `RunRequest` ao `Game` | 0010, 0015 |
 | `SaveService` | `autoload/save_service.gd` | Save único da partida (`RunState`, só entre noites) e progresso de desbloqueio (`user://`) | 0014 |
-| `Settings` | `autoload/settings.gd` | Volumes, sensibilidade e controles remapeáveis (`user://settings.cfg`); aplica as ligações no `InputMap` | 0012, 0018 |
+| `Settings` | `autoload/settings.gd` | Volumes, sensibilidade, resolução 3D e controles remapeáveis (`user://settings.cfg`); aplica as ligações no `InputMap` e a escala 3D na janela | 0012, 0018 |
 
 O parse do check carrega os scripts com os autoloads registrados (decisão 0013).
 

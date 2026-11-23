@@ -16,10 +16,11 @@ var state: SettingsState = SettingsState.new()
 var bindings: InputBindings = InputBindings.new()
 
 
-## Carrega as preferências e aplica os volumes e as ligações ao abrir o jogo.
+## Carrega as preferências e aplica os volumes, a resolução 3D e as ligações ao abrir o jogo.
 func _ready() -> void:
 	_load()
 	_apply_volumes()
+	_apply_render_scale()
 	_apply_bindings()
 
 
@@ -44,6 +45,12 @@ func set_sfx_volume(volume: float) -> void:
 ## Muda a escala da sensibilidade do olhar. Só grava com `save`.
 func set_sensitivity_scale(scale: float) -> void:
 	state.sensitivity_scale = scale
+	_on_state_edited()
+
+
+## Muda a escala da resolução 3D (fração da tela) na hora. Só grava com `save`.
+func set_render_scale(scale: float) -> void:
+	state.render_scale = scale
 	_on_state_edited()
 
 
@@ -98,11 +105,12 @@ func _read_section(file: ConfigFile, section: String) -> Dictionary:
 	return values
 
 
-## Limita os valores editados, aplica os volumes e emite `changed`.
+## Limita os valores editados, aplica os volumes e a resolução 3D e emite `changed`.
 func _on_state_edited() -> void:
 	# Passa pelo dicionário para aplicar os mesmos limites de um arquivo carregado.
 	state.from_dict(state.to_dict())
 	_apply_volumes()
+	_apply_render_scale()
 	changed.emit()
 
 
@@ -132,6 +140,16 @@ func _replace_event(action: StringName, event_class: String, event: InputEvent) 
 		if existing.is_class(event_class):
 			InputMap.action_erase_event(action, existing)
 	InputMap.action_add_event(action, event)
+
+
+## Desenha o 3D da janela na fração `render_scale` da resolução e amplia com interpolação simples.
+## As câmeras de segurança têm resolução própria e não mudam.
+func _apply_render_scale() -> void:
+	# O FSR seria mais nítido, mas numa GPU integrada o passe dele custou mais do que a resolução
+	# menor economizou (75%: 25 FPS com FSR, 43 com a ampliação simples, 32 em 100%).
+	var root: Viewport = get_tree().root
+	root.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
+	root.scaling_3d_scale = state.render_scale
 
 
 ## Aplica os três volumes aos buses de áudio.
