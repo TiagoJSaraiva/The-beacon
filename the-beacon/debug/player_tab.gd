@@ -1,7 +1,7 @@
 class_name PlayerTab
 extends DebugTab
-## Aba "Jogador" do painel de debug: invulnerabilidade, bateria da lanterna, bloqueio da corrida e
-## teleporte para pontos do farol.
+## Aba "Jogador" do painel de debug: invulnerabilidade, bateria da lanterna, bloqueio da corrida,
+## teleporte para pontos do farol e a visão sem escuridão.
 
 ## Altura acima da navmesh em que o jogador aparece, para não nascer dentro do piso.
 const TELEPORT_LIFT := 0.1
@@ -11,12 +11,14 @@ const PERCENT := 100.0
 
 var _player: Player
 var _lighthouse: Lighthouse
+var _fullbright: FullbrightView
 
 
-## Monta a aba para o jogador e o farol dados.
-func setup(player: Player, lighthouse: Lighthouse) -> void:
+## Monta a aba para o jogador, o farol e o `WorldEnvironment` do mundo dados.
+func setup(player: Player, lighthouse: Lighthouse, world_environment: WorldEnvironment) -> void:
 	_player = player
 	_lighthouse = lighthouse
+	_fullbright = FullbrightView.new(world_environment)
 	add_toggle(
 		"Invulnerável", player.invulnerable, func(on: bool) -> void: _player.invulnerable = on
 	)
@@ -38,6 +40,8 @@ func setup(player: Player, lighthouse: Lighthouse) -> void:
 			"Cabine (cadeira)": _teleport_to_node.bind(_lighthouse.chair),
 		}
 	)
+	add_title("Visão")
+	add_toggle("Sem escuridão", false, _fullbright.set_active)
 	add_status()
 
 

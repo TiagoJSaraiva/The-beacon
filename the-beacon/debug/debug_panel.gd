@@ -19,6 +19,8 @@ signal restart_night_requested
 @export var drowned: DrownedDirector
 @export var figurehead: FigureheadDirector
 @export var player: Player
+## Ambiente do mundo, que a caixa "Sem escuridão" da aba Jogador troca.
+@export var world_environment: WorldEnvironment
 
 ## Desligado fora da simulação (fim de noite, morte, vitória). Desligar fecha o painel.
 var enabled: bool = true:
@@ -88,7 +90,7 @@ func setup(difficulty: DifficultyConfig) -> void:
 	_lighthouse_tab.setup(lighthouse)
 	_fog_tab.setup(fog)
 	_threats_tab.setup(boats, drowned, figurehead)
-	_player_tab.setup(player, lighthouse)
+	_player_tab.setup(player, lighthouse, world_environment)
 	_balance_tab.setup(difficulty)
 
 

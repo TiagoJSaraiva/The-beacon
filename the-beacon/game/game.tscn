@@ -136,10 +136,11 @@ unique_name_in_owner = true
 script = ExtResource("25_carryover")
 lighthouse = NodePath("../World/Lighthouse")
 player = NodePath("../World/Player")
+world_environment = NodePath("../World/WorldEnvironment")
 drowned = NodePath("../World/DrownedDirector")
 tutorial = NodePath("../World/TutorialDirector")
 
-[node name="DebugPanel" parent="." node_paths=PackedStringArray("world", "night_director", "event_director", "lighthouse", "fog", "boats", "drowned", "figurehead", "player") instance=ExtResource("27_debug_panel")]
+[node name="DebugPanel" parent="." node_paths=PackedStringArray("world", "night_director", "event_director", "lighthouse", "fog", "boats", "drowned", "figurehead", "player", "world_environment") instance=ExtResource("27_debug_panel")]
 unique_name_in_owner = true
 world = NodePath("../World")
 night_director = NodePath("../World/NightDirector")
