@@ -32,6 +32,14 @@
   - Alçapão: o interativo virou um volume fixo de 1 m sobre o vão, mirável de mais longe.
   - Corrida a 4,125 m/s (3/4 da anterior; a metade ficaria abaixo da caminhada).
   - Painel de debug: "Sem escuridão" na aba Jogador.
+- **Desempenho e visual externo** (pedido direto do desenvolvedor; medido a 1080p na GPU integrada: de 20 para 32 FPS na largada, 43 FPS com a resolução 3D a 75%):
+  - Céu: o `Sky` do mundo reparte a radiância em vários quadros, com 64 px (`exterior-e-cameras.md`); antes ela era recalculada a cada quadro (~13 ms).
+  - Câmeras de segurança: só renderiza a do canal aberto, com o jogador na cabine e o monitor no enquadramento.
+  - Resolução 3D nas configurações (50% a 100%, ampliação simples; o FSR pesou mais do que aliviou).
+  - Câmeras do mar a 9,5 m, abaixo da cabeça do farol: o feixe cruza o céu da imagem. O cilindro amarelo virou um facho que esmaece (`beam_shaft.gdshader`), e o spot alcança 110 m.
+  - Barcos cruzam a rota em 20 s (eram 12).
+  - Telhado invisível de duas águas (camada `slippery_tops`) no gerador de emergência e na casa de máquinas: o jogador e o galão escorregam. O gerador principal e o tanque ficaram sem, porque a escada passa logo acima deles (ver Bloqueios).
+  - Faixa de nevoeiro no mar com deslocamento só visual (`FogVisuals.sea_band_offset`), ajustável ao vivo na aba Nevoeiro do painel (Y).
 - **Ilha** (decisão 0030): o mar desceu 2 m (o farol não mudou de lugar) e as ondas ficaram mais baixas: antes as cristas, de ~3,2 m, entravam no térreo. A ilha gerada tem platô de grama, encosta e praia; na frente da porta, só onde a câmera da porta vê, há tambores, boias, tronco, pedras e capim.
 - **Mar da Boujie Water Shader** (decisão 0029): ondas baixas, espuma e reflexo do céu e da lua nas câmeras de segurança.
 - **Céu da Sky3D** (decisão 0028): lua cheia que nasce, cruza o céu e se põe com o relógio da noite (`SkyClock`), estrelas e Via Láctea nas câmeras de segurança; a noite começa no fim do crepúsculo e termina no amanhecer.
@@ -61,13 +69,17 @@ Validar jogando (por fase):
 - **Visual do interior**: leitura das texturas (reboco com mofo, emendas da projeção triplanar nas diagonais da parede, tábuas do piso); degraus de metal (andar sobre eles sem os pés afundarem demais entre um e outro, vão entre degraus, mãos-francesas); começo da escada sem o guarda-corpo; brilho das pendentes e das arandelas (energia 1 e 0,7 na cena de cada uma, vezes `InteriorLights.light_scale` 0,4) e desempenho com nove luzes com sombra mais as câmeras; altura das pendentes (o fundo fica a ~0,3 m acima do olho); alçapão mirado de longe e o trinco ao lado (o alcance do trinco não mudou e é pequeno); ritmo com a corrida mais lenta; "Sem escuridão" no painel (Y).
 - **Breu, céu e mar**: breu completo onde não há luz e força das luzes (0,4, ajustável no painel); nevoeiro interno escuro no breu e quente perto das lâmpadas; reboco com mofo na parede interna; lanterna iluminando os degraus; nas câmeras, a lua nascendo à esquerda no começo da noite, alta com o reflexo no mar de madrugada e se pondo à direita no amanhecer (o crepúsculo às 20h e o amanhecer às 6h são intencionais); estrelas e Via Láctea; ondas e espuma do mar; desempenho com o céu e o mar novos nas três câmeras.
 - **Ilha**: nenhuma água no térreo nem na escada; leitura da ilha e dos props na câmera da porta à noite (o farol faz sombra da lua sobre a entrada em parte da noite); espuma só na beira da água; enquadramento das câmeras do mar com a rota 2 m mais baixa.
+- **Desempenho e visual externo**: FPS jogando (largada, térreo, olhando o monitor) e se os engasgos continuam; nitidez com a resolução 3D a 75% e 50%; troca de canal sem atraso visível (a câmera volta a renderizar no quadro seguinte); a imagem do monitor ao voltar à cabine; o facho no céu das câmeras do mar (força, largura, de noite fechada) e iluminando o nevoeiro no mar; enquadramento das câmeras do mar mais baixas (barcos, horizonte, faixa de nevoeiro); barcos a 20 s; escorregar do topo do gerador de emergência e da casa de máquinas, e o galão arremessado sobre elas; despejar no gerador de emergência (o telhado não pode bloquear a mira); posições novas da faixa no mar pela aba Nevoeiro.
 - **G**: textos do tutorial com as teclas certas no teclado e no controle (o prompt troca ao usar o outro dispositivo); remapear tecla e botão, conflito vira troca, Esc cancela a espera, "Restaurar padrão", gravar e reabrir o jogo; navegar todos os menus só com o controle, B voltando uma página.
 
 ## Bloqueios
+- **Decisão pendente, topo do gerador principal e do tanque**: a escada em caracol passa logo acima dos dois (0,25 a 1,6 m), e um telhado a 46° ou mais furaria os degraus (até 0,48 m no gerador; no tanque também atravessa a parede). Embaixo da escada o jogador não cabe de pé, mas sobram faixas livres nas bordas. Opções: empurrão no jogador e no galão que param em cima de uma máquina marcada (código no `Player` e no `Jerrycan`); mudar as máquinas de lugar; ou deixar como está.
 - Observações:
+  - Engasgos: picos de 60 a 140 ms mais ou menos a cada segundo, com a GPU carregada. Não vêm de um nó específico (continuam com a simulação congelada e sem câmeras; somem numa cena leve). Suspeita: driver ou gerenciamento de energia da GPU integrada. Próximo passo, se continuarem: o profiler do editor.
+  - Na cumeeira exata do telhado invisível (a até ~0,25 m dela), a ponta redonda da cápsula do jogador ainda se equilibra; o pulo não alcança essa altura, mas cair de cima dá.
   - Anotados em `../notes/feature-godmode.txt`, a investigar: nenhum barco parece aparecer; na câmera da porta, o feixe aparece batendo na parede externa do farol.
   - `project.godot` ainda declara `config/features` com `"GL Compatibility"`; o editor atualiza ao salvar o projeto (agente não altera esse campo).
-  - O feixe não aparece como facho no nevoeiro em nenhuma câmera: o `spot_range` (60 m) não alcança a faixa no mar (~70 m), e o anel fica fora das câmeras do mar e do jogador.
+  - O spot do feixe agora alcança 110 m, além da faixa no mar (~70 m): conferir jogando se o nevoeiro mostra o facho. O anel continua fora das câmeras do mar e do jogador.
   - `project.godot` aponta `config/icon="res://icon.svg"`, que não existe.
   - O check não acusa avisos do GDScript.
   - O bake da navmesh avisa no console que lê malhas visuais do CSG (custo só na abertura; decisão 0009).
