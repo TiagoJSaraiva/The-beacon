@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" path="res://lighthouse/ceiling_lamp.tscn" id="25_ceiling_lamp"]
 [ext_resource type="PackedScene" path="res://lighthouse/wall_lamp.tscn" id="26_wall_lamp"]
 [ext_resource type="Script" path="res://lighthouse/interior_lights.gd" id="27_interior_lights"]
+[ext_resource type="Material" path="res://assets/textures/worn_mossy_plasterwall/worn_mossy_plasterwall.tres" id="28_plaster"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -64,7 +65,7 @@ polygon = PackedVector2Array(0, -0.1, 6.5, -0.1, 6.5, 0, 5.5, 10.8, 5.5, 13.9, 0
 mode = 1
 spin_degrees = 360.0
 spin_sides = 32
-material = ExtResource("20_brick")
+material = ExtResource("28_plaster")
 
 [node name="EntranceDoor" parent="Shell" unique_id=1126458855 instance=ExtResource("3_door")]
 unique_name_in_owner = true

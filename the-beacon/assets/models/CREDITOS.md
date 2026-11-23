@@ -24,7 +24,8 @@ Da Poly Haven, licença CC0 (domínio público, sem atribuição obrigatória). 
 
 | Pasta | Textura | Autor | Fonte | Uso no jogo |
 |---|---|---|---|---|
-| `castle_brick_02_white/` | Castle Brick 02 White | Rob Tuytel | https://polyhaven.com/a/castle_brick_02_white | Paredes do farol, por dentro e por fora |
+| `castle_brick_02_white/` | Castle Brick 02 White | Rob Tuytel | https://polyhaven.com/a/castle_brick_02_white | Parede externa do farol |
+| `worn_mossy_plasterwall/` | Worn Mossy Plasterwall | Amal Kumar | https://polyhaven.com/a/worn_mossy_plasterwall | Parede interna do farol (reboco caiado com mofo) |
 | `concrete_floor_worn_001/` | Concrete Floor Worn 001 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_floor_worn_001 | Piso do térreo |
 | `dark_wooden_planks/` | Dark Wooden Planks | Amal Kumar | https://polyhaven.com/a/dark_wooden_planks | Piso da cabine e patamar da escada de mão |
 | `concrete_wall_003/` | Concrete Wall 003 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_wall_003 | Teto da cabine |
