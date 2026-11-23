@@ -1,9 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://8nhej3jqc0mw"]
 
-[ext_resource type="Script" path="res://lighthouse/trapdoor.gd" id="1_trapdoor"]
-[ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
-[ext_resource type="Script" path="res://components/looping_sound.gd" id="3_loop"]
-[ext_resource type="AudioStream" path="res://assets/audio/placeholder/bang.wav" id="4_bang"]
+[ext_resource type="Script" uid="uid://bahbus82o4xg2" path="res://lighthouse/trapdoor.gd" id="1_trapdoor"]
+[ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
+[ext_resource type="AudioStream" uid="uid://dtxhjisyvurp4" path="res://assets/audio/placeholder/bang.wav" id="4_bang"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
 size = Vector3(1.93, 0.1, 1.6)
@@ -16,7 +16,7 @@ material = SubResource("StandardMaterial3D_wood")
 size = Vector3(1.93, 0.1, 1.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel_use"]
-size = Vector3(1.93, 0.18, 1.6)
+size = Vector3(1.93, 1, 1.6)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_latch"]
 albedo_color = Color(0.55, 0.12, 0.08, 1)
@@ -29,55 +29,56 @@ size = Vector3(0.15, 0.2, 0.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_latch_use"]
 size = Vector3(0.35, 0.35, 0.45)
 
-[node name="Trapdoor" type="CSGBox3D"]
+[node name="Trapdoor" type="CSGBox3D" unique_id=1394721695]
+transparency = 1.0
 operation = 2
 size = Vector3(1.83, 0.5, 1.5)
 script = ExtResource("1_trapdoor")
 
-[node name="Panel" type="AnimatableBody3D" parent="."]
+[node name="Panel" type="AnimatableBody3D" parent="." unique_id=916829930]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.965, 0.15, -0.8)
 collision_layer = 2
 collision_mask = 0
 sync_to_physics = false
 
-[node name="PanelCollision" type="CollisionShape3D" parent="Panel"]
+[node name="PanelCollision" type="CollisionShape3D" parent="Panel" unique_id=1962578380]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, -0.05, 0.8)
 shape = SubResource("BoxShape3D_panel")
 
-[node name="Mesh" type="MeshInstance3D" parent="Panel"]
+[node name="Mesh" type="MeshInstance3D" parent="Panel" unique_id=1933376718]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, -0.05, 0.8)
 mesh = SubResource("BoxMesh_panel")
 
-[node name="PanelInteractable" type="Area3D" parent="Panel"]
+[node name="PanelInteractable" type="Area3D" parent="." unique_id=544423673]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.965, -0.05, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 script = ExtResource("2_interactable")
 hands_rule = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Panel/PanelInteractable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PanelInteractable" unique_id=784205130]
 shape = SubResource("BoxShape3D_panel_use")
 
-[node name="Latch" type="Node3D" parent="."]
+[node name="Latch" type="Node3D" parent="." unique_id=350747352]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.15, 1.05)
 
-[node name="LatchBolt" type="MeshInstance3D" parent="Latch"]
+[node name="LatchBolt" type="MeshInstance3D" parent="Latch" unique_id=1314338289]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 mesh = SubResource("BoxMesh_latch")
 
-[node name="LatchInteractable" type="Area3D" parent="Latch"]
+[node name="LatchInteractable" type="Area3D" parent="Latch" unique_id=1512118616]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
 script = ExtResource("2_interactable")
 mode = 1
 hands_rule = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Latch/LatchInteractable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Latch/LatchInteractable" unique_id=1904023122]
 shape = SubResource("BoxShape3D_latch_use")
 
-[node name="BangSound" type="AudioStreamPlayer3D" parent="."]
+[node name="BangSound" type="AudioStreamPlayer3D" parent="." unique_id=1390068775]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 stream = ExtResource("4_bang")
@@ -85,6 +86,6 @@ volume_db = 4.0
 bus = &"SFX"
 script = ExtResource("3_loop")
 
-[connection signal="interacted" from="Panel/PanelInteractable" to="." method="_on_panel_interactable_interacted"]
-[connection signal="interacted" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_interacted"]
+[connection signal="interacted" from="PanelInteractable" to="." method="_on_panel_interactable_interacted"]
 [connection signal="hold_completed" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_hold_completed"]
+[connection signal="interacted" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_interacted"]
