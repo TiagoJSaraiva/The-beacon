@@ -2,7 +2,7 @@
 
 Modelos de terceiros usados no jogo (decisão 0023). Os pacotes originais ficam em `../notes/modelos-store/`, fora do git; a lista completa de candidatos está no documento citado em `../notes/modelos-link.txt`.
 
-A página do Fab de nenhum destes mostra os termos de licença (campo "License terms" vazio). **Confirme a licença na conta do Fab antes de publicar o jogo.** Os da Quixel Megascans têm termos próprios.
+Os da Poly Haven são CC0. A página do Fab de nenhum dos outros mostra os termos de licença (campo "License terms" vazio). **Confirme a licença na conta do Fab antes de publicar o jogo.** Os da Quixel Megascans têm termos próprios.
 
 | Pasta | Modelo | Autor | Fonte | Uso no jogo |
 |---|---|---|---|---|
@@ -15,6 +15,8 @@ A página do Fab de nenhum destes mostra os termos de licença (campo "License t
 | `fuel_container/` | Props_FuelContainer (a confirmar) | a confirmar | a confirmar (export glTF do Sketchfab) | Galão com bico (`fuel/jerrycan.tscn`, `player/player.tscn`). O embrulho centra o corpo, sem o bico, que aponta para +X |
 | `gas_tank/` | Propane Tank (a confirmar) | a confirmar | a confirmar (um dos links de tanques em `../notes/modelos-link.txt`) | Tanque de combustível (`fuel/fuel_tank.tscn`) |
 | `radio_station/` | Radiostation McKinley (a confirmar) | a confirmar | a confirmar | Rádio da mesa (`boats/radio.tscn`) |
+| `hanging_industrial_lamp/` | Hanging Industrial Lamp | Kuutti Siitonen | https://polyhaven.com/a/hanging_industrial_lamp (CC0) | Pendentes da cabine (`lighthouse/ceiling_lamp.tscn`). O vidro usa material próprio (vidro fosco emissivo): o Godot não lê a transmissão do glTF |
+| `industrial_caged_sconce/` | Industrial Caged Sconce | Ulan Cabanilla | https://polyhaven.com/a/industrial_caged_sconce (CC0) | Arandelas do térreo e da escada (`lighthouse/wall_lamp.tscn`). O pacote é um kit; o embrulho mostra só a variante `a` |
 
 ## Texturas de superfície
 

@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/industrial_caged_sconce/industrial_caged_sconce.gltf" id="1_model"]
+
+[node name="IndustrialCagedSconce" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.105, 0)
+
+[node name="industrial_caged_sconce_b" parent="Model" index="0"]
+visible = false
+
+[node name="industrial_caged_sconce_a" parent="Model" index="1"]
+cast_shadow = 0
+
+[node name="industrial_caged_sconce_c" parent="Model" index="2"]
+visible = false
+
+[node name="industrial_caged_sconce_mount" parent="Model" index="3"]
+visible = false
+
+[node name="industrial_caged_sconce_elbow" parent="Model" index="4"]
+visible = false
+
+[node name="industrial_caged_sconce_light" parent="Model" index="5"]
+visible = false
+
+[node name="industrial_caged_sconce_pipe_long" parent="Model" index="6"]
+visible = false
+
+[node name="industrial_caged_sconce_pipe_short" parent="Model" index="7"]
+visible = false
+
+[node name="industrial_caged_sconce_base_b" parent="Model" index="8"]
+visible = false
+
+[node name="industrial_caged_sconce_base_a" parent="Model" index="9"]
+visible = false
+
+[node name="industrial_caged_sconce_pipe_t" parent="Model" index="10"]
+visible = false
+
+[editable path="Model"]

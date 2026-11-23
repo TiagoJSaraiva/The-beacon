@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/industrial_caged_sconce/industrial_caged_sconce.tscn" id="1_model"]
+
+[node name="WallLamp" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0.17)
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.7
+shadow_enabled = true
+omni_range = 4.5
