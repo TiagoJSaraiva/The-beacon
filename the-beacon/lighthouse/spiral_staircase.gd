@@ -7,7 +7,6 @@ extends StaticBody3D
 
 # Sobreposição dos segmentos para não abrir frestas na borda externa da curva.
 const SEGMENT_OVERLAP := 1.08
-const RAIL_THICKNESS := 0.06
 
 @export var inner_radius: float = 3.4:
 	set(value):
@@ -50,17 +49,6 @@ const RAIL_THICKNESS := 0.06
 	set(value):
 		material = value
 		_queue_build()
-## Guarda-corpo na borda interna enquanto o degrau está abaixo desta altura. Sem ele, a
-## lateral baixa do começo da escada vira atalho na navmesh que o corpo não consegue subir.
-@export var low_rail_until_height: float = 1.0:
-	set(value):
-		low_rail_until_height = value
-		_queue_build()
-@export var rail_height: float = 0.9:
-	set(value):
-		rail_height = value
-		_queue_build()
-
 var _generated: Array[Node] = []
 var _build_queued: bool = false
 
@@ -88,8 +76,7 @@ func _queue_build() -> void:
 	_build.call_deferred()
 
 
-## Apaga os nós gerados e recria os segmentos de colisão e visual, mais o guarda-corpo do trecho
-## baixo.
+## Apaga os nós gerados e recria os segmentos de colisão e visual.
 func _build() -> void:
 	_build_queued = false
 	for node: Node in _generated:
@@ -117,30 +104,6 @@ func _build() -> void:
 		var segment_transform := Transform3D(segment_basis, middle - up * thickness * 0.5)
 		_add_generated(_make_collision(shape, segment_transform))
 		_add_generated(_make_mesh(mesh, segment_transform))
-		if end.y < low_rail_until_height:
-			_add_rail(middle, along, outward, length, end.y)
-
-
-## Cria um trecho do guarda-corpo na borda interna, do chão até `rail_height` acima de `top`.
-func _add_rail(
-	middle: Vector3, along: Vector3, outward: Vector3, length: float, top: float
-) -> void:
-	var height: float = top + rail_height
-	var size := Vector3(length, height, RAIL_THICKNESS)
-	var shape := BoxShape3D.new()
-	shape.size = size
-	var mesh := BoxMesh.new()
-	mesh.size = size
-	mesh.material = material
-	var flat_along: Vector3 = Vector3(along.x, 0.0, along.z).normalized()
-	var rail_basis := Basis(flat_along, Vector3.UP, flat_along.cross(Vector3.UP))
-	var center: Vector3 = (
-		Vector3(middle.x, 0.0, middle.z)
-		- outward * ((outer_radius - inner_radius) * 0.5 + RAIL_THICKNESS * 0.5)
-	)
-	var rail_transform := Transform3D(rail_basis, center + Vector3.UP * (height * 0.5))
-	_add_generated(_make_collision(shape, rail_transform))
-	_add_generated(_make_mesh(mesh, rail_transform))
 
 
 ## Devolve um nó de colisão com a forma e a transformação dadas.
