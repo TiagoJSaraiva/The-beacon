@@ -44,6 +44,7 @@ Commits:
 ## Branches preservadas
 
 - `teste/tanques-verticais`: versão de demonstração com dois tanques verticais no lugar do tanque deitado, para o parceiro do desenvolvedor avaliar. **Não apague, não mescle na `main` e não faça rebase.** Só mexa nela a pedido do desenvolvedor. Se a versão for aprovada, os tanques entram na `main` por uma tarefa nova.
+- `teste/nevoeiro-shader-e-volume`: nevoeiro com o shader antigo somado à névoa volumétrica, para o desenvolvedor comparar. Mesmas regras: não apague, não mescle na `main`, não faça rebase; se aprovado, entra por uma tarefa nova.
 
 ## Regras essenciais de GDScript
 
