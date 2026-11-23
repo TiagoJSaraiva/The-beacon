@@ -1,7 +1,7 @@
 class_name PlayerTab
 extends DebugTab
 ## Aba "Jogador" do painel de debug: invulnerabilidade, bateria da lanterna, bloqueio da corrida,
-## teleporte para pontos do farol e a visão sem escuridão.
+## teleporte para pontos do farol, a visão sem escuridão e a força das luzes do farol.
 
 ## Altura acima da navmesh em que o jogador aparece, para não nascer dentro do piso.
 const TELEPORT_LIFT := 0.1
@@ -42,6 +42,15 @@ func setup(player: Player, lighthouse: Lighthouse, world_environment: WorldEnvir
 	)
 	add_title("Visão")
 	add_toggle("Sem escuridão", false, _fullbright.set_active)
+	add_value_action(
+		"Força das luzes do farol",
+		0.0,
+		2.0,
+		0.05,
+		lighthouse.interior_lights.light_scale,
+		"Aplicar",
+		func(value: float) -> void: _lighthouse.interior_lights.light_scale = value
+	)
 	add_status()
 
 

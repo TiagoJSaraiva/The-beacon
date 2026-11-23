@@ -29,6 +29,7 @@ var _was_lit: bool = false
 @onready var radio: Radio = %Radio
 @onready var chair: Chair = %Chair
 @onready var monitor: SecurityMonitor = %Monitor
+@onready var interior_lights: InteriorLights = %InteriorLights
 @onready var _wall_clock: WallClock = %WallClock
 @onready var _door_inside: Marker3D = %DoorInside
 @onready var _rest_spot: Marker3D = %RestSpot
