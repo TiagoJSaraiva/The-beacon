@@ -61,8 +61,9 @@ func test_jerrycan_goes_from_slot_to_floor_and_back() -> void:
 	assert_int(jerrycan.place).is_equal(Jerrycan.Place.HAND)
 	await assert_signal(lighthouse).is_emitted("jerrycan_carried_changed", [true])
 
-	# Solto no meio do térreo, cai e para no chão.
-	lighthouse.drop_jerrycan(Vector3(0.0, 1.0, 0.0), Vector3.ZERO)
+	# Solto no térreo, num vão livre ao lado da casa de máquinas (que ocupa o centro), cai e para
+	# no chão.
+	lighthouse.drop_jerrycan(Vector3(0.0, 1.0, 3.0), Vector3.ZERO)
 	assert_int(jerrycan.place).is_equal(Jerrycan.Place.WORLD)
 	await runner.simulate_frames(90)
 	assert_float(jerrycan.global_position.y).is_between(-0.05, 0.3)

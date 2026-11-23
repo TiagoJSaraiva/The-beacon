@@ -64,7 +64,6 @@ Validar jogando (por fase):
 - **G**: textos do tutorial com as teclas certas no teclado e no controle (o prompt troca ao usar o outro dispositivo); remapear tecla e botão, conflito vira troca, Esc cancela a espera, "Restaurar padrão", gravar e reabrir o jogo; navegar todos os menus só com o controle, B voltando uma página.
 
 ## Bloqueios
-- O check completo falha em um teste de cena por mudança de posição na cena (commit `0261881`), sem correção feita: `lighthouse_power_test::test_jerrycan_goes_from_slot_to_floor_and_back` (o galão solto em (0, 1, 0) cai em cima da casa de máquinas, agora no centro do térreo com escala 2,5; essa falha também interrompe os testes seguintes da suíte).
 - Observações:
   - Anotados em `../notes/feature-godmode.txt`, a investigar: nenhum barco parece aparecer; na câmera da porta, o feixe aparece batendo na parede externa do farol.
   - `project.godot` ainda declara `config/features` com `"GL Compatibility"`; o editor atualiza ao salvar o projeto (agente não altera esse campo).
