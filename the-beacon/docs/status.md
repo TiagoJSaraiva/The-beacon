@@ -32,6 +32,7 @@
   - Alçapão: o interativo virou um volume fixo de 1 m sobre o vão, mirável de mais longe.
   - Corrida a 4,125 m/s (3/4 da anterior; a metade ficaria abaixo da caminhada).
   - Painel de debug: "Sem escuridão" na aba Jogador.
+- **Mar da Boujie Water Shader** (decisão 0029): ondas baixas, espuma e reflexo do céu e da lua nas câmeras de segurança.
 - **Céu da Sky3D** (decisão 0028): lua cheia que nasce, cruza o céu e se põe com o relógio da noite (`SkyClock`), estrelas e Via Láctea nas câmeras de segurança; a noite começa no fim do crepúsculo e termina no amanhecer.
 - **Nevoeiro combinado** (decisão 0027, aprovado na branch `teste/nevoeiro-shader-e-volume`): cada volume do nevoeiro tem também uma camada com o shader antigo; `FogVisuals.volume_density_scale` e `shader_density_scale` ajustam a mistura no Inspector.
 - **Modo debug** (pedido em `../notes/feature-godmode.txt`, decisão 0024, `sistemas/debug.md`): com `DebugMode.ENABLED` e build de debug, Y abre um painel com a simulação rodando (caixa para pausar o `World`). Abas: Noite (hora, velocidade, fim e recomeço da noite, disparo de eventos, sorteio), Farol (falhas, consertos, mangueira, combustível, galão, alavanca, trinco), Nevoeiro (surgir, limpar, congelar, avanço, estágio), Ameaças (barcos, Afogado, carranca), Jogador (invulnerável, bateria, corrida, teleporte) e Balanceamento (todos os valores da dificuldade ao vivo, exportar diferenças no console, restaurar).

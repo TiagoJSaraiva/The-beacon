@@ -7,7 +7,7 @@ Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de d
 
 **Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração. **Entrega 2** implementada: revisão das mecânicas (`planos/entrega-2.md`), à espera do playtest.
 
-Renderizador Forward+ com o driver D3D12 no Windows (decisão 0025). O ambiente do mundo é o da Sky3D e vale para as câmeras de segurança; o jogador usa o seu, sem luz ambiente, na própria câmera (decisão 0028). Addons de terceiros em `addons/`: gdUnit4 (testes) e Sky3D (céu).
+Renderizador Forward+ com o driver D3D12 no Windows (decisão 0025). O ambiente do mundo é o da Sky3D e vale para as câmeras de segurança; o jogador usa o seu, sem luz ambiente, na própria câmera (decisão 0028). Addons de terceiros em `addons/`: gdUnit4 (testes), Sky3D (céu) e Boujie Water Shader (mar, decisão 0029).
 
 Princípios da implementação:
 - Regras em classes `RefCounted` puras (`*_state.gd`, `*_rules.gd`), testáveis. Nós só fazem tick, leem input e aplicam o resultado. Só o estado que passa de uma noite para a outra é serializado (`RunState`, decisão 0015).

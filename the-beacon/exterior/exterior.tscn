@@ -1,20 +1,13 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://addons/boujie_water_shader/types/ocean.gd" id="20_ocean"]
+[ext_resource type="Material" path="res://exterior/sea_material.tres" id="21_sea_material"]
 [ext_resource type="Script" path="res://exterior/exterior.gd" id="1_exterior"]
 [ext_resource type="PackedScene" path="res://exterior/security_camera.tscn" id="2_camera"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock"]
 albedo_color = Color(0.2, 0.21, 0.2, 1)
 roughness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sea"]
-albedo_color = Color(0.03, 0.08, 0.12, 1)
-metallic = 0.3
-roughness = 0.2
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_sea"]
-material = SubResource("StandardMaterial3D_sea")
-size = Vector2(600, 600)
 
 [sub_resource type="Curve3D" id="Curve3D_boats"]
 _data = {
@@ -34,9 +27,13 @@ height = 1.0
 sides = 48
 material = SubResource("StandardMaterial3D_rock")
 
-[node name="Sea" type="MeshInstance3D" parent="."]
+[node name="Sea" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
-mesh = SubResource("PlaneMesh_sea")
+script = ExtResource("20_ocean")
+material = ExtResource("21_sea_material")
+outermost_resolution = 16
+levels_of_detail = 4
+far_edge = 300
 
 [node name="BoatPath" type="Path3D" parent="."]
 unique_name_in_owner = true

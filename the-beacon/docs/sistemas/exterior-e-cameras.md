@@ -4,7 +4,7 @@
 Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da mesa (GDD 1.2.17).
 
 ## Componentes
-- `exterior/exterior.tscn` (`Exterior`): `Island` (CSG), `Sea`, `BoatPath` (`Path3D` de x −140 a 140 em z=70), marcadores `SeaViewLeft`/`SeaViewRight`/`DoorView`. Fora da navmesh: o Afogado só anda dentro do farol.
+- `exterior/exterior.tscn` (`Exterior`): `Island` (CSG), `Sea` (`Ocean` da Boujie Water Shader com `exterior/sea_material.tres`: ondas baixas, cores de noite, reflexo do céu e da lua; decisão 0029), `BoatPath` (`Path3D` de x −140 a 140 em z=70), marcadores `SeaViewLeft`/`SeaViewRight`/`DoorView`. Fora da navmesh: o Afogado só anda dentro do farol.
 - `exterior/security_camera.tscn` (`SecurityCamera`): `SubViewport` com `Camera3D`, sem `Environment` próprio (usa o do mundo, o da Sky3D); mira o `target` em `_ready`.
   - `SeaCameraLeft` e `SeaCameraRight`: no alto da torre, com `fov` de 75°, miram x = 23 e x = −23 da rota. Juntas cobrem a rota inteira e enxergam em comum o meio dela (x de −30 a 30, cerca de 21% da rota), onde fica o nevoeiro (`FogConfig.route_center`, `max_route_coverage` = 0,2): ele aparece no lado direito de uma imagem e no esquerdo da outra.
   - `DoorCamera`: fora da porta de entrada, mirando-a.

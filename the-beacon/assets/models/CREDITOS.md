@@ -38,3 +38,4 @@ Da Poly Haven, licença CC0 (domínio público, sem atribuição obrigatória). 
 | `addons/sky_3d/` | Sky3D v2.1.0 (céu, sol, lua, estrelas) | Cory Petkovsek, J. Cuéllar e contribuidores (TokisanGames) | MIT | Não |
 | `addons/sky_3d/assets/thirdparty/textures/milkyway/` | "The Milky Way panorama" (e uma versão só com as estrelas mais brilhantes) | ESO/S. Brunier | CC BY 4.0 | **Sim**: "The Milky Way panorama by ESO/S. Brunier, licensed under CC BY 4.0 and used in original and modified forms." (https://www.eso.org/public/images/eso0932a/) |
 | `addons/sky_3d/assets/thirdparty/textures/moon/` | Mapa da lua | GPoSM | MIT | Não |
+| `addons/boujie_water_shader/` | Boujie Water Shader (mar, ondas Gerstner, espuma) | Zach Bernal (Chrisknyfe) e contribuidores | MIT | Não |
