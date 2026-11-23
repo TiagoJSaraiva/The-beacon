@@ -21,6 +21,7 @@
 [ext_resource type="Material" path="res://assets/textures/concrete_floor_worn_001/concrete_floor_worn_001.tres" id="21_concrete_floor"]
 [ext_resource type="Material" path="res://assets/textures/dark_wooden_planks/dark_wooden_planks.tres" id="22_planks"]
 [ext_resource type="Material" path="res://assets/textures/concrete_wall_003/concrete_wall_003.tres" id="23_ceiling"]
+[ext_resource type="Material" path="res://assets/textures/metal_plate/metal_plate.tres" id="24_metal_plate"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
@@ -109,7 +110,7 @@ radius_shrink = 0.778
 end_height = 8.4
 turns = 1.045
 start_angle_degrees = 36.0
-material = SubResource("StandardMaterial3D_wood")
+material = ExtResource("24_metal_plate")
 
 [node name="LadderLanding" type="CSGBox3D" parent="." unique_id=1127796698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 8.275, 0.1)
