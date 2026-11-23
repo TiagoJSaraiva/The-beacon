@@ -187,6 +187,11 @@ func teleport(point: Vector3) -> void:
 	_fall_damage.cancel_fall()
 
 
+## Devolve a câmera do olhar do jogador (para o painel de debug trocar o ambiente dela).
+func view_camera() -> Camera3D:
+	return _camera
+
+
 ## Diz se a corrida está bloqueada por uma queda média.
 func is_sprint_blocked() -> bool:
 	return _fall_damage.is_sprint_blocked()

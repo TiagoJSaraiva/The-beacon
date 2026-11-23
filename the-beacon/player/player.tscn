@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://player/flashlight.tscn" id="4_flashlight"]
 [ext_resource type="PackedScene" path="res://assets/models/fuel_container/fuel_container.tscn" id="5_jerrycan"]
 [ext_resource type="Script" path="res://player/ladder_climber.gd" id="6_ladder"]
+[ext_resource type="Environment" path="res://player/interior_environment.tres" id="7_environment"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -25,6 +26,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
 cull_mask = 1048573
+environment = ExtResource("7_environment")
 current = true
 
 [node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D" node_paths=PackedStringArray("user")]

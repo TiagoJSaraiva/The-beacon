@@ -30,3 +30,11 @@ Da Poly Haven, licença CC0 (domínio público, sem atribuição obrigatória). 
 | `dark_wooden_planks/` | Dark Wooden Planks | Amal Kumar | https://polyhaven.com/a/dark_wooden_planks | Piso da cabine e patamar da escada de mão |
 | `concrete_wall_003/` | Concrete Wall 003 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_wall_003 | Teto da cabine |
 | `metal_plate/` | Metal Plate | Rob Tuytel | https://polyhaven.com/a/metal_plate | Degraus da escada em caracol |
+
+## Addons
+
+| Pasta | O quê | Autor | Licença | Crédito exigido |
+|---|---|---|---|---|
+| `addons/sky_3d/` | Sky3D v2.1.0 (céu, sol, lua, estrelas) | Cory Petkovsek, J. Cuéllar e contribuidores (TokisanGames) | MIT | Não |
+| `addons/sky_3d/assets/thirdparty/textures/milkyway/` | "The Milky Way panorama" (e uma versão só com as estrelas mais brilhantes) | ESO/S. Brunier | CC BY 4.0 | **Sim**: "The Milky Way panorama by ESO/S. Brunier, licensed under CC BY 4.0 and used in original and modified forms." (https://www.eso.org/public/images/eso0932a/) |
+| `addons/sky_3d/assets/thirdparty/textures/moon/` | Mapa da lua | GPoSM | MIT | Não |

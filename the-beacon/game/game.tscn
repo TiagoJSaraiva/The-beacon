@@ -25,16 +25,22 @@
 [ext_resource type="Script" path="res://game/run_carryover.gd" id="25_carryover"]
 [ext_resource type="PackedScene" path="res://fog/fog_visuals.tscn" id="26_fog_visuals"]
 [ext_resource type="PackedScene" path="res://debug/debug_panel.tscn" id="27_debug_panel"]
+[ext_resource type="Script" path="res://addons/sky_3d/src/Sky3D.gd" id="28_sky3d"]
+[ext_resource type="Script" path="res://addons/sky_3d/src/SkyDome.gd" id="29_sky_dome"]
+[ext_resource type="Script" path="res://addons/sky_3d/src/TimeOfDay.gd" id="30_time_of_day"]
+[ext_resource type="Script" path="res://night/sky_clock.gd" id="31_sky_clock"]
 
-[sub_resource type="Environment" id="Environment_night"]
-background_mode = 1
-background_color = Color(0.02, 0.03, 0.05, 1)
-ambient_light_source = 2
-ambient_light_color = Color(0.25, 0.3, 0.4, 1)
-ambient_light_energy = 0.0
+[sub_resource type="Environment" id="Environment_exterior"]
+background_mode = 2
+ambient_light_source = 3
+ambient_light_sky_contribution = 0.7
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_white = 6.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
 volumetric_fog_ambient_inject = 1.5
+volumetric_fog_length = 120.0
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_world"]
 geometry_parsed_geometry_type = 1
@@ -57,14 +63,46 @@ catalog = ExtResource("17_catalog")
 [node name="World" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
-environment = SubResource("Environment_night")
+[node name="Sky3D" type="WorldEnvironment" parent="World"]
+unique_name_in_owner = true
+environment = SubResource("Environment_exterior")
+script = ExtResource("28_sky3d")
+fog_enabled = false
+editor_time_enabled = false
+game_time_enabled = false
+current_time = 20.0
 
-[node name="Moon" type="DirectionalLight3D" parent="World"]
-transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 30, 0)
-light_color = Color(0.6, 0.7, 0.9, 1)
-light_energy = 0.5
+[node name="SunLight" type="DirectionalLight3D" parent="World/Sky3D"]
+light_energy = 0.0
 shadow_enabled = true
+
+[node name="MoonLight" type="DirectionalLight3D" parent="World/Sky3D"]
+light_color = Color(0.572549, 0.776471, 0.956863, 1)
+light_energy = 0.0
+shadow_enabled = true
+
+[node name="SkyDome" type="Node" parent="World/Sky3D"]
+script = ExtResource("29_sky_dome")
+sun_light_path = NodePath("../SunLight")
+moon_light_path = NodePath("../MoonLight")
+
+[node name="TimeOfDay" type="Node" parent="World/Sky3D"]
+script = ExtResource("30_time_of_day")
+dome_path = NodePath("../SkyDome")
+editor_time_enabled = false
+game_time_enabled = false
+current_time = 20.0
+day = 11
+month = 6
+year = 2025
+latitude = 0.523599
+longitude = 0.0
+utc = 1.0
+
+[node name="SkyClock" type="Node" parent="World" node_paths=PackedStringArray("sky", "night_director")]
+script = ExtResource("31_sky_clock")
+sky = NodePath("../Sky3D")
+night_director = NodePath("../NightDirector")
 
 [node name="Exterior" parent="World" instance=ExtResource("8_exterior")]
 unique_name_in_owner = true
@@ -136,11 +174,10 @@ unique_name_in_owner = true
 script = ExtResource("25_carryover")
 lighthouse = NodePath("../World/Lighthouse")
 player = NodePath("../World/Player")
-world_environment = NodePath("../World/WorldEnvironment")
 drowned = NodePath("../World/DrownedDirector")
 tutorial = NodePath("../World/TutorialDirector")
 
-[node name="DebugPanel" parent="." node_paths=PackedStringArray("world", "night_director", "event_director", "lighthouse", "fog", "boats", "drowned", "figurehead", "player", "world_environment") instance=ExtResource("27_debug_panel")]
+[node name="DebugPanel" parent="." node_paths=PackedStringArray("world", "night_director", "event_director", "lighthouse", "fog", "boats", "drowned", "figurehead", "player") instance=ExtResource("27_debug_panel")]
 unique_name_in_owner = true
 world = NodePath("../World")
 night_director = NodePath("../World/NightDirector")

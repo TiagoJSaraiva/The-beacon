@@ -2,18 +2,6 @@
 
 [ext_resource type="Script" path="res://exterior/security_camera.gd" id="1_camera"]
 
-[sub_resource type="Environment" id="Environment_camera"]
-resource_local_to_scene = true
-background_mode = 1
-background_color = Color(0.03, 0.04, 0.06, 1)
-ambient_light_source = 2
-ambient_light_color = Color(0.4, 0.45, 0.55, 1)
-ambient_light_energy = 0.8
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
-volumetric_fog_ambient_inject = 1.5
-volumetric_fog_length = 120.0
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.15, 0.15, 0.15, 1)
 
@@ -35,6 +23,5 @@ render_target_update_mode = 4
 
 [node name="Camera" type="Camera3D" parent="Viewport"]
 unique_name_in_owner = true
-environment = SubResource("Environment_camera")
 fov = 60.0
 far = 300.0

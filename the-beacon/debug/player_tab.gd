@@ -14,11 +14,11 @@ var _lighthouse: Lighthouse
 var _fullbright: FullbrightView
 
 
-## Monta a aba para o jogador, o farol e o `WorldEnvironment` do mundo dados.
-func setup(player: Player, lighthouse: Lighthouse, world_environment: WorldEnvironment) -> void:
+## Monta a aba para o jogador e o farol dados.
+func setup(player: Player, lighthouse: Lighthouse) -> void:
 	_player = player
 	_lighthouse = lighthouse
-	_fullbright = FullbrightView.new(world_environment)
+	_fullbright = FullbrightView.new(player.view_camera())
 	add_toggle(
 		"Invulnerável", player.invulnerable, func(on: bool) -> void: _player.invulnerable = on
 	)

@@ -14,6 +14,7 @@ Horário da noite (20h → 6h) e fim de noite (GDD 1.1, 1.2.1).
 - Fim de noite (`Game`): congela o `World` (`process_mode`), recolhe o estado persistente no `RunState` (`RunCarryover`) e mostra `NightEndScreen` (próxima noite / salvar e sair). Na última noite do contrato, é vitória (ver `menus-e-telas.md`).
 - Próxima noite: `SceneRouter.play_night` recarrega a cena; só o que está no `RunState` continua (ver `save-e-progresso.md`).
 - `RunState` (puro, `game/run_state.gd`) guarda dificuldade, total de noites e noite atual.
+- `night/sky_clock.gd` (`SkyClock`, nó no `World`): a cada minuto, põe o céu (`Sky3D.current_time`) na hora do relógio da noite (decisão 0028).
 - `NightDirector.debug_time_scale` acelera só o relógio e só em build de debug.
 
 ## Sinais

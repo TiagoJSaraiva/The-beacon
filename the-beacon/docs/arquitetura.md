@@ -7,7 +7,7 @@ Survival horror de gerenciamento em primeira pessoa, 3D, dentro de um farol de d
 
 **Entrega 1 (MVP)**: core loop completo e meta-jogo (menus, desbloqueio, save, tutorial) com placeholders (greybox CSG, áudio de tons) e todos os valores em configuração. **Entrega 2** implementada: revisão das mecânicas (`planos/entrega-2.md`), à espera do playtest.
 
-Renderizador Forward+ com o driver D3D12 no Windows (decisão 0025).
+Renderizador Forward+ com o driver D3D12 no Windows (decisão 0025). O ambiente do mundo é o da Sky3D e vale para as câmeras de segurança; o jogador usa o seu, sem luz ambiente, na própria câmera (decisão 0028). Addons de terceiros em `addons/`: gdUnit4 (testes) e Sky3D (céu).
 
 Princípios da implementação:
 - Regras em classes `RefCounted` puras (`*_state.gd`, `*_rules.gd`), testáveis. Nós só fazem tick, leem input e aplicam o resultado. Só o estado que passa de uma noite para a outra é serializado (`RunState`, decisão 0015).
@@ -36,7 +36,7 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 ## Cenas principais
 - `ui/main_menu/main_menu.tscn` (**Main Scene**) → `MainMenu`: menu, seleção de dificuldade e configurações (ver `sistemas/menus-e-telas.md`).
 - `game/game.tscn` → `Game` (`Node3D`, `game.gd`):
-  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `WorldEnvironment`, `Moon`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `FogVisuals`, `BoatDirector`, `DrownedDirector`, `FigureheadDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
+  - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `Sky3D` (o `WorldEnvironment`, com sol, lua e estrelas; decisão 0028), `SkyClock`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `FogVisuals`, `BoatDirector`, `DrownedDirector`, `FigureheadDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
   - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `PauseMenu` (`sistemas/menus-e-telas.md`), `RunCarryover` (`sistemas/save-e-progresso.md`), `DebugPanel` (`sistemas/debug.md`).
   - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica a dificuldade e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG (`Shell` com `EntranceDoor`, `UpperFloor` com `Trapdoor`; decisão 0019), `SpiralStaircase`, `LadderLanding`, `Ladder`, `LadderLink` (ver `sistemas/farol.md`); `MainGenerator`, `EmergencyGenerator`, `FuelTank` (com `JerrycanSlot`), `Jerrycan` (`sistemas/energia-e-combustivel.md`); `MachineHouse`, `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights` (pendentes) e `LowerLights` (arandelas); `Desk` com `Monitor` (um só, com canais), `Radio` e `Chair`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
@@ -60,7 +60,7 @@ O parse do check carrega os scripts com os autoloads registrados (decisão 0013)
 ## Sinais entre sistemas
 - `Player.interaction.focus_changed(focused)` → `Hud.show_prompt` — hotkey ao mirar.
 - `Player.interaction.hold_progress_changed` → `Hud.show_hold_progress` — barra de interações de duração.
-- `NightDirector.time_changed` → `Lighthouse.show_time` — relógio de parede.
+- `NightDirector.time_changed` → `Lighthouse.show_time` — relógio de parede; → `SkyClock` → `Sky3D.current_time` (céu e lua).
 - `NightDirector.night_started` → `Game` → `EventDirector.reset_night`.
 - `Lighthouse.jerrycan_carried_changed` → `Player.set_carrying` — galão na mão.
 - `Lighthouse.chair.sit_requested` → `Player.sit` — cadeira da mesa.
