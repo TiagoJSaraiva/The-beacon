@@ -213,11 +213,11 @@ func _add_solid(surface: SurfaceTool, corners: PackedVector3Array) -> void:
 ## Acrescenta o triângulo `points` virado para `outward`, invertendo a ordem dos vértices se
 ## preciso, com a normal plana.
 func _add_triangle(surface: SurfaceTool, points: Array[Vector3], outward: Vector3) -> void:
-	# Face da frente no Godot: a normal do `Plane` pelos três pontos aponta para dentro.
+	# Face da frente no Godot: a normal do `Plane` pelos três pontos aponta para fora. Invertida,
+	# a malha ainda parece sólida (mostra as faces internas do lado oposto), mas a luz não a pega.
 	var normal: Vector3 = Plane(points[0], points[1], points[2]).normal
-	if normal.dot(outward) > 0.0:
+	if normal.dot(outward) < 0.0:
 		points.reverse()
-	else:
 		normal = -normal
 	for point: Vector3 in points:
 		surface.set_normal(normal)

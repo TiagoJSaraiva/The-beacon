@@ -33,6 +33,7 @@ Greybox dos dois andares, escada em caracol, porta de entrada e alçapão (GDD 1
 - `Lighthouse.set_fog_stage` → `Trapdoor.set_fog_present`; `DrownedDirector` → `Trapdoor.set_banging`, `EntranceDoor.show_approach`, `EntranceDoor.burst_open`.
 
 ## Testes
+- `test/unit/spiral_staircase_mesh_test.gd`: cada triângulo dos degraus é de frente para a sua normal (invertida, a luz não pega na escada).
 - `test/unit/spiral_step_layout_test.gd`: quantidade de degraus pela altura, trecho centrado na fatia com vão, sem vão com `fill` 1.
 - `test/unit/trapdoor_rules_test.gd`: trinco só fechado e trava o alçapão; nevoeiro destranca e o intervalo para religar; batidas só abrem destrancado; resistência recomeça; intervalo para fechar depois de aberto pelo Afogado; área do painel com a folga.
 - `test/scenes/trapdoor_test.gd`: em cima do painel, o jogador não o usa; mirando o vão a mais de 1 m da borda, o abre; com o painel aberto, rente à parede, o fecha de dentro da cabine.
