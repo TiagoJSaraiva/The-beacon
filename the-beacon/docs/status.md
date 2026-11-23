@@ -32,7 +32,7 @@
   - Alçapão: o interativo virou um volume fixo de 1 m sobre o vão, mirável de mais longe.
   - Corrida a 4,125 m/s (3/4 da anterior; a metade ficaria abaixo da caminhada).
   - Painel de debug: "Sem escuridão" na aba Jogador.
-- **Branch de teste `teste/nevoeiro-shader-e-volume`** (preservada, ver `AGENTS.md`): cada volume do nevoeiro ganha uma camada com o shader antigo; `FogVisuals.volume_density_scale` e `shader_density_scale` ajustam a mistura no Inspector (`sistemas/nevoeiro.md` da branch). Não mesclar.
+- **Nevoeiro combinado** (decisão 0027, aprovado na branch `teste/nevoeiro-shader-e-volume`): cada volume do nevoeiro tem também uma camada com o shader antigo; `FogVisuals.volume_density_scale` e `shader_density_scale` ajustam a mistura no Inspector.
 - **Modo debug** (pedido em `../notes/feature-godmode.txt`, decisão 0024, `sistemas/debug.md`): com `DebugMode.ENABLED` e build de debug, Y abre um painel com a simulação rodando (caixa para pausar o `World`). Abas: Noite (hora, velocidade, fim e recomeço da noite, disparo de eventos, sorteio), Farol (falhas, consertos, mangueira, combustível, galão, alavanca, trinco), Nevoeiro (surgir, limpar, congelar, avanço, estágio), Ameaças (barcos, Afogado, carranca), Jogador (invulnerável, bateria, corrida, teleporte) e Balanceamento (todos os valores da dificuldade ao vivo, exportar diferenças no console, restaurar).
 - **Forward+ e nevoeiro volumétrico** (decisão 0025, substitui a 0020): o projeto roda no Forward+ (D3D12). Os volumes do `FogVisuals` são `FogVolume`, iluminados pela luz ambiente e pelas luzes da cena; a lanterna desenha o facho no nevoeiro. O anel em volta do farol saiu também da câmera do jogador.
 

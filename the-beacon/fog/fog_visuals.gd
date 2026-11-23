@@ -5,7 +5,7 @@ extends Node3D
 ## de render dele fica fora das outras câmeras), um volume por área interna e um em volta da
 ## cabeça do farol no estágio BEAM. Cada volume esmaece ao entrar e sair do seu estágio. Lê o
 ## estado do FogSystem a cada frame.
-## Teste (branch teste/nevoeiro-shader-e-volume): cada volume tem um filho `ShaderLayer`, uma malha
+## Cada volume tem um filho `ShaderLayer` (decisão 0027), uma malha
 ## com o shader antigo (`fog_volume.gdshader`), que esmaece junto. As duas camadas somam; a
 ## densidade de cada uma é multiplicada por `volume_density_scale` e `shader_density_scale`.
 

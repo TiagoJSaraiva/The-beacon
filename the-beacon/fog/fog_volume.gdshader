@@ -1,5 +1,5 @@
-// Camada de nevoeiro por shader, somada a cada FogVolume do FogVisuals (teste da branch
-// teste/nevoeiro-shader-e-volume). Era o nevoeiro inteiro no Compatibility (decisão 0020).
+// Camada de nevoeiro por shader, somada a cada FogVolume do FogVisuals (decisão 0027). Era o
+// nevoeiro inteiro no Compatibility (decisão 0020).
 // Desenha as faces de trás e calcula quanto do raio de visão atravessa o volume, até a
 // primeira superfície da cena: paredes cortam o nevoeiro e dá para estar dentro dele.
 // Malhas: BoxMesh de tamanho 2 ou CylinderMesh de raio 1 e altura 2; a escala do nó dá o

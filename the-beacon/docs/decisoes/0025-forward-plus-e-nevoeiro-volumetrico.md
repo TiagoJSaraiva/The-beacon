@@ -1,7 +1,7 @@
 # 0025 — Forward+ e nevoeiro por névoa volumétrica
 
 - **Data**: 2026-11
-- **Status**: aceita
+- **Status**: aceita; a parte do nevoeiro visível foi substituída pela 0027 (shader somado aos `FogVolume`)
 
 ## Contexto
 A decisão 0020 manteve o projeto no Compatibility porque se acreditava que o PC de desenvolvimento (Ryzen 7 5700U, GPU integrada) não rodava o Forward+. A premissa estava errada: com o driver D3D12, o jogo roda normalmente no Forward+. O nevoeiro era falso, feito com malhas e um shader próprio (`fog_volume.gdshader`), e não reagia à luz.
