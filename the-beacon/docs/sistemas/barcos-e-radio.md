@@ -10,7 +10,7 @@ Barcos que cruzam o mar e precisam de aviso quando há nevoeiro (entrega 2).
 - `boats/radio.tscn` (`Radio`, na mesa da cabine): toca (som em loop e luz piscando) e é atendido com E; sem tocar, toca uma música ambiente em loop (`Ambient`, bus `Music`, placeholder `radio_ambient.wav`); funciona sem energia.
 
 ## Regras
-- O barco cruza a rota inteira em `crossing_seconds` (12 s): aparece numa câmera do mar, passa pelo trecho que as duas enxergam (onde fica o nevoeiro) e segue na outra.
+- O barco cruza a rota inteira em `crossing_seconds` (20 s nas três dificuldades): aparece numa câmera do mar, passa pelo trecho que as duas enxergam (onde fica o nevoeiro) e segue na outra.
 - Sem nevoeiro, o rádio não toca e o barco passa.
 - Com nevoeiro adiante do barco, ele chama. O rádio toca só enquanto algum barco que chama aparece na câmera do canal aberto no monitor (`Camera3D.is_position_in_frustum` na posição do barco, sem considerar oclusão). Só contam as câmeras com `shows_boat_route` (as do mar): pelo enquadramento, a da porta também alcança o mar distante, mas no canal dela o rádio nunca toca. Trocar de canal para um sem barco chamando faz o toque parar; um barco que chama fora do canal aberto não toca o rádio.
 - Atender vale para os barcos que chamam no canal aberto: com o feixe aceso, eles param e desviam; com o feixe apagado, param de chamar e seguem em frente.

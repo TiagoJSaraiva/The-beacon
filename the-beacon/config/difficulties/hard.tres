@@ -19,6 +19,7 @@
 
 [sub_resource type="Resource" id="Resource_ucn1s"]
 script = ExtResource("1_83dqw")
+crossing_seconds = 20.0
 
 [sub_resource type="Resource" id="Resource_0fsd6"]
 script = ExtResource("2_rac0w")
