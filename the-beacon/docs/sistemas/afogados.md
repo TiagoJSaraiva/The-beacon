@@ -11,6 +11,9 @@ A condição de morte (entrega 2; GDD 1.2.10): com o nevoeiro dentro do farol, e
 - `drowned/drowned_director.gd` (`DrownedDirector`, nó no `World`, recebe `Lighthouse` e `Player` em `setup()`): pontos, aproximação, entrada, efeitos e batidas no alçapão. Para o painel de debug: `force_enter()` (entra sem nevoeiro nem pontos, se ele não estiver dentro), `remove_drowned()` e `has_drowned_inside()`.
 - Pontos no farol (`DrownedTargets/*`): `DoorInside` (onde aparece), `TrapdoorBelow` (patamar no fim da escada, sob o alçapão; provisório, ver "Comportamento atual a revisar"), `RestSpot` (térreo).
 
+## Modelo
+Pendente: segue o greybox; a escolha do modelo placeholder ficou para depois (`status.md`).
+
 ## Regras
 - Cada barco afundado soma um ponto de Afogado; os pontos passam de uma noite para a outra (`RunState`).
 - **Aproximação**: medidor de 0 a 1. Sobe com o nevoeiro em `GROUND_FLOOR` ou acima e ao menos um ponto, a `approach_base_per_second + approach_per_point_per_second × pontos`. Com o nevoeiro fora do farol, desce a `approach_recede_per_second`. O barulho vem de fora da porta (`EntranceDoor.show_approach`) e cresce com o medidor.

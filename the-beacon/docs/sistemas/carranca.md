@@ -9,6 +9,9 @@ Armadilha do nevoeiro dentro do farol: cega o jogador e, com o tempo, o derruba 
 - `figurehead/figurehead.tscn` (`Figurehead`, `Node3D` sem corpo físico): imóvel e translúcida; pula no jogador ou se dissolve quando o diretor manda.
 - `figurehead/figurehead_director.gd` (`FigureheadDirector`, nó no `World`, recebe o `Player` em `setup()`): surgimento, gatilho, luz, ataques. Para o painel de debug: `spawn_in_front_of_player(distância)` (ponto da navmesh mais perto, mesmo sem nevoeiro; some na próxima mudança de estágio se a área não estiver no nevoeiro), `dissolve_all()` (sem contar como destruída) e `active_count()`.
 
+## Modelo
+Pendente: segue o greybox; a escolha do modelo placeholder ficou para depois (`status.md`).
+
 ## Regras
 - Surge só nas áreas já tomadas pelo nevoeiro: térreo (`GROUND_FLOOR`), escada (`STAIRS`) e cabine (`CABIN`). A área de um ponto vem da altura (`stairs_from_height` 3.84, `cabin_from_height` 10.6).
 - O ponto é aleatório na navmesh do interior (até `spawn_attempts` tentativas): fora do campo de visão do jogador (`view_half_angle_degrees` 60° a partir do olhar) e a pelo menos `min_spawn_distance`. Ela surge virada para o jogador.
