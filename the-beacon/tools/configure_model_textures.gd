@@ -1,9 +1,11 @@
 extends SceneTree
-## Ajusta as opções de import das texturas de um modelo de res://assets/models/<nome>/ para uso
-## em 3D: compressão de VRAM, mipmaps e, nos mapas de normal, o modo de normal map (regras em
-## tools/model_import_rules.gd). Rodar da raiz do projeto, depois de o Godot ter importado o
-## modelo uma vez (o .import precisa existir):
+## Ajusta as opções de import das texturas de um modelo de res://assets/models/<nome>/, ou de uma
+## pasta `res://` qualquer (ex.: as texturas de superfície em res://assets/textures/<nome>/), para
+## uso em 3D: compressão de VRAM, mipmaps e, nos mapas de normal, o modo de normal map (regras em
+## tools/model_import_rules.gd). Rodar da raiz do projeto, depois de o Godot ter importado as
+## texturas uma vez (o .import precisa existir):
 ##   godot --headless --path . --script res://tools/configure_model_textures.gd -- <nome>
+## ou, para uma pasta: ... -- res://assets/textures/<nome>
 ## O próximo --import (o check faz isso) reimporta as texturas com as opções novas.
 
 const Rules := preload("res://tools/model_import_rules.gd")
@@ -11,15 +13,16 @@ const Rules := preload("res://tools/model_import_rules.gd")
 const MODELS_ROOT := "res://assets/models/"
 
 
-## Lê o nome do modelo, ajusta o .import de cada textura da pasta e encerra com código 0 em
-## sucesso ou 1 em erro.
+## Lê o nome do modelo (ou a pasta `res://`), ajusta o .import de cada textura da pasta e encerra
+## com código 0 em sucesso ou 1 em erro.
 func _init() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	if args.size() != 1:
-		push_error("Uso: -- <nome>")
+		push_error("Uso: -- <nome ou res://pasta>")
 		quit(1)
 		return
-	var folder: String = MODELS_ROOT + args[0] + "/"
+	var folder: String = args[0] if args[0].begins_with("res://") else MODELS_ROOT + args[0]
+	folder = folder.trim_suffix("/") + "/"
 	if not DirAccess.dir_exists_absolute(folder):
 		push_error("Pasta não encontrada: %s" % folder)
 		quit(1)

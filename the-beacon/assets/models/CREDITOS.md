@@ -15,3 +15,14 @@ A página do Fab de nenhum destes mostra os termos de licença (campo "License t
 | `fuel_container/` | Props_FuelContainer (a confirmar) | a confirmar | a confirmar (export glTF do Sketchfab) | Galão com bico (`fuel/jerrycan.tscn`, `player/player.tscn`). O embrulho centra o corpo, sem o bico, que aponta para +X |
 | `gas_tank/` | Propane Tank (a confirmar) | a confirmar | a confirmar (um dos links de tanques em `../notes/modelos-link.txt`) | Tanque de combustível (`fuel/fuel_tank.tscn`) |
 | `radio_station/` | Radiostation McKinley (a confirmar) | a confirmar | a confirmar | Rádio da mesa (`boats/radio.tscn`) |
+
+## Texturas de superfície
+
+Da Poly Haven, licença CC0 (domínio público, sem atribuição obrigatória). Em `assets/textures/<pasta>/`, em 2K.
+
+| Pasta | Textura | Autor | Fonte | Uso no jogo |
+|---|---|---|---|---|
+| `castle_brick_02_white/` | Castle Brick 02 White | Rob Tuytel | https://polyhaven.com/a/castle_brick_02_white | Paredes do farol, por dentro e por fora |
+| `concrete_floor_worn_001/` | Concrete Floor Worn 001 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_floor_worn_001 | Piso do térreo |
+| `dark_wooden_planks/` | Dark Wooden Planks | Amal Kumar | https://polyhaven.com/a/dark_wooden_planks | Piso da cabine e patamar da escada de mão |
+| `concrete_wall_003/` | Concrete Wall 003 | Dimitrios Savva, Rico Cilliers | https://polyhaven.com/a/concrete_wall_003 | Teto da cabine |

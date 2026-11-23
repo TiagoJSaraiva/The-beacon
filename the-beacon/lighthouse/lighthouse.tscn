@@ -17,14 +17,14 @@
 [ext_resource type="PackedScene" path="res://assets/models/old_wooden_table/old_wooden_table.tscn" id="17_table"]
 [ext_resource type="PackedScene" uid="uid://byq48ionki6aw" path="res://power/main_generator.tscn" id="18_main_generator"]
 [ext_resource type="PackedScene" path="res://lighthouse/ladder.tscn" id="19_ladder"]
+[ext_resource type="Material" path="res://assets/textures/castle_brick_02_white/castle_brick_02_white.tres" id="20_brick"]
+[ext_resource type="Material" path="res://assets/textures/concrete_floor_worn_001/concrete_floor_worn_001.tres" id="21_concrete_floor"]
+[ext_resource type="Material" path="res://assets/textures/dark_wooden_planks/dark_wooden_planks.tres" id="22_planks"]
+[ext_resource type="Material" path="res://assets/textures/concrete_wall_003/concrete_wall_003.tres" id="23_ceiling"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
 albedo_color = Color(0.32, 0.32, 0.3, 1)
 roughness = 0.9
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brick"]
-albedo_color = Color(0.42, 0.24, 0.18, 1)
-roughness = 0.95
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.4, 0.28, 0.16, 1)
@@ -42,7 +42,7 @@ use_collision = true
 radius = 7.0
 height = 0.4
 sides = 32
-material = SubResource("StandardMaterial3D_stone")
+material = ExtResource("21_concrete_floor")
 
 [node name="Shell" type="CSGCombiner3D" parent="." unique_id=385335724]
 use_collision = true
@@ -52,7 +52,7 @@ polygon = PackedVector2Array(0, 0, 7, 0, 6, 10.8, 6, 13.8, 0, 13.8)
 mode = 1
 spin_degrees = 360.0
 spin_sides = 32
-material = SubResource("StandardMaterial3D_brick")
+material = ExtResource("20_brick")
 
 [node name="Inner" type="CSGPolygon3D" parent="Shell" unique_id=233539158]
 operation = 2
@@ -60,7 +60,7 @@ polygon = PackedVector2Array(0, -0.1, 6.5, -0.1, 6.5, 0, 5.5, 10.8, 5.5, 13.9, 0
 mode = 1
 spin_degrees = 360.0
 spin_sides = 32
-material = SubResource("StandardMaterial3D_brick")
+material = ExtResource("20_brick")
 
 [node name="EntranceDoor" parent="Shell" unique_id=1126458855 instance=ExtResource("3_door")]
 unique_name_in_owner = true
@@ -84,7 +84,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.65, 0)
 radius = 5.53
 height = 0.3
 sides = 32
-material = SubResource("StandardMaterial3D_wood")
+material = ExtResource("22_planks")
 
 [node name="Trapdoor" parent="UpperFloor" unique_id=271035687 instance=ExtResource("2_trapdoor")]
 unique_name_in_owner = true
@@ -97,7 +97,7 @@ use_collision = true
 radius = 6.0
 height = 0.3
 sides = 32
-material = SubResource("StandardMaterial3D_stone")
+material = ExtResource("23_ceiling")
 
 [node name="SpiralStaircase" type="StaticBody3D" parent="." unique_id=1476225256]
 transform = Transform3D(0.46983027, 0, 0.88275677, 0, 1, 0, -0.88275677, 0, 0.46983027, 0, 0, 0)
@@ -115,7 +115,7 @@ material = SubResource("StandardMaterial3D_wood")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 8.275, 0.1)
 use_collision = true
 size = Vector3(1.7, 0.25, 2)
-material = SubResource("StandardMaterial3D_wood")
+material = ExtResource("22_planks")
 
 [node name="Ladder" parent="." unique_id=262899824 instance=ExtResource("19_ladder")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.7, 8.4, 1.03)
