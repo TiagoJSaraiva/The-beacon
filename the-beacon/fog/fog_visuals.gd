@@ -17,6 +17,11 @@ extends Node3D
 @export var sea_band_half_depth: float = 45.0
 ## Menor meia-medida da faixa: tamanho zero deixaria o volume degenerado.
 @export var sea_band_min_half_extent: float = 0.5
+## Desloca a faixa no mar do trecho da rota que ela cobre, em metros: X ao longo da rota, Y para
+## cima, Z para o lado (com a rota atual, +Z afasta do farol). Só o visual: o barco continua
+## afundando no trecho da rota (`FogConfig.route_center`), e um deslocamento grande deixa a faixa
+## longe de onde os barcos afundam.
+@export var sea_band_offset: Vector3 = Vector3.ZERO
 ## Multiplica a densidade dos `FogVolume` (0 desliga a névoa volumétrica).
 @export_range(0.0, 2.0, 0.05) var volume_density_scale: float = 1.0
 ## Multiplica a densidade das camadas de shader (0 desliga o shader).
@@ -89,7 +94,7 @@ func sea_band_shape() -> SeaBandShape:
 
 ## Posiciona, orienta e dimensiona a faixa sobre o trecho da rota (início, fim, em fração),
 ## conforme o crescimento do nevoeiro (0 a 1). O centro fica no nível da rota, onde a faixa é
-## mais densa.
+## mais densa, mais o `sea_band_offset`.
 func _place_sea_band(route: Vector2, growth: float) -> void:
 	var curve: Curve3D = _boat_path.curve
 	var length: float = curve.get_baked_length()
@@ -97,9 +102,8 @@ func _place_sea_band(route: Vector2, growth: float) -> void:
 	var end: Vector3 = _boat_path.to_global(curve.sample_baked(route.y * length))
 	var along: Vector3 = end - start
 	var x_axis: Vector3 = along.normalized()
-	_sea_band.global_transform = Transform3D(
-		Basis(x_axis, Vector3.UP, x_axis.cross(Vector3.UP)), (start + end) * 0.5
-	)
+	var basis := Basis(x_axis, Vector3.UP, x_axis.cross(Vector3.UP))
+	_sea_band.global_transform = Transform3D(basis, (start + end) * 0.5 + basis * sea_band_offset)
 	_sea_band.size = _sea_band_shape.half_extents(along.length() * 0.5, growth) * 2.0
 	# A malha do shader tem lado 2: a escala é a meia-medida.
 	var layer := _sea_band.get_node_or_null(^"ShaderLayer") as Node3D

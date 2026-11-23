@@ -15,6 +15,7 @@ signal restart_night_requested
 @export var event_director: EventDirector
 @export var lighthouse: Lighthouse
 @export var fog: FogSystem
+@export var fog_visuals: FogVisuals
 @export var boats: BoatDirector
 @export var drowned: DrownedDirector
 @export var figurehead: FigureheadDirector
@@ -86,7 +87,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func setup(difficulty: DifficultyConfig) -> void:
 	_night_tab.setup(night_director, event_director)
 	_lighthouse_tab.setup(lighthouse)
-	_fog_tab.setup(fog)
+	_fog_tab.setup(fog, fog_visuals)
 	_threats_tab.setup(boats, drowned, figurehead)
 	_player_tab.setup(player, lighthouse)
 	_balance_tab.setup(difficulty)
