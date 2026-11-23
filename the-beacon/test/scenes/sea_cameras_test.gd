@@ -1,7 +1,11 @@
 extends GdUnitTestSuite
-## As câmeras do mar cobrem, juntas, a rota inteira e se sobrepõem no trecho máximo do nevoeiro.
+## As câmeras do mar cobrem, juntas, a rota inteira e se sobrepõem no trecho máximo do nevoeiro,
+## e ficam abaixo do farol, para o feixe passar por cima da imagem e não na frente da lente.
 
 const EXTERIOR := "res://exterior/exterior.tscn"
+const LIGHTHOUSE := "res://lighthouse/lighthouse.tscn"
+## Folga mínima entre a base da cabeça do farol e as câmeras do mar.
+const MIN_DROP_BELOW_LAMP := 3.0
 ## Altura do casco dos barcos sobre a rota.
 const BOAT_HEIGHT := 1.0
 
@@ -25,6 +29,19 @@ func test_sea_cameras_overlap_on_the_whole_fog_segment_and_cover_the_route_ends(
 	assert_bool(right.is_position_in_frustum(_route_point(exterior.boat_path, 0.01))).is_true()
 	assert_bool(left.is_position_in_frustum(_route_point(exterior.boat_path, 0.01))).is_false()
 	assert_bool(right.is_position_in_frustum(_route_point(exterior.boat_path, 0.99))).is_false()
+
+
+func test_sea_cameras_sit_below_the_lighthouse_lamp() -> void:
+	var runner := scene_runner(EXTERIOR)
+	var exterior: Exterior = runner.scene()
+	# O farol e o exterior ficam na origem do mundo, na cena do jogo.
+	var lighthouse: Lighthouse = load(LIGHTHOUSE).instantiate()
+	exterior.add_child(lighthouse)
+	await runner.simulate_frames(2)
+
+	var lamp_height: float = lighthouse.lamp.global_position.y
+	for camera: SecurityCamera in [exterior.sea_camera_left, exterior.sea_camera_right]:
+		assert_float(lamp_height - camera.global_position.y).is_greater(MIN_DROP_BELOW_LAMP)
 
 
 func test_sea_fog_band_at_full_growth_rises_above_the_top_of_the_sea_cameras() -> void:

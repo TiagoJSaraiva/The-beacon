@@ -47,7 +47,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.2, -5.64)
 
 [node name="SeaCameraLeft" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.3, 6.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 6.4)
 target = NodePath("../SeaViewLeft")
 cull_mask = 1048573
 fov = 75.0
@@ -55,7 +55,7 @@ shows_boat_route = true
 
 [node name="SeaCameraRight" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.3, 6.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 6.4)
 target = NodePath("../SeaViewRight")
 cull_mask = 1048573
 fov = 75.0
