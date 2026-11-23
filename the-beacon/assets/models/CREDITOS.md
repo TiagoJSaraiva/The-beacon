@@ -14,6 +14,13 @@ Os da Poly Haven são CC0. A página do Fab de nenhum dos outros mostra os termo
 | `emergency_generator/` | Power Generator | RamananTitus | https://www.fab.com/listings/c8b5eb88-9944-433a-b69a-a0442040be69 | Gerador de emergência (`power/emergency_generator.tscn`) |
 | `fuel_container/` | Props_FuelContainer (a confirmar) | a confirmar | a confirmar (export glTF do Sketchfab) | Galão com bico (`fuel/jerrycan.tscn`, `player/player.tscn`). O embrulho centra o corpo, sem o bico, que aponta para +X |
 | `gas_tank/` | Propane Tank (a confirmar) | a confirmar | a confirmar (um dos links de tanques em `../notes/modelos-link.txt`) | Tanque de combustível (`fuel/fuel_tank.tscn`) |
+| `barrel_03/` | Barrel 03 (CC0) | Poly Haven | https://polyhaven.com/a/barrel_03 | Dois tambores ao lado da porta (`exterior/entrance_props.tscn`) |
+| `ocean_buoy/` | Ocean Buoy (CC0) | Poly Haven | https://polyhaven.com/a/ocean_buoy | Boia de navegação na grama (o contrapeso fica enterrado) (`exterior/entrance_props.tscn`) |
+| `lifebuoy/` | Lifebuoy (CC0) | Poly Haven | https://polyhaven.com/a/lifebuoy | Boia salva-vidas na parede, ao lado da porta (`exterior/entrance_props.tscn`) |
+| `dead_tree_trunk/` | Dead Tree Trunk (CC0) | Poly Haven | https://polyhaven.com/a/dead_tree_trunk | Tronco seco na grama (`exterior/entrance_props.tscn`) |
+| `boulder_01/` | Boulder 01 (CC0) | Poly Haven | https://polyhaven.com/a/boulder_01 | Pedra (`exterior/entrance_props.tscn`) |
+| `namaqualand_boulder_05/` | Namaqualand Boulder 05 (CC0) | Poly Haven | https://polyhaven.com/a/namaqualand_boulder_05 | Pedra menor (`exterior/entrance_props.tscn`) |
+| `grass_medium_01/` | Grass Medium 01 (CC0) | Poly Haven | https://polyhaven.com/a/grass_medium_01 | Touceiras de capim (o embrulho espalha os 17 tufos da fileira original num círculo) (`exterior/entrance_props.tscn`) |
 | `radio_station/` | Radiostation McKinley (a confirmar) | a confirmar | a confirmar | Rádio da mesa (`boats/radio.tscn`) |
 | `hanging_industrial_lamp/` | Hanging Industrial Lamp | Kuutti Siitonen | https://polyhaven.com/a/hanging_industrial_lamp (CC0) | Pendentes da cabine (`lighthouse/ceiling_lamp.tscn`). O vidro usa material próprio (vidro fosco emissivo): o Godot não lê a transmissão do glTF |
 | `industrial_caged_sconce/` | Industrial Caged Sconce | Ulan Cabanilla | https://polyhaven.com/a/industrial_caged_sconce (CC0) | Arandelas do térreo e da escada (`lighthouse/wall_lamp.tscn`). O pacote é um kit; o embrulho mostra só a variante `a` |

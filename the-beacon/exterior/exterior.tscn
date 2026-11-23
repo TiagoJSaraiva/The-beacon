@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://exterior/entrance_props.tscn" id="24_entrance_props"]
 [ext_resource type="Script" path="res://exterior/island.gd" id="22_island"]
 [ext_resource type="Material" path="res://exterior/island_ground.tres" id="23_island_ground"]
 [ext_resource type="Script" path="res://addons/boujie_water_shader/types/ocean.gd" id="20_ocean"]
@@ -20,6 +21,8 @@ script = ExtResource("1_exterior")
 [node name="Island" type="MeshInstance3D" parent="."]
 material_override = ExtResource("23_island_ground")
 script = ExtResource("22_island")
+
+[node name="EntranceProps" parent="." instance=ExtResource("24_entrance_props")]
 
 [node name="Sea" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9, 0)

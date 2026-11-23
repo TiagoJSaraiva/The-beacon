@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/grass_medium_01/grass_medium_01.gltf" id="1_model"]
+
+[node name="GrassMedium01" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="grass_medium_01_small_a_LOD0" parent="Model" index="0"]
+transform = Transform3D(0.87653, 0, -0.45211, 0, 0.98626, 0, 0.45211, 0, 0.87653, -0.751, 0, -0.296)
+
+[node name="grass_medium_01_large_b_LOD0" parent="Model" index="1"]
+transform = Transform3D(0.40101, 0, 0.92127, 0, 1.0048, 0, -0.92127, 0, 0.40101, -0.729, 0, -0.446)
+
+[node name="grass_medium_01_mid_b_LOD0" parent="Model" index="2"]
+transform = Transform3D(0.76488, 0, 0.51368, 0, 0.92136, 0, -0.51368, 0, 0.76488, 0.254, 0, -0.918)
+
+[node name="grass_medium_01_tall_b_LOD0" parent="Model" index="3"]
+transform = Transform3D(-0.28419, 0, -0.76571, 0, 0.81675, 0, 0.76571, 0, -0.28419, 0.132, 0, -0.336)
+
+[node name="grass_medium_01_tall_a_LOD0" parent="Model" index="4"]
+transform = Transform3D(-0.59391, 0, -0.86131, 0, 1.0462, 0, 0.86131, 0, -0.59391, 1.16, 0, -0.261)
+
+[node name="grass_medium_01_tall_c_LOD0" parent="Model" index="5"]
+transform = Transform3D(-0.81076, 0, -0.14613, 0, 0.82382, 0, 0.14613, 0, -0.81076, 0.474, 0, 0.045)
+
+[node name="grass_medium_01_small_b_LOD0" parent="Model" index="6"]
+transform = Transform3D(0.96802, 0, 0.18518, 0, 0.98557, 0, -0.18518, 0, 0.96802, 0.026, 0, 0.523)
+
+[node name="grass_medium_01_mid_c_LOD0" parent="Model" index="7"]
+transform = Transform3D(-1.0485, 0, -0.1266, 0, 1.0561, 0, 0.1266, 0, -1.0485, 0.437, 0, -0.666)
+
+[node name="grass_medium_01_mid_a_LOD0" parent="Model" index="8"]
+transform = Transform3D(-0.87871, 0, 0.2414, 0, 0.91127, 0, -0.2414, 0, -0.87871, -0.443, 0, -0.723)
+
+[node name="grass_medium_01_large_a_LOD0" parent="Model" index="9"]
+transform = Transform3D(0.5816, 0, -0.91372, 0, 1.0831, 0, 0.91372, 0, 0.5816, 1.198, 0, -0.032)
+
+[node name="grass_medium_01_large_c_LOD0" parent="Model" index="10"]
+transform = Transform3D(-0.2011, 0, 0.8033, 0, 0.82809, 0, -0.8033, 0, -0.2011, 0.086, 0, 0.668)
+
+[node name="grass_medium_01_tiny_c_LOD0" parent="Model" index="11"]
+transform = Transform3D(0.5444, 0, -0.78416, 0, 0.95461, 0, 0.78416, 0, 0.5444, -0.851, 0, 0.615)
+
+[node name="grass_medium_01_tiny_a_LOD0" parent="Model" index="12"]
+transform = Transform3D(0.88388, 0, 0.0030264, 0, 0.88389, 0, -0.0030264, 0, 0.88388, 0.674, 0, -0.962)
+
+[node name="grass_medium_01_tiny_b_LOD0" parent="Model" index="13"]
+transform = Transform3D(0.95168, 0, -0.11804, 0, 0.95897, 0, 0.11804, 0, 0.95168, -1.125, 0, 0.215)
+
+[node name="grass_medium_01_tiny_d_LOD0" parent="Model" index="14"]
+transform = Transform3D(0.16177, 0, -0.89338, 0, 0.90791, 0, 0.89338, 0, 0.16177, -0.223, 0, -0.236)
+
+[node name="grass_medium_01_tiny_e_LOD0" parent="Model" index="15"]
+transform = Transform3D(1.0752, 0, -0.2469, 0, 1.1032, 0, 0.2469, 0, 1.0752, -0.176, 0, 0.308)
+
+[node name="grass_medium_01_tiny_f_LOD0" parent="Model" index="16"]
+transform = Transform3D(0.6634, 0, 0.48868, 0, 0.82396, 0, -0.48868, 0, 0.6634, 0.009, 0, 0.412)
+
+[editable path="Model"]
