@@ -20,3 +20,11 @@ func channel_feeds() -> Array[Texture2D]:
 	for camera: SecurityCamera in channel_cameras():
 		feeds.append(camera.get_feed())
 	return feeds
+
+
+## Deixa renderizando só a câmera do canal `index` (na ordem de `channel_cameras`); um índice fora
+## da lista, como `MonitorChannels.NO_CHANNEL`, desliga todas.
+func show_live_channel(index: int) -> void:
+	var cameras: Array[SecurityCamera] = channel_cameras()
+	for i: int in cameras.size():
+		cameras[i].set_live(i == index)

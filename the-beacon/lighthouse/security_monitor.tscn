@@ -28,6 +28,10 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, 0.005)
 mesh = SubResource("QuadMesh_screen")
 
+[node name="ScreenNotifier" type="VisibleOnScreenNotifier3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, 0.005)
+aabb = AABB(-0.25, -0.19, -0.01, 0.5, 0.38, 0.02)
+
 [node name="SwitchPoint" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, -0.14)
 script = ExtResource("2_interactable")
@@ -36,3 +40,5 @@ script = ExtResource("2_interactable")
 shape = SubResource("BoxShape3D_switch")
 
 [connection signal="interacted" from="SwitchPoint" to="." method="_on_switch_point_interacted"]
+[connection signal="screen_entered" from="ScreenNotifier" to="." method="_on_screen_notifier_screen_entered"]
+[connection signal="screen_exited" from="ScreenNotifier" to="." method="_on_screen_notifier_screen_exited"]

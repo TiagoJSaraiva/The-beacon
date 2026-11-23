@@ -30,6 +30,14 @@ func _ready() -> void:
 	_camera.global_transform = global_transform
 
 
+## Liga ou desliga a renderização da imagem. Desligada, a câmera guarda a última imagem e não
+## gasta a GPU; o enquadramento (`get_camera`) continua valendo.
+func set_live(live: bool) -> void:
+	_viewport.render_target_update_mode = (
+		SubViewport.UPDATE_ALWAYS if live else SubViewport.UPDATE_DISABLED
+	)
+
+
 ## Devolve a câmera que renderiza a imagem, para saber o que está no enquadramento.
 func get_camera() -> Camera3D:
 	return _camera

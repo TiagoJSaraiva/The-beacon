@@ -9,6 +9,7 @@ Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da m
   - `SeaCameraLeft` e `SeaCameraRight`: no alto da torre, com `fov` de 75°, miram x = 23 e x = −23 da rota. Juntas cobrem a rota inteira e enxergam em comum o meio dela (x de −30 a 30, cerca de 21% da rota), onde fica o nevoeiro (`FogConfig.route_center`, `max_route_coverage` = 0,2): ele aparece no lado direito de uma imagem e no esquerdo da outra.
   - `DoorCamera`: fora da porta de entrada, mirando-a.
 - `lighthouse/security_monitor.tscn` (`SecurityMonitor`, nó `Monitor` na mesa da cabine): um monitor só, que mostra uma câmera por vez. Interagir (`SwitchPoint`) passa ao próximo canal; a regra fica em `lighthouse/monitor_channels.gd` (`MonitorChannels`, puro).
+- Renderização sob demanda: só a câmera do canal aberto renderiza, e só com o jogador na cabine (`CabinZone`, `Area3D` do `Lighthouse` ligada ao `viewer_zone` do monitor) e a tela no enquadramento (`ScreenNotifier`, `VisibleOnScreenNotifier3D`). O enquadramento não vê pisos: a zona da cabine impede que o monitor conte como visto do térreo. As outras câmeras ficam paradas na última imagem (`SecurityCamera.set_live`). O enquadramento das câmeras, usado pelo rádio, não depende disso.
 
 ## Regras
 - A câmera da esquerda mira o lado +X da rota, que aparece à esquerda na tela; os barcos vão da direita para a esquerda. Mudou a mira, o `fov` ou a rota: confira o trecho do nevoeiro dentro da sobreposição (`test/scenes/sea_cameras_test.gd`).
@@ -20,9 +21,10 @@ Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da m
 ## Sinais
 - O `Game` passa as texturas com `Lighthouse.show_camera_feeds(Exterior.channel_feeds())`.
 - `SecurityMonitor.channel_changed(index)` ao trocar de canal.
+- `SecurityMonitor.live_channel_changed(index)` → `Exterior.show_live_channel`: a câmera que precisa renderizar (`MonitorChannels.NO_CHANNEL` = nenhuma).
 
 ## Testes
 - `test/unit/island_shape_test.gd`: platô plano sob o farol em todo ângulo, praia no nível do mar, fundo abaixo dele, perfil sempre descendo e malha virada para cima.
 - `test/scenes/sea_level_test.gd`: a crista mais alta das ondas fica ao menos 1,5 m abaixo do térreo do farol.
-- `test/unit/monitor_channels_test.gd`: começa no primeiro canal, passa por todos e volta ao início.
+- `test/unit/monitor_channels_test.gd`: começa no primeiro canal, passa por todos e volta ao início; câmera viva só com o jogador no cômodo e a tela à vista.
 - `test/scenes/sea_cameras_test.gd`: as duas câmeras do mar enxergam as pontas do trecho máximo do nevoeiro, e cada uma cobre a ponta da rota do seu lado.
