@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" path="res://player/chair.tscn" id="15_chair"]
 [ext_resource type="PackedScene" uid="uid://c4dtmuijputsa" path="res://machine_house/machine_house.tscn" id="16_machine"]
 [ext_resource type="PackedScene" path="res://assets/models/old_wooden_table/old_wooden_table.tscn" id="17_table"]
-[ext_resource type="PackedScene" path="res://power/main_generator.tscn" id="18_main_generator"]
+[ext_resource type="PackedScene" uid="uid://byq48ionki6aw" path="res://power/main_generator.tscn" id="18_main_generator"]
 [ext_resource type="PackedScene" path="res://lighthouse/ladder.tscn" id="19_ladder"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
@@ -111,17 +111,17 @@ turns = 1.045
 start_angle_degrees = 36.0
 material = SubResource("StandardMaterial3D_wood")
 
-[node name="LadderLanding" type="CSGBox3D" parent="."]
+[node name="LadderLanding" type="CSGBox3D" parent="." unique_id=1127796698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 8.275, 0.1)
 use_collision = true
 size = Vector3(1.7, 0.25, 2)
 material = SubResource("StandardMaterial3D_wood")
 
-[node name="Ladder" parent="." instance=ExtResource("19_ladder")]
+[node name="Ladder" parent="." unique_id=262899824 instance=ExtResource("19_ladder")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.7, 8.4, 1.03)
 material = SubResource("StandardMaterial3D_wood")
 
-[node name="LadderLink" type="NavigationLink3D" parent="."]
+[node name="LadderLink" type="NavigationLink3D" parent="." unique_id=30139969]
 start_position = Vector3(4.7, 8.4, 0.45)
 end_position = Vector3(4.7, 10.8, 1.6)
 
@@ -131,7 +131,7 @@ transform = Transform3D(-0.77301, 0, -0.63439, 0, 1, 0, 0.63439, 0, -0.77301, 3.
 
 [node name="MainGenerator" parent="." unique_id=904717009 instance=ExtResource("18_main_generator")]
 unique_name_in_owner = true
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.4789524, 0, 3.3948839)
+transform = Transform3D(-1.3422345, 0, 1.1993358, 0, 1.8, 0, -1.1993358, 0, -1.3422345, -3.337059, 0, 4.03486)
 
 [node name="EmergencyGenerator" parent="." unique_id=1992588035 instance=ExtResource("6_generator")]
 unique_name_in_owner = true
