@@ -15,6 +15,7 @@ Ilha, mar e rota dos barcos; câmeras de segurança vistas só pelo monitor da m
 - Canais, na ordem de `Exterior.channel_cameras()`: 0 porta, 1 mar à esquerda, 2 mar à direita; depois do último, volta ao primeiro. A noite começa no canal 0. A tela não mostra o número do canal.
 - O monitor funciona sem energia.
 - O nevoeiro aparece pelos volumes do `FogVisuals` (`nevoeiro.md`). O céu é o da Sky3D (decisão 0028): a lua cheia nasce baixa à esquerda das câmeras do mar no começo da noite, passa alta pelo meio (o reflexo dela aparece no mar) e se põe à direita no amanhecer. O `Environment` do mundo (`Environment_exterior` em `game.tscn`) tem a névoa volumétrica ligada, com densidade global zero e alcance de 120 m, para cobrir a faixa no mar inteira (a rota fica a cerca de 70 m). Exceção: as câmeras do mar têm `cull_mask` sem a camada de render `fog_near_ring`, e o anel em volta do farol não as cobre.
+- O `Sky` do ambiente do mundo é declarado em `game.tscn` (a Sky3D só cria um quando falta), com `process_mode` incremental e radiância de 64 px. O shader da Sky3D usa `TIME`: no modo automático, o Godot recalcularia a radiância inteira a cada quadro (~13 ms numa GPU integrada); o incremental a reparte em vários quadros, sem diferença visível nas câmeras.
 
 ## Sinais
 - O `Game` passa as texturas com `Lighthouse.show_camera_feeds(Exterior.channel_feeds())`.

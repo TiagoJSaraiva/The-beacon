@@ -29,9 +29,19 @@
 [ext_resource type="Script" path="res://addons/sky_3d/src/SkyDome.gd" id="29_sky_dome"]
 [ext_resource type="Script" path="res://addons/sky_3d/src/TimeOfDay.gd" id="30_time_of_day"]
 [ext_resource type="Script" path="res://night/sky_clock.gd" id="31_sky_clock"]
+[ext_resource type="Shader" path="res://addons/sky_3d/shaders/SkyMaterial.gdshader" id="32_sky_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("32_sky_shader")
+
+[sub_resource type="Sky" id="Sky_exterior"]
+sky_material = SubResource("ShaderMaterial_sky")
+process_mode = 2
+radiance_size = 1
 
 [sub_resource type="Environment" id="Environment_exterior"]
 background_mode = 2
+sky = SubResource("Sky_exterior")
 ambient_light_source = 3
 ambient_light_sky_contribution = 0.7
 reflected_light_source = 2
