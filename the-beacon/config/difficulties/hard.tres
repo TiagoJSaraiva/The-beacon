@@ -57,7 +57,6 @@ display_name = "Hard"
 nights = 7
 events = Array[ExtResource("3_0up6b")]([ExtResource("4_6yf4o"), ExtResource("5_3kbr3"), ExtResource("7_hrpw4"), ExtResource("8_atx57")])
 event_chance_multiplier = 1.3
-chance_increase_per_night = 0.12
 time = SubResource("Resource_8fen3")
 power = SubResource("Resource_4aahe")
 flashlight = SubResource("Resource_bcnhu")

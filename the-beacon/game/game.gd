@@ -12,7 +12,11 @@ signal run_lost(cause: StringName)
 ## Ordem de desbloqueio das dificuldades.
 @export var catalog: DifficultyCatalog
 
+## Dificuldade escolhida, como está no `.tres`; é ela que passa de uma noite para a outra.
 var difficulty: DifficultyConfig
+## Cópia da dificuldade com os valores da noite atual (tabela por noite, decisão 0031). É a que
+## os sistemas recebem.
+var night_config: DifficultyConfig
 var run: RunState
 
 @onready var _world: Node3D = %World
@@ -37,10 +41,11 @@ var run: RunState
 @onready var _debug_panel: DebugPanel = %DebugPanel
 
 
-## Monta a noite: lê o pedido, consome o save, configura e liga os sistemas, aplica o estado
-## persistente, inicia a noite e assa a navmesh um frame depois.
+## Monta a noite: lê o pedido, consome o save, pega os valores da noite, configura e liga os
+## sistemas, aplica o estado persistente, inicia a noite e assa a navmesh um frame depois.
 func _ready() -> void:
 	_read_run_request()
+	night_config = BalanceService.config_for_night(difficulty, run.current_night)
 	# Começar a noite consome o save: qualquer saída antes do próximo "Salvar e sair",
 	# inclusive fechar o jogo à força, perde a partida (decisão 0014).
 	SaveService.delete_run()
@@ -54,23 +59,23 @@ func _ready() -> void:
 	_navigation.bake_navigation_mesh(false)
 
 
-## Passa a dificuldade e as referências aos sistemas, registra os eventos e liga as câmeras ao
-## monitor e aos barcos (o rádio só ouve o canal aberto). Só a câmera do canal aberto renderiza, e
-## só com o monitor à vista.
+## Passa os valores da noite e as referências aos sistemas, registra os eventos e liga as câmeras
+## ao monitor e aos barcos (o rádio só ouve o canal aberto). Só a câmera do canal aberto
+## renderiza, e só com o monitor à vista.
 func _configure_systems() -> void:
-	_player.configure(difficulty)
-	_lighthouse.configure(difficulty)
-	_night_director.configure(difficulty.time)
-	_event_director.configure(difficulty)
-	_fog.configure(difficulty.fog)
-	_boats.configure(difficulty.boat)
+	_player.configure(night_config)
+	_lighthouse.configure(night_config)
+	_night_director.configure(night_config.time)
+	_event_director.configure(night_config)
+	_fog.configure(night_config.fog)
+	_boats.configure(night_config.boat)
 	_boats.boat_path = _exterior.boat_path
-	_drowned.configure(difficulty.drowned)
+	_drowned.configure(night_config.drowned)
 	_drowned.setup(_lighthouse, _player)
-	_figurehead.configure(difficulty.figurehead)
+	_figurehead.configure(night_config.figurehead)
 	_figurehead.setup(_player)
 	_tutorial.setup(
-		difficulty.tutorial_enabled,
+		night_config.tutorial_enabled,
 		_night_director,
 		_lighthouse,
 		_fog,
@@ -85,7 +90,7 @@ func _configure_systems() -> void:
 	_lighthouse.show_camera_feeds(_exterior.channel_feeds())
 	_boats.watch_cameras(_exterior.channel_cameras(), _lighthouse.monitor.channels.current)
 	_fog_visuals.setup(_fog, _exterior.boat_path)
-	_debug_panel.setup(difficulty)
+	_debug_panel.setup(night_config)
 
 
 ## Liga os sinais entre jogador, farol, sistemas, HUD e telas (lista em `docs/arquitetura.md`).
@@ -132,7 +137,7 @@ func _read_run_request() -> void:
 	var request: RunRequest = SceneRouter.take_run_request()
 	if request == null:
 		difficulty = default_difficulty
-		run = RunState.new_run(difficulty)
+		run = RunState.new_run(BalanceService.config_for_night(difficulty, 1))
 		return
 	difficulty = request.difficulty
 	run = request.run

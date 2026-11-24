@@ -12,7 +12,7 @@ Renderizador Forward+ com o driver D3D12 no Windows (decisão 0025). O ambiente 
 Princípios da implementação:
 - Regras em classes `RefCounted` puras (`*_state.gd`, `*_rules.gd`), testáveis. Nós só fazem tick, leem input e aplicam o resultado. Só o estado que passa de uma noite para a outra é serializado (`RunState`, decisão 0015).
 - Cada noite é uma carga nova de `game/game.tscn`; o `RunState` leva o que persiste.
-- Todo valor de balanceamento vem de `DifficultyConfig` (`config/difficulties/*.tres`), com sub-configs por sistema.
+- Todo valor de balanceamento vem de `DifficultyConfig` (`config/difficulties/*.tres`), com sub-configs por sistema. Os números de cada noite vêm da tabela da dificuldade (`config/balance/<id>.json`, uma coluna por noite, decisão 0031): o `Game` monta a noite com uma cópia da dificuldade com os valores dela.
 - Eventos sorteáveis são `EventDefinition` (`config/events/*.tres`); o sistema que trata cada um se registra no `EventDirector`.
 
 ## Organização de pastas
@@ -25,7 +25,7 @@ Organização por feature: cada cena fica junto do seu script e dos recursos exc
 components/         componentes reutilizados por mais de uma feature (ex.: health_component)
 assets/             arte, áudio e fontes compartilhados
 autoload/           singletons (cada um com decisão registrada) e as regras puras deles
-config/             classes de configuração e .tres de dificuldades e eventos
+config/             classes de configuração, .tres de dificuldades e eventos e tabelas por noite (balance/)
 tools/              scripts headless de manutenção do jogo
 debug/              modo debug: painel de testes dentro do jogo (decisão 0024)
 scripts/            pipeline de verificação (check.ps1, check-docs.ps1, check-doc-review.ps1, parse_check.gd); tem .gdignore, fora do res://
@@ -38,7 +38,7 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
 - `game/game.tscn` → `Game` (`Node3D`, `game.gd`):
   - `World` (`Node3D`): toda a simulação, congelada entre noites e na morte por `process_mode`. Filhos: `Sky3D` (o `WorldEnvironment`, com sol, lua e estrelas; decisão 0028), `SkyClock`, `Exterior`, `Lighthouse`, `Player`, `NightDirector`, `EventDirector`, `FogSystem`, `FogVisuals`, `BoatDirector`, `DrownedDirector`, `FigureheadDirector`, `TutorialDirector`, `Navigation` (`NavigationRegion3D`, decisão 0009).
   - Fora do `World`: `Hud`, `NightEndScreen`, `GameOverScreen`, `VictoryScreen`, `PauseMenu` (`sistemas/menus-e-telas.md`), `RunCarryover` (`sistemas/save-e-progresso.md`), `DebugPanel` (`sistemas/debug.md`).
-  - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica a dificuldade e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
+  - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica os valores da noite (`night_config`, do `BalanceService`) e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG (`Shell` com `EntranceDoor`, `UpperFloor` com `Trapdoor`; decisão 0019), `SpiralStaircase`, `LadderLanding`, `Ladder`, `LadderLink` (ver `sistemas/farol.md`); `MainGenerator`, `EmergencyGenerator`, `FuelTank` (com `JerrycanSlot`), `Jerrycan` (`sistemas/energia-e-combustivel.md`); `MachineHouse`, `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights` (pendentes) e `LowerLights` (arandelas); `Desk` com `Monitor` (um só, com canais), `Radio` e `Chair`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
 - `exterior/exterior.tscn` → `Exterior`: ilha, mar, rota dos barcos e câmeras (`sistemas/exterior-e-cameras.md`).
 - `player/player.tscn` → `Player` (`CharacterBody3D`) → `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
@@ -54,6 +54,7 @@ Os diretores que mexem em outros sistemas (`DrownedDirector`, `FigureheadDirecto
 | `SceneRouter` | `autoload/scene_router.gd` | Troca menu ↔ jogo; `play_night(difficulty, run)` carrega cada noite e entrega o `RunRequest` ao `Game` | 0010, 0015 |
 | `SaveService` | `autoload/save_service.gd` | Save único da partida (`RunState`, só entre noites) e progresso de desbloqueio (`user://`) | 0014 |
 | `Settings` | `autoload/settings.gd` | Volumes, sensibilidade, resolução 3D e controles remapeáveis (`user://settings.cfg`); aplica as ligações no `InputMap` e a escala 3D na janela | 0012, 0018 |
+| `BalanceService` | `autoload/balance_service.gd` | Tabelas de balanceamento por noite (`config/balance/<id>.json`), guardadas enquanto o jogo está aberto; `config_for_night(difficulty, night)` | 0031 |
 
 O parse do check carrega os scripts com os autoloads registrados (decisão 0013).
 

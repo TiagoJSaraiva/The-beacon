@@ -30,9 +30,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _difficulty == null or not night.is_running or not random_events_enabled:
 		return
-	var multiplier: float = _difficulty.chance_multiplier_for_night(night.current_night)
 	var fired: Array[EventDefinition] = _scheduler.update(
-		delta, night.clock.clock_hour(), multiplier, rng, _is_eligible
+		delta, night.clock.clock_hour(), _difficulty.event_chance_multiplier, rng, _is_eligible
 	)
 	for definition: EventDefinition in fired:
 		_trigger[definition.id].call()

@@ -55,7 +55,6 @@ id = &"medium"
 display_name = "Medium"
 nights = 5
 events = Array[ExtResource("3_pl71k")]([ExtResource("4_brymo"), ExtResource("5_50g2q"), ExtResource("7_co02s"), ExtResource("8_fcvjl")])
-chance_increase_per_night = 0.12
 time = SubResource("Resource_ut0qd")
 power = SubResource("Resource_ei2eh")
 flashlight = SubResource("Resource_o6lxf")

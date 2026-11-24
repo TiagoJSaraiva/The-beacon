@@ -2,6 +2,8 @@ class_name DifficultyConfig
 extends Resource
 ## Uma dificuldade completa: duração do plantão e todos os parâmetros de balanceamento.
 ## As ameaças são as mesmas em todas as dificuldades; só os valores mudam (GDD 1.2.14).
+## Os valores de cada noite vêm da tabela `config/balance/<id>.json` (decisão 0031): os números
+## deste recurso e dos sub-configs só valem para uma linha nova, que ainda não está na tabela.
 
 @export var id: StringName = &""
 @export var display_name: String = ""
@@ -12,8 +14,6 @@ extends Resource
 @export var events: Array[EventDefinition] = []
 ## Multiplica a chance de todos os eventos sorteáveis.
 @export var event_chance_multiplier: float = 1.0
-## Aumento da chance a cada noite após a primeira (0.2 = +20% por noite).
-@export var chance_increase_per_night: float = 0.0
 
 @export_group("Sistemas")
 @export var time: TimeConfig
@@ -26,11 +26,6 @@ extends Resource
 @export var trapdoor: TrapdoorConfig
 @export var figurehead: FigureheadConfig
 @export var fall: FallConfig
-
-
-## Devolve o multiplicador de chance dos eventos na noite indicada (a primeira noite é 1).
-func chance_multiplier_for_night(night: int) -> float:
-	return event_chance_multiplier * (1.0 + chance_increase_per_night * float(night - 1))
 
 
 ## Lista os problemas de configuração. Vazia quando o recurso está pronto para uso.

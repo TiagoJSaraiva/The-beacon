@@ -57,7 +57,6 @@ display_name = "Easy"
 tutorial_enabled = true
 events = Array[ExtResource("3_h4kqa")]([ExtResource("4_63jmm"), ExtResource("5_44wgk"), ExtResource("7_wj5i2"), ExtResource("8_ru7dc")])
 event_chance_multiplier = 0.7
-chance_increase_per_night = 0.1
 time = SubResource("Resource_co2l7")
 power = SubResource("Resource_pe4op")
 flashlight = SubResource("Resource_bxr3d")

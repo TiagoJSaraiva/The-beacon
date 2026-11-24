@@ -38,14 +38,6 @@ func test_validate_reports_missing_sub_config() -> void:
 	assert_array(Array(difficulty.validate())).contains(["time não atribuído"])
 
 
-func test_chance_multiplier_grows_each_night() -> void:
-	var difficulty := DifficultyConfig.new()
-	difficulty.event_chance_multiplier = 2.0
-	difficulty.chance_increase_per_night = 0.5
-	assert_float(difficulty.chance_multiplier_for_night(1)).is_equal_approx(2.0, 0.0001)
-	assert_float(difficulty.chance_multiplier_for_night(3)).is_equal_approx(4.0, 0.0001)
-
-
 func test_find_by_id_returns_null_for_unknown() -> void:
 	var catalog: DifficultyCatalog = load(CATALOG_PATH)
 	assert_object(catalog.find_by_id(&"nightmare")).is_null()

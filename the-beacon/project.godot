@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 SceneRouter="*res://autoload/scene_router.gd"
 SaveService="*res://autoload/save_service.gd"
 Settings="*res://autoload/settings.gd"
+BalanceService="*res://autoload/balance_service.gd"
 
 [debug]
 

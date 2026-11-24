@@ -13,9 +13,9 @@ func go_to_main_menu() -> void:
 	_change_scene(MAIN_MENU_SCENE)
 
 
-## Começa um plantão novo na dificuldade dada, na primeira noite.
+## Começa um plantão novo na dificuldade dada, na primeira noite, com a bateria da tabela.
 func start_new_run(difficulty: DifficultyConfig) -> void:
-	play_night(difficulty, RunState.new_run(difficulty))
+	play_night(difficulty, RunState.new_run(BalanceService.config_for_night(difficulty, 1)))
 
 
 ## Carrega a cena de jogo do zero para a noite atual do plantão. Plantão novo, próxima noite
