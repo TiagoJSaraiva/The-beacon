@@ -1,7 +1,7 @@
 class_name ConfigFields
 extends RefCounted
-## Lê, compara e copia os valores de balanceamento (`@export` de número ou bool) de um
-## `Resource` de configuração, para o editor do painel de debug (decisão 0024).
+## Lista os valores de balanceamento (`@export` de número ou bool) de um `Resource` de
+## configuração e as seções de uma dificuldade, de onde sai a tabela por noite (decisão 0031).
 
 
 ## Um campo editável: nome, tipo e, se o `@export_range` der, a faixa.
@@ -72,24 +72,6 @@ static func sections(difficulty: DifficultyConfig) -> Array[Section]:
 	for definition: EventDefinition in difficulty.events:
 		result.append(Section.new("events/%s" % definition.id, definition))
 	return result
-
-
-## Devolve uma linha "<campo>: <original> -> <atual>" para cada campo que difere entre os dois
-## recursos (do mesmo script).
-static func differences(current: Resource, original: Resource) -> PackedStringArray:
-	var lines := PackedStringArray()
-	for field: Field in fields(current):
-		var now: Variant = current.get(field.name)
-		var before: Variant = original.get(field.name)
-		if now != before:
-			lines.append("%s: %s -> %s" % [field.name, before, now])
-	return lines
-
-
-## Copia para `target` os valores de todos os campos de `source` (do mesmo script).
-static func copy_values(source: Resource, target: Resource) -> void:
-	for field: Field in fields(source):
-		target.set(field.name, source.get(field.name))
 
 
 ## Lê "min,max[,step]" do `@export_range`.

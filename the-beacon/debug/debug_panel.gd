@@ -9,6 +9,9 @@ signal opened_changed(opened: bool)
 ## O testador pediu para recomeçar a noite (mesmo `RunState`, valores editados).
 signal restart_night_requested
 
+## Largura do painel estreito; a aba Tabela usa a tela inteira.
+const NARROW_WIDTH := 480.0
+
 ## O nó que a caixa "Pausar simulação" congela.
 @export var world: Node3D
 @export var night_director: NightDirector
@@ -31,6 +34,8 @@ var _froze_world: bool = false
 ## Abas na ordem em que a leitura do topo as mostra.
 var _tabs: Array[DebugTab] = []
 
+@onready var _frame: PanelContainer = %Frame
+@onready var _tabs_container: TabContainer = %Tabs
 @onready var _pause_check: CheckBox = %PauseCheck
 @onready var _readout: Label = %Readout
 @onready var _night_tab: NightTab = %NightTab
@@ -41,12 +46,14 @@ var _tabs: Array[DebugTab] = []
 @onready var _balance_tab: BalanceTab = %BalanceTab
 
 
-## Começa escondido e repassa o pedido de recomeçar a noite da aba Noite.
+## Começa escondido, repassa o pedido de recomeçar a noite da aba Noite e alarga o painel na aba
+## Tabela.
 func _ready() -> void:
 	visible = false
 	_tabs = [_night_tab, _lighthouse_tab, _fog_tab, _threats_tab, _player_tab, _balance_tab]
 	_pause_check.toggled.connect(_on_pause_check_toggled)
 	_night_tab.restart_night_requested.connect(restart_night_requested.emit)
+	_tabs_container.tab_changed.connect(_on_tabs_tab_changed)
 
 
 ## Atualiza a leitura de estado do topo enquanto o painel está aberto.
@@ -83,14 +90,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		close()
 
 
-## Monta as abas com a dificuldade da noite e os sistemas ligados por `@export`.
-func setup(difficulty: DifficultyConfig) -> void:
+## Monta as abas com os sistemas ligados por `@export` e a aba Tabela com o catálogo, a
+## dificuldade em jogo, os valores vivos da noite (`night_config`) e o número da noite.
+func setup(
+	catalog: DifficultyCatalog,
+	difficulty: DifficultyConfig,
+	night_config: DifficultyConfig,
+	night: int
+) -> void:
 	_night_tab.setup(night_director, event_director)
 	_lighthouse_tab.setup(lighthouse)
 	_fog_tab.setup(fog, fog_visuals)
 	_threats_tab.setup(boats, drowned, figurehead)
 	_player_tab.setup(player, lighthouse)
-	_balance_tab.setup(difficulty)
+	_balance_tab.setup(catalog, difficulty, night_config, night)
 
 
 ## Mostra o painel, com a simulação rodando, e emite `opened_changed`.
@@ -124,6 +137,13 @@ func _set_world_frozen(frozen: bool) -> void:
 		return
 	_froze_world = frozen
 	world.process_mode = Node.PROCESS_MODE_DISABLED if frozen else Node.PROCESS_MODE_INHERIT
+
+
+## Ocupa a tela inteira com a aba Tabela e volta à largura estreita nas outras.
+func _on_tabs_tab_changed(_tab: int) -> void:
+	var wide: bool = _tabs_container.get_current_tab_control().is_ancestor_of(_balance_tab)
+	_frame.anchor_left = 0.0 if wide else 1.0
+	_frame.offset_left = 0.0 if wide else -NARROW_WIDTH
 
 
 ## Aplica a caixa "Pausar simulação".

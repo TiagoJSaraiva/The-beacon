@@ -53,6 +53,20 @@ func test_keeps_the_table_after_the_first_read() -> void:
 	assert_float(_service.config_for_night(_easy(), 3).boat.crossing_seconds).is_equal(44.0)
 
 
+func test_save_writes_the_table_and_discard_reads_it_again() -> void:
+	var table: BalanceTable = _service.table_for(_easy())
+	table.set_value("boat.crossing_seconds", 2, 55.0)
+	_service.mark_changed(&"easy")
+
+	assert_int(_service.save(&"easy")).is_equal(OK)
+	assert_bool(_service.has_unsaved_changes(&"easy")).is_false()
+	table.set_value("boat.crossing_seconds", 2, 66.0)
+	_service.discard(&"easy")
+
+	assert_float(_service.config_for_night(_easy(), 2).boat.crossing_seconds).is_equal(55.0)
+	assert_int(_service.save(&"medium")).is_equal(ERR_DOES_NOT_EXIST)
+
+
 func test_project_tables_match_the_catalog() -> void:
 	var catalog: DifficultyCatalog = load("res://config/difficulties/catalog.tres")
 	for difficulty: DifficultyConfig in catalog.difficulties:

@@ -1,6 +1,5 @@
 extends GdUnitTestSuite
-## Campos editáveis, seções, diferenças e cópia dos valores de balanceamento para o painel de
-## debug.
+## Campos editáveis e seções dos valores de balanceamento, de onde sai a tabela por noite.
 
 
 func test_fields_list_numbers_and_bools_with_range_and_group() -> void:
@@ -37,17 +36,3 @@ func test_sections_cover_sub_configs_and_events() -> void:
 
 	assert_str(labels[0]).is_equal("difficulty")
 	assert_array(labels).contains(["fog", "power", "drowned", "events/boat"])
-
-
-func test_differences_and_copy_values() -> void:
-	var original := BoatConfig.new()
-	var current := BoatConfig.new()
-	current.crossing_seconds = 30.0
-
-	var lines: PackedStringArray = ConfigFields.differences(current, original)
-	assert_int(lines.size()).is_equal(1)
-	assert_str(lines[0]).is_equal("crossing_seconds: 12.0 -> 30.0")
-
-	ConfigFields.copy_values(original, current)
-	assert_float(current.crossing_seconds).is_equal(12.0)
-	assert_int(ConfigFields.differences(current, original).size()).is_equal(0)

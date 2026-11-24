@@ -90,7 +90,7 @@ func _configure_systems() -> void:
 	_lighthouse.show_camera_feeds(_exterior.channel_feeds())
 	_boats.watch_cameras(_exterior.channel_cameras(), _lighthouse.monitor.channels.current)
 	_fog_visuals.setup(_fog, _exterior.boat_path)
-	_debug_panel.setup(night_config)
+	_debug_panel.setup(catalog, difficulty, night_config, run.current_night)
 
 
 ## Liga os sinais entre jogador, farol, sistemas, HUD e telas (lista em `docs/arquitetura.md`).

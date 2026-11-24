@@ -1,6 +1,7 @@
 extends GdUnitTestSuite
 ## Painel de debug (decisão 0024): Y abre com a simulação rodando, a caixa "Pausar simulação"
-## congela o `World`, e fechar devolve o `World` e não abre o menu de pausa.
+## congela o `World`, e fechar devolve o `World` e não abre o menu de pausa. Na aba Tabela, a
+## célula da noite em jogo muda os valores vivos (decisão 0031).
 
 const GAME := "res://game/game.tscn"
 
@@ -18,9 +19,6 @@ func test_panel_opens_pauses_world_and_closes() -> void:
 	assert_int(world.process_mode).is_equal(Node.PROCESS_MODE_INHERIT)
 	var readout: Label = runner.find_child("Readout")
 	assert_str(readout.text).contains("Noite 1 · 20:00")
-	# Uma seção por parte da dificuldade, montada com a dificuldade da noite.
-	var balance: BalanceTab = runner.find_child("BalanceTab")
-	assert_int(balance.find_children("*", "ConfigEditor", true, false).size()).is_greater(10)
 
 	pause_check.button_pressed = true
 	assert_int(world.process_mode).is_equal(Node.PROCESS_MODE_DISABLED)
@@ -30,6 +28,28 @@ func test_panel_opens_pauses_world_and_closes() -> void:
 	assert_bool(panel.visible).is_false()
 	assert_bool(pause_menu.visible).is_false()
 	assert_int(world.process_mode).is_equal(Node.PROCESS_MODE_INHERIT)
+
+
+func test_table_cell_of_current_night_changes_live_values() -> void:
+	var runner := scene_runner(GAME)
+	var game: Game = runner.scene()
+	var grid: NightTableGrid = (
+		runner.find_child("BalanceTab").find_children("*", "NightTableGrid", true, false)[0]
+	)
+	await runner.simulate_frames(2)
+	var original: float = game.night_config.boat.crossing_seconds
+
+	(grid.cell("boat.crossing_seconds", 2) as SpinBox).value = original + 7.0
+	assert_float(game.night_config.boat.crossing_seconds).is_equal(original)
+	assert_bool(BalanceService.has_unsaved_changes(&"easy")).is_true()
+
+	(grid.cell("boat.crossing_seconds", 1) as SpinBox).value = original + 5.0
+	assert_float(game.night_config.boat.crossing_seconds).is_equal(original + 5.0)
+	assert_object(grid.cell("boat.crossing_seconds", 2).modulate).is_equal(
+		NightTableGrid.CHANGED_COLOR
+	)
+	# O autoload vive durante todos os testes: esquece as edições sem gravar.
+	BalanceService.discard(&"easy")
 
 
 func test_panel_does_not_open_with_simulation_stopped() -> void:
