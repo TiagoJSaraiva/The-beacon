@@ -2,7 +2,8 @@ class_name BalanceTab
 extends DebugTab
 ## Aba "Tabela" do painel de debug: a tabela de balanceamento por noite de uma dificuldade
 ## (decisão 0031). A célula da noite em jogo vale na hora; as outras valem quando aquela noite for
-## jogada. As edições ficam no `BalanceService` até fechar o jogo, e "Salvar" as grava no arquivo.
+## jogada. As edições ficam no `BalanceService` até fechar o jogo, e "Salvar" as grava no arquivo
+## (no executável exportado, numa cópia local que dá para apagar daqui).
 
 ## Campos que os sistemas copiam ao montar a noite: só valem ao recomeçá-la.
 const RESTART_ONLY: Dictionary[String, Array] = {
@@ -31,6 +32,7 @@ var _playing_night: int = 0
 var _shown: DifficultyConfig
 var _picker: OptionButton
 var _grid: NightTableGrid
+var _local_copy_label: Label
 
 
 ## Monta a barra da aba e a grade da dificuldade em jogo. `live_config` é a cópia que os sistemas
@@ -46,13 +48,17 @@ func setup(
 	_live_config = live_config
 	_playing_night = playing_night
 	_add_picker()
-	add_buttons(
-		{
-			"Salvar": save_table,
-			"Descartar alterações": discard_changes,
-			"Copiar para as noites seguintes": fill_following,
-		}
-	)
+	var buttons: Dictionary[String, Callable] = {
+		"Salvar": save_table,
+		"Descartar alterações": discard_changes,
+		"Copiar para as noites seguintes": fill_following,
+	}
+	if BalanceService.local_copy_enabled:
+		buttons["Apagar cópia local"] = delete_local_copy
+	add_buttons(buttons)
+	_local_copy_label = Label.new()
+	_local_copy_label.add_theme_color_override("font_color", NightTableGrid.CHANGED_COLOR)
+	add_child(_local_copy_label)
 	add_status(LEGEND)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -74,12 +80,17 @@ func readout() -> String:
 	return "Tabela com alterações não salvas: %s" % ", ".join(names)
 
 
-## Mostra na grade a tabela da dificuldade; a coluna da noite em jogo só aparece destacada na
-## dificuldade em jogo.
+## Mostra na grade a tabela da dificuldade e avisa se ela vem da cópia local. A coluna da noite em
+## jogo só aparece destacada na dificuldade em jogo.
 func show_difficulty(difficulty: DifficultyConfig) -> void:
 	_shown = difficulty
 	var current_night: int = _playing_night if _is_playing(difficulty) else 0
 	_grid.build(BalanceService.table_for(difficulty), current_night, _restart_keys())
+	_local_copy_label.visible = BalanceService.is_using_local_copy(difficulty.id)
+	_local_copy_label.text = (
+		"Usando a cópia local: %s"
+		% ProjectSettings.globalize_path(BalanceService.local_path(difficulty.id))
+	)
 
 
 ## Grava a tabela mostrada e diz onde.
@@ -97,6 +108,15 @@ func discard_changes() -> void:
 	show_difficulty(_shown)
 	_apply_live()
 	show_status("Alterações da tabela %s descartadas." % _shown.display_name)
+
+
+## Apaga a cópia local da tabela mostrada, volta aos valores do projeto e reaplica a noite em
+## jogo.
+func delete_local_copy() -> void:
+	BalanceService.delete_local_copy(_shown.id)
+	show_difficulty(_shown)
+	_apply_live()
+	show_status("Cópia local da tabela %s apagada." % _shown.display_name)
 
 
 ## Copia a última célula usada para as noites seguintes da mesma linha.

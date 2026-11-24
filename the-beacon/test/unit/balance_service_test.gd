@@ -1,9 +1,10 @@
 extends GdUnitTestSuite
-## Leitura das tabelas por noite pelo BalanceService: arquivo do projeto, falta de arquivo e
-## cache entre recargas.
+## Tabelas por noite pelo BalanceService: arquivo do projeto, falta de arquivo, cache entre
+## recargas, gravação, descarte e cópia local do executável exportado.
 
 const SERVICE_SCRIPT := "res://autoload/balance_service.gd"
 const TEST_DIR := "user://balance_service_test"
+const LOCAL_TEST_DIR := "user://balance_service_test_local"
 
 var _service: Node
 
@@ -12,12 +13,15 @@ func before_test() -> void:
 	DirAccess.make_dir_recursive_absolute(TEST_DIR)
 	_service = auto_free(load(SERVICE_SCRIPT).new())
 	_service.project_dir = TEST_DIR
+	_service.local_dir = LOCAL_TEST_DIR
+	_service.local_copy_enabled = false
 
 
 func after_test() -> void:
-	for file_name: String in DirAccess.get_files_at(TEST_DIR):
-		DirAccess.remove_absolute(TEST_DIR.path_join(file_name))
-	DirAccess.remove_absolute(TEST_DIR)
+	for directory: String in [TEST_DIR, LOCAL_TEST_DIR]:
+		for file_name: String in DirAccess.get_files_at(directory):
+			DirAccess.remove_absolute(directory.path_join(file_name))
+		DirAccess.remove_absolute(directory)
 
 
 func _easy() -> DifficultyConfig:
@@ -65,6 +69,29 @@ func test_save_writes_the_table_and_discard_reads_it_again() -> void:
 
 	assert_float(_service.config_for_night(_easy(), 2).boat.crossing_seconds).is_equal(55.0)
 	assert_int(_service.save(&"medium")).is_equal(ERR_DOES_NOT_EXIST)
+
+
+func test_local_copy_is_saved_and_read_only_when_enabled() -> void:
+	_write("easy.json", '{"rows": {"boat.crossing_seconds": [11.0, 11.0, 11.0]}}')
+	_service.local_copy_enabled = true
+	_service.table_for(_easy()).set_value("boat.crossing_seconds", 1, 77.0)
+
+	assert_int(_service.save(&"easy")).is_equal(OK)
+	assert_bool(FileAccess.file_exists(LOCAL_TEST_DIR.path_join("easy.json"))).is_true()
+	assert_str(FileAccess.get_file_as_string(TEST_DIR.path_join("easy.json"))).contains("11.0")
+	_service.discard(&"easy")
+	assert_bool(_service.is_using_local_copy(&"easy")).is_true()
+	assert_float(_service.config_for_night(_easy(), 1).boat.crossing_seconds).is_equal(77.0)
+
+	# Rodando pelo editor, a cópia local não vale.
+	_service.local_copy_enabled = false
+	_service.discard(&"easy")
+	assert_float(_service.config_for_night(_easy(), 1).boat.crossing_seconds).is_equal(11.0)
+
+	_service.local_copy_enabled = true
+	_service.delete_local_copy(&"easy")
+	assert_bool(_service.is_using_local_copy(&"easy")).is_false()
+	assert_float(_service.config_for_night(_easy(), 1).boat.crossing_seconds).is_equal(11.0)
 
 
 func test_project_tables_match_the_catalog() -> void:

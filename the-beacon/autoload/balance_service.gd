@@ -2,30 +2,38 @@ extends Node
 ## Autoload BalanceService: as tabelas de balanceamento por noite (decisão 0031). Lê a tabela de
 ## cada dificuldade em `config/balance/<id>.json` e a guarda enquanto o jogo estiver aberto, para
 ## que as edições do painel de debug sobrevivam à recarga da cena a cada noite. O painel grava a
-## tabela com `save`.
+## tabela com `save`: no projeto, rodando pelo editor; numa cópia local em `user://`, no
+## executável de debug exportado, onde o `res://` é só leitura. A cópia local vale por cima da do
+## projeto até ser apagada.
 
 const PROJECT_DIR := "res://config/balance"
+const LOCAL_DIR := "user://balance"
 
-## Pasta das tabelas do projeto; os testes trocam por uma pasta temporária.
+## Pastas das tabelas; os testes trocam por pastas temporárias.
 var project_dir: String = PROJECT_DIR
+var local_dir: String = LOCAL_DIR
+## Verdadeiro no executável de debug exportado: lê e grava a cópia local. Rodando pelo editor, o
+## binário tem a feature "editor" e grava no projeto; um build de release não tem cópia local.
+var local_copy_enabled: bool = OS.is_debug_build() and not OS.has_feature("editor")
 
 var _tables: Dictionary[StringName, BalanceTable] = {}
 ## Dificuldades com edições ainda não gravadas.
 var _unsaved: Dictionary[StringName, bool] = {}
 
 
-## Devolve a tabela da dificuldade, lida do arquivo na primeira chamada. Sem arquivo, a tabela
-## repete em todas as noites os valores do `.tres`.
+## Devolve a tabela da dificuldade, lida do arquivo na primeira chamada, com a cópia local por
+## cima quando ela vale. Sem arquivo, a tabela repete em todas as noites os valores do `.tres`.
 func table_for(difficulty: DifficultyConfig) -> BalanceTable:
 	if _tables.has(difficulty.id):
 		return _tables[difficulty.id]
 	var table := BalanceTable.from_difficulty(difficulty)
 	var path: String = project_path(difficulty.id)
 	if FileAccess.file_exists(path):
-		for warning: String in table.load_values(_read_json(path)):
-			push_warning("%s: %s" % [path, warning])
+		_load_into(table, path)
 	else:
 		push_warning("Sem tabela de balanceamento em %s; usando os valores do .tres." % path)
+	if is_using_local_copy(difficulty.id):
+		_load_into(table, local_path(difficulty.id))
 	_tables[difficulty.id] = table
 	return table
 
@@ -69,14 +77,38 @@ func discard(difficulty_id: StringName) -> void:
 	_unsaved.erase(difficulty_id)
 
 
-## Devolve onde `save` grava a tabela da dificuldade.
+## Diz se a tabela da dificuldade vem da cópia local (executável de debug exportado com uma
+## tabela já salva nele).
+func is_using_local_copy(difficulty_id: StringName) -> bool:
+	return local_copy_enabled and FileAccess.file_exists(local_path(difficulty_id))
+
+
+## Apaga a cópia local da dificuldade e as edições dela: a próxima `table_for` lê só o projeto.
+func delete_local_copy(difficulty_id: StringName) -> void:
+	if FileAccess.file_exists(local_path(difficulty_id)):
+		DirAccess.remove_absolute(local_path(difficulty_id))
+	discard(difficulty_id)
+
+
+## Devolve onde `save` grava a tabela da dificuldade: a cópia local ou o projeto.
 func save_path(difficulty_id: StringName) -> String:
-	return project_path(difficulty_id)
+	return local_path(difficulty_id) if local_copy_enabled else project_path(difficulty_id)
 
 
 ## Devolve o caminho da tabela da dificuldade no projeto.
 func project_path(difficulty_id: StringName) -> String:
 	return project_dir.path_join("%s.json" % difficulty_id)
+
+
+## Devolve o caminho da cópia local da tabela da dificuldade.
+func local_path(difficulty_id: StringName) -> String:
+	return local_dir.path_join("%s.json" % difficulty_id)
+
+
+## Lê o arquivo na tabela e avisa no console cada linha que não foi reconhecida.
+func _load_into(table: BalanceTable, path: String) -> void:
+	for warning: String in table.load_values(_read_json(path)):
+		push_warning("%s: %s" % [path, warning])
 
 
 ## Devolve o conteúdo do arquivo JSON, ou vazio se não puder ler.
