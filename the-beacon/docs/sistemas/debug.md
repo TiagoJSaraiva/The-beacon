@@ -15,7 +15,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - `debug/fullbright_view.gd` (`FullbrightView`): "Sem escuridão" da aba Jogador.
 - `debug/balance_tab.gd` (`BalanceTab`): aba Balanceamento.
 - `debug/config_editor.gd` (`ConfigEditor`): linhas de um recurso (SpinBox para número, CheckBox para bool).
-- `debug/config_fields.gd` (`ConfigFields`): regras puras: campos editáveis de um recurso, seções da dificuldade, diferenças e cópia.
+- `config/config_fields.gd` (`ConfigFields`): regras puras: campos editáveis de um recurso, seções da dificuldade, diferenças e cópia.
 
 ## Regras
 - Y (`debug_menu`) abre e fecha; Esc também fecha, sem abrir o menu de pausa. Não abre com o menu de pausa aberto nem fora da simulação (fim de noite, morte, vitória).
