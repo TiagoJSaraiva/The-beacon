@@ -52,6 +52,18 @@ func test_table_cell_of_current_night_changes_live_values() -> void:
 	BalanceService.discard(&"easy")
 
 
+func test_night_tab_asks_for_another_night() -> void:
+	# Só o painel: no jogo, o pedido recarregaria a cena no meio do teste.
+	var runner := scene_runner("res://debug/debug_panel.tscn")
+	var panel: DebugPanel = runner.scene()
+	var night_tab: NightTab = runner.find_child("NightTab")
+	await runner.simulate_frames(1)
+	monitor_signals(panel)
+
+	night_tab.night_jump_requested.emit(3)
+	await assert_signal(panel).is_emitted("night_jump_requested", [3])
+
+
 func test_panel_does_not_open_with_simulation_stopped() -> void:
 	var runner := scene_runner(GAME)
 	var panel: DebugPanel = runner.find_child("DebugPanel")

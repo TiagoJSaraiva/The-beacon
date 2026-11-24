@@ -8,6 +8,8 @@ extends CanvasLayer
 signal opened_changed(opened: bool)
 ## O testador pediu para recomeçar a noite (mesmo `RunState`, valores editados).
 signal restart_night_requested
+## O testador pediu para jogar a noite dada do plantão (a primeira é 1).
+signal night_jump_requested(night: int)
 
 ## Largura do painel estreito; a aba Tabela usa a tela inteira.
 const NARROW_WIDTH := 480.0
@@ -46,13 +48,14 @@ var _tabs: Array[DebugTab] = []
 @onready var _balance_tab: BalanceTab = %BalanceTab
 
 
-## Começa escondido, repassa o pedido de recomeçar a noite da aba Noite e alarga o painel na aba
-## Tabela.
+## Começa escondido, repassa os pedidos de recomeçar a noite e de ir para outra noite da aba Noite
+## e alarga o painel na aba Tabela.
 func _ready() -> void:
 	visible = false
 	_tabs = [_night_tab, _lighthouse_tab, _fog_tab, _threats_tab, _player_tab, _balance_tab]
 	_pause_check.toggled.connect(_on_pause_check_toggled)
 	_night_tab.restart_night_requested.connect(restart_night_requested.emit)
+	_night_tab.night_jump_requested.connect(night_jump_requested.emit)
 	_tabs_container.tab_changed.connect(_on_tabs_tab_changed)
 
 
@@ -90,20 +93,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		close()
 
 
-## Monta as abas com os sistemas ligados por `@export` e a aba Tabela com o catálogo, a
-## dificuldade em jogo, os valores vivos da noite (`night_config`) e o número da noite.
+## Monta as abas com os sistemas ligados por `@export`, a aba Noite com as noites do plantão e a
+## aba Tabela com o catálogo, a dificuldade em jogo, os valores vivos da noite (`night_config`) e a
+## noite atual do plantão.
 func setup(
 	catalog: DifficultyCatalog,
 	difficulty: DifficultyConfig,
 	night_config: DifficultyConfig,
-	night: int
+	run: RunState
 ) -> void:
-	_night_tab.setup(night_director, event_director)
+	_night_tab.setup(night_director, event_director, run.total_nights)
 	_lighthouse_tab.setup(lighthouse)
 	_fog_tab.setup(fog, fog_visuals)
 	_threats_tab.setup(boats, drowned, figurehead)
 	_player_tab.setup(player, lighthouse)
-	_balance_tab.setup(catalog, difficulty, night_config, night)
+	_balance_tab.setup(catalog, difficulty, night_config, run.current_night)
 
 
 ## Mostra o painel, com a simulação rodando, e emite `opened_changed`.

@@ -38,6 +38,12 @@ func advance_night() -> void:
 	current_night = mini(current_night + 1, total_nights)
 
 
+## Põe o plantão na noite dada, presa entre a primeira e a última; o resto do estado não muda
+## (painel de debug).
+func go_to_night(night: int) -> void:
+	current_night = clampi(night, 1, total_nights)
+
+
 ## Devolve o estado em tipos aceitos pelo JSON, pronto para o save.
 func to_dict() -> Dictionary:
 	var shown: Array[String] = []

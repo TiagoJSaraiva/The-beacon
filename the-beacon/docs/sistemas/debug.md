@@ -5,7 +5,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 
 ## Componentes
 - `debug/debug_mode.gd` (`DebugMode`): `ENABLED` liga o modo; `is_active()` exige também build de debug.
-- `debug/debug_panel.tscn` (`DebugPanel`, `CanvasLayer`, `process_mode = ALWAYS`): filho do `Game`, fora do `World`. Abas em `%Tabs`. Os sistemas chegam por `@export`; o catálogo, a dificuldade, os valores vivos da noite (`Game.night_config`) e o número da noite, pelo `setup()` que o `Game` chama. No topo, a leitura de estado junta o `readout()` de cada aba.
+- `debug/debug_panel.tscn` (`DebugPanel`, `CanvasLayer`, `process_mode = ALWAYS`): filho do `Game`, fora do `World`. Abas em `%Tabs`. Os sistemas chegam por `@export`; o catálogo, a dificuldade, os valores vivos da noite (`Game.night_config`) e o `RunState`, pelo `setup()` que o `Game` chama. No topo, a leitura de estado junta o `readout()` de cada aba.
 - `debug/debug_tab.gd` (`DebugTab`): base das abas, que montam a interface em código (títulos, botões, valor com botão, caixas, linha de status).
 - `debug/night_tab.gd` (`NightTab`): aba Noite.
 - `debug/lighthouse_tab.gd` (`LighthouseTab`): aba Farol.
@@ -31,10 +31,12 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - "Copiar para as noites seguintes" repete a última célula editada ou focada nas noites à direita.
 - Campos com `*` são copiados pelos sistemas ao montar a noite e só valem em "Recomeçar a noite": capacidade, enchimento e despejo do galão; todo o `repair`; tempo do trinco; toda a `flashlight` (`BalanceTab.RESTART_ONLY`). `boat.crossing_seconds` vale a partir do próximo barco. A bateria da lanterna passa de uma noite para a outra: `flashlight.battery_seconds` só conta na primeira noite de um plantão novo.
 - "Recomeçar a noite" (aba Noite) recarrega a noite atual com o mesmo `RunState` (`SceneRouter.play_night`).
+- "Ir para a noite" (aba Noite) carrega a noite escolhida do plantão (de 1 até o total), com os valores da tabela daquela noite e o estado que passa entre noites (pontos de Afogado, mangueira, bateria) como estava no começo da noite atual.
 
 ## Sinais
 - `DebugPanel.opened_changed(opened)` → `Game` → `Player.set_controls_enabled`.
 - `DebugPanel.restart_night_requested` (repassado do `NightTab`) → `Game` → `SceneRouter.play_night`.
+- `DebugPanel.night_jump_requested(night)` (repassado do `NightTab`) → `Game` → `RunState.go_to_night` e `SceneRouter.play_night`.
 
 ## Testes
 - `test/unit/config_fields_test.gd`: campos, faixas, grupos e seções.
@@ -45,4 +47,4 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - `test/unit/interior_lights_test.gd` (escala a energia a partir da cena, sem acumular).
 - `test/unit/fullbright_view_test.gd` (troca e devolve o ambiente da câmera sem alterar o original; sem câmera ou sem ambiente, não faz nada).
 - `test/unit/failure_state_test.gd` (`skip_cooldown`) e `test/unit/generator_state_test.gd` (`set_fuel_ratio`).
-- `test/scenes/debug_panel_test.gd`: abrir, pausar o `World`, fechar com Esc sem abrir a pausa; não abrir com o painel desabilitado; célula da noite em jogo muda os valores vivos e a de outra noite não; comandos de barcos, Afogado, carranca e jogador.
+- `test/scenes/debug_panel_test.gd`: abrir, pausar o `World`, fechar com Esc sem abrir a pausa; não abrir com o painel desabilitado; célula da noite em jogo muda os valores vivos e a de outra noite não; a aba Noite pede outra noite; comandos de barcos, Afogado, carranca e jogador.

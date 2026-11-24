@@ -16,6 +16,18 @@ func test_advances_until_last_night() -> void:
 	assert_int(run.current_night).is_equal(3)
 
 
+func test_go_to_night_stays_inside_the_run() -> void:
+	var run := RunState.new(&"medium", 5)
+	run.drowned_points = 2
+	run.go_to_night(4)
+	assert_int(run.current_night).is_equal(4)
+	assert_int(run.drowned_points).is_equal(2)
+	run.go_to_night(9)
+	assert_int(run.current_night).is_equal(5)
+	run.go_to_night(0)
+	assert_int(run.current_night).is_equal(1)
+
+
 func test_new_run_starts_clean_with_full_battery() -> void:
 	var difficulty := DifficultyConfig.new()
 	difficulty.id = &"medium"

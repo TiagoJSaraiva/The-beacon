@@ -1,10 +1,12 @@
 class_name NightTab
 extends DebugTab
-## Aba "Noite" do painel de debug: hora, velocidade do relógio, fim e recomeço da noite, disparo
-## manual de eventos e o liga-desliga do sorteio.
+## Aba "Noite" do painel de debug: hora, velocidade do relógio, fim e recomeço da noite, ida para
+## outra noite do plantão, disparo manual de eventos e o liga-desliga do sorteio.
 
 ## O testador pediu para recomeçar a noite (mesmo `RunState`, valores editados).
 signal restart_night_requested
+## O testador pediu para jogar a noite dada do plantão (a primeira é 1).
+signal night_jump_requested(night: int)
 
 const HOUR_STEP := 0.25
 const LAST_HOUR := 23.75
@@ -14,8 +16,9 @@ var _night: NightDirector
 var _events: EventDirector
 
 
-## Monta a aba para o relógio e o sorteio da noite.
-func setup(night: NightDirector, events: EventDirector) -> void:
+## Monta a aba para o relógio e o sorteio da noite, com a ida para qualquer noite de 1 a
+## `total_nights`.
+func setup(night: NightDirector, events: EventDirector, total_nights: int) -> void:
 	_night = night
 	_events = events
 	add_title("Relógio")
@@ -36,6 +39,15 @@ func setup(night: NightDirector, events: EventDirector) -> void:
 			"Terminar a noite": _end_night,
 			"Recomeçar a noite": restart_night_requested.emit,
 		}
+	)
+	add_value_action(
+		"Ir para a noite",
+		1.0,
+		total_nights,
+		1.0,
+		night.current_night,
+		"Ir",
+		func(value: float) -> void: night_jump_requested.emit(int(value))
 	)
 	add_title("Eventos")
 	add_toggle(
