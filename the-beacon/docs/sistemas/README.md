@@ -11,7 +11,8 @@ Modelo:
 Uma ou duas frases.
 
 ## Componentes
-Cenas e scripts envolvidos, com o papel de cada um.
+Cenas e scripts envolvidos, com o papel de cada um. Cite o caminho de cada um entre crases
+(`player/player.gd`): o `/revisar` monta os fluxos a partir destas citações (decisão 0032).
 
 ## Regras
 As regras de gameplay que o código implementa (valores, limites, condições).

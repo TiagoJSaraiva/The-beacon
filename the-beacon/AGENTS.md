@@ -24,7 +24,8 @@ Procedimentos detalhados em `.agents/fluxos/` (também expostos como comandos no
 |---|---|
 | `inicio.md` | Início de sessão |
 | `planejar.md` | Qualquer tarefa que crie sistema, cena ou mais de ~3 arquivos |
-| `revisar.md` | Revisão de diff, a pedido |
+| `revisar.md` | Revisão de diff, a pedido, com auditoria de comentários, duplicação e código morto dos fluxos tocados (`tudo`: o jogo inteiro) |
+| `auditar-fluxo.md` | Usado pelo `revisar`, um fluxo por vez; não é comando |
 | `fim.md` | Fim de sessão ou de tarefa |
 
 Regras gerais:
@@ -91,7 +92,7 @@ A memória entre sessões é a pasta `docs/`, versionada com o código.
 |---|---|---|
 | `status.md` | Estado atual, próximo passo, bloqueios | Fim de toda sessão |
 | `arquitetura.md` | Cenas, autoloads, sinais, input map, camadas de colisão | Mudou algum desses |
-| `sistemas/<sistema>.md` | Como um sistema funciona e suas regras | Criou ou alterou o sistema |
+| `sistemas/<sistema>.md` | Como um sistema funciona e suas regras; a seção Componentes cita o caminho de cada script e cena, e é dela que o `/revisar` tira os fluxos (decisão 0032) | Criou ou alterou o sistema |
 | `decisoes/NNNN-titulo.md` | Decisão não trivial: contexto, escolha, alternativas | Tomou uma decisão estrutural |
 
 Regras:
