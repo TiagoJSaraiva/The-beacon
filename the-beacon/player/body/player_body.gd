@@ -16,6 +16,15 @@ const WORLD_VIEW_LAYER := 1 << 3
 const HEAD_BONE := &"Head"
 const HEAD_WEIGHT_LIMIT := 0.5
 
+## Animações dos braços, que valem só nos ossos de cada braço: a esquerda segura a lanterna
+## (`Idle_Torch`) e a direita segura o galão (a pose de mirar, com o braço à frente).
+const TORCH_ANIMATION := &"Idle_Torch"
+const CARRY_ANIMATION := &"Pistol_Aim_Neutral"
+const LEFT_ARM_ROOT := &"clavicle_l"
+const RIGHT_ARM_ROOT := &"clavicle_r"
+const LEFT_HAND_BONE := &"hand_l"
+const RIGHT_HAND_BONE := &"hand_r"
+
 ## Estados da transição principal e a animação de cada um (nomes do pacote, sem o `_Loop`).
 const STATE_ANIMATIONS: Dictionary[StringName, StringName] = {
 	&"idle": &"Idle",
@@ -35,6 +44,8 @@ const GAIT_STATES: Dictionary[LocomotionRules.Gait, StringName] = {
 @export var leg_turn_speed: float = 10.0
 ## Tempo da mistura entre duas animações.
 @export var crossfade_seconds: float = 0.2
+## Rapidez com que o braço direito vai à pose de carregar e volta (peso por segundo).
+@export var arm_blend_speed: float = 6.0
 ## Tempo sem pisar no chão até o corpo passar para a animação de pulo; evita piscar nos degraus.
 @export var airborne_delay_seconds: float = 0.15
 
@@ -44,13 +55,18 @@ var _off_floor_seconds: float = 0.0
 var _state: StringName = &""
 var _torso: TorsoAim
 var _skeleton: Skeleton3D
+var _left_hand: BoneAttachment3D
+var _right_hand: BoneAttachment3D
+var _carrying: bool = false
+var _carry_weight: float = 0.0
 
 @onready var _visual: Node3D = $Visual
 @onready var _tree: AnimationTree = $AnimationTree
 
 
 ## Acha o esqueleto e o `AnimationPlayer` do modelo, separa a cópia do corpo sem cabeça para a
-## câmera do jogador, põe o ajuste do tronco no esqueleto e monta a árvore de animação.
+## câmera do jogador, prende um ponto a cada mão, põe o ajuste do tronco no esqueleto e monta a
+## árvore de animação.
 func _ready() -> void:
 	var rig: Node = $Visual/Rig
 	var animation_player := (
@@ -58,6 +74,8 @@ func _ready() -> void:
 	)
 	_skeleton = rig.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
 	_split_views()
+	_left_hand = _attach_to_bone(LEFT_HAND_BONE)
+	_right_hand = _attach_to_bone(RIGHT_HAND_BONE)
 	_torso = TorsoAim.new()
 	_skeleton.add_child(_torso)
 	_build_tree(animation_player)
@@ -89,6 +107,23 @@ func update_body(
 	_visual.rotation.y = PI - _leg_yaw
 	_torso.counter_yaw = _leg_yaw
 	_torso.look_pitch = look_pitch
+	_carry_weight = move_toward(_carry_weight, 1.0 if _carrying else 0.0, arm_blend_speed * delta)
+	_tree.set("parameters/carry_arm/blend_amount", _carry_weight)
+
+
+## Põe o braço direito na pose de carregar (o galão) ou o solta.
+func set_carrying(carrying: bool) -> void:
+	_carrying = carrying
+
+
+## Devolve um ponto que acompanha a mão esquerda, onde fica a lanterna.
+func left_hand() -> Node3D:
+	return _left_hand
+
+
+## Devolve um ponto que acompanha a mão direita, onde fica o galão.
+func right_hand() -> Node3D:
+	return _right_hand
 
 
 ## Devolve o estado da transição principal (`idle`, `walk`, `jog`, `jump`, `sit` ou `kneel`).
@@ -156,6 +191,51 @@ func _mesh_without_head(source: Mesh, skin: Skin) -> ArrayMesh:
 	return result
 
 
+## Cria um ponto no esqueleto que acompanha o osso e o devolve.
+func _attach_to_bone(bone_name: StringName) -> BoneAttachment3D:
+	var attachment := BoneAttachment3D.new()
+	attachment.name = "%sAttachment" % bone_name
+	attachment.bone_name = bone_name
+	_skeleton.add_child(attachment)
+	return attachment
+
+
+## Acrescenta à árvore uma camada de braço: toca `animation` só nos ossos do braço de `arm_root`
+## (o osso e todos os que descendem dele) por cima de `base`, com o peso do parâmetro
+## `parameters/<layer>/blend_amount`.
+func _add_arm_layer(
+	blend_tree: AnimationNodeBlendTree,
+	layer: StringName,
+	base: StringName,
+	animation: StringName,
+	arm_root: StringName
+) -> void:
+	var blend := AnimationNodeBlend2.new()
+	blend.filter_enabled = true
+	for bone_path: NodePath in _arm_track_paths(arm_root):
+		blend.set_filter_path(bone_path, true)
+	blend_tree.add_node(layer, blend)
+	var clip := AnimationNodeAnimation.new()
+	clip.animation = animation
+	var clip_name := StringName("clip_%s" % layer)
+	blend_tree.add_node(clip_name, clip)
+	blend_tree.connect_node(layer, 0, base)
+	blend_tree.connect_node(layer, 1, clip_name)
+
+
+## Devolve o caminho das trilhas de animação do osso `arm_root` e de todos os seus descendentes,
+## relativo à raiz da árvore.
+func _arm_track_paths(arm_root: StringName) -> Array[NodePath]:
+	var paths: Array[NodePath] = []
+	var skeleton_path: String = str(_tree.get_node(_tree.root_node).get_path_to(_skeleton))
+	var pending: Array[int] = [_skeleton.find_bone(arm_root)]
+	while not pending.is_empty():
+		var bone: int = pending.pop_back()
+		paths.append(NodePath("%s:%s" % [skeleton_path, _skeleton.get_bone_name(bone)]))
+		pending.append_array(_skeleton.get_bone_children(bone))
+	return paths
+
+
 ## Devolve o estado de animação para a pose e o passo.
 func _state_for(pose: Pose, gait: LocomotionRules.Gait, airborne: bool) -> StringName:
 	match pose:
@@ -178,7 +258,8 @@ func _request_state(state: StringName) -> void:
 	_tree.set("parameters/gait/transition_request", state)
 
 
-## Monta a árvore: uma transição entre os estados seguida da velocidade de reprodução.
+## Monta a árvore: uma transição entre os estados, a velocidade de reprodução e as camadas dos
+## braços (lanterna na esquerda, galão na direita).
 func _build_tree(animation_player: AnimationPlayer) -> void:
 	var blend_tree := AnimationNodeBlendTree.new()
 	var gait := AnimationNodeTransition.new()
@@ -196,8 +277,13 @@ func _build_tree(animation_player: AnimationPlayer) -> void:
 		index += 1
 	blend_tree.add_node(&"speed", AnimationNodeTimeScale.new())
 	blend_tree.connect_node(&"speed", 0, &"gait")
-	blend_tree.connect_node(&"output", 0, &"speed")
-	_tree.tree_root = blend_tree
 	_tree.root_node = _tree.get_path_to(animation_player.get_node(animation_player.root_node))
 	_tree.anim_player = _tree.get_path_to(animation_player)
+	_add_arm_layer(blend_tree, &"torch_arm", &"speed", TORCH_ANIMATION, LEFT_ARM_ROOT)
+	_add_arm_layer(blend_tree, &"carry_arm", &"torch_arm", CARRY_ANIMATION, RIGHT_ARM_ROOT)
+	blend_tree.connect_node(&"output", 0, &"carry_arm")
+	_tree.tree_root = blend_tree
+	# A lanterna está sempre na mão esquerda; o galão, só quando carregado.
+	_tree.set("parameters/torch_arm/blend_amount", 1.0)
+	_tree.set("parameters/carry_arm/blend_amount", 0.0)
 	_tree.active = true

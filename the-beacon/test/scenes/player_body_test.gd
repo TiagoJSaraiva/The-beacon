@@ -75,3 +75,26 @@ func test_player_sees_a_headless_copy_and_cameras_see_the_whole_body() -> void:
 	var security: SecurityCamera = auto_free(SecurityCamera.new())
 	assert_int(security.cull_mask & PlayerBody.PLAYER_VIEW_LAYER).is_equal(0)
 	assert_int(security.cull_mask & PlayerBody.WORLD_VIEW_LAYER).is_not_equal(0)
+
+
+func test_flashlight_and_jerrycan_follow_the_hands() -> void:
+	var runner := scene_runner(LEVEL)
+	var player: Player = runner.find_child("Player")
+	var body: PlayerBody = player.get_node("%Body")
+	var jerrycan: Node3D = player.get_node("%CarriedJerrycan")
+	await runner.simulate_frames(10)
+
+	(
+		assert_float(
+			player.flashlight.global_position.distance_to(body.left_hand().global_position)
+		)
+		. is_less(0.05)
+	)
+
+	player.set_carrying(true)
+	await runner.simulate_frames(30)
+	assert_bool(jerrycan.visible).is_true()
+	# O galão pende perto da mão direita, nunca solto longe do corpo.
+	assert_float(jerrycan.global_position.distance_to(body.right_hand().global_position)).is_less(
+		0.5
+	)

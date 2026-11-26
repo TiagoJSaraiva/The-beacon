@@ -27,6 +27,8 @@ const CAUSE_DROWNED := &"drowned"
 @export var drop_throw_speed: float = 1.5
 ## Distância que o galão solto fica de uma parede à frente.
 @export var drop_wall_margin: float = 0.25
+## Deslocamento do galão em relação à mão direita, nos eixos do corpo.
+@export var carried_hand_offset: Vector3 = Vector3(0.18, -0.22, -0.12)
 
 var is_dead: bool = false
 var is_seated: bool = false
@@ -53,9 +55,12 @@ var _knockdown_left: float = 0.0
 @onready var _body: PlayerBody = %Body
 
 
-## Guarda a altura da cabeça em pé, liga o pedido de soltar o galão e captura o mouse.
+## Guarda a altura da cabeça em pé, põe a lanterna e o galão nas mãos do corpo, liga o pedido de
+## soltar o galão e captura o mouse.
 func _ready() -> void:
 	_standing_head_height = _head.position.y
+	flashlight.follow(_body.left_hand(), _camera)
+	_carried_jerrycan.top_level = true
 	interaction.drop_requested.connect(_request_drop)
 	_capture_mouse(true)
 
@@ -136,9 +141,11 @@ func set_controls_enabled(enabled: bool) -> void:
 	_capture_mouse(enabled)
 
 
-## Mostra o galão na mão direita e bloqueia o que exige mãos livres (GDD 1.2.24).
+## Mostra o galão na mão direita do corpo, que ergue o braço, e bloqueia o que exige mãos livres
+## (GDD 1.2.24).
 func set_carrying(carrying: bool) -> void:
 	_carried_jerrycan.visible = carrying
+	_body.set_carrying(carrying)
 	interaction.hands_busy = carrying
 
 
@@ -243,9 +250,15 @@ func _look(turn: Vector2) -> void:
 	_head.rotation.x = clampf(_head.rotation.x - turn.y, -max_pitch, max_pitch)
 
 
-## Passa ao corpo a velocidade, o olhar e a pose do jogador.
+## Passa ao corpo a velocidade, o olhar e a pose do jogador e leva o galão carregado à mão
+## direita.
 func _update_body(delta: float) -> void:
 	_body.update_body(_body_pose(), velocity, global_basis, _head.rotation.x, is_on_floor(), delta)
+	if _carried_jerrycan.visible:
+		# De pé como o corpo (só gira com o jogador), na mão direita.
+		_carried_jerrycan.global_transform = Transform3D(
+			global_basis, _body.right_hand().global_position + global_basis * carried_hand_offset
+		)
 
 
 ## Devolve a pose do corpo: ajoelhado, sentado, agarrado na escada de mão ou em pé.
