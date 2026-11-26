@@ -43,7 +43,7 @@ test/scenes/        testes de cena (gdUnit4 scene runner)
   - Uma noite do plantão: lê o pedido do `SceneRouter` (dificuldade e `RunState`; sem pedido, plantão novo na `default_difficulty` = Easy), apaga o save, aplica os valores da noite (`night_config`, do `BalanceService`) e o estado persistente, registra eventos e liga os sinais. Às 06:00 recolhe o estado persistente e segue para a próxima noite (recarregando a cena), o save ou a vitória. Emite `run_won(difficulty_id)` e `run_lost(cause)` como aviso.
 - `lighthouse/lighthouse.tscn` → `Lighthouse` (`Node3D`) → greybox CSG (`Shell` com `EntranceDoor`, `UpperFloor` com `Trapdoor`; decisão 0019), `SpiralStaircase`, `LadderLanding`, `Ladder`, `LadderLink` (ver `sistemas/farol.md`); `MainGenerator`, `EmergencyGenerator`, `FuelTank` (com `JerrycanSlot`), `Jerrycan` (`sistemas/energia-e-combustivel.md`); `MachineHouse`, `LighthouseLamp`, `BeamControl` (`sistemas/feixe.md`); `WallClock`, `UpperLights` (pendentes) e `LowerLights` (arandelas); `Desk` com `Monitor` (um só, com canais), `Radio` e `Chair`; `DrownedTargets`. O script `lighthouse.gd` faz a fiação interna e expõe métodos e sinais ao `Game`.
 - `exterior/exterior.tscn` → `Exterior`: ilha, mar, rota dos barcos e câmeras (`sistemas/exterior-e-cameras.md`).
-- `player/player.tscn` → `Player` (`CharacterBody3D`) → `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
+- `player/player.tscn` → `Player` (`CharacterBody3D`) → `Body` (corpo humano animado), `Head/Camera3D` (`InteractionRay`, `Flashlight`, `CarriedJerrycan`), `FallDamage` (ver `sistemas/jogador.md`).
 - Entidades instanciadas pelos diretores: `boats/boat.tscn` (na `BoatPath`), `drowned/drowned.tscn` e `figurehead/figurehead.tscn` (filhos dos diretores).
 - `ui/hud/hud.tscn` → `Hud` (`CanvasLayer`): hotkey de interagir, barra de progresso, texto do tutorial, borda vermelha, cegueira. Mostra a tecla atual (`Settings.bindings`) do último dispositivo usado.
 - `ui/night_end/night_end_screen.tscn` → `NightEndScreen` (`CanvasLayer`): entre noites.
@@ -113,6 +113,8 @@ Menus usam as ações `ui_*` padrão do Godot (só interface, nunca gameplay), q
 ## Camadas de render
 1 — `default` — tudo
 2 — `fog_near_ring` — anel de nevoeiro em volta do farol / fora do `cull_mask` das câmeras do mar e da câmera do jogador
+3 — `player_view_body` — cópia do corpo do jogador sem a cabeça / só a câmera do jogador a vê (as câmeras de segurança a deixam de fora)
+4 — `world_view_body` — cópia inteira do corpo do jogador (projeta a sombra) / todas as câmeras a veem, menos a do jogador
 
 ## Áudio
 Buses em `default_bus_layout.tres`: `Master` → `Music`, `SFX`. Sons placeholder (tons sintéticos) em `assets/audio/placeholder/`, gerados por `tools/generate_placeholder_audio.gd` (rodar com `godot --headless --path . --script res://tools/generate_placeholder_audio.gd`). Sons em loop usam `components/looping_sound.gd`.

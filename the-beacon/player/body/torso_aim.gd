@@ -8,9 +8,9 @@ extends SkeletonModifier3D
 @export var base_bone: StringName = &"spine_01"
 ## Ossos que acompanham a inclinação do olhar e a fração da inclinação que cada um recebe.
 @export var pitch_bones: Dictionary[StringName, float] = {
-	&"spine_02": 0.25,
-	&"spine_03": 0.3,
-	&"neck_01": 0.2,
+	&"spine_02": 0.15,
+	&"spine_03": 0.2,
+	&"neck_01": 0.1,
 }
 
 ## Giro das pernas, em radianos, que o tronco desfaz. Positivo para a direita.

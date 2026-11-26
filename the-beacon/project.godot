@@ -132,6 +132,8 @@ debug_menu={
 
 3d_render/layer_1="default"
 3d_render/layer_2="fog_near_ring"
+3d_render/layer_3="player_view_body"
+3d_render/layer_4="world_view_body"
 3d_physics/layer_1="world"
 3d_physics/layer_2="barriers"
 3d_physics/layer_3="player"

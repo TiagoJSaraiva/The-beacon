@@ -49,7 +49,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 1.2, -5.64)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 6.4)
 target = NodePath("../SeaViewLeft")
-cull_mask = 1048573
+cull_mask = 1048569
 fov = 75.0
 shows_boat_route = true
 
@@ -57,7 +57,7 @@ shows_boat_route = true
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, 6.4)
 target = NodePath("../SeaViewRight")
-cull_mask = 1048573
+cull_mask = 1048569
 fov = 75.0
 shows_boat_route = true
 

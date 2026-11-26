@@ -8,8 +8,8 @@ extends Node3D
 ## Campo de visão vertical, em graus.
 @export_range(1.0, 179.0, 0.1) var fov: float = 60.0
 ## Camadas de render que a câmera enxerga; as do mar deixam de fora o anel de nevoeiro em volta do
-## farol.
-@export_flags_3d_render var cull_mask: int = 0xFFFFF
+## farol. Nenhuma vê a cópia do corpo do jogador sem cabeça (camada 3), só a inteira (camada 4).
+@export_flags_3d_render var cull_mask: int = 0xFFFFB
 ## Câmera feita para vigiar a rota dos barcos: só nela o rádio ouve os barcos. A da porta
 ## também alcança o mar distante pelo enquadramento, mas não serve para isso.
 @export var shows_boat_route: bool = false

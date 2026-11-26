@@ -7,6 +7,15 @@ extends Node3D
 ## Estado do corpo: em pé (andando ou parado), sentado, ajoelhado ou agarrado na escada de mão.
 enum Pose { STANDING, SEATED, KNEELING, CLIMBING }
 
+## Camadas de render (`project.godot`, `layer_names`): a cópia do corpo sem a cabeça só aparece
+## para a câmera do jogador, e a cópia inteira para as outras câmeras e para as sombras. Cada câmera
+## deixa de fora a camada que não deve ver.
+const PLAYER_VIEW_LAYER := 1 << 2
+const WORLD_VIEW_LAYER := 1 << 3
+## Osso da cabeça: os triângulos que ele move mais da metade somem da cópia vista pelo jogador.
+const HEAD_BONE := &"Head"
+const HEAD_WEIGHT_LIMIT := 0.5
+
 ## Estados da transição principal e a animação de cada um (nomes do pacote, sem o `_Loop`).
 const STATE_ANIMATIONS: Dictionary[StringName, StringName] = {
 	&"idle": &"Idle",
@@ -34,21 +43,23 @@ var _leg_yaw: float = 0.0
 var _off_floor_seconds: float = 0.0
 var _state: StringName = &""
 var _torso: TorsoAim
+var _skeleton: Skeleton3D
 
 @onready var _visual: Node3D = $Visual
 @onready var _tree: AnimationTree = $AnimationTree
 
 
-## Acha o esqueleto e o `AnimationPlayer` do modelo, põe o ajuste do tronco no esqueleto e monta a
-## árvore de animação.
+## Acha o esqueleto e o `AnimationPlayer` do modelo, separa a cópia do corpo sem cabeça para a
+## câmera do jogador, põe o ajuste do tronco no esqueleto e monta a árvore de animação.
 func _ready() -> void:
 	var rig: Node = $Visual/Rig
 	var animation_player := (
 		rig.find_children("*", "AnimationPlayer", true, false)[0] as AnimationPlayer
 	)
-	var skeleton := rig.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+	_skeleton = rig.find_children("*", "Skeleton3D", true, false)[0] as Skeleton3D
+	_split_views()
 	_torso = TorsoAim.new()
-	skeleton.add_child(_torso)
+	_skeleton.add_child(_torso)
 	_build_tree(animation_player)
 
 
@@ -88,6 +99,61 @@ func current_state() -> StringName:
 ## Devolve o giro atual das pernas em relação à frente do corpo, em radianos.
 func leg_yaw() -> float:
 	return _leg_yaw
+
+
+## Deixa a malha do modelo como a cópia inteira (camada do mundo, que projeta sombra) e cria ao
+## lado dela a cópia sem cabeça (camada do jogador, sem sombra).
+func _split_views() -> void:
+	var full := _skeleton.find_children("*", "MeshInstance3D", false, false)[0] as MeshInstance3D
+	full.layers = WORLD_VIEW_LAYER
+	var view := full.duplicate() as MeshInstance3D
+	view.name = "PlayerViewMesh"
+	view.layers = PLAYER_VIEW_LAYER
+	view.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	view.mesh = _mesh_without_head(full.mesh, full.skin)
+	_skeleton.add_child(view)
+
+
+## Devolve uma cópia da malha sem os triângulos que têm algum vértice movido pelo osso da cabeça
+## em mais de `HEAD_WEIGHT_LIMIT`. Pelo peso de pele, o corte acompanha a cabeça em qualquer pose.
+## A malha deve ter a pele `skin`, que diz a qual osso cada índice de osso se refere.
+func _mesh_without_head(source: Mesh, skin: Skin) -> ArrayMesh:
+	var head_bone: int = _skeleton.find_bone(HEAD_BONE)
+	var head_binds: Dictionary[int, bool] = {}
+	for bind: int in skin.get_bind_count():
+		if skin.get_bind_name(bind) == HEAD_BONE or skin.get_bind_bone(bind) == head_bone:
+			head_binds[bind] = true
+	var result := ArrayMesh.new()
+	for surface: int in source.get_surface_count():
+		var arrays: Array = source.surface_get_arrays(surface)
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+		var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+		var influences: int = bones.size() / vertices.size()
+		var is_head := PackedByteArray()
+		is_head.resize(vertices.size())
+		for vertex: int in vertices.size():
+			var head_weight: float = 0.0
+			for slot: int in influences:
+				if head_binds.has(bones[vertex * influences + slot]):
+					head_weight += weights[vertex * influences + slot]
+			is_head[vertex] = 1 if head_weight > HEAD_WEIGHT_LIMIT else 0
+		var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+		var kept := PackedInt32Array()
+		for corner: int in range(0, indices.size(), 3):
+			if (
+				(
+					is_head[indices[corner]]
+					+ is_head[indices[corner + 1]]
+					+ is_head[indices[corner + 2]]
+				)
+				== 0
+			):
+				kept.append_array(indices.slice(corner, corner + 3))
+		arrays[Mesh.ARRAY_INDEX] = kept
+		result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		result.surface_set_material(surface, source.surface_get_material(surface))
+	return result
 
 
 ## Devolve o estado de animação para a pose e o passo.
