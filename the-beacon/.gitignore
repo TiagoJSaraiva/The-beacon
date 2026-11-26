@@ -11,5 +11,8 @@ reports/
 # Diretório de build do Godot
 dist/
 
+# Preparo da auditoria do /revisar (scripts/auditoria.mjs)
+.auditoria/
+
 # Confirmações locais de ## revisado (scripts/check-doc-review.ps1)
 .doc-review
