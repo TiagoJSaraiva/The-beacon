@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://chhnm3dr0dpfe"]
 
 [ext_resource type="Script" uid="uid://bs1w85q01key1" path="res://lighthouse/spiral_staircase.gd" id="1_stairs"]
-[ext_resource type="PackedScene" path="res://lighthouse/trapdoor.tscn" id="2_trapdoor"]
+[ext_resource type="PackedScene" uid="uid://8nhej3jqc0mw" path="res://lighthouse/trapdoor.tscn" id="2_trapdoor"]
 [ext_resource type="PackedScene" path="res://lighthouse/entrance_door.tscn" id="3_door"]
 [ext_resource type="Script" uid="uid://d015ev76gt87w" path="res://lighthouse/lighthouse.gd" id="4_lighthouse"]
 [ext_resource type="PackedScene" path="res://night/wall_clock.tscn" id="5_clock"]
@@ -24,16 +24,16 @@
 [ext_resource type="Material" path="res://assets/textures/metal_plate/metal_plate.tres" id="24_metal_plate"]
 [ext_resource type="PackedScene" path="res://lighthouse/ceiling_lamp.tscn" id="25_ceiling_lamp"]
 [ext_resource type="PackedScene" path="res://lighthouse/wall_lamp.tscn" id="26_wall_lamp"]
-[ext_resource type="Script" path="res://lighthouse/interior_lights.gd" id="27_interior_lights"]
+[ext_resource type="Script" uid="uid://v5wowvx6g6vu" path="res://lighthouse/interior_lights.gd" id="27_interior_lights"]
 [ext_resource type="Material" path="res://assets/textures/worn_mossy_plasterwall/worn_mossy_plasterwall.tres" id="28_plaster"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
-albedo_color = Color(0.32, 0.32, 0.3, 1)
-roughness = 0.9
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.4, 0.28, 0.16, 1)
 roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stone"]
+albedo_color = Color(0.32, 0.32, 0.3, 1)
+roughness = 0.9
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_cabin"]
 height = 3.1
@@ -150,39 +150,39 @@ transform = Transform3D(0.00491732, 0, 0.9999879, 0, 1, 0, -0.9999879, 0, 0.0049
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021223217, -0.010761023, -0.016112566)
 
-[node name="InteriorLights" type="Node3D" parent="."]
+[node name="InteriorLights" type="Node3D" parent="." unique_id=1599981516]
 unique_name_in_owner = true
 script = ExtResource("27_interior_lights")
 
 [node name="UpperLights" type="Node3D" parent="InteriorLights" unique_id=1774744971]
 
-[node name="LampA" parent="InteriorLights/UpperLights" instance=ExtResource("25_ceiling_lamp")]
+[node name="LampA" parent="InteriorLights/UpperLights" unique_id=685964197 instance=ExtResource("25_ceiling_lamp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 13.8, 0)
 
-[node name="LampB" parent="InteriorLights/UpperLights" instance=ExtResource("25_ceiling_lamp")]
+[node name="LampB" parent="InteriorLights/UpperLights" unique_id=1874446442 instance=ExtResource("25_ceiling_lamp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 13.8, -2.75)
 
-[node name="LampC" parent="InteriorLights/UpperLights" instance=ExtResource("25_ceiling_lamp")]
+[node name="LampC" parent="InteriorLights/UpperLights" unique_id=1298313134 instance=ExtResource("25_ceiling_lamp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 13.8, 2.75)
 
-[node name="LowerLights" type="Node3D" parent="InteriorLights"]
+[node name="LowerLights" type="Node3D" parent="InteriorLights" unique_id=2088674466]
 
-[node name="GroundA" parent="InteriorLights/LowerLights" instance=ExtResource("26_wall_lamp")]
+[node name="GroundA" parent="InteriorLights/LowerLights" unique_id=480827989 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(-0.7071068, 0.06519398, 0.704095, 0, 0.9957407, -0.092198215, -0.7071068, -0.06519398, -0.704095, -4.4437523, 2.000639, 4.4437523)
 
-[node name="GroundB" parent="InteriorLights/LowerLights" instance=ExtResource("26_wall_lamp")]
+[node name="GroundB" parent="InteriorLights/LowerLights" unique_id=1233298750 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(0.38268343, 0.085180044, 0.91994447, 0, 0.9957407, -0.092198215, -0.9238795, 0.03528273, 0.38105348, -5.8060417, 2.000639, -2.4049413)
 
-[node name="GroundC" parent="InteriorLights/LowerLights" instance=ExtResource("26_wall_lamp")]
+[node name="GroundC" parent="InteriorLights/LowerLights" unique_id=875675914 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(0.98078537, 0.01798698, 0.19425938, 0, 0.9957407, -0.092198215, -0.19509034, 0.09042665, 0.9766078, -1.2260286, 2.000639, -6.1636615)
 
-[node name="GroundD" parent="InteriorLights/LowerLights" instance=ExtResource("26_wall_lamp")]
+[node name="GroundD" parent="InteriorLights/LowerLights" unique_id=53309121 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(0.5555703, -0.076660015, -0.8279281, 3.7252899e-09, 0.9957407, -0.092198215, 0.83146954, 0.051222585, 0.55320394, 5.2253, 2.000639, -3.4914339)
 
-[node name="StairsLow" parent="InteriorLights/LowerLights" instance=ExtResource("26_wall_lamp")]
+[node name="StairsLow" parent="InteriorLights/LowerLights" unique_id=1643611547 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(-0.38268343, -0.085180044, -0.91994447, 0, 0.9957407, -0.092198215, 0.9238795, -0.03528273, -0.38105348, 5.6868563, 3.4006388, 2.3555732)
 
-[node name="StairsHigh" parent="InteriorLights/LowerLights" instance=ExtResource("26_wall_lamp")]
+[node name="StairsHigh" parent="InteriorLights/LowerLights" unique_id=788686292 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(0.7071068, 0.06519398, 0.704095, 0, 0.9957407, -0.092198215, -0.7071068, 0.06519398, 0.704095, -4.0723543, 7.700639, -4.0723543)
 
 [node name="FuelTank" parent="." unique_id=968141463 instance=ExtResource("9_tank")]
@@ -195,7 +195,7 @@ transform = Transform3D(0.9908605, 0, -0.13489027, 0, 1, 0, 0.13489027, 0, 0.990
 
 [node name="LighthouseLamp" parent="." unique_id=704315292 instance=ExtResource("11_lamp")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 14.1, -2.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.016544878, 14.1, -0.036832094)
 
 [node name="BeamControl" parent="." unique_id=812803256 instance=ExtResource("12_control")]
 unique_name_in_owner = true
@@ -207,13 +207,13 @@ use_collision = true
 size = Vector3(0.12, 1, 0.12)
 material = SubResource("StandardMaterial3D_stone")
 
-[node name="CabinZone" type="Area3D" parent="."]
+[node name="CabinZone" type="Area3D" parent="." unique_id=1107225357]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.35, 0)
 collision_layer = 0
 collision_mask = 4
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CabinZone"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CabinZone" unique_id=232475720]
 shape = SubResource("CylinderShape3D_cabin")
 
 [node name="Desk" type="Node3D" parent="." unique_id=442308190]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://tgoqtleobfy"]
 
 [ext_resource type="Script" uid="uid://cm4vyx3yoqhur" path="res://beam/lighthouse_lamp.gd" id="1_lamp"]
-[ext_resource type="Shader" path="res://beam/beam_shaft.gdshader" id="2_shaft"]
+[ext_resource type="Shader" uid="uid://bbhs6loyf72d4" path="res://beam/beam_shaft.gdshader" id="2_shaft"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
 albedo_color = Color(0.3, 0.3, 0.32, 1)
@@ -29,8 +29,15 @@ radius = 0.18
 height = 0.36
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_shaft"]
+render_priority = 0
 shader = ExtResource("2_shaft")
+shader_parameter/color = Color(1, 0.92, 0.7, 1)
+shader_parameter/intensity = 1.0
 shader_parameter/length = 90.0
+shader_parameter/falloff = 1.6
+shader_parameter/edge_softness = 1.5
+shader_parameter/surface_fade = 2.0
+shader_parameter/camera_fade = 4.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_shaft"]
 material = SubResource("ShaderMaterial_shaft")
@@ -58,7 +65,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
 [node name="Housing" type="CSGBox3D" parent="Head" unique_id=1100061393]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0005041063)
 size = Vector3(0.5, 0.5, 0.3)
 material = SubResource("StandardMaterial3D_metal")
 
