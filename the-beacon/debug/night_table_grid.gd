@@ -11,7 +11,7 @@ const TITLE_COLOR := Color(0.85, 0.65, 0.2)
 const CURRENT_NIGHT_COLOR := Color(0.45, 0.8, 1.0)
 ## Célula com valor diferente do da noite anterior.
 const CHANGED_COLOR := Color(1.0, 0.7, 0.35)
-const LABEL_WIDTH := 330.0
+const LABEL_WIDTH := 440.0
 const CELL_WIDTH := 96.0
 ## Limite das células de campos sem `@export_range`.
 const OPEN_LIMIT := 100000.0
@@ -44,10 +44,10 @@ func build(table: BalanceTable, current_night: int, restart_keys: Array[String])
 		if row.theme != theme:
 			theme = row.theme
 			_add_theme_title(theme)
-		var label_text: String = row.key
+		var label_text: String = BalanceLabels.label_for(row.key)
 		if row.key in restart_keys:
 			label_text += RESTART_MARK
-		_add_label(label_text, Color.WHITE)
+		_add_label(label_text, Color.WHITE).tooltip_text = row.key
 		for night: int in range(1, table.nights + 1):
 			var cell: Control = _make_cell(row, night)
 			_cells[_cell_id(row.key, night)] = cell
@@ -90,13 +90,16 @@ func _add_theme_title(theme: String) -> void:
 		add_child(Control.new())
 
 
-## Acrescenta um rótulo na próxima posição da grade.
-func _add_label(text: String, color: Color) -> void:
+## Acrescenta um rótulo na próxima posição da grade e o devolve.
+func _add_label(text: String, color: Color) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.add_theme_color_override("font_color", color)
 	label.custom_minimum_size.x = LABEL_WIDTH if get_child_count() % columns == 0 else CELL_WIDTH
+	# Sem isto o rótulo ignora o mouse e a dica com a chave técnica não aparece.
+	label.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(label)
+	return label
 
 
 ## Cria a célula da linha na noite: CheckBox para bool, SpinBox para número.

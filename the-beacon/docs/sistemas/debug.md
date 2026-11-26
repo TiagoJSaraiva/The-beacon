@@ -15,7 +15,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - `debug/fullbright_view.gd` (`FullbrightView`): "Sem escuridão" da aba Jogador.
 - `debug/balance_tab.gd` (`BalanceTab`): aba Tabela (barra de botões e grade).
 - `debug/night_table_grid.gd` (`NightTableGrid`): grade de uma tabela por noite (SpinBox para número, CheckBox para bool).
-- Fora de `debug/`: `config/balance_table.gd` (`BalanceTable`), `config/config_fields.gd` (`ConfigFields`) e o autoload `BalanceService` (decisão 0031).
+- Fora de `debug/`: `config/balance_table.gd` (`BalanceTable`), `config/config_fields.gd` (`ConfigFields`), `config/balance_labels.gd` (`BalanceLabels`) e o autoload `BalanceService` (decisão 0031).
 
 ## Regras
 - Y (`debug_menu`) abre e fecha; Esc também fecha, sem abrir o menu de pausa. Não abre com o menu de pausa aberto nem fora da simulação (fim de noite, morte, vitória).
@@ -26,6 +26,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 - Ameaças: spawnar barco sem limite e afundar todos (cada um soma ponto de Afogado); +1 ponto, forçar a entrada, remover o Afogado e definir o nível de aproximação; invocar carranca a 4 m à frente do jogador (fora do alcance do pulo, 3 m), dissolver todas e zerar as cegueiras.
 - Jogador: invulnerável (cobre Afogado e queda fatal), bateria infinita, encher a bateria (apaga a lanterna), tirar o bloqueio da corrida e teleportar para o ponto da navmesh mais perto da porta (dentro), de baixo do alçapão, da casa de máquinas, de cima do alçapão e da cadeira da cabine. "Força das luzes do farol" aplica `InteriorLights.light_scale` ao vivo. "Sem escuridão" troca o `Environment` da câmera do jogador (`Player.view_camera()`) por uma cópia com luz ambiente branca forte (as câmeras de segurança usam o do mundo) e devolve o original ao desmarcar.
 - Tabela (decisão 0031): a tabela de balanceamento por noite de uma dificuldade, escolhida no topo (abre na dificuldade em jogo). Uma linha por valor, agrupada por tema, e uma coluna por noite; `nights` e `tutorial_enabled` ficam de fora (o `RunState` já os copiou). Com a aba aberta, o painel ocupa a tela inteira.
+- Cada linha aparece com um nome em português (`BalanceLabels.LABELS`, com a unidade entre parênteses); a chave técnica (`fog.advance_per_second`) fica na dica ao passar o mouse. Um `@export` novo precisa de nome nesse dicionário: o teste `balance_labels_test.gd` reprova linha sem nome.
 - A célula da noite e da dificuldade em jogo vale na hora (a coluna é aplicada em `Game.night_config`); as outras valem quando aquela noite for jogada. A coluna da noite em jogo tem "▶" no cabeçalho, e a célula diferente da noite anterior fica laranja.
 - As edições ficam no `BalanceService` até fechar o jogo: sobrevivem a "Recomeçar a noite" e à noite seguinte. "Salvar" grava a tabela mostrada em `config/balance/<id>.json` quando o jogo roda pelo editor. No executável de debug exportado, onde o `res://` é só leitura, grava uma cópia local em `user://balance/<id>.json` (`%APPDATA%/Godot/app_userdata/the-beacon/balance/`), que vale por cima da do projeto até "Apagar cópia local"; a aba mostra o caminho quando está usando a cópia. Para levar os valores ao projeto, copie o arquivo por cima de `config/balance/<id>.json`. "Descartar alterações" volta ao arquivo. O topo do painel avisa quais tabelas têm alterações não salvas.
 - "Copiar para as noites seguintes" repete a última célula editada ou focada nas noites à direita.
@@ -41,6 +42,7 @@ Painel dentro do jogo para testar funções e balanceamento sem mexer no código
 ## Testes
 - `test/unit/config_fields_test.gd`: campos, faixas, grupos e seções.
 - `test/unit/balance_table_test.gd` e `test/unit/balance_service_test.gd` (tabela por noite, leitura, gravação e descarte).
+- `test/unit/balance_labels_test.gd`: toda linha das três dificuldades tem nome; sem nome sobrando nem repetido.
 - `test/unit/night_clock_test.gd` (hora definida) e `test/unit/event_director_test.gd` (disparo manual).
 - `test/unit/fog_state_test.gd` (limiares, `force_advance`, `clear`).
 - `test/unit/flashlight_battery_test.gd` (bateria infinita).
