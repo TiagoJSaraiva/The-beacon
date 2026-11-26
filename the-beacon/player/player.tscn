@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://assets/models/fuel_container/fuel_container.tscn" id="5_jerrycan"]
 [ext_resource type="Script" path="res://player/ladder_climber.gd" id="6_ladder"]
 [ext_resource type="Environment" path="res://player/interior_environment.tres" id="7_environment"]
+[ext_resource type="PackedScene" path="res://player/body/player_body.tscn" id="8_body"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -20,6 +21,9 @@ script = ExtResource("1_player")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_body")
+
+[node name="Body" parent="." instance=ExtResource("8_body")]
+unique_name_in_owner = true
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)

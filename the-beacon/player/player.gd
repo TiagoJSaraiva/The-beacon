@@ -50,6 +50,7 @@ var _knockdown_left: float = 0.0
 @onready var _fall_damage: FallDamage = %FallDamage
 @onready var _carried_jerrycan: Node3D = %CarriedJerrycan
 @onready var _ladder_climber: LadderClimber = %LadderClimber
+@onready var _body: PlayerBody = %Body
 
 
 ## Guarda a altura da cabeça em pé, liga o pedido de soltar o galão e captura o mouse.
@@ -69,8 +70,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	_look(motion.relative * mouse_sensitivity * sensitivity_scale)
 
 
-## Vira o olhar com o analógico direito.
+## Atualiza o corpo e vira o olhar com o analógico direito.
 func _process(delta: float) -> void:
+	_update_body(delta)
 	if not _controls_enabled:
 		return
 	var stick: Vector2 = Input.get_vector("look_left", "look_right", "look_up", "look_down")
@@ -239,6 +241,22 @@ func _look(turn: Vector2) -> void:
 		rotation.y = SeatRules.clamp_yaw(rotation.y, _seat_yaw, _seat_yaw_limit)
 	var max_pitch: float = deg_to_rad(max_pitch_degrees)
 	_head.rotation.x = clampf(_head.rotation.x - turn.y, -max_pitch, max_pitch)
+
+
+## Passa ao corpo a velocidade, o olhar e a pose do jogador.
+func _update_body(delta: float) -> void:
+	_body.update_body(_body_pose(), velocity, global_basis, _head.rotation.x, is_on_floor(), delta)
+
+
+## Devolve a pose do corpo: ajoelhado, sentado, agarrado na escada de mão ou em pé.
+func _body_pose() -> PlayerBody.Pose:
+	if is_knocked_down:
+		return PlayerBody.Pose.KNEELING
+	if is_seated:
+		return PlayerBody.Pose.SEATED
+	if _ladder_climber.is_climbing():
+		return PlayerBody.Pose.CLIMBING
+	return PlayerBody.Pose.STANDING
 
 
 ## Devolve a altura da cabeça para o estado atual: ajoelhado, sentado ou em pé.

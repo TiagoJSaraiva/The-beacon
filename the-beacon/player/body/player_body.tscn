@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://player/body/player_body.gd" id="1_body"]
+[ext_resource type="PackedScene" path="res://assets/models/player_body/player_body.tscn" id="2_rig"]
+
+[node name="PlayerBody" type="Node3D"]
+script = ExtResource("1_body")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Rig" parent="Visual" instance=ExtResource("2_rig")]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
