@@ -10,7 +10,7 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
   - `FallDamage`: mede a altura de cada queda e conta o bloqueio da corrida.
   - `LadderClimber` (`Area3D`, máscara `ladders`): detecta a zona de agarrar das escadas de mão (`Ladder`, ver `farol.md`) e calcula o movimento agarrado. Ajustes por `@export`: `climb_speed` (2 m/s), `off_floor_horizontal_scale` (0.4), `descend_pitch_degrees` (30°), `top_clearance` (0.1 m).
 - `player/chair.tscn` (`Chair`): cadeira da mesa da cabine, instanciada no `Lighthouse`. Não colide com o jogador.
-- Regras puras: `FallRules` (altura → nada / corrida bloqueada / fatal), `SeatRules` (limite do olhar sentado), `LadderRules` (sentido e velocidade na escada de mão), `FlashlightBattery`, `FlashlightCone`.
+- Regras puras: `LocomotionRules` (`player/body/locomotion_rules.gd`: velocidade local ao corpo, passo, giro das pernas e velocidade da animação), `FallRules` (altura → nada / corrida bloqueada / fatal), `SeatRules` (limite do olhar sentado), `LadderRules` (sentido e velocidade na escada de mão), `FlashlightBattery`, `FlashlightCone`.
 
 ## Regras
 - Velocidades por `@export` no `Player` (andar 3.5, correr 4.125 m/s). O analógico esquerdo inclinado pela metade anda mais devagar.
@@ -31,6 +31,6 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 - `Flashlight.toggled(lit)`, `Flashlight.battery_depleted`.
 
 ## Testes
-- `test/unit/fall_rules_test.gd`, `seat_rules_test.gd`, `ladder_rules_test.gd`, `flashlight_battery_test.gd`, `flashlight_cone_test.gd`.
+- `test/unit/locomotion_rules_test.gd`, `test/unit/fall_rules_test.gd`, `seat_rules_test.gd`, `ladder_rules_test.gd`, `flashlight_battery_test.gd`, `flashlight_cone_test.gd`.
 - `test/scenes/player_test.gd`: velocidade de caminhada (faixa), queda média bloqueia a corrida, queda alta mata; altura do pulo (faixa); sentar segura o jogador parado e mover levanta; a derrubada segura o jogador, bloqueia interagir e sentar, e depois o solta (com os controles desligados, a interação segue desligada).
 - `test/scenes/ladder_climb_test.gd`: com o alçapão aberto, segurar a frente leva o jogador do patamar ao piso da cabine.
