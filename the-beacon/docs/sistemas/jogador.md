@@ -24,6 +24,7 @@ Controle em primeira pessoa (andar, correr, pular, olhar com mouse ou analógico
 - Lanterna: `toggle_flashlight` liga/desliga; segurar `check_battery` traz a barra de carga para a frente da câmera, sem parar o movimento. A bateria (`FlashlightConfig.battery_seconds`) só gasta ligada e não recarrega, nem entre noites; zerada, apaga e não liga mais.
 - `Flashlight.illuminates(point)` diz se um ponto está no cone aceso (alcance e meio-ângulo da config); obstáculos são checados por quem pergunta.
 - Efeitos de tela (não são HUD de estado): borda vermelha enquanto a corrida está bloqueada (`Hud.set_hurt_border`) e tela preta do pulo da carranca (`Hud.show_blindness`).
+- Topo de máquina marcada (`PushOffTop`, ver `energia-e-combustivel.md`): no chão sobre ela, o jogador é empurrado para a borda mais próxima (`PushOffTop.push_under`, uma sondagem curta da cápsula para baixo depois do `move_and_slide`); o empurrão entra no `_walk` do quadro seguinte. A parte da entrada que vai contra o empurrão é descartada (`PushOffRules.steer`), andar de lado continua livre.
 - Derrubada (`knock_down(seconds)`, carranca): ajoelha (`kneeling_head_height`), sem andar, pular, interagir (nem sentar) ou soltar o galão; o olhar e a lanterna continuam livres. Tira da cadeira e cancela uma barra de interação em andamento. Ao levantar, a interação volta só se os controles estiverem ligados. `eye_transform()` dá a posição e a direção da câmera.
 
 ## Sinais

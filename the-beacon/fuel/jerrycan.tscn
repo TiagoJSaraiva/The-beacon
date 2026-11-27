@@ -21,6 +21,8 @@ mass = 12.0
 physics_material_override = SubResource("PhysicsMaterial_jerrycan")
 freeze = true
 continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 4
 script = ExtResource("1_jerrycan")
 
 [node name="Shape" type="CollisionShape3D" parent="." unique_id=1537502495]

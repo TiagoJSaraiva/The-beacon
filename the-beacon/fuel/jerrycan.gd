@@ -15,6 +15,18 @@ var place: Place = Place.SLOT
 @onready var _pick_point: Interactable = %PickPoint
 
 
+## Solto no mundo e apoiado no topo de uma máquina marcada (`PushOffTop`), desliza para a borda
+## pelo menos na velocidade do empurrão.
+func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	var push: Vector3 = PushOffTop.push_from_contacts(state)
+	if push.is_zero_approx():
+		return
+	var direction: Vector3 = push.normalized()
+	var along: float = state.linear_velocity.dot(direction)
+	if along < push.length():
+		state.linear_velocity += direction * (push.length() - along)
+
+
 ## Recria o estado do galão, cheio, com a capacidade da dificuldade.
 func configure(power: PowerConfig) -> void:
 	state = JerrycanState.new(power.jerrycan_capacity)

@@ -44,6 +44,8 @@ var _standing_head_height: float = 0.0
 var _seat_yaw: float = 0.0
 var _seat_yaw_limit: float = 0.0
 var _knockdown_left: float = 0.0
+## Empurrão do topo de uma máquina em que o jogador pisou no último quadro (`PushOffTop`).
+var _push: Vector3 = Vector3.ZERO
 
 @onready var interaction: InteractionRay = %InteractionRay
 @onready var flashlight: Flashlight = %Flashlight
@@ -88,7 +90,7 @@ func _process(delta: float) -> void:
 
 ## Atualiza a derrubada e a altura da cabeça, lê o input e move o corpo, andando ou agarrado na
 ## escada de mão. Sentado, não se move: mover ou pular só levanta. Derrubado, ignora andar,
-## pular e soltar o galão.
+## pular e soltar o galão. Em pé no topo de uma máquina marcada, é empurrado para a borda.
 func _physics_process(delta: float) -> void:
 	_update_knockdown(delta)
 	_head.position.y = move_toward(
@@ -124,6 +126,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		_walk(direction, speed, jump_pressed, delta)
 	move_and_slide()
+	_push = PushOffTop.push_under(self)
 
 
 ## Aplica os parâmetros da dificuldade aos componentes do jogador.
@@ -227,15 +230,16 @@ func _request_drop() -> void:
 	drop_requested.emit(at, carried_velocity + forward * drop_throw_speed)
 
 
-## Aplica a gravidade e o pulo e acelera o horizontal até `direction × speed` (m/s), sem mover
-## o corpo.
+## Aplica a gravidade e o pulo e acelera o horizontal até `direction × speed` (m/s) somado ao
+## empurrão do topo de uma máquina, sem mover o corpo. Andar contra o empurrão não o segura.
 func _walk(direction: Vector3, speed: float, jump_pressed: bool, delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	elif jump_pressed:
 		velocity.y = jump_velocity
 	var horizontal: Vector3 = Vector3(velocity.x, 0.0, velocity.z)
-	horizontal = horizontal.move_toward(direction * speed, acceleration * speed * delta)
+	var target: Vector3 = PushOffRules.steer(direction * speed, _push)
+	horizontal = horizontal.move_toward(target, acceleration * speed * delta)
 	velocity.x = horizontal.x
 	velocity.z = horizontal.z
 

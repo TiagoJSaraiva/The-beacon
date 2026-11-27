@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://fuel/jerrycan_slot.tscn" id="2_slot"]
 [ext_resource type="AudioStream" uid="uid://dtxhjisyvurp4" path="res://assets/audio/placeholder/bang.wav" id="3_bang"]
 [ext_resource type="PackedScene" path="res://assets/models/gas_tank/gas_tank.tscn" id="4_model"]
+[ext_resource type="Script" path="res://components/push_off_top.gd" id="90_push"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_vessel"]
 height = 9.0
@@ -74,6 +75,11 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.1675, 1.81, 0.109)
 shape = SubResource("CylinderShape3D_vessel")
+
+[node name="PushOffTop" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1675, 3.2, 0.109)
+script = ExtResource("90_push")
+top_size = Vector2(2.78, 9)
 
 [node name="Model" parent="Body" unique_id=1643862937 instance=ExtResource("4_model")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.167521, -0.85293996, 0.10831073)

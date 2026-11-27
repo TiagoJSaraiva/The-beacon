@@ -10,9 +10,10 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 - `power/fuel_inlet.tscn` (`FuelInlet`): medidor (barra), tampa e boca para o galão (topo). Mostra o nível que o gerador passa e emite `pour_completed`; o gerador o recebe por `@export var fuel_inlet` e reclama no console se o papel por combustível ficar sem ele.
 - `fuel/fuel_tank.tscn` (`FuelTank`, térreo, modelo `gas_tank`): reserva infinita; colisão cilíndrica só no corpo do tanque, deixando livre o vão do slot embaixo dele; mangueira até o gerador principal; estourada, some e fica o toco com a poça. Contém o `JerrycanSlot`. `debug_burst_on_start` começa a noite com ela estourada (só depuração).
 - `fuel/jerrycan_slot.tscn` (`JerrycanSlot`): prateleira no tanque; com o galão devolvido, enche-o e mostra o nível dele (barra).
-- `fuel/jerrycan.tscn` (`Jerrycan`, `RigidBody3D` na camada `props`, regra `JerrycanState`, modelo `fuel_container` com o bico para +X; a caixa de colisão cobre só o corpo): no slot (parado), na mão (escondido, sem colisão) ou solto no mundo (com física).
+- `fuel/jerrycan.tscn` (`Jerrycan`, `RigidBody3D` na camada `props` que reporta contatos, regra `JerrycanState`, modelo `fuel_container` com o bico para +X; a caixa de colisão cobre só o corpo): no slot (parado), na mão (escondido, sem colisão) ou solto no mundo (com física).
 - Fiação em `Lighthouse` (energia, galão) e no `Player` (soltar).
 - Topo do gerador de emergência: telhado invisível de duas águas a 60° (`components/slippery_roof.gd`, `SlipperyRoof`, geometria em `RidgeRoof`), na camada `slippery_tops`. O jogador e o galão escorregam dele; os raios (mira na boca do gerador) e a navmesh o ignoram. O gerador principal e o tanque não têm: a escada em caracol passa logo acima deles, e o telhado furaria os degraus.
+- Topo do gerador principal e do tanque: empurrão para a borda mais próxima (decisão 0034). O marcador `PushOffTop` (`components/push_off_top.gd`, regra `PushOffRules`) fica no `Body` de cada um, no centro do topo, com o tamanho do topo (`top_size`) e a velocidade (`push_speed`, 2 m/s). O jogador (`Player`) e o galão (`Jerrycan._integrate_forces`, que reporta contatos) procuram o marcador no corpo em que estão apoiados. Sem forma de colisão nova: a escada, os raios e a navmesh não mudam.
 
 ## Regras
 - Energia alimenta só a casa de máquinas e a lâmpada. Relógio, luzes, monitores e rádio funcionam sem ela (provisório).
@@ -33,4 +34,5 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 ## Testes
 - `test/unit/generator_state_test.gd` (modo mangueira e modo combustível), `jerrycan_state_test.gd` (encher no slot, despejar), `ridge_roof_test.gd` (inclinação e cobertura do telhado).
 - `test/scenes/slippery_roof_test.gd`: o jogador e o galão soltos sobre o gerador de emergência escorregam até o chão.
+- `test/unit/push_off_rules_test.gd` (borda mais próxima, entrada contra o empurrão) e `test/scenes/push_off_top_test.gd`: o jogador e o galão parados em cima do gerador principal e do tanque caem no chão, o jogador pela borda mais próxima.
 - `test/scenes/lighthouse_power_test.gd`: o gerador de emergência assume quando a mangueira estoura e o feixe apaga sem combustível; galão do slot para a mão e da prateleira vazia para a mão pelo raio de interação real, para o chão (cai e para), de volta ao slot (enche) e despejado no gerador; só o gerador de emergência tem boca de combustível, e o despejo nela chega ao farol.
