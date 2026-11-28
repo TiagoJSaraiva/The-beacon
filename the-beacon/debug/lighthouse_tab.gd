@@ -18,7 +18,8 @@ func setup(lighthouse: Lighthouse) -> void:
 			"Trocar lâmpada": _lighthouse.lamp.replace,
 			"Quebrar casa de máquinas": _break_machine,
 			"Consertar casa de máquinas": _lighthouse.machine_house.repair,
-			"Estourar mangueira": _lighthouse.burst_hose,
+			"Estourar mangueira": _burst_hose,
+			"Consertar mangueira": _restore_hose,
 		}
 	)
 	add_title("Energia e galão")
@@ -69,6 +70,24 @@ func readout() -> String:
 func _burn_lamp() -> void:
 	_lighthouse.lamp.failure.skip_cooldown()
 	_lighthouse.lamp.burn_out()
+
+
+## Estoura a mangueira e diz o que isso causou.
+func _burst_hose() -> void:
+	if _lighthouse.is_hose_burst():
+		show_status("A mangueira já estava estourada.")
+		return
+	_lighthouse.burst_hose()
+	show_status("Mangueira estourada: o gerador principal parou e as luzes do térreo apagaram.")
+
+
+## Refaz a mangueira estourada (só no debug: no jogo ela não tem conserto).
+func _restore_hose() -> void:
+	if not _lighthouse.is_hose_burst():
+		show_status("A mangueira já estava inteira.")
+		return
+	_lighthouse.restore_hose()
+	show_status("Mangueira refeita: o gerador principal e as luzes do térreo voltaram.")
 
 
 ## Quebra a casa de máquinas mesmo no intervalo depois do último conserto.

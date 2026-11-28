@@ -38,11 +38,12 @@ var _was_lit: bool = false
 @onready var _trapdoor_below: Marker3D = %TrapdoorBelow
 
 
-## Liga os sinais internos (o medidor da cabine, que repete o nível do gerador de emergência, e
-## as luzes do térreo e da escada, que só têm energia do gerador principal), assenta o galão no
-## slot e calcula o estado inicial do farol.
+## Liga os sinais internos (a mangueira, o medidor da cabine, que repete o nível do gerador de
+## emergência, e as luzes do térreo e da escada, que só têm energia do gerador principal), assenta
+## o galão no slot e calcula o estado inicial do farol.
 func _ready() -> void:
 	fuel_tank.hose_burst.connect(_on_fuel_tank_hose_burst)
+	fuel_tank.hose_restored.connect(_on_fuel_tank_hose_restored)
 	fuel_tank.slot.return_requested.connect(_on_jerrycan_slot_return_requested)
 	jerrycan.pick_up_requested.connect(_on_jerrycan_pick_up_requested)
 	emergency_generator.refuel_requested.connect(_on_emergency_generator_refuel_requested)
@@ -82,6 +83,12 @@ func register_events(events: EventDirector) -> void:
 ## (decisão 0017). Sem som quando vem de uma noite anterior.
 func burst_hose(with_sound: bool = true) -> void:
 	fuel_tank.burst_hose(with_sound)
+
+
+## Depuração: refaz a mangueira estourada e devolve a energia ao gerador principal. Com o nevoeiro
+## dentro do farol, ela estoura de novo na próxima mudança de estágio.
+func restore_hose() -> void:
+	fuel_tank.restore_hose()
 
 
 ## Diz se a mangueira já estourou.
@@ -161,6 +168,11 @@ func _dock_jerrycan() -> void:
 ## Para de vez o gerador principal quando a mangueira estoura.
 func _on_fuel_tank_hose_burst() -> void:
 	main_generator.set_hose_intact(false)
+
+
+## Devolve a energia ao gerador principal quando a mangueira é refeita (depuração).
+func _on_fuel_tank_hose_restored() -> void:
+	main_generator.set_hose_intact(true)
 
 
 ## Passa o galão para a mão, do slot ou do chão, e avisa que ele está sendo carregado.

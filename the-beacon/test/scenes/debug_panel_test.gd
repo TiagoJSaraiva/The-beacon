@@ -117,3 +117,37 @@ func test_invulnerable_player_survives_and_teleports() -> void:
 func _tap(runner: GdUnitSceneRunner, action: String) -> void:
 	runner.simulate_action_pressed(action)
 	await runner.simulate_frames(2)
+
+
+func test_farol_tab_bursts_and_restores_the_hose() -> void:
+	var runner := scene_runner(GAME)
+	var lighthouse: Lighthouse = runner.find_child("Lighthouse")
+	var tab: LighthouseTab = runner.find_child("LighthouseTab")
+	await runner.simulate_frames(2)
+	assert_bool(lighthouse.is_hose_burst()).is_false()
+	assert_bool(lighthouse.lower_lights.is_powered()).is_true()
+
+	_press(tab, "Estourar mangueira")
+	await runner.simulate_frames(2)
+	assert_bool(lighthouse.is_hose_burst()).is_true()
+	assert_bool(lighthouse.main_generator.is_running()).is_false()
+	assert_bool(lighthouse.lower_lights.is_powered()).is_false()
+
+	# Repetir só avisa que já estava estourada.
+	_press(tab, "Estourar mangueira")
+	assert_bool(lighthouse.is_hose_burst()).is_true()
+
+	_press(tab, "Consertar mangueira")
+	await runner.simulate_frames(2)
+	assert_bool(lighthouse.is_hose_burst()).is_false()
+	assert_bool(lighthouse.main_generator.is_running()).is_true()
+	assert_bool(lighthouse.lower_lights.is_powered()).is_true()
+
+
+## Aperta o botão da aba com o texto dado.
+func _press(tab: DebugTab, text: String) -> void:
+	for button: Node in tab.find_children("*", "Button", true, false):
+		if (button as Button).text == text:
+			(button as Button).pressed.emit()
+			return
+	fail("Botão não encontrado: " + text)
