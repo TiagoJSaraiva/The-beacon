@@ -30,7 +30,7 @@ Ao longo das noites, fenômenos e entidades sobrenaturais podem surgir de acordo
 
 O jogador deverá interpretar as informações disponíveis, administrar os recursos e decidir quando manter ou interromper determinados sistemas do farol. Manter o feixe ligado protege os barcos, mas gasta combustível do gerador; desligá-lo economiza combustível, mas deixa os barcos expostos. Essas decisões criam situações de risco nas quais diferentes ameaças podem ocorrer simultaneamente ou como consequência das ações do jogador.
 
-Um relógio digital fixo na parede do farol funciona como referência temporal para o jogador, permitindo acompanhar o avanço da noite e estimar quanto tempo falta para o término do turno. O tempo do jogo é acelerado em relação ao tempo real: **1 hora do jogo = 1 minuto e 30 segundos reais**, ou seja, uma noite completa (20h às 6h) dura **15 minutos reais**.
+Um relógio digital fixo na parede do farol funciona como referência temporal para o jogador, permitindo acompanhar o avanço da noite e estimar quanto tempo falta para o término do turno. O tempo do jogo é acelerado em relação ao tempo real: **1 hora do jogo = 1 minuto e 30 segundos reais**, ou seja, uma noite completa (20h às 6h) dura **15 minutos reais**. Enquanto o jogador está olhando o relógio (ele aparece na tela, sem parede no caminho), o visor corre em tempo real, sem a aceleração: 1 minuto do visor a cada 60 segundos reais. Quando o jogador desvia o olhar, o visor volta ao horário real do jogo de uma vez; ao olhar de novo, ele congela nesse horário e volta a correr devagar.
 
 ### Objetivo
 
