@@ -7,6 +7,7 @@ Uso dos objetos do cenário com a ação `interact` (E, Y no controle). A HUD s�
 - `components/interactable.gd` (`Interactable`, `Area3D` na camada `interactable`): declara modo, duração e restrições. Não conhece o efeito; o dono escuta os sinais.
 - `player/interaction_ray.gd` (`InteractionRay`, `RayCast3D` na câmera): encontra o alvo e traduz a tecla.
 - `components/hold_progress.gd` (`HoldProgress`): regra pura do progresso.
+- `components/outline_highlight.gd` (`OutlineHighlight`): contorno branco do objeto em foco. Escuta `Interactable.focus_changed` e, em foco, põe o material `components/outline_overlay.tres` (shader `outline_overlay.gdshader`, casco invertido de 1,2 cm no espaço do mundo) como `material_overlay` das malhas em `targets`. Cada objeto interativo leva o seu, apontando para as próprias malhas, porque o `Interactable` é só um volume de mira.
 - `ui/hud/hud.tscn` (`Hud`): `show_prompt(visible)` (a tecla de `interact` atual, do último dispositivo usado), `show_hold_progress(ratio, active)`; ligado pelo `Game`.
 
 ## Regras
@@ -17,10 +18,12 @@ Uso dos objetos do cenário com a ação `interact` (E, Y no controle). A HUD s�
 - `hands_rule`: `ANY`, `FREE` ou `CARRYING` (só com o galão), conforme `InteractionRay.hands_busy`. Com o galão na mão, um alvo `FREE` continua em foco, mas a interação só solta o galão (`InteractionRay.drop_requested`); a seguinte o usa.
 - `usable_check`: checagem opcional do dono, recebe o corpo de quem interage (ex.: alçapão só por cima).
 
+- Foco: o contorno acende na mesma condição da hotkey (o alvo em foco, inclusive o de mãos livres com o galão na mão, que só pede para soltá-lo). `InteractionRay` chama `Interactable.set_focused` no alvo que sai e no que entra.
+
 ## Sinais
-- `Interactable.interacted`, `hold_completed`.
+- `Interactable.interacted`, `hold_completed`, `focus_changed(focused)` → `OutlineHighlight`.
 - `InteractionRay.focus_changed(focused)`, `hold_progress_changed(ratio, active)` → `Hud`.
 
 ## Testes
 - `test/unit/hold_progress_test.gd`.
-- `test/scenes/interaction_test.gd`: soltar antes do fim zera; segurar até o fim completa.
+- `test/scenes/interaction_test.gd`: soltar antes do fim zera; segurar até o fim completa; o contorno acende com o foco e some quando o alvo deixa de poder ser usado.

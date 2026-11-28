@@ -5,6 +5,8 @@ extends Area3D
 
 signal interacted
 signal hold_completed
+## A mira do jogador passou a usar (true) ou largou (false) este objeto; acende o contorno.
+signal focus_changed(focused: bool)
 
 ## PRESS: um toque. HOLD: segurar até completar a barra.
 enum Mode { PRESS, HOLD }
@@ -19,6 +21,8 @@ enum HandsRule { ANY, FREE, CARRYING }
 
 ## Checagem extra opcional do dono: recebe quem interage e diz se pode usar.
 var usable_check: Callable
+
+var _focused: bool = false
 
 
 ## Coloca a área na camada interactable, só para ser encontrada pelo raio: ela não detecta nada.
@@ -38,6 +42,14 @@ func can_be_used(hands_busy: bool, user: Node3D) -> bool:
 	if hands_rule == HandsRule.CARRYING and not hands_busy:
 		return false
 	return not usable_check.is_valid() or usable_check.call(user)
+
+
+## Marca o objeto como mirado ou não pelo jogador e emite `focus_changed` só quando o valor muda.
+func set_focused(focused: bool) -> void:
+	if focused == _focused:
+		return
+	_focused = focused
+	focus_changed.emit(focused)
 
 
 ## Emite `interacted`, o toque do modo PRESS.

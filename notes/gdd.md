@@ -619,7 +619,8 @@ O jogo **não exibe informações de estado do jogo na HUD**. Toda informação 
 
 A HUD só mostra elementos de **interação**, nunca estado do jogo:
 
-- **Hotkey de interação:** ao mirar em um objeto interativo, aparece apenas a tecla de interação. É a única indicação de que o objeto é interativo.
+- **Hotkey de interação:** ao mirar em um objeto interativo, aparece a tecla de interação.
+- **Contorno de destaque:** o objeto mirado ganha um contorno branco, na mesma condição em que a hotkey aparece. Hotkey e contorno são as únicas indicações de que o objeto é interativo.
 - **Barra de progresso:** interações que levam tempo (por exemplo, consertar algo) mostram uma barrinha de progresso enquanto são executadas.
 - **Instruções do tutorial:** apenas durante o tutorial (ver 9.1).
 

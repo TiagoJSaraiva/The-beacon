@@ -76,10 +76,16 @@ func _stop_hold() -> void:
 		hold_progress_changed.emit(0.0, false)
 
 
-## Troca o alvo em foco, cancelando a interação anterior, e emite `focus_changed`.
+## Troca o alvo em foco, cancelando a interação anterior, avisa os dois objetos (contorno) e
+## emite `focus_changed`.
 func _change_focus(target: Interactable) -> void:
 	_stop_hold()
+	# O alvo antigo pode ter sido liberado (ex.: o galão trocado de lugar) sem a mira largá-lo.
+	if is_instance_valid(_focused):
+		_focused.set_focused(false)
 	_focused = target
+	if _focused != null:
+		_focused.set_focused(true)
 	# Segurar E enquanto vira para outro objeto não deve disparar o novo.
 	_awaiting_release = Input.is_action_pressed("interact")
 	focus_changed.emit(target != null)
