@@ -27,7 +27,7 @@
 [ext_resource type="Script" uid="uid://v5wowvx6g6vu" path="res://lighthouse/interior_lights.gd" id="27_interior_lights"]
 [ext_resource type="Material" path="res://assets/textures/worn_mossy_plasterwall/worn_mossy_plasterwall.tres" id="28_plaster"]
 [ext_resource type="PackedScene" path="res://power/fuel_gauge.tscn" id="29_fuel_gauge"]
-[ext_resource type="Script" path="res://lighthouse/powered_lights.gd" id="30_powered_lights"]
+[ext_resource type="Script" uid="uid://bawok6sbnncs3" path="res://lighthouse/powered_lights.gd" id="30_powered_lights"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.4, 0.28, 0.16, 1)
@@ -203,15 +203,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.016544878, 14.1, -0.036832
 
 [node name="BeamControl" parent="." unique_id=812803256 instance=ExtResource("12_control")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 11.85, -2.1)
+transform = Transform3D(-0.05747182, 0, -0.9983471, 0, 1, 0, 0.9983471, 0, -0.05747182, -0.30167338, 11.85, -0.9648247)
 
 [node name="LeverPost" type="CSGBox3D" parent="." unique_id=1501372199]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 11.3, -2.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27516186, 11.3, -0.98153317)
 use_collision = true
 size = Vector3(0.12, 1, 0.12)
 material = SubResource("StandardMaterial3D_stone")
 
-[node name="CabinFuelGauge" parent="." instance=ExtResource("29_fuel_gauge")]
+[node name="CabinFuelGauge" parent="." unique_id=1026488319 instance=ExtResource("29_fuel_gauge")]
 unique_name_in_owner = true
 transform = Transform3D(1.546, 0, 1.2688, 0, 2, 0, -1.2688, 0, 1.546, -3.375, 12.1, -4.296)
 

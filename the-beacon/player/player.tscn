@@ -1,11 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c4xnvn5o5n0ue"]
 
-[ext_resource type="Script" path="res://player/player.gd" id="1_player"]
-[ext_resource type="Script" path="res://player/fall_damage.gd" id="2_fall"]
-[ext_resource type="Script" path="res://player/interaction_ray.gd" id="3_ray"]
+[ext_resource type="Script" uid="uid://c02fa6aq31ibb" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://lthflg02rg7h" path="res://player/fall_damage.gd" id="2_fall"]
+[ext_resource type="Script" uid="uid://cbewmbtmode7w" path="res://player/interaction_ray.gd" id="3_ray"]
 [ext_resource type="PackedScene" path="res://player/flashlight.tscn" id="4_flashlight"]
 [ext_resource type="PackedScene" path="res://assets/models/fuel_container/fuel_container.tscn" id="5_jerrycan"]
-[ext_resource type="Script" path="res://player/ladder_climber.gd" id="6_ladder"]
+[ext_resource type="Script" uid="uid://brfj7274yn2y0" path="res://player/ladder_climber.gd" id="6_ladder"]
 [ext_resource type="Environment" path="res://player/interior_environment.tres" id="7_environment"]
 [ext_resource type="PackedScene" path="res://player/body/player_body.tscn" id="8_body"]
 
@@ -13,57 +13,58 @@
 radius = 0.35
 height = 1.8
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" unique_id=161197052]
 collision_layer = 4
 collision_mask = 67
 script = ExtResource("1_player")
+body_enabled = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1251404404]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_body")
 
-[node name="Body" parent="." instance=ExtResource("8_body")]
+[node name="Body" parent="." unique_id=744811594 instance=ExtResource("8_body")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.15)
 
-[node name="Head" type="Node3D" parent="."]
+[node name="Head" type="Node3D" parent="." unique_id=885304269]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Head"]
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=737939701]
 cull_mask = 1048565
 environment = ExtResource("7_environment")
 current = true
 
-[node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D" node_paths=PackedStringArray("user")]
+[node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D" unique_id=876324777 node_paths=PackedStringArray("user")]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -2.2)
 script = ExtResource("3_ray")
 user = NodePath("../../..")
 
-[node name="Flashlight" parent="Head/Camera3D" instance=ExtResource("4_flashlight")]
+[node name="Flashlight" parent="Head/Camera3D" unique_id=194672769 instance=ExtResource("4_flashlight")]
 unique_name_in_owner = true
 
-[node name="CarriedJerrycan" type="Node3D" parent="Head/Camera3D"]
+[node name="CarriedJerrycan" type="Node3D" parent="Head/Camera3D" unique_id=1835582313]
 unique_name_in_owner = true
-visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, -0.42, -0.5)
+visible = false
 
-[node name="Model" parent="Head/Camera3D/CarriedJerrycan" instance=ExtResource("5_jerrycan")]
+[node name="Model" parent="Head/Camera3D/CarriedJerrycan" unique_id=1292084304 instance=ExtResource("5_jerrycan")]
 transform = Transform3D(0.728, 0, 0, 0, 0.728, 0, 0, 0, 0.728, 0, -0.2, 0)
 
-[node name="FallDamage" type="Node" parent="." node_paths=PackedStringArray("body")]
+[node name="FallDamage" type="Node" parent="." unique_id=929935368 node_paths=PackedStringArray("body")]
 unique_name_in_owner = true
 script = ExtResource("2_fall")
 body = NodePath("..")
 
-[node name="LadderClimber" type="Area3D" parent="."]
+[node name="LadderClimber" type="Area3D" parent="." unique_id=1572812900]
 unique_name_in_owner = true
 collision_layer = 0
 collision_mask = 16
 monitorable = false
 script = ExtResource("6_ladder")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LadderClimber"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LadderClimber" unique_id=1454041778]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_body")
 
