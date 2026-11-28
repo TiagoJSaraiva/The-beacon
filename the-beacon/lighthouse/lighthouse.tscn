@@ -238,7 +238,7 @@ transform = Transform3D(1.4256, 0, 0, 0, 1.0526, 0, 0, 0, 0.7073, 0, 0, 0)
 
 [node name="Monitor" parent="Desk" unique_id=323299548 node_paths=PackedStringArray("viewer_zone") instance=ExtResource("13_monitor")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.05)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.8, 0.1)
 viewer_zone = NodePath("../../CabinZone")
 
 [node name="Radio" parent="Desk" unique_id=386836183 instance=ExtResource("14_radio")]
