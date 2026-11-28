@@ -1,7 +1,7 @@
 # 0035 — Gerador de emergência e casa de máquinas no térreo, com o medidor repetido na cabine
 
 - **Data**: 2026-11
-- **Status**: aceita (substitui a 0017 só na posição das peças e no deslocamento do galão)
+- **Status**: aceita (substitui a 0017 só na posição das peças e no deslocamento do galão; a posição do medidor da cabine foi substituída pela 0037)
 
 ## Contexto
 A decisão 0017 pôs o gerador de emergência e a casa de máquinas na cabine, para obrigar o jogador a subir a escada com o galão. Depois dela, o game designer mudou os dois para o térreo (a cena já os tem lá: casa de máquinas no centro, gerador de emergência ao lado), e a decisão não foi atualizada. O medidor do gerador de emergência ficou onde o jogador não o vê enquanto opera o farol.
