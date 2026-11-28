@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" path="res://lighthouse/wall_lamp.tscn" id="26_wall_lamp"]
 [ext_resource type="Script" uid="uid://v5wowvx6g6vu" path="res://lighthouse/interior_lights.gd" id="27_interior_lights"]
 [ext_resource type="Material" path="res://assets/textures/worn_mossy_plasterwall/worn_mossy_plasterwall.tres" id="28_plaster"]
+[ext_resource type="PackedScene" path="res://power/fuel_gauge.tscn" id="29_fuel_gauge"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.4, 0.28, 0.16, 1)
@@ -206,6 +207,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 11.3, -2.22)
 use_collision = true
 size = Vector3(0.12, 1, 0.12)
 material = SubResource("StandardMaterial3D_stone")
+
+[node name="CabinFuelGauge" parent="." instance=ExtResource("29_fuel_gauge")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 11.85, -2.03)
 
 [node name="CabinZone" type="Area3D" parent="." unique_id=1107225357]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.35, 0)

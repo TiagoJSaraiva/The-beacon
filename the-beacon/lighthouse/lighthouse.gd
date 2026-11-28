@@ -30,13 +30,15 @@ var _was_lit: bool = false
 @onready var chair: Chair = %Chair
 @onready var monitor: SecurityMonitor = %Monitor
 @onready var interior_lights: InteriorLights = %InteriorLights
+@onready var cabin_fuel_gauge: FuelGauge = %CabinFuelGauge
 @onready var _wall_clock: WallClock = %WallClock
 @onready var _door_inside: Marker3D = %DoorInside
 @onready var _rest_spot: Marker3D = %RestSpot
 @onready var _trapdoor_below: Marker3D = %TrapdoorBelow
 
 
-## Liga os sinais internos, assenta o galão no slot e calcula o estado inicial do farol.
+## Liga os sinais internos (inclusive o medidor da cabine, que repete o nível do gerador de
+## emergência), assenta o galão no slot e calcula o estado inicial do farol.
 func _ready() -> void:
 	fuel_tank.hose_burst.connect(_on_fuel_tank_hose_burst)
 	fuel_tank.slot.return_requested.connect(_on_jerrycan_slot_return_requested)
@@ -44,6 +46,8 @@ func _ready() -> void:
 	emergency_generator.refuel_requested.connect(_on_emergency_generator_refuel_requested)
 	main_generator.power_changed.connect(_refresh_beam.unbind(1))
 	emergency_generator.power_changed.connect(_refresh_beam.unbind(1))
+	emergency_generator.fuel_ratio_changed.connect(cabin_fuel_gauge.show_fuel_ratio)
+	cabin_fuel_gauge.show_fuel_ratio(emergency_generator.state.fuel_ratio())
 	beam_control.switched.connect(_refresh_beam.unbind(1))
 	machine_house.broken_changed.connect(_refresh_beam.unbind(1))
 	machine_house.lamp_replaced.connect(lamp.replace)

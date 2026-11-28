@@ -6,7 +6,8 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 ## Componentes
 - `Generator` (`power/generator.gd`, regra `GeneratorState`): o mesmo script nos dois papéis, escolhidos por `feed`, cada um com a sua cena e o seu modelo. `GeneratorState.set_fuel_ratio` define o combustível (painel de debug).
   - `power/main_generator.tscn` (`MainGenerator`, térreo, `feed = HOSE`, modelo `main_generator`): funciona enquanto a mangueira está inteira; sem medidor nem boca de combustível.
-  - `power/emergency_generator.tscn` (`EmergencyGenerator`, `feed = FUEL`, modelo `emergency_generator`): combustível e o componente `FuelInlet`.
+  - `power/emergency_generator.tscn` (`EmergencyGenerator`, térreo, ao lado da casa de máquinas, `feed = FUEL`, modelo `emergency_generator`): combustível e o componente `FuelInlet`.
+- `power/fuel_gauge.tscn` (`FuelGauge`, `CabinFuelGauge` no painel da alavanca, na cabine): medidor de barra, só de leitura, que repete o nível do gerador de emergência para quem está em cima decidir quando descer. Funciona sem energia. `Generator.fuel_ratio_changed` → `Lighthouse` → `FuelGauge.show_fuel_ratio`.
 - `power/fuel_inlet.tscn` (`FuelInlet`): medidor (barra), tampa e boca para o galão (topo). Mostra o nível que o gerador passa e emite `pour_completed`; o gerador o recebe por `@export var fuel_inlet` e reclama no console se o papel por combustível ficar sem ele.
 - `fuel/fuel_tank.tscn` (`FuelTank`, térreo, modelo `gas_tank`): reserva infinita; colisão cilíndrica só no corpo do tanque, deixando livre o vão do slot embaixo dele; mangueira até o gerador principal; estourada, some e fica o toco com a poça. Contém o `JerrycanSlot`. `debug_burst_on_start` começa a noite com ela estourada (só depuração).
 - `fuel/jerrycan_slot.tscn` (`JerrycanSlot`): prateleira no tanque; com o galão devolvido, enche-o e mostra o nível dele (barra).
@@ -33,6 +34,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 
 ## Testes
 - `test/unit/generator_state_test.gd` (modo mangueira e modo combustível), `jerrycan_state_test.gd` (encher no slot, despejar), `ridge_roof_test.gd` (inclinação e cobertura do telhado).
+- `test/scenes/lighthouse_power_test.gd` também cobre o medidor da cabine (acompanha o nível do gerador ao definir, despejar e esvaziar).
 - `test/scenes/slippery_roof_test.gd`: o jogador e o galão soltos sobre o gerador de emergência escorregam até o chão.
 - `test/unit/push_off_rules_test.gd` (borda mais próxima, entrada contra o empurrão) e `test/scenes/push_off_top_test.gd`: o jogador e o galão parados em cima do gerador principal e do tanque caem no chão, o jogador pela borda mais próxima.
 - `test/scenes/lighthouse_power_test.gd`: o gerador de emergência assume quando a mangueira estoura e o feixe apaga sem combustível; galão do slot para a mão e da prateleira vazia para a mão pelo raio de interação real, para o chão (cai e para), de volta ao slot (enche) e despejado no gerador; só o gerador de emergência tem boca de combustível, e o despejo nela chega ao farol.

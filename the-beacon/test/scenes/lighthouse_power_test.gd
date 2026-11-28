@@ -102,6 +102,30 @@ func test_only_the_emergency_generator_takes_the_jerrycan() -> void:
 	assert_float(lighthouse.emergency_generator.state.fuel).is_equal_approx(15.0, 0.001)
 
 
+func test_cabin_gauge_repeats_the_emergency_generator_fuel() -> void:
+	var runner := scene_runner(LIGHTHOUSE)
+	var lighthouse: Lighthouse = runner.scene()
+	var gauge_fill: Node3D = lighthouse.cabin_fuel_gauge.find_child("GaugePivot")
+	await runner.simulate_frames(2)
+	assert_float(gauge_fill.scale.y).is_equal_approx(
+		lighthouse.emergency_generator.state.fuel_ratio(), 0.01
+	)
+
+	lighthouse.emergency_generator.state.set_fuel_ratio(0.4)
+	await runner.simulate_frames(2)
+	assert_float(gauge_fill.scale.y).is_equal_approx(0.4, 0.01)
+
+	# Despejar o galão no gerador de baixo sobe também o medidor de cima.
+	lighthouse.jerrycan.state.amount = 5.0
+	lighthouse.emergency_generator.refuel_requested.emit()
+	await runner.simulate_frames(2)
+	assert_float(gauge_fill.scale.y).is_greater(0.4)
+
+	lighthouse.emergency_generator.state.fuel = 0.0
+	await runner.simulate_frames(2)
+	assert_float(gauge_fill.scale.y).is_less(0.01)
+
+
 ## Mira o galão de cima, como o jogador em pé, e usa a tecla de interagir pelo raio real.
 func _pick_up_with_ray(runner: GdUnitSceneRunner, lighthouse: Lighthouse) -> void:
 	var center: Vector3 = lighthouse.jerrycan.global_position + Vector3.UP * 0.2

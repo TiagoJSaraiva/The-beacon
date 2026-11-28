@@ -8,6 +8,8 @@ extends Node3D
 signal power_changed(powered: bool)
 ## Jogador segurou E na boca de combustível com o galão; o farol faz a transferência.
 signal refuel_requested
+## O nível de combustível (0 a 1) mudou; repetido pelos medidores longe do gerador.
+signal fuel_ratio_changed(ratio: float)
 
 @export var feed: GeneratorState.Feed = GeneratorState.Feed.FUEL
 ## Boca de combustível com medidor. Só o gerador abastecido com o galão tem uma.
@@ -16,6 +18,7 @@ signal refuel_requested
 var state: GeneratorState
 
 var _was_running: bool = false
+var _last_fuel_ratio: float = -1.0
 
 @onready var _hum: LoopingSound = %Hum
 
@@ -64,10 +67,15 @@ func set_in_use(in_use: bool) -> void:
 	_refresh()
 
 
-## Atualiza medidor e zumbido e emite `power_changed` só quando a energia muda.
+## Atualiza medidor e zumbido, emite `power_changed` só quando a energia muda e
+## `fuel_ratio_changed` só quando o nível muda.
 func _refresh() -> void:
+	var ratio: float = state.fuel_ratio()
 	if fuel_inlet != null:
-		fuel_inlet.show_fuel_ratio(state.fuel_ratio())
+		fuel_inlet.show_fuel_ratio(ratio)
+	if not is_equal_approx(ratio, _last_fuel_ratio):
+		_last_fuel_ratio = ratio
+		fuel_ratio_changed.emit(ratio)
 	var running: bool = state.is_running()
 	# O de emergência só faz barulho quando está de fato alimentando o farol.
 	_hum.set_active(running and (feed == GeneratorState.Feed.HOSE or state.in_use))
