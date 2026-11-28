@@ -17,7 +17,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 - Topo do gerador principal e do tanque: empurrão para a borda mais próxima (decisão 0034). O marcador `PushOffTop` (`components/push_off_top.gd`, regra `PushOffRules`) fica no `Body` de cada um, no centro do topo, com o tamanho do topo (`top_size`) e a velocidade (`push_speed`, 2 m/s). O jogador (`Player`) e o galão (`Jerrycan._integrate_forces`, que reporta contatos) procuram o marcador no corpo em que estão apoiados. Sem forma de colisão nova: a escada, os raios e a navmesh não mudam.
 
 ## Regras
-- Energia alimenta só a casa de máquinas e a lâmpada. Relógio, luzes, monitores e rádio funcionam sem ela (provisório).
+- Energia alimenta só a casa de máquinas e a lâmpada. Relógio, monitores, rádio e as luzes da cabine funcionam sem ela (provisório). As luzes do térreo e da escada (`LowerLights`, `lighthouse/powered_lights.gd`) só acendem com o gerador principal: a mangueira estourada as apaga de vez (decisão 0036).
 - Com energia = gerador principal funcionando **ou** gerador de emergência com combustível.
 - Mangueira: estoura uma vez (`Lighthouse.burst_hose()`), sem conserto, e continua estourada nas noites seguintes (`RunState.hose_burst`). Estourada, o gerador principal para de vez. Estoura na primeira vez que o nevoeiro entra no farol (`GROUND_FLOOR`).
 - Gerador de emergência: começa cada noite cheio (`generator_start_fuel`). Só gasta (`generator_consumption_per_second`) quando é a fonte ativa (mangueira estourada) e a alavanca está ligada.
@@ -27,6 +27,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 - Com o galão na mão, `HandsRule.FREE` fica bloqueado (usar solta o galão) e `CARRYING` libera (boca do gerador, slot).
 
 ## Sinais
+- `Generator.power_changed` (principal) → `Lighthouse` → `PoweredLights.set_powered` (`LowerLights`).
 - `FuelInlet.pour_completed` → `Generator` (emergência) → `Generator.refuel_requested` → `Lighthouse`. `Generator.power_changed(powered)` → `Lighthouse`.
 - `FuelTank.hose_burst` → `Lighthouse` (gerador principal para), tutorial.
 - `Jerrycan.pick_up_requested`, `JerrycanSlot.return_requested` → `Lighthouse` → `Lighthouse.jerrycan_carried_changed` → `Game` → `Player.set_carrying`.
@@ -34,7 +35,7 @@ Geradores, tanque, mangueira e galão (decisão 0017; GDD 1.2.5, 1.2.24).
 
 ## Testes
 - `test/unit/generator_state_test.gd` (modo mangueira e modo combustível), `jerrycan_state_test.gd` (encher no slot, despejar), `ridge_roof_test.gd` (inclinação e cobertura do telhado).
-- `test/scenes/lighthouse_power_test.gd` também cobre o medidor da cabine (acompanha o nível do gerador ao definir, despejar e esvaziar).
+- `test/scenes/lighthouse_power_test.gd` também cobre o medidor da cabine (acompanha o nível do gerador ao definir, despejar e esvaziar) e as luzes do térreo e da escada apagando com a mangueira estourada, com as da cabine acesas.
 - `test/scenes/slippery_roof_test.gd`: o jogador e o galão soltos sobre o gerador de emergência escorregam até o chão.
 - `test/unit/push_off_rules_test.gd` (borda mais próxima, entrada contra o empurrão) e `test/scenes/push_off_top_test.gd`: o jogador e o galão parados em cima do gerador principal e do tanque caem no chão, o jogador pela borda mais próxima.
 - `test/scenes/lighthouse_power_test.gd`: o gerador de emergência assume quando a mangueira estoura e o feixe apaga sem combustível; galão do slot para a mão e da prateleira vazia para a mão pelo raio de interação real, para o chão (cai e para), de volta ao slot (enche) e despejado no gerador; só o gerador de emergência tem boca de combustível, e o despejo nela chega ao farol.

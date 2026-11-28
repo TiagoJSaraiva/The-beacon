@@ -126,6 +126,26 @@ func test_cabin_gauge_repeats_the_emergency_generator_fuel() -> void:
 	assert_float(gauge_fill.scale.y).is_less(0.01)
 
 
+func test_ground_and_stair_lights_go_out_when_the_hose_bursts() -> void:
+	var runner := scene_runner(LIGHTHOUSE)
+	var lighthouse: Lighthouse = runner.scene()
+	await runner.simulate_frames(2)
+	var lower: Array[Node] = lighthouse.lower_lights.find_children("*", "Light3D", true, false)
+	var upper: Array[Node] = lighthouse.interior_lights.find_child("UpperLights").find_children(
+		"*", "Light3D", true, false
+	)
+	assert_int(lower.size()).is_greater(0)
+	assert_int(upper.size()).is_greater(0)
+	assert_bool(lower.all(func(light: Node) -> bool: return (light as Light3D).visible)).is_true()
+
+	lighthouse.burst_hose()
+	await runner.simulate_frames(2)
+	assert_bool(lighthouse.lower_lights.is_powered()).is_false()
+	assert_bool(lower.any(func(light: Node) -> bool: return (light as Light3D).visible)).is_false()
+	# A cabine segue iluminada (o que acontece com ela sem combustível é pendência do patrão).
+	assert_bool(upper.all(func(light: Node) -> bool: return (light as Light3D).visible)).is_true()
+
+
 ## Mira o galão de cima, como o jogador em pé, e usa a tecla de interagir pelo raio real.
 func _pick_up_with_ray(runner: GdUnitSceneRunner, lighthouse: Lighthouse) -> void:
 	var center: Vector3 = lighthouse.jerrycan.global_position + Vector3.UP * 0.2

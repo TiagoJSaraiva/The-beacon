@@ -1,7 +1,7 @@
 # 0017 — Modelo de energia: gerador principal pela mangueira e gerador de emergência pelo galão
 
 - **Data**: 2026-11
-- **Status**: aceita (a posição do gerador de emergência e da casa de máquinas foi substituída pela 0035)
+- **Status**: aceita (a posição do gerador de emergência e da casa de máquinas foi substituída pela 0035, e "luzes funcionam sem energia" pela 0036 nas luzes do térreo e da escada)
 
 ## Contexto
 Na revisão das mecânicas (`planos/entrega-2.md`), o combustível só vira problema depois que a mangueira estoura (uma vez, sem conserto). A reunião usou vários nomes para as mesmas peças (gerador, casa de máquinas, gerador reserva), e o fluxo precisou ser padronizado.

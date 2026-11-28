@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://v5wowvx6g6vu" path="res://lighthouse/interior_lights.gd" id="27_interior_lights"]
 [ext_resource type="Material" path="res://assets/textures/worn_mossy_plasterwall/worn_mossy_plasterwall.tres" id="28_plaster"]
 [ext_resource type="PackedScene" path="res://power/fuel_gauge.tscn" id="29_fuel_gauge"]
+[ext_resource type="Script" path="res://lighthouse/powered_lights.gd" id="30_powered_lights"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
 albedo_color = Color(0.4, 0.28, 0.16, 1)
@@ -167,6 +168,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 13.8, -2.75)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 13.8, 2.75)
 
 [node name="LowerLights" type="Node3D" parent="InteriorLights" unique_id=2088674466]
+unique_name_in_owner = true
+script = ExtResource("30_powered_lights")
 
 [node name="GroundA" parent="InteriorLights/LowerLights" unique_id=480827989 instance=ExtResource("26_wall_lamp")]
 transform = Transform3D(-0.7071068, 0.06519398, 0.704095, 0, 0.9957407, -0.092198215, -0.7071068, -0.06519398, -0.704095, -4.4437523, 2.000639, 4.4437523)
