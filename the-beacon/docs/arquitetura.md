@@ -61,7 +61,7 @@ Os diretores que mexem em outros sistemas (`DrownedDirector`, `FigureheadDirecto
 O parse do check carrega os scripts com os autoloads registrados (decisão 0013).
 
 ## Sinais entre sistemas
-- `Player.interaction.focus_changed(focused)` → `Hud.show_prompt` — hotkey ao mirar.
+- `Player.interaction.focus_changed(focused)` → `Hud.show_prompt` — hotkey ao mirar. `Interactable.focus_changed(focused)` → `OutlineHighlight` — contorno do objeto mirado.
 - `Player.interaction.hold_progress_changed` → `Hud.show_hold_progress` — barra de interações de duração.
 - `NightDirector.time_changed` → `Lighthouse.show_time` — relógio de parede; → `SkyClock` → `Sky3D.current_time` (céu e lua).
 - `NightDirector.night_started` → `Game` → `EventDirector.reset_night`.

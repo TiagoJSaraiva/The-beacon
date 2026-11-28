@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://player/chair.gd" id="1_chair"]
 [ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
 [ext_resource type="PackedScene" path="res://assets/models/old_wooden_chair/old_wooden_chair.tscn" id="3_model"]
+[ext_resource type="Script" path="res://components/outline_highlight.gd" id="9_outline"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sit"]
 size = Vector3(0.5, 0.9, 0.5)
@@ -19,5 +20,10 @@ script = ExtResource("2_interactable")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SitPoint"]
 shape = SubResource("BoxShape3D_sit")
+
+[node name="Outline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../SitPoint")
+target = NodePath("../Model")
 
 [connection signal="interacted" from="SitPoint" to="." method="_on_sit_point_interacted"]

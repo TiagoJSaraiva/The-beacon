@@ -37,7 +37,7 @@ func test_outline_follows_focus() -> void:
 	runner.scene().add_child(mesh)
 	var outline := OutlineHighlight.new()
 	outline.interactable = target
-	outline.targets = [mesh]
+	outline.target = mesh
 	runner.scene().add_child(outline)
 	assert_object(mesh.material_overlay).is_null()
 	monitor_signals(ray)

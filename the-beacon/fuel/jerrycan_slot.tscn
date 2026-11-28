@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://fuel/jerrycan_slot.gd" id="1_slot"]
 [ext_resource type="Script" path="res://components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://components/outline_highlight.gd" id="9_outline"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shelf"]
 albedo_color = Color(0.3, 0.3, 0.3, 1)
@@ -61,5 +62,10 @@ hands_rule = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPoint"]
 shape = SubResource("BoxShape3D_return")
+
+[node name="Outline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../ReturnPoint")
+target = NodePath("../Shelf")
 
 [connection signal="interacted" from="ReturnPoint" to="." method="_on_return_point_interacted"]

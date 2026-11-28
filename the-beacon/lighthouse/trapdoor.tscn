@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://m8tl7asmqwn1" path="res://components/interactable.gd" id="2_interactable"]
 [ext_resource type="Script" uid="uid://g85cmvsp8vwf" path="res://components/looping_sound.gd" id="3_loop"]
 [ext_resource type="AudioStream" uid="uid://dtxhjisyvurp4" path="res://assets/audio/placeholder/bang.wav" id="4_bang"]
+[ext_resource type="Script" path="res://components/outline_highlight.gd" id="9_outline"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_panel"]
 size = Vector3(1.93, 0.1, 1.6)
@@ -85,6 +86,16 @@ stream = ExtResource("4_bang")
 volume_db = 4.0
 bus = &"SFX"
 script = ExtResource("3_loop")
+
+[node name="PanelOutline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../PanelInteractable")
+target = NodePath("../Panel/Mesh")
+
+[node name="LatchOutline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../Latch/LatchInteractable")
+target = NodePath("../Latch/LatchBolt")
 
 [connection signal="interacted" from="PanelInteractable" to="." method="_on_panel_interactable_interacted"]
 [connection signal="hold_completed" from="Latch/LatchInteractable" to="." method="_on_latch_interactable_hold_completed"]

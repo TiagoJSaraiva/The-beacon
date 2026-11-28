@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://cenpf5m38kvtl" path="res://assets/audio/placeholder/alarm.wav" id="5_alarm"]
 [ext_resource type="PackedScene" path="res://assets/models/machinery_device/machinery_device.tscn" id="6_model"]
 [ext_resource type="Script" path="res://components/slippery_roof.gd" id="90_roof"]
+[ext_resource type="Script" path="res://components/outline_highlight.gd" id="9_outline"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_housing"]
 size = Vector3(1.6, 0.75, 0.75)
@@ -121,6 +122,16 @@ stream = ExtResource("5_alarm")
 max_distance = 25.0
 bus = &"SFX"
 script = ExtResource("3_loop")
+
+[node name="HousingOutline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../RepairPoint")
+target = NodePath("../Housing/Model")
+
+[node name="LampDoorOutline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../ReplacePoint")
+target = NodePath("../LampDoor")
 
 [connection signal="hold_completed" from="ReplacePoint" to="." method="_on_replace_point_hold_completed"]
 [connection signal="hold_completed" from="RepairPoint" to="." method="_on_repair_point_hold_completed"]

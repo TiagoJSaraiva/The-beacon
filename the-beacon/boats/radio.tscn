@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://3gvs3a7ear5m" path="res://assets/audio/placeholder/radio_allowed.wav" id="5_allowed"]
 [ext_resource type="PackedScene" path="res://assets/models/radio_station/radio_station.tscn" id="7_model"]
 [ext_resource type="AudioStream" path="res://assets/audio/placeholder/radio_ambient.wav" id="8_ambient"]
+[ext_resource type="Script" path="res://components/outline_highlight.gd" id="9_outline"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_answer"]
 size = Vector3(0.5, 0.35, 0.35)
@@ -49,5 +50,10 @@ shape = SubResource("BoxShape3D_answer")
 
 [node name="Model" parent="." unique_id=1793233140 instance=ExtResource("7_model")]
 transform = Transform3D(2.2329223, 0, 0, 0, 3.3536701, 0, 0, 0, 1.7053541, -0.0018395483, 0, 0.012781918)
+
+[node name="Outline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../AnswerPoint")
+target = NodePath("../Model")
 
 [connection signal="interacted" from="AnswerPoint" to="." method="_on_answer_point_interacted"]

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bueo80sfq8jwx" path="res://assets/models/emergency_generator/emergency_generator.tscn" id="5_model"]
 [ext_resource type="PackedScene" path="res://power/fuel_inlet.tscn" id="6_inlet"]
 [ext_resource type="Script" path="res://components/slippery_roof.gd" id="90_roof"]
+[ext_resource type="Script" path="res://components/outline_highlight.gd" id="9_outline"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(1.15, 0.97, 0.91)
@@ -43,5 +44,10 @@ volume_db = -8.0
 max_distance = 14.0
 bus = &"SFX"
 script = ExtResource("3_loop")
+
+[node name="Outline" type="Node" parent="." node_paths=PackedStringArray("interactable", "target")]
+script = ExtResource("9_outline")
+interactable = NodePath("../FuelInlet/PourPoint")
+target = NodePath("../Body/Model")
 
 [connection signal="pour_completed" from="FuelInlet" to="." method="_on_fuel_inlet_pour_completed"]
