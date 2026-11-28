@@ -29,6 +29,9 @@ const CAUSE_DROWNED := &"drowned"
 @export var drop_wall_margin: float = 0.25
 ## Deslocamento do galão em relação à mão direita, nos eixos do corpo.
 @export var carried_hand_offset: Vector3 = Vector3(0.18, -0.22, -0.12)
+## Desmarcado, o jogador é só uma câmera (sem o corpo da decisão 0033): a lanterna e o galão
+## ficam soltos na frente dela, na posição de repouso da cena. Vale ao entrar na árvore.
+@export var body_enabled: bool = true
 
 var is_dead: bool = false
 var is_seated: bool = false
@@ -57,12 +60,16 @@ var _push: Vector3 = Vector3.ZERO
 @onready var _body: PlayerBody = %Body
 
 
-## Guarda a altura da cabeça em pé, põe a lanterna e o galão nas mãos do corpo, liga o pedido de
-## soltar o galão e captura o mouse.
+## Guarda a altura da cabeça em pé, põe a lanterna e o galão nas mãos do corpo (ou desliga o
+## corpo, com `body_enabled` desmarcado), liga o pedido de soltar o galão e captura o mouse.
 func _ready() -> void:
 	_standing_head_height = _head.position.y
-	flashlight.follow(_body.left_hand(), _camera)
-	_carried_jerrycan.top_level = true
+	if body_enabled:
+		flashlight.follow(_body.left_hand(), _camera)
+		_carried_jerrycan.top_level = true
+	else:
+		_body.visible = false
+		_body.process_mode = Node.PROCESS_MODE_DISABLED
 	interaction.drop_requested.connect(_request_drop)
 	_capture_mouse(true)
 
@@ -144,11 +151,12 @@ func set_controls_enabled(enabled: bool) -> void:
 	_capture_mouse(enabled)
 
 
-## Mostra o galão na mão direita do corpo, que ergue o braço, e bloqueia o que exige mãos livres
-## (GDD 1.2.24).
+## Mostra o galão na mão direita do corpo, que ergue o braço (sem o corpo, na frente da câmera), e
+## bloqueia o que exige mãos livres (GDD 1.2.24).
 func set_carrying(carrying: bool) -> void:
 	_carried_jerrycan.visible = carrying
-	_body.set_carrying(carrying)
+	if body_enabled:
+		_body.set_carrying(carrying)
 	interaction.hands_busy = carrying
 
 
@@ -255,8 +263,10 @@ func _look(turn: Vector2) -> void:
 
 
 ## Passa ao corpo a velocidade, o olhar e a pose do jogador e leva o galão carregado à mão
-## direita.
+## direita. Sem o corpo, não faz nada.
 func _update_body(delta: float) -> void:
+	if not body_enabled:
+		return
 	_body.update_body(_body_pose(), velocity, global_basis, _head.rotation.x, is_on_floor(), delta)
 	if _carried_jerrycan.visible:
 		# De pé como o corpo (só gira com o jogador), na mão direita.

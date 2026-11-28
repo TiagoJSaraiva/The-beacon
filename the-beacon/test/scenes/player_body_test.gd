@@ -98,3 +98,27 @@ func test_flashlight_and_jerrycan_follow_the_hands() -> void:
 	assert_float(jerrycan.global_position.distance_to(body.right_hand().global_position)).is_less(
 		0.5
 	)
+
+
+func test_without_the_body_the_player_is_only_a_camera() -> void:
+	var player: Player = (load("res://player/player.tscn") as PackedScene).instantiate()
+	player.body_enabled = false
+	add_child(auto_free(player))
+	var body: PlayerBody = player.get_node("%Body")
+	var jerrycan: Node3D = player.get_node("%CarriedJerrycan")
+	await await_idle_frame()
+	await await_idle_frame()
+
+	assert_bool(body.visible).is_false()
+	assert_int(body.process_mode).is_equal(Node.PROCESS_MODE_DISABLED)
+	# A lanterna segue a câmera, na posição de repouso, em vez da mão do corpo.
+	assert_bool(player.flashlight.top_level).is_false()
+	assert_vector(player.flashlight.position).is_equal_approx(
+		player.flashlight.rest_position, Vector3.ONE * 0.05
+	)
+
+	player.set_carrying(true)
+	await await_idle_frame()
+	assert_bool(jerrycan.visible).is_true()
+	assert_bool(jerrycan.top_level).is_false()
+	assert_bool(player.interaction.hands_busy).is_true()
